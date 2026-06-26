@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+manager/node_modules/
+
+# Build output
+manager/dist/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+manager/.env.local
+manager/.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Legacy internal admin (not for public deployment)
+admin/
+
+# Supabase local dev
+supabase/.temp/
