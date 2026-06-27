@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Bell, Search, LogOut, User, ChevronDown, Menu } from 'lucide-react'
 import { cn, formatDate } from '@/lib/utils'
 import { Avatar } from '@/components/ui/Avatar'
+import { useAuth } from '@/contexts/AuthContext'
 import type { Notification } from '@/types'
 
 const MOCK_NOTIFICATIONS: Notification[] = [
@@ -25,7 +26,11 @@ interface HeaderProps {
 export function Header({ sidebarWidth, onMobileMenuToggle }: HeaderProps) {
   const [notifOpen, setNotifOpen] = useState(false)
   const [userOpen, setUserOpen] = useState(false)
+  const { user, signOut } = useAuth()
   const unread = MOCK_NOTIFICATIONS.filter(n => !n.lu).length
+
+  const userEmail = user?.email ?? ''
+  const displayName = userEmail.split('@')[0].replace(/[._-]/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
 
   return (
     <header
@@ -103,8 +108,8 @@ export function Header({ sidebarWidth, onMobileMenuToggle }: HeaderProps) {
           onClick={() => { setUserOpen(v => !v); setNotifOpen(false) }}
           className="flex items-center gap-2 h-8 pl-1 pr-2 rounded-lg hover:bg-gray-100 transition"
         >
-          <Avatar nom="Dupont" prenom="Jean" size="sm" />
-          <span className="text-sm font-medium text-gray-700 hidden sm:block">Jean Dupont</span>
+          <Avatar nom={displayName.split(' ').slice(-1)[0] || 'U'} prenom={displayName.split(' ')[0] || ''} size="sm" />
+          <span className="text-sm font-medium text-gray-700 hidden sm:block">{displayName}</span>
           <ChevronDown className="h-3.5 w-3.5 text-gray-400" />
         </button>
 
@@ -113,14 +118,17 @@ export function Header({ sidebarWidth, onMobileMenuToggle }: HeaderProps) {
             <div className="fixed inset-0 z-40" onClick={() => setUserOpen(false)} />
             <div className="absolute right-0 top-10 w-52 bg-white border border-gray-100 rounded-xl shadow-modal z-50 overflow-hidden animate-slide-in">
               <div className="px-4 py-3 border-b border-gray-100">
-                <p className="text-sm font-semibold text-gray-900">Jean Dupont</p>
-                <p className="text-xs text-gray-500">admin@ca-tech.fr</p>
+                <p className="text-sm font-semibold text-gray-900">{displayName}</p>
+                <p className="text-xs text-gray-500">{userEmail}</p>
               </div>
               <div className="p-1">
                 <button className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition">
                   <User className="h-4 w-4 text-gray-400" />Mon profil
                 </button>
-                <button className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-red-500 hover:bg-red-50 rounded-lg transition">
+                <button
+                  onClick={() => { setUserOpen(false); signOut() }}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-red-500 hover:bg-red-50 rounded-lg transition"
+                >
                   <LogOut className="h-4 w-4" />Se déconnecter
                 </button>
               </div>
