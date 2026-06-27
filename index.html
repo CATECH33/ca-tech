@@ -1343,6 +1343,18 @@ const EJS_TPL_CONTACT    = 'template_gk2gjor';
 const EJS_TPL_DEVIS      = 'template_gk2gjor';
 emailjs.init({ publicKey: EJS_PUBLIC_KEY });
 
+// ── Supabase ──────────────────────────────────────────────────────────
+const SB_URL  = 'https://jhcyooksjeivajdjicka.supabase.co';
+const SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoY3lvb2tzamVpdmFqZGppY2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5NzEwMjQsImV4cCI6MjA5NzU0NzAyNH0.pFYDxJUDD5oZyVfGSDDKnPAnyc-jkXd0scS0LvGdlFk';
+
+function sbInsert(table, row) {
+  return fetch(SB_URL + '/rest/v1/' + table, {
+    method: 'POST',
+    headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+    body: JSON.stringify(row),
+  });
+}
+
 function sendContactForm(e) {
   e.preventDefault();
   const btn = document.getElementById('c-btn');
@@ -1357,6 +1369,16 @@ function sendContactForm(e) {
     message: document.getElementById('c-message').value,
   }).then(() => {
     trackFormSubmit();
+    sbInsert('messages', {
+      from_name:   document.getElementById('c-nom').value,
+      from_email:  document.getElementById('c-email').value,
+      subject:     document.getElementById('c-sujet').value || 'Contact',
+      body:        document.getElementById('c-message').value,
+      source:      'formulaire',
+      is_read:     false,
+      is_replied:  false,
+      is_archived: false,
+    });
     btn.textContent = '✓ Message envoyé !';
     btn.style.background = '#10b981';
     e.target.reset();
@@ -1406,7 +1428,33 @@ function sendDevis() {
     infos_complementaires: document.getElementById('d-extra').value || '—',
   }).then(() => {
     trackGenerateLead();
-    const p = document.getElementById('d-prenom').value;
+    const _prenom = document.getElementById('d-prenom').value;
+    const _nom    = document.getElementById('d-nom').value;
+    const _email  = document.getElementById('d-email').value;
+    const _tel    = document.getElementById('d-tel').value;
+    const _budget = parseFloat((document.getElementById('budget-display').textContent || '0').replace(/[^0-9.]/g, '')) || null;
+    sbInsert('leads', {
+      first_name:  _prenom,
+      last_name:   _nom,
+      email:       _email,
+      phone:       _tel || null,
+      company:     document.getElementById('d-ent').value || null,
+      source:      'devis',
+      notes:       document.getElementById('d-desc').value,
+      budget_max:  _budget,
+      status:      'new',
+    });
+    sbInsert('messages', {
+      from_name:   _prenom + ' ' + _nom,
+      from_email:  _email,
+      subject:     'Devis — ' + projets,
+      body:        'Projet : ' + projets + '\nDescription : ' + document.getElementById('d-desc').value + '\nBudget : ' + document.getElementById('budget-display').textContent + '\nDélai : ' + delai,
+      source:      'formulaire',
+      is_read:     false,
+      is_replied:  false,
+      is_archived: false,
+    });
+    const p = _prenom;
     const a = document.getElementById('d-agence').value || 'Paris (siège)';
     document.getElementById('success-name').textContent = p;
     document.getElementById('success-agence').textContent = a;
