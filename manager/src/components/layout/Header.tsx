@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Bell, Search, LogOut, User, ChevronDown } from 'lucide-react'
+import { Bell, Search, LogOut, User, ChevronDown, Menu } from 'lucide-react'
 import { cn, formatDate } from '@/lib/utils'
 import { Avatar } from '@/components/ui/Avatar'
 import type { Notification } from '@/types'
@@ -19,18 +19,27 @@ const notifColors: Record<string, string> = {
 
 interface HeaderProps {
   sidebarWidth: number
+  onMobileMenuToggle: () => void
 }
 
-export function Header({ sidebarWidth }: HeaderProps) {
+export function Header({ sidebarWidth, onMobileMenuToggle }: HeaderProps) {
   const [notifOpen, setNotifOpen] = useState(false)
   const [userOpen, setUserOpen] = useState(false)
   const unread = MOCK_NOTIFICATIONS.filter(n => !n.lu).length
 
   return (
     <header
-      className="fixed top-0 right-0 h-14 bg-white border-b border-gray-100 z-20 flex items-center px-4 gap-3 transition-all duration-300"
-      style={{ left: sidebarWidth }}
+      className="fixed top-0 right-0 h-14 bg-white border-b border-gray-100 z-20 flex items-center px-4 gap-3 transition-all duration-300 left-0 md:left-[var(--sidebar-w)]"
+      style={{ '--sidebar-w': sidebarWidth + 'px' } as React.CSSProperties}
     >
+      {/* Burger mobile */}
+      <button
+        onClick={onMobileMenuToggle}
+        className="md:hidden h-8 w-8 flex items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 transition shrink-0"
+      >
+        <Menu className="h-5 w-5" />
+      </button>
+
       {/* Search */}
       <div className="relative flex-1 max-w-xs hidden md:flex items-center">
         <Search className="absolute left-2.5 h-3.5 w-3.5 text-gray-400 pointer-events-none" />

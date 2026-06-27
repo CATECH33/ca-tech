@@ -34,15 +34,28 @@ const navItems: NavItem[] = [
 interface SidebarProps {
   collapsed: boolean
   onToggle: () => void
+  mobileOpen: boolean
+  onMobileClose: () => void
 }
 
-export function Sidebar({ collapsed, onToggle }: SidebarProps) {
+export function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose }: SidebarProps) {
   const location = useLocation()
 
   return (
+    <>
+      {/* Overlay mobile */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-20 md:hidden"
+          onClick={onMobileClose}
+        />
+      )}
+
     <aside className={cn(
       'fixed left-0 top-0 h-screen bg-white border-r border-gray-100 flex flex-col z-30 transition-all duration-300 ease-in-out',
-      collapsed ? 'w-[60px]' : 'w-[220px]'
+      collapsed ? 'w-[60px]' : 'w-[220px]',
+      'max-md:-translate-x-full max-md:w-[220px]',
+      mobileOpen && 'max-md:translate-x-0'
     )}>
       {/* Logo */}
       <div className={cn('h-14 flex items-center border-b border-gray-100 shrink-0 px-3 gap-2.5')}>
@@ -115,5 +128,6 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         </button>
       </div>
     </aside>
+    </>
   )
 }
