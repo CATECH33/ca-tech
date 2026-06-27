@@ -681,7 +681,7 @@ export function Leads() {
 
   return (
     <Layout
-      title="Pipeline commercial"
+      title="Leads"
       actions={
         <div className="flex items-center gap-2">
           {/* View toggle */}
