@@ -27,3 +27,5 @@ admin/
 
 # Supabase local dev
 supabase/.temp/
+
+.vercel
