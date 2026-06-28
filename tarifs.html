@@ -167,6 +167,31 @@
   .p-card.featured .p-btn{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 4px 16px rgba(0,102,255,.25)}
   .p-card.featured .p-btn:hover{background:#1a7aff;box-shadow:0 8px 28px rgba(0,102,255,.4);transform:translateY(-1px)}
 
+  /* MAINTENANCE BUNDLES */
+  .p-bundle{display:flex;flex-direction:column}
+  .p-connector{display:flex;align-items:center;justify-content:center;padding:.9rem 0;position:relative}
+  .p-connector::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,transparent,rgba(0,102,255,.22),transparent);transform:translateX(-50%)}
+  .p-connector-dot{background:#fff;border:1.5px solid rgba(0,102,255,.22);border-radius:20px;padding:5px 18px;font-size:.62rem;font-weight:700;color:var(--blue);letter-spacing:1.5px;text-transform:uppercase;z-index:1;position:relative;display:flex;align-items:center;gap:6px}
+  .p-connector-dot svg{width:12px;height:12px;stroke:var(--blue);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .p-card.maintenance{border:1.5px dashed rgba(0,102,255,.22);background:linear-gradient(135deg,rgba(0,102,255,.025) 0%,rgba(0,212,255,.025) 100%);max-width:720px;width:100%;margin-left:auto;margin-right:auto}
+  .p-card.maintenance:hover{border-color:var(--blue);border-style:solid;transform:translateY(-6px);box-shadow:0 24px 64px rgba(0,102,255,.1)}
+  .p-badge-star{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;font-size:.62rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:5px 16px;border-radius:20px;white-space:nowrap;box-shadow:0 4px 16px rgba(245,158,11,.35)}
+  .maintenance-header{display:flex;align-items:flex-start;gap:1.2rem;margin-bottom:1.4rem}
+  .maintenance-icon{width:48px;height:48px;border-radius:14px;background:rgba(0,102,255,.07);border:1px solid rgba(0,102,255,.14);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .maintenance-icon svg{width:22px;height:22px;stroke:var(--blue);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .maintenance-price{display:flex;align-items:baseline;gap:.25rem;margin-top:.4rem}
+  .maintenance-price .m-amount{font-size:2rem;font-weight:900;color:var(--blue-dk);letter-spacing:-1px;line-height:1}
+  .maintenance-price .m-period{font-size:.78rem;color:#94a3b8;font-weight:500}
+  .p-features-grid{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:.6rem .8rem;margin-bottom:1.5rem;flex:1}
+  .p-features-grid li{display:flex;align-items:center;gap:.65rem;font-size:.82rem;color:#475569;line-height:1.4}
+  .p-features-grid li::before{content:'';width:16px;height:16px;border-radius:50%;background:rgba(0,102,255,.08);border:1.5px solid rgba(0,102,255,.2);flex-shrink:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 8l2.5 2.5L12 5' stroke='%230066FF' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center}
+  .p-reassurance{font-size:.76rem;color:#94a3b8;line-height:1.55;font-style:italic;margin-bottom:1.4rem;padding:.75rem 1rem;background:#f8fafc;border-radius:8px;border-left:3px solid rgba(0,102,255,.2)}
+  .p-card.maintenance .p-btn{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 4px 16px rgba(0,102,255,.2)}
+  .p-card.maintenance .p-btn:hover{background:#1a7aff;box-shadow:0 8px 28px rgba(0,102,255,.4);transform:translateY(-1px)}
+  .tarifs-social-proof{text-align:center;margin-top:2.5rem;padding:1.2rem 2rem;background:linear-gradient(135deg,rgba(0,102,255,.05),rgba(0,212,255,.04));border:1px solid rgba(0,102,255,.12);border-radius:14px;font-size:.88rem;color:#475569;line-height:1.6}
+  .tarifs-social-proof strong{color:var(--blue-dk)}
+  @media(max-width:640px){.p-features-grid{grid-template-columns:1fr}.maintenance-header{flex-direction:column;gap:.8rem}}
+
   /* ── PROCESSUS ────────────────────────────────────────────────── */
   #processus{background:#fff;padding:100px 6%}
   .proc-header{text-align:center;margin-bottom:5rem}
@@ -444,46 +469,137 @@
       <button class="p-btn" onclick="openDevis()">Créer ma landing page</button>
     </div>
 
-    <!-- Site Vitrine — FEATURED -->
-    <div class="p-card featured reveal d3">
-      <div class="p-badge">OFFRE POPULAIRE</div>
-      <h3 class="p-name">Site Vitrine</h3>
-      <div class="p-price">
-        <div class="p-price-amount">590 €</div>
+    <!-- Site Vitrine + Maintenance Bundle -->
+    <div class="p-bundle reveal d3" style="grid-column:1/-1">
+
+      <!-- Site Vitrine -->
+      <div class="p-card featured">
+        <div class="p-badge">OFFRE POPULAIRE</div>
+        <h3 class="p-name">Site Vitrine</h3>
+        <div class="p-price">
+          <div class="p-price-amount">590 €</div>
+          <div class="p-price-unit">TTC · Paiement unique</div>
+        </div>
+        <div class="p-divider"></div>
+        <ul class="p-features">
+          <li>Design sur mesure</li>
+          <li>Site responsive (mobile first)</li>
+          <li>Optimisation SEO</li>
+          <li>Formulaire de contact</li>
+          <li>Hébergement configurable</li>
+          <li>Livraison rapide</li>
+        </ul>
+        <button class="p-btn" onclick="openDevis()">Créer mon site vitrine</button>
       </div>
-      <div class="p-divider"></div>
-      <ul class="p-features">
-        <li>Jusqu'à 5 pages</li>
-        <li>Design premium</li>
-        <li>Responsive mobile</li>
-        <li>Formulaire de contact</li>
-        <li>Référencement SEO de base</li>
-        <li>Intégration Google Maps</li>
-        <li>Hébergement et nom de domaine en option</li>
-      </ul>
-      <button class="p-btn" onclick="openDevis()">Créer mon site vitrine</button>
+
+      <!-- Connector -->
+      <div class="p-connector">
+        <span class="p-connector-dot">
+          <svg viewBox="0 0 16 16"><line x1="8" y1="2" x2="8" y2="14"/><polyline points="4,10 8,14 12,10"/></svg>
+          Ajouter la maintenance
+        </span>
+      </div>
+
+      <!-- Maintenance Vitrine Premium -->
+      <div class="p-card maintenance">
+        <div class="p-badge-star">⭐ Recommandé</div>
+        <div class="maintenance-header">
+          <div class="maintenance-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+          </div>
+          <div>
+            <div class="p-cat">Maintenance &amp; Assistance</div>
+            <h3 class="p-name">Maintenance Premium</h3>
+            <div class="maintenance-price">
+              <span class="m-amount">89,99 €</span>
+              <span class="m-period">/mois · Sans engagement</span>
+            </div>
+          </div>
+        </div>
+        <div class="p-divider"></div>
+        <ul class="p-features-grid">
+          <li>Mises à jour du site</li>
+          <li>Sauvegardes automatiques</li>
+          <li>Surveillance de sécurité</li>
+          <li>Corrections de bugs</li>
+          <li>Assistance prioritaire</li>
+          <li>Modifications mineures incluses</li>
+          <li>Optimisation des performances</li>
+          <li>Support Email / WhatsApp</li>
+        </ul>
+        <p class="p-reassurance">La maintenance n'est pas obligatoire, mais elle est fortement recommandée afin de garantir la sécurité, les performances et la disponibilité de votre site.</p>
+        <button class="p-btn" onclick="openDevis()">Souscrire à la maintenance</button>
+      </div>
+
     </div>
 
-    <!-- Site E-commerce -->
-    <div class="p-card reveal d4">
-      <h3 class="p-name">Site E-commerce</h3>
-      <div class="p-price">
-        <div class="p-price-amount">1 090 €</div>
+    <!-- Site E-commerce + Maintenance Bundle -->
+    <div class="p-bundle reveal d4" style="grid-column:1/-1">
+
+      <!-- Site E-commerce -->
+      <div class="p-card featured">
+        <div class="p-badge">BOUTIQUE EN LIGNE</div>
+        <h3 class="p-name">Site E-commerce</h3>
+        <div class="p-price">
+          <div class="p-price-amount">1 090 €</div>
+          <div class="p-price-unit">TTC · Paiement unique</div>
+        </div>
+        <div class="p-divider"></div>
+        <ul class="p-features">
+          <li>Boutique en ligne complète</li>
+          <li>Paiement Stripe sécurisé</li>
+          <li>Gestion des produits</li>
+          <li>SEO de base</li>
+          <li>Responsive mobile</li>
+          <li>Formation incluse</li>
+        </ul>
+        <button class="p-btn" onclick="openDevis()">Créer ma boutique</button>
       </div>
-      <div class="p-divider"></div>
-      <ul class="p-features">
-        <li>Boutique en ligne complète</li>
-        <li>Gestion des produits</li>
-        <li>Paiement sécurisé Stripe</li>
-        <li>Gestion des commandes</li>
-        <li>Responsive mobile</li>
-        <li>SEO de base</li>
-      </ul>
-      <button class="p-btn" onclick="openDevis()">Créer ma boutique</button>
+
+      <!-- Connector -->
+      <div class="p-connector">
+        <span class="p-connector-dot">
+          <svg viewBox="0 0 16 16"><line x1="8" y1="2" x2="8" y2="14"/><polyline points="4,10 8,14 12,10"/></svg>
+          Ajouter la maintenance
+        </span>
+      </div>
+
+      <!-- Maintenance E-commerce Premium -->
+      <div class="p-card maintenance">
+        <div class="p-badge-star">⭐ Recommandé</div>
+        <div class="maintenance-header">
+          <div class="maintenance-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+          </div>
+          <div>
+            <div class="p-cat">Maintenance &amp; Assistance</div>
+            <h3 class="p-name">Maintenance E-commerce Premium</h3>
+            <div class="maintenance-price">
+              <span class="m-amount">120 €</span>
+              <span class="m-period">/mois · Sans engagement</span>
+            </div>
+          </div>
+        </div>
+        <div class="p-divider"></div>
+        <ul class="p-features-grid">
+          <li>Mises à jour du site</li>
+          <li>Sauvegardes quotidiennes</li>
+          <li>Sécurité renforcée</li>
+          <li>Surveillance 24/7</li>
+          <li>Assistance prioritaire</li>
+          <li>Corrections de bugs</li>
+          <li>Optimisation des performances</li>
+          <li>Ajout de nouveaux produits</li>
+          <li>Support Email / WhatsApp</li>
+        </ul>
+        <p class="p-reassurance">La maintenance n'est pas obligatoire, mais elle est fortement recommandée afin de garantir la sécurité, les performances et la disponibilité de votre site.</p>
+        <button class="p-btn" onclick="openDevis()">Souscrire à la maintenance</button>
+      </div>
+
     </div>
 
     <!-- Flyer Professionnel -->
-    <div class="p-card reveal d5">
+    <div class="p-card reveal d5" style="grid-column:1/-1;max-width:520px;margin:0 auto">
       <h3 class="p-name">Flyer Professionnel</h3>
       <div class="p-price">
         <div class="p-price-amount">139 €</div>
@@ -498,6 +614,10 @@
       <button class="p-btn" onclick="openDevis()">Commander mon flyer</button>
     </div>
 
+  </div>
+
+  <div class="tarifs-social-proof reveal">
+    <strong>Plus de 80 % de nos clients</strong> choisissent la maintenance afin de garder leur site sécurisé, rapide et toujours à jour.
   </div>
 
   <div class="tarifs-devis-cta reveal">
@@ -611,7 +731,7 @@
         Proposez-vous la maintenance après livraison ?
         <span class="faq-icon"><svg viewBox="0 0 12 12"><line x1="6" y1="2" x2="6" y2="10"/><line x1="2" y1="6" x2="10" y2="6"/></svg></span>
       </button>
-      <div class="faq-a"><div class="faq-a-inner">Oui. Notre offre Maintenance à 49 €/mois couvre les sauvegardes automatiques, les mises à jour de sécurité, la surveillance de disponibilité et une assistance prioritaire. Sans engagement, résiliable à tout moment.</div></div>
+      <div class="faq-a"><div class="faq-a-inner">Oui. Nous proposons deux formules : Maintenance Premium à 89,99 €/mois pour les sites vitrines (mises à jour, sauvegardes, sécurité, corrections de bugs, modifications mineures, support Email/WhatsApp) et Maintenance E-commerce Premium à 120 €/mois pour les boutiques (sauvegardes quotidiennes, surveillance 24/7, ajout de produits inclus). Sans engagement, résiliable à tout moment.</div></div>
     </div>
 
   </div>
