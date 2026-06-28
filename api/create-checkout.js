@@ -45,21 +45,24 @@ module.exports = async (req, res) => {
   const siteUrl = process.env.SITE_URL || 'https://www.ca-tech.fr';
 
   try {
-    const lineItem = {
-      quantity: 1,
-      price_data: {
-        currency: product.currency,
-        product_data: {
-          name: product.name,
-          description: product.description,
-          metadata: { productId: product.id, category: product.category },
-        },
-        unit_amount: product.amount,
-        ...(product.mode === 'subscription' && {
-          recurring: { interval: product.interval },
-        }),
-      },
-    };
+    // Utilise le Price ID Stripe pré-créé si disponible, sinon price_data inline
+    const lineItem = product.stripePrice
+      ? { quantity: 1, price: product.stripePrice }
+      : {
+          quantity: 1,
+          price_data: {
+            currency: product.currency,
+            product_data: {
+              name: product.name,
+              description: product.description,
+              metadata: { productId: product.id, category: product.category },
+            },
+            unit_amount: product.amount,
+            ...(product.mode === 'subscription' && {
+              recurring: { interval: product.interval },
+            }),
+          },
+        };
 
     const sessionParams = {
       mode: product.mode,
