@@ -6,8 +6,11 @@
     "node": ">=20"
   },
   "dependencies": {
-    "stripe": "^17.4.0",
     "@supabase/supabase-js": "^2.49.0",
-    "resend": "^4.5.1"
+    "resend": "^4.5.1",
+    "stripe": "^17.4.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.61.1"
   }
 }
