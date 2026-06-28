@@ -20,11 +20,7 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  if (!process.env.STRIPE_SECRET_KEY) {
-    console.error('STRIPE_SECRET_KEY manquant');
-    return res.status(500).json({ error: 'Configuration serveur incomplète.' });
-  }
-
+  // Valider les entrées avant de vérifier la config serveur
   let body = req.body;
   if (typeof body === 'string') {
     try { body = JSON.parse(body); } catch { body = {}; }
@@ -39,6 +35,11 @@ module.exports = async (req, res) => {
   const product = getProduct(productId);
   if (!product) {
     return res.status(404).json({ error: `Produit inconnu : ${productId}` });
+  }
+
+  if (!process.env.STRIPE_SECRET_KEY) {
+    console.error('STRIPE_SECRET_KEY manquant');
+    return res.status(500).json({ error: 'Configuration serveur incomplète.' });
   }
 
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2024-11-20.acacia' });
