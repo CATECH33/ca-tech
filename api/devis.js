@@ -172,18 +172,20 @@ async function handleCreate(body, supabase) {
     }
   }
 
-  // Log audit
-  await supabase.from('audit_logs').insert({
-    action:     'DEVIS_CREATED',
-    table_name: 'devis',
-    record_id:  devis.id,
-    new_data: {
-      devis_number: devisNumber,
-      contact_email: body.contact_email,
-      project_type:  body.project_type,
-      total,
-    },
-  }).catch(() => {});
+  // Log audit (fire-and-forget, non-bloquant)
+  try {
+    await supabase.from('audit_logs').insert({
+      action:     'DEVIS_CREATED',
+      table_name: 'devis',
+      record_id:  devis.id,
+      new_data: {
+        devis_number: devisNumber,
+        contact_email: body.contact_email,
+        project_type:  body.project_type,
+        total,
+      },
+    });
+  } catch {}
 
   // Notifications
   await notify('nouveau_devis', {

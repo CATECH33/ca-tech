@@ -24,18 +24,22 @@ async function screenshot(name) {
   return path;
 }
 
-async function waitForLoic(timeout = 8000) {
-  // Attendre qu'au moins un message Loïc soit apparu et sans animation de frappe
-  await page.waitForFunction(() => {
-    const bubbles = document.querySelectorAll('.msg-bubble');
-    if (!bubbles.length) return false;
-    const last = bubbles[bubbles.length - 1];
-    return !last.querySelector('.typing');
-  }, null, { timeout });
+// Attendre un NOUVEAU message Loïc (pas utilisateur) au-delà de prevCount
+async function waitForNewLoicMsg(prevCount = 0, timeout = 10000) {
+  await page.waitForFunction((prev) => {
+    const msgs = document.querySelectorAll('.msg:not(.user) .msg-bubble');
+    if (msgs.length <= prev) return false;
+    return !msgs[msgs.length - 1].querySelector('.typing');
+  }, prevCount, { timeout });
+  await page.waitForTimeout(400); // laisse le temps aux choices de s'insérer
 }
 
-async function waitForChoices(timeout = 6000) {
-  await page.waitForSelector('.choice-card, .feat-item, .option-toggle, .f-grp input', { timeout });
+async function loicCount() {
+  return page.evaluate(() => document.querySelectorAll('.msg:not(.user) .msg-bubble').length);
+}
+
+async function waitForChoices(timeout = 7000) {
+  await page.waitForSelector('.choice-card, .feat-item, .option-toggle, #fPrenom', { timeout });
 }
 
 (async () => {
@@ -51,7 +55,7 @@ async function waitForChoices(timeout = 6000) {
   // Capture console errors
   const consoleErrors = [];
   page.on('console', msg => { if (msg.type() === 'error') consoleErrors.push(msg.text()); });
-  page.on('pageerror', err => consoleErrors.push('PAGE ERROR: ' + err.message));
+  page.on('pageerror', err => consoleErrors.push('PAGEERR: ' + err.message));
 
   try {
     // ── STEP 0 : Chargement ────────────────────────────────────────────────
@@ -70,8 +74,9 @@ async function waitForChoices(timeout = 6000) {
     const pricePanel = await page.locator('.price-panel').isVisible();
     log(pricePanel ? '✅' : '❌', 'Panneau estimation visible');
 
-    // Attendre le premier message Loïc
-    await waitForLoic(12000);
+    // Attendre le premier message Loïc (peut déjà être là après networkidle)
+    await waitForNewLoicMsg(0, 12000);
+    let count = await loicCount();
 
     // Loïc avatar visible (après que les messages apparaissent)
     const avatar = await page.locator('.msg-avatar').first().isVisible();
@@ -87,7 +92,8 @@ async function waitForChoices(timeout = 6000) {
     const cards = await page.locator('.choice-card').count();
     log(cards >= 4 ? '✅' : '❌', `${cards} cartes de projet affichées`);
 
-    // Cliquer sur "Site Vitrine"
+    // Cliquer sur "Site Vitrine" — capturer count avant
+    count = await loicCount();
     const siteVitrine = page.locator('.choice-card').filter({ hasText: 'Site Vitrine' }).first();
     await siteVitrine.click();
     log('✅', 'Clic → Site Vitrine');
@@ -98,13 +104,14 @@ async function waitForChoices(timeout = 6000) {
     log(priceText.includes('590') || priceText.includes('708') ? '✅' : '⚠️',
       `Prix sidebar mis à jour : "${priceText.trim()}"`);
 
-    await waitForLoic(6000);
+    await waitForNewLoicMsg(count, 8000);
 
     // ── STEP 2 : Secteur ─────────────────────────────────────────────────
     log('', '');
     log('🔵', 'STEP 2 — Secteur d\'activité');
     await waitForChoices(6000);
 
+    count = await loicCount();
     const secteur = page.locator('.choice-card').filter({ hasText: 'Commerce' }).first();
     const secteurVisible = await secteur.isVisible().catch(() => false);
     log(secteurVisible ? '✅' : '⚠️', 'Cartes secteur affichées');
@@ -113,12 +120,11 @@ async function waitForChoices(timeout = 6000) {
       await secteur.click();
       log('✅', 'Clic → Commerce & Retail');
     } else {
-      // Bouton passer
       await page.locator('.btn-skip').click();
       log('⚠️', 'Bouton "Passer" utilisé (cartes non visibles)');
     }
 
-    await waitForLoic(6000);
+    await waitForNewLoicMsg(count, 8000);
 
     // ── STEP 3 : Fonctionnalités ─────────────────────────────────────────
     log('', '');
@@ -138,8 +144,9 @@ async function waitForChoices(timeout = 6000) {
       log('✅', '2 fonctionnalités cochées');
     }
 
+    count = await loicCount();
     await page.locator('.btn-next').click();
-    await waitForLoic(6000);
+    await waitForNewLoicMsg(count, 8000);
 
     // ── STEP 4 : Options ─────────────────────────────────────────────────
     log('', '');
@@ -159,28 +166,31 @@ async function waitForChoices(timeout = 6000) {
       log('✅', `SEO activé — prix sidebar : "${priceAfterSeo.trim()}"`);
     }
 
+    count = await loicCount();
     await page.locator('.btn-next').click();
-    await waitForLoic(6000);
+    await waitForNewLoicMsg(count, 8000);
 
     // ── STEP 5 : Délai ────────────────────────────────────────────────────
     log('', '');
     log('🔵', 'STEP 5 — Délai');
     await waitForChoices(5000);
 
+    count = await loicCount();
     const normal = page.locator('.choice-card').filter({ hasText: 'Normal' }).first();
     await normal.click();
     log('✅', 'Clic → Délai Normal');
-    await waitForLoic(5000);
+    await waitForNewLoicMsg(count, 8000);
 
     // ── STEP 6 : Budget ───────────────────────────────────────────────────
     log('', '');
     log('🔵', 'STEP 6 — Budget');
     await waitForChoices(5000);
 
+    count = await loicCount();
     const budget = page.locator('.choice-card').filter({ hasText: '500' }).first();
     await budget.click();
     log('✅', 'Clic → Budget 500-1000€');
-    await waitForLoic(5000);
+    await waitForNewLoicMsg(count, 8000);
 
     // ── STEP 7 : Contact ─────────────────────────────────────────────────
     log('', '');
@@ -267,17 +277,14 @@ async function waitForChoices(timeout = 6000) {
     log('', '');
     log('🔵', 'STEP 10 — Génération PDF (jsPDF)');
 
-    // Vérifier que jsPDF est chargé
     const jsPdfLoaded = await page.evaluate(() => typeof window.jspdf !== 'undefined').catch(() => false);
     log(jsPdfLoaded ? '✅' : '❌', 'jsPDF chargé en mémoire');
 
     if (pdfBtn && jsPdfLoaded) {
-      // Intercepter le téléchargement
       const [download] = await Promise.all([
         page.waitForEvent('download', { timeout: 8000 }),
         page.locator('#btnPdf').click(),
       ]).catch(async () => {
-        // Certains navigateurs headless ne déclenchent pas l'event download
         await page.locator('#btnPdf').click().catch(() => {});
         return [null];
       });
@@ -285,7 +292,6 @@ async function waitForChoices(timeout = 6000) {
       if (download) {
         log('✅', `PDF téléchargé : ${download.suggestedFilename()}`);
       } else {
-        // Vérifier qu'aucune erreur JS n'a été levée
         const pdfErrors = consoleErrors.filter(e => e.toLowerCase().includes('pdf') || e.toLowerCase().includes('jspdf'));
         log(pdfErrors.length === 0 ? '✅' : '⚠️', 'Génération PDF sans erreur console');
       }
@@ -321,11 +327,10 @@ async function waitForChoices(timeout = 6000) {
     log('🔍', 'Probe : viewport mobile 390×844');
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(DEVIS_URL, { waitUntil: 'networkidle', timeout: 15000 });
-    await waitForLoic(6000);
+    await waitForNewLoicMsg(0, 8000);
     await screenshot('05-mobile');
 
     const priceColHidden = await page.locator('.price-col').evaluate(el => getComputedStyle(el).display === 'none').catch(() => null);
-    const mobileBarVisible = await page.locator('.mobile-price-bar').isVisible().catch(() => false);
     log(priceColHidden ? '✅' : '⚠️', 'Sidebar prix masquée sur mobile');
 
     const mobileCards = await page.locator('.choice-card').count();
