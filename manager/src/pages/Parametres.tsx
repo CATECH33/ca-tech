@@ -2,7 +2,7 @@ import { useState } from 'react'
 import {
   User, Building2, Receipt, Bell, Palette, Shield,
   Check, Eye, EyeOff, AlertTriangle, CreditCard,
-  Clock, Monitor, Smartphone, LogOut,
+  Clock, Monitor, Smartphone, LogOut, Mail, Send, MessageCircle,
 } from 'lucide-react'
 import { Layout } from '@/components/layout/Layout'
 import { Card } from '@/components/ui/Card'
@@ -11,6 +11,7 @@ import { Input, Select, Textarea } from '@/components/ui/Input'
 import { Avatar } from '@/components/ui/Avatar'
 import { supabase } from '@/lib/supabase'
 import { cn } from '@/lib/utils'
+import { useNotificationSettings, useUpdateNotificationChannel } from '@/hooks/useNotifications'
 
 // ─── Types & storage ──────────────────────────────────────────────────────────
 
@@ -163,10 +164,19 @@ function SectionHeader({ title, desc }: { title: string; desc: string }) {
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
+const CHANNEL_META: Record<string, { label: string; desc: string; icon: React.ElementType; color: string }> = {
+  email:    { label: 'Email',    desc: 'Notifications par email via Resend',         icon: Mail,          color: 'text-blue-500' },
+  telegram: { label: 'Telegram', desc: 'Messages via votre bot Telegram',             icon: Send,          color: 'text-sky-500' },
+  whatsapp: { label: 'WhatsApp', desc: 'Messages via CallMeBot (compte personnel)',   icon: MessageCircle, color: 'text-emerald-500' },
+}
+
 export function Parametres() {
   const [tab, setTab] = useState<Tab>('profil')
   const [settings, setSettings] = useState(loadSettings)
   const [saved, setSaved] = useState<Tab | null>(null)
+
+  const { data: channelSettings = [] } = useNotificationSettings()
+  const updateChannel = useUpdateNotificationChannel()
 
   const [pw, setPw] = useState({ current: '', next: '', confirm: '' })
   const [showPw, setShowPw] = useState(false)
@@ -364,9 +374,43 @@ export function Parametres() {
 
           {/* NOTIFICATIONS */}
           {tab === 'notifications' && (
+            <>
+            {/* Canaux */}
             <Card>
               <SectionHeader
-                title="Notifications"
+                title="Canaux d'envoi"
+                desc="Activez ou désactivez chaque canal. Les clés API sont configurées dans les variables d'environnement Vercel."
+              />
+              <div className="space-y-1">
+                {channelSettings.map(ch => {
+                  const meta = CHANNEL_META[ch.channel]
+                  if (!meta) return null
+                  const Icon = meta.icon
+                  return (
+                    <div key={ch.channel} className="flex items-center justify-between py-3 border-b border-gray-50 last:border-0">
+                      <div className="flex items-center gap-3">
+                        <div className="h-7 w-7 rounded-lg bg-gray-50 flex items-center justify-center shrink-0">
+                          <Icon className={cn('h-3.5 w-3.5', meta.color)} />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">{meta.label}</p>
+                          <p className="text-xs text-gray-500">{meta.desc}</p>
+                        </div>
+                      </div>
+                      <Toggle
+                        checked={ch.enabled}
+                        onChange={v => updateChannel.mutate({ channel: ch.channel, enabled: v })}
+                      />
+                    </div>
+                  )
+                })}
+              </div>
+            </Card>
+
+            {/* Événements */}
+            <Card>
+              <SectionHeader
+                title="Événements"
                 desc="Choisissez les événements pour lesquels vous souhaitez être notifié"
               />
               <div className="space-y-1">
@@ -396,6 +440,7 @@ export function Parametres() {
                 <Button onClick={() => save('notifications')}>Sauvegarder</Button>
               </div>
             </Card>
+            </>
           )}
 
           {/* APPARENCE */}

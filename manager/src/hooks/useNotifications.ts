@@ -1,12 +1,20 @@
 import { useEffect } from 'react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
+
+export interface NotificationChannel {
+  id: string
+  channel: 'email' | 'telegram' | 'whatsapp'
+  enabled: boolean
+  updated_at: string
+}
 
 export interface NotificationLog {
   id: string
   prospect_id: string | null
-  type: 'email' | 'telegram' | 'whatsapp'
-  provider: string
+  type: string
+  channel: 'email' | 'telegram' | 'whatsapp'
+  provider: string | null
   status: 'sent' | 'failed' | 'skipped'
   recipient: string | null
   message: string | null
@@ -41,5 +49,35 @@ export function useNotifications() {
       return (data ?? []) as NotificationLog[]
     },
     refetchInterval: 30_000,
+  })
+}
+
+const QS = ['notification_settings'] as const
+
+export function useNotificationSettings() {
+  return useQuery({
+    queryKey: QS,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('notification_settings')
+        .select('*')
+        .order('channel')
+      if (error) throw error
+      return (data ?? []) as NotificationChannel[]
+    },
+  })
+}
+
+export function useUpdateNotificationChannel() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ channel, enabled }: { channel: string; enabled: boolean }) => {
+      const { error } = await supabase
+        .from('notification_settings')
+        .update({ enabled, updated_at: new Date().toISOString() })
+        .eq('channel', channel)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: QS }),
   })
 }

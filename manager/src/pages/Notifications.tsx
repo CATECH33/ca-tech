@@ -30,8 +30,8 @@ export function Notifications() {
   const [statusFilter, setStatusFilter] = useState<FilterStatus>('all')
 
   const filtered = logs.filter(l => {
-    if (typeFilter   !== 'all' && l.type   !== typeFilter)   return false
-    if (statusFilter !== 'all' && l.status !== statusFilter) return false
+    if (typeFilter   !== 'all' && l.channel !== typeFilter)  return false
+    if (statusFilter !== 'all' && l.status  !== statusFilter) return false
     return true
   })
 
@@ -155,7 +155,7 @@ export function Notifications() {
                 </thead>
                 <tbody className="divide-y divide-gray-50">
                   {filtered.map(log => {
-                    const T = TYPE_CONFIG[log.type]   ?? TYPE_CONFIG.email
+                    const T = TYPE_CONFIG[log.channel] ?? TYPE_CONFIG.email
                     const S = STATUS_CONFIG[log.status as keyof typeof STATUS_CONFIG] ?? STATUS_CONFIG.failed
                     return (
                       <tr key={log.id} className="hover:bg-gray-50/60 transition-colors">
@@ -203,14 +203,12 @@ export function Notifications() {
 
         {/* Config reminder */}
         <div className="bg-amber-50 border border-amber-100 rounded-xl p-4">
-          <p className="text-xs font-semibold text-amber-700 mb-2">Secrets Supabase à configurer</p>
+          <p className="text-xs font-semibold text-amber-700 mb-2">Variables d'environnement Vercel à configurer</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-[11px] text-amber-600">
             <div>
-              <p className="font-semibold mb-1">📧 Email (Resend ou Brevo)</p>
+              <p className="font-semibold mb-1">📧 Email (Resend) ✅</p>
               <code className="block">RESEND_API_KEY</code>
-              <code className="block">BREVO_API_KEY (fallback)</code>
-              <code className="block">NOTIFICATION_EMAIL</code>
-              <code className="block">NOTIFICATION_FROM_EMAIL</code>
+              <code className="block">ADMIN_EMAIL (optionnel)</code>
             </div>
             <div>
               <p className="font-semibold mb-1">📱 Telegram</p>
@@ -218,9 +216,9 @@ export function Notifications() {
               <code className="block">TELEGRAM_CHAT_ID</code>
             </div>
             <div>
-              <p className="font-semibold mb-1">💬 WhatsApp (optionnel)</p>
-              <code className="block">WHATSAPP_PROVIDER (meta/twilio)</code>
-              <code className="block">+ identifiants provider</code>
+              <p className="font-semibold mb-1">💬 WhatsApp (CallMeBot)</p>
+              <code className="block">CALLMEBOT_PHONE</code>
+              <code className="block">CALLMEBOT_APIKEY</code>
             </div>
           </div>
         </div>
