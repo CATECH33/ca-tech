@@ -81,7 +81,7 @@ const PAGES = [
       log(loaderHidden ? '✅' : '⚠️', 'Loader masqué');
 
       // Nav présente
-      const nav = await page.locator('nav').isVisible().catch(() => false);
+      const nav = await page.locator('nav').first().isVisible().catch(() => false);
       log(nav ? '✅' : '⚠️', 'Nav visible');
 
       // Logo CA-TECH
