@@ -1,12 +1,144 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loïc IA — Devis</title>
-    <meta name="robots" content="noindex, nofollow">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Loïc IA — Devis</title>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/admin.css"/>
+  <style>
+  .subnav{display:flex;gap:.3rem;padding:.7rem 2rem;border-bottom:1px solid var(--border);background:rgba(255,255,255,.01);flex-shrink:0;overflow-x:auto}
+  .subnav-link{display:flex;align-items:center;gap:.4rem;padding:6px 14px;border-radius:7px;text-decoration:none;font-size:.76rem;font-weight:600;color:var(--text3);white-space:nowrap;transition:all .2s}
+  .subnav-link:hover{background:rgba(255,255,255,.05);color:var(--text2)}
+  .subnav-link.active{background:rgba(0,102,255,.12);color:var(--white)}
+  .two-col{display:grid;grid-template-columns:1fr 300px;gap:1.2rem}
+  .panel{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+  .panel-head{padding:1rem 1.3rem;border-bottom:1px solid var(--border);font-size:.8rem;font-weight:700;color:var(--white);display:flex;align-items:center;justify-content:space-between}
+  .panel-body{padding:.4rem 0}
+  .devis-row{display:flex;align-items:center;gap:.8rem;padding:.65rem 1.2rem;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .15s;text-decoration:none}
+  .devis-row:hover{background:rgba(255,255,255,.03)}
+  .devis-row:last-child{border-bottom:none}
+  .dr-num{font-size:.75rem;font-weight:700;color:var(--white);min-width:100px}
+  .dr-info{flex:1;min-width:0}
+  .dr-name{font-size:.76rem;color:var(--text2);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dr-type{font-size:.67rem;color:var(--text3)}
+  .dr-amt{font-size:.78rem;font-weight:800;color:var(--white);white-space:nowrap}
+  .ia-insight{padding:.9rem 1.2rem;border-bottom:1px solid rgba(255,255,255,.04);display:flex;gap:.7rem;align-items:flex-start}
+  .ia-insight:last-child{border-bottom:none}
+  .ia-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:.3rem}
+  .ia-dot.blue{background:var(--blue)} .ia-dot.green{background:var(--green)} .ia-dot.orange{background:var(--orange)}
+  .ia-text{font-size:.75rem;color:var(--text2);line-height:1.5}
+  .ia-tag{font-size:.65rem;font-weight:700;color:var(--text3);margin-top:.2rem}
+  @media(max-width:1000px){.two-col{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
-    <!-- Loïc IA — Génération de devis -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <img src="../../assets/logos/logo-ca-tech.png" alt="CA-TECH"/>
+    <div><span class="sb-logo-name">CA-TECH</span><span class="sb-logo-sub">Manager</span></div>
+  </div>
+  <div class="sb-section">Principal</div>
+  <a href="../dashboard.html" class="sb-link"><span class="sb-icon">📊</span>Dashboard</a>
+  <a href="../clients.html"   class="sb-link"><span class="sb-icon">👥</span>Clients</a>
+  <a href="../projets.html"   class="sb-link"><span class="sb-icon">🚀</span>Projets</a>
+  <a href="../devis.html"     class="sb-link"><span class="sb-icon">📄</span>Devis</a>
+  <a href="../factures.html"  class="sb-link"><span class="sb-icon">🧾</span>Factures</a>
+  <a href="../paiements.html" class="sb-link"><span class="sb-icon">💳</span>Paiements</a>
+  <div class="sb-section">Outils</div>
+  <a href="../agenda.html"     class="sb-link"><span class="sb-icon">📅</span>Agenda</a>
+  <a href="../leads.html"      class="sb-link"><span class="sb-icon">🎯</span>Leads</a>
+  <a href="../portfolio.html"  class="sb-link"><span class="sb-icon">🖼️</span>Portfolio</a>
+  <a href="../parametres.html" class="sb-link"><span class="sb-icon">⚙️</span>Paramètres</a>
+  <div class="sb-section">IA</div>
+  <a href="index.html"  class="sb-link active"><span class="sb-icon">🤖</span>Loïc IA</a>
+  <a href="/devis" class="sb-link" target="_blank"><span class="sb-icon">🔗</span>Page Devis <span style="font-size:.65rem">↗</span></a>
+  <div class="sb-bottom"><div class="sb-user"><div class="sb-avatar">CA</div><div><div style="color:var(--white);font-weight:600;font-size:.75rem">CA-TECH</div><div style="font-size:.68rem">Admin</div></div></div></div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-title">🤖 Loïc IA — Devis</div>
+    <div class="topbar-right">
+      <a href="/devis" target="_blank" class="btn-primary">✚ Nouveau devis</a>
+    </div>
+  </div>
+  <nav class="subnav">
+    <a href="index.html"         class="subnav-link">🏠 Hub</a>
+    <a href="devis.html"         class="subnav-link active">📄 Devis IA</a>
+    <a href="qualification.html" class="subnav-link">🎯 Qualification</a>
+    <a href="crm.html"           class="subnav-link">👥 CRM IA</a>
+    <a href="stripe.html"        class="subnav-link">💳 Stripe IA</a>
+    <a href="agenda.html"        class="subnav-link">📅 Agenda IA</a>
+  </nav>
+  <div class="content">
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-head">
+          📄 Devis récents générés par Loïc
+          <a href="../devis.html" style="font-size:.72rem;color:var(--blue);text-decoration:none;font-weight:600">Voir tout →</a>
+        </div>
+        <div class="panel-body" id="devisList">
+          <div style="display:flex;align-items:center;justify-content:center;gap:.6rem;padding:2rem;color:var(--text3)"><div class="spinner"></div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">🧠 Insights Loïc IA</div>
+        <div class="panel-body" id="insights">
+          <div style="display:flex;align-items:center;justify-content:center;gap:.6rem;padding:2rem;color:var(--text3)"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+const TYPE_LABELS={'site-vitrine':'Site Vitrine','site-ecommerce':'Site E-commerce','landing-page':'Landing Page','logo':'Logo','flyer':'Flyer','identite-visuelle':'Identité Visuelle','sur-mesure':'Sur mesure','ia-automatisation':'IA & Auto.'};
+const BADGE_LABELS={draft:'Brouillon',sent:'Envoyé',accepted:'Accepté',refused:'Refusé',expired:'Expiré'};
+const fmtEur = n=>(n||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0});
+const fmtAge = s=>{if(!s)return'';const d=Math.floor((Date.now()-new Date(s))/86400000);return d===0?"Auj.":d===1?'Hier':`${d}j`;};
+
+(async()=>{
+  try{
+    const res=await fetch('/api/devis?action=list&limit=200');
+    const devis=await res.json();
+
+    document.getElementById('devisList').innerHTML = devis.length === 0
+      ? '<div class="empty-state"><div class="empty-icon">📄</div><div class="empty-title">Aucun devis</div><div class="empty-desc">Créez votre premier devis via la page publique.</div></div>'
+      : devis.slice(0,10).map(d=>`
+        <a href="../devis.html" class="devis-row">
+          <div class="dr-num">${d.devis_number}</div>
+          <div class="dr-info"><div class="dr-name">${d.contact_name||d.contact_email}</div><div class="dr-type">${TYPE_LABELS[d.project_type]||d.project_type||'—'}</div></div>
+          <span class="badge ${d.status}" style="font-size:.6rem">${BADGE_LABELS[d.status]||d.status}</span>
+          <div class="dr-amt">${(d.total||0).toLocaleString('fr-FR',{maximumFractionDigits:0})}€</div>
+          <div style="font-size:.65rem;color:var(--text3);white-space:nowrap;margin-left:.3rem">${fmtAge(d.created_at)}</div>
+        </a>`).join('');
+
+    // Insights IA (calculés)
+    const total=devis.length, accepted=devis.filter(d=>d.status==='accepted').length;
+    const draft=devis.filter(d=>d.status==='draft').length;
+    const sent=devis.filter(d=>d.status==='sent').length;
+    const types={};devis.forEach(d=>{if(d.project_type)types[d.project_type]=(types[d.project_type]||0)+1;});
+    const topType=Object.entries(types).sort((a,b)=>b[1]-a[1])[0];
+    const ca=devis.filter(d=>d.status==='accepted').reduce((s,d)=>s+(d.total||0),0);
+
+    const insights=[];
+    if(draft>0) insights.push({dot:'orange',text:`${draft} devis en brouillon — pensez à les envoyer pour augmenter votre taux de conversion.`,tag:'Action recommandée'});
+    if(sent>0)  insights.push({dot:'blue',text:`${sent} devis envoyés en attente de réponse. Une relance après 3 jours augmente les chances d'acceptation de 40%.`,tag:'Relance conseillée'});
+    if(topType) insights.push({dot:'green',text:`Type de projet le plus demandé : ${TYPE_LABELS[topType[0]]||topType[0]} (${topType[1]} devis). Considérez une offre packagée.`,tag:'Tendance'});
+    if(ca>0)    insights.push({dot:'green',text:`CA potentiel confirmé : ${fmtEur(ca)} — démarrez les projets acceptés pour encaisser.`,tag:'Opportunité'});
+    if(total===0) insights.push({dot:'blue',text:"Aucun devis encore. Partagez le lien /devis à vos prospects pour démarrer.",tag:'Démarrage'});
+
+    document.getElementById('insights').innerHTML = insights.length
+      ? insights.map(i=>`<div class="ia-insight"><div class="ia-dot ${i.dot}"></div><div><div class="ia-text">${i.text}</div><div class="ia-tag">${i.tag}</div></div></div>`).join('')
+      : '<div style="padding:1.5rem;color:var(--text3);font-size:.8rem;text-align:center">Aucun insight disponible</div>';
+  }catch(e){
+    document.getElementById('devisList').innerHTML=`<div style="padding:1rem;color:var(--red);font-size:.8rem">Erreur : ${e.message}</div>`;
+  }
+})();
+</script>
 </body>
 </html>

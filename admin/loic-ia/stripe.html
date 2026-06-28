@@ -1,12 +1,70 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loïc IA — Stripe</title>
-    <meta name="robots" content="noindex, nofollow">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Loïc IA — Stripe</title>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/admin.css"/>
+  <style>
+  .subnav{display:flex;gap:.3rem;padding:.7rem 2rem;border-bottom:1px solid var(--border);background:rgba(255,255,255,.01);flex-shrink:0;overflow-x:auto}
+  .subnav-link{display:flex;align-items:center;gap:.4rem;padding:6px 14px;border-radius:7px;text-decoration:none;font-size:.76rem;font-weight:600;color:var(--text3);white-space:nowrap;transition:all .2s}
+  .subnav-link:hover{background:rgba(255,255,255,.05);color:var(--text2)}
+  .subnav-link.active{background:rgba(0,102,255,.12);color:var(--white)}
+  </style>
 </head>
 <body>
-    <!-- Loïc IA — Intégration Stripe -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <img src="../../assets/logos/logo-ca-tech.png" alt="CA-TECH"/>
+    <div><span class="sb-logo-name">CA-TECH</span><span class="sb-logo-sub">Manager</span></div>
+  </div>
+  <div class="sb-section">Principal</div>
+  <a href="../dashboard.html" class="sb-link"><span class="sb-icon">📊</span>Dashboard</a>
+  <a href="../clients.html"   class="sb-link"><span class="sb-icon">👥</span>Clients</a>
+  <a href="../projets.html"   class="sb-link"><span class="sb-icon">🚀</span>Projets</a>
+  <a href="../devis.html"     class="sb-link"><span class="sb-icon">📄</span>Devis</a>
+  <a href="../factures.html"  class="sb-link"><span class="sb-icon">🧾</span>Factures</a>
+  <a href="../paiements.html" class="sb-link"><span class="sb-icon">💳</span>Paiements</a>
+  <div class="sb-section">Outils</div>
+  <a href="../agenda.html"     class="sb-link"><span class="sb-icon">📅</span>Agenda</a>
+  <a href="../leads.html"      class="sb-link"><span class="sb-icon">🎯</span>Leads</a>
+  <a href="../portfolio.html"  class="sb-link"><span class="sb-icon">🖼️</span>Portfolio</a>
+  <a href="../parametres.html" class="sb-link"><span class="sb-icon">⚙️</span>Paramètres</a>
+  <div class="sb-section">IA</div>
+  <a href="index.html"  class="sb-link active"><span class="sb-icon">🤖</span>Loïc IA</a>
+  <a href="/devis" class="sb-link" target="_blank"><span class="sb-icon">🔗</span>Page Devis <span style="font-size:.65rem">↗</span></a>
+  <div class="sb-bottom"><div class="sb-user"><div class="sb-avatar">CA</div><div><div style="color:var(--white);font-weight:600;font-size:.75rem">CA-TECH</div><div style="font-size:.68rem">Admin</div></div></div></div>
+</aside>
+<main class="main">
+  <div class="topbar"><div class="topbar-title">🤖 Loïc IA — Stripe</div></div>
+  <nav class="subnav">
+    <a href="index.html"         class="subnav-link">🏠 Hub</a>
+    <a href="devis.html"         class="subnav-link">📄 Devis IA</a>
+    <a href="qualification.html" class="subnav-link">🎯 Qualification</a>
+    <a href="crm.html"           class="subnav-link">👥 CRM IA</a>
+    <a href="stripe.html"        class="subnav-link active">💳 Stripe IA</a>
+    <a href="agenda.html"        class="subnav-link">📅 Agenda IA</a>
+  </nav>
+  <div class="content">
+    <div class="cs-panel">
+      <div class="cs-icon">💳</div>
+      <div class="cs-title">Stripe IA</div>
+      <div class="cs-desc">Loïc crée des liens de paiement personnalisés depuis un devis accepté, gère les abonnements et analyse les revenus en temps réel.</div>
+      <div class="cs-features">
+        <span class="cs-feat">Lien paiement depuis devis</span>
+        <span class="cs-feat">Abonnements récurrents</span>
+        <span class="cs-feat">Analyse revenus</span>
+        <span class="cs-feat">Remboursements IA</span>
+        <span class="cs-feat">Alertes impayés</span>
+      </div>
+      <div class="cs-eta">Stripe Checkout actif — assistant IA en développement</div>
+      <a href="../paiements.html" class="btn-sec" style="text-decoration:none">💳 Voir les paiements</a>
+    </div>
+  </div>
+</main>
 </body>
 </html>

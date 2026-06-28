@@ -1,12 +1,143 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loïc IA — Assistant CA-TECH</title>
-    <meta name="robots" content="noindex, nofollow">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Loïc IA — Assistant CA-TECH</title>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/admin.css"/>
+  <style>
+  .subnav{display:flex;gap:.3rem;padding:.7rem 2rem;border-bottom:1px solid var(--border);background:rgba(255,255,255,.01);flex-shrink:0;overflow-x:auto}
+  .subnav-link{display:flex;align-items:center;gap:.4rem;padding:6px 14px;border-radius:7px;text-decoration:none;font-size:.76rem;font-weight:600;color:var(--text3);white-space:nowrap;transition:all .2s}
+  .subnav-link:hover{background:rgba(255,255,255,.05);color:var(--text2)}
+  .subnav-link.active{background:rgba(0,102,255,.12);color:var(--white)}
+  .cap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
+  .cap-card{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:14px;padding:1.4rem;text-decoration:none;display:flex;flex-direction:column;gap:.8rem;transition:all .25s;position:relative;overflow:hidden}
+  .cap-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad)}
+  .cap-card:hover{border-color:rgba(0,102,255,.3);transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,0,0,.3)}
+  .cap-icon{font-size:2rem;line-height:1}
+  .cap-title{font-size:.9rem;font-weight:800;color:var(--white)}
+  .cap-desc{font-size:.75rem;color:var(--text3);line-height:1.6}
+  .cap-chips{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:auto}
+  .cap-chip{background:rgba(255,255,255,.05);border-radius:4px;padding:2px 8px;font-size:.65rem;color:var(--text3);font-weight:600}
+  .stat-band{display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap}
+  .stat-pill{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:.7rem 1.2rem;display:flex;align-items:center;gap:.7rem}
+  .sp-val{font-size:1.2rem;font-weight:900;color:var(--white);letter-spacing:-0.5px}
+  .sp-lbl{font-size:.68rem;color:var(--text3);font-weight:600}
+  @media(max-width:1100px){.cap-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:700px){.cap-grid{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
-    <!-- Loïc IA — Page principale -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <img src="../../assets/logos/logo-ca-tech.png" alt="CA-TECH"/>
+    <div><span class="sb-logo-name">CA-TECH</span><span class="sb-logo-sub">Manager</span></div>
+  </div>
+  <div class="sb-section">Principal</div>
+  <a href="../dashboard.html" class="sb-link"><span class="sb-icon">📊</span>Dashboard</a>
+  <a href="../clients.html"   class="sb-link"><span class="sb-icon">👥</span>Clients</a>
+  <a href="../projets.html"   class="sb-link"><span class="sb-icon">🚀</span>Projets</a>
+  <a href="../devis.html"     class="sb-link"><span class="sb-icon">📄</span>Devis</a>
+  <a href="../factures.html"  class="sb-link"><span class="sb-icon">🧾</span>Factures</a>
+  <a href="../paiements.html" class="sb-link"><span class="sb-icon">💳</span>Paiements</a>
+  <div class="sb-section">Outils</div>
+  <a href="../agenda.html"     class="sb-link"><span class="sb-icon">📅</span>Agenda</a>
+  <a href="../leads.html"      class="sb-link"><span class="sb-icon">🎯</span>Leads</a>
+  <a href="../portfolio.html"  class="sb-link"><span class="sb-icon">🖼️</span>Portfolio</a>
+  <a href="../parametres.html" class="sb-link"><span class="sb-icon">⚙️</span>Paramètres</a>
+  <div class="sb-section">IA</div>
+  <a href="index.html"  class="sb-link active"><span class="sb-icon">🤖</span>Loïc IA</a>
+  <a href="/devis" class="sb-link" target="_blank"><span class="sb-icon">🔗</span>Page Devis <span style="font-size:.65rem">↗</span></a>
+  <div class="sb-bottom"><div class="sb-user"><div class="sb-avatar">CA</div><div><div style="color:var(--white);font-weight:600;font-size:.75rem">CA-TECH</div><div style="font-size:.68rem">Admin</div></div></div></div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-title">🤖 Loïc IA</div>
+    <div class="topbar-right">
+      <a href="/devis" target="_blank" class="btn-primary">✚ Nouveau devis</a>
+    </div>
+  </div>
+
+  <nav class="subnav">
+    <a href="index.html"         class="subnav-link active">🏠 Hub</a>
+    <a href="devis.html"         class="subnav-link">📄 Devis IA</a>
+    <a href="qualification.html" class="subnav-link">🎯 Qualification</a>
+    <a href="crm.html"           class="subnav-link">👥 CRM IA</a>
+    <a href="stripe.html"        class="subnav-link">💳 Stripe IA</a>
+    <a href="agenda.html"        class="subnav-link">📅 Agenda IA</a>
+  </nav>
+
+  <div class="content">
+
+    <div class="stat-band" id="statBand">
+      <div class="stat-pill"><div class="sp-val" id="spDevis">—</div><div class="sp-lbl">Devis générés</div></div>
+      <div class="stat-pill"><div class="sp-val" id="spLeads">—</div><div class="sp-lbl">Leads qualifiés</div></div>
+      <div class="stat-pill"><div class="sp-val" id="spCA">—</div><div class="sp-lbl">CA potentiel</div></div>
+      <div class="stat-pill"><div class="sp-val" id="spConv">—</div><div class="sp-lbl">Taux conversion</div></div>
+    </div>
+
+    <div class="cap-grid">
+      <a href="devis.html" class="cap-card" style="--grad:linear-gradient(90deg,#0066FF,#00D4FF)">
+        <div class="cap-icon">📄</div>
+        <div class="cap-title">Devis IA</div>
+        <div class="cap-desc">Loïc accompagne le prospect étape par étape, calcule le prix en temps réel et génère un devis PDF professionnel.</div>
+        <div class="cap-chips"><span class="cap-chip">Conversationnel</span><span class="cap-chip">PDF auto</span><span class="cap-chip">Prix temps réel</span></div>
+      </a>
+      <a href="qualification.html" class="cap-card" style="--grad:linear-gradient(90deg,#8b5cf6,#a78bfa)">
+        <div class="cap-icon">🎯</div>
+        <div class="cap-title">Qualification leads</div>
+        <div class="cap-desc">Analyse automatique des prospects : score de qualification, budget, urgence et recommandations de suivi.</div>
+        <div class="cap-chips"><span class="cap-chip">Score IA</span><span class="cap-chip">Priorité</span><span class="cap-chip">Recommandations</span></div>
+      </a>
+      <a href="crm.html" class="cap-card" style="--grad:linear-gradient(90deg,#10b981,#34d399)">
+        <div class="cap-icon">👥</div>
+        <div class="cap-title">CRM intelligent</div>
+        <div class="cap-desc">Enrichissement automatique des fiches clients, détection d'opportunités et suggestions de relance personnalisées.</div>
+        <div class="cap-chips"><span class="cap-chip">Enrichissement</span><span class="cap-chip">Opportunités</span><span class="cap-chip">Relances IA</span></div>
+      </a>
+      <a href="stripe.html" class="cap-card" style="--grad:linear-gradient(90deg,#f59e0b,#fbbf24)">
+        <div class="cap-icon">💳</div>
+        <div class="cap-title">Stripe IA</div>
+        <div class="cap-desc">Assistant pour créer des liens de paiement, gérer les abonnements et analyser les revenus Stripe.</div>
+        <div class="cap-chips"><span class="cap-chip">Paiement rapide</span><span class="cap-chip">Abonnements</span><span class="cap-chip">Analytics</span></div>
+      </a>
+      <a href="agenda.html" class="cap-card" style="--grad:linear-gradient(90deg,#06b6d4,#22d3ee)">
+        <div class="cap-icon">📅</div>
+        <div class="cap-title">Agenda IA</div>
+        <div class="cap-desc">Planification intelligente des rendez-vous, rappels automatiques et optimisation du calendrier CA-TECH.</div>
+        <div class="cap-chips"><span class="cap-chip">RDV auto</span><span class="cap-chip">Rappels</span><span class="cap-chip">Optimisation</span></div>
+      </a>
+      <a href="/devis" target="_blank" class="cap-card" style="--grad:linear-gradient(90deg,#ef4444,#f87171)">
+        <div class="cap-icon">🔗</div>
+        <div class="cap-title">Page devis publique</div>
+        <div class="cap-desc">Accéder directement au formulaire conversationnel Loïc côté client — testez le parcours prospect en conditions réelles.</div>
+        <div class="cap-chips"><span class="cap-chip">Client-side</span><span class="cap-chip">Live ↗</span></div>
+      </a>
+    </div>
+
+  </div>
+</main>
+
+<script>
+(async () => {
+  try {
+    const res = await fetch('/api/devis?action=list&limit=200');
+    const devis = await res.json();
+    const fmtEur = n => n >= 1000 ? (n/1000).toFixed(1)+'k€' : n+'€';
+    const unique = new Set(devis.map(d=>d.contact_email).filter(Boolean));
+    const ca = devis.filter(d=>d.status==='accepted').reduce((s,d)=>s+(d.total||0),0);
+    const conv = devis.length ? Math.round(devis.filter(d=>d.status==='accepted').length/devis.length*100) : 0;
+    document.getElementById('spDevis').textContent = devis.length;
+    document.getElementById('spLeads').textContent = unique.size;
+    document.getElementById('spCA').textContent = fmtEur(Math.round(ca));
+    document.getElementById('spConv').textContent = conv+'%';
+  } catch{}
+})();
+</script>
 </body>
 </html>

@@ -1,12 +1,149 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loïc IA — Qualification</title>
-    <meta name="robots" content="noindex, nofollow">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Loïc IA — Qualification</title>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/admin.css"/>
+  <style>
+  .subnav{display:flex;gap:.3rem;padding:.7rem 2rem;border-bottom:1px solid var(--border);background:rgba(255,255,255,.01);flex-shrink:0;overflow-x:auto}
+  .subnav-link{display:flex;align-items:center;gap:.4rem;padding:6px 14px;border-radius:7px;text-decoration:none;font-size:.76rem;font-weight:600;color:var(--text3);white-space:nowrap;transition:all .2s}
+  .subnav-link:hover{background:rgba(255,255,255,.05);color:var(--text2)}
+  .subnav-link.active{background:rgba(0,102,255,.12);color:var(--white)}
+  .lead-card{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:.7rem;display:flex;align-items:center;gap:1rem;transition:border-color .2s}
+  .lead-card:hover{border-color:rgba(0,102,255,.25)}
+  .score-ring{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:900;flex-shrink:0;border:2.5px solid}
+  .score-ring.high{border-color:var(--green);color:var(--green);background:rgba(16,185,129,.08)}
+  .score-ring.mid {border-color:var(--orange);color:var(--orange);background:rgba(245,158,11,.08)}
+  .score-ring.low {border-color:var(--red);color:var(--red);background:rgba(239,68,68,.08)}
+  .lead-info{flex:1;min-width:0}
+  .lead-name{font-size:.82rem;font-weight:700;color:var(--white)}
+  .lead-meta{font-size:.7rem;color:var(--text3);margin-top:.2rem}
+  .lead-tags{display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.4rem}
+  .lead-tag{font-size:.63rem;font-weight:700;padding:2px 7px;border-radius:4px}
+  .tag-budget{background:rgba(16,185,129,.1);color:var(--green)}
+  .tag-urgence{background:rgba(239,68,68,.1);color:var(--red)}
+  .tag-type{background:rgba(0,102,255,.1);color:var(--cyan)}
+  .tag-source{background:rgba(255,255,255,.06);color:var(--text3)}
+  .lead-action{font-size:.72rem;font-weight:600;color:var(--blue);cursor:pointer;white-space:nowrap}
+  </style>
 </head>
 <body>
-    <!-- Loïc IA — Qualification des leads -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <img src="../../assets/logos/logo-ca-tech.png" alt="CA-TECH"/>
+    <div><span class="sb-logo-name">CA-TECH</span><span class="sb-logo-sub">Manager</span></div>
+  </div>
+  <div class="sb-section">Principal</div>
+  <a href="../dashboard.html" class="sb-link"><span class="sb-icon">📊</span>Dashboard</a>
+  <a href="../clients.html"   class="sb-link"><span class="sb-icon">👥</span>Clients</a>
+  <a href="../projets.html"   class="sb-link"><span class="sb-icon">🚀</span>Projets</a>
+  <a href="../devis.html"     class="sb-link"><span class="sb-icon">📄</span>Devis</a>
+  <a href="../factures.html"  class="sb-link"><span class="sb-icon">🧾</span>Factures</a>
+  <a href="../paiements.html" class="sb-link"><span class="sb-icon">💳</span>Paiements</a>
+  <div class="sb-section">Outils</div>
+  <a href="../agenda.html"     class="sb-link"><span class="sb-icon">📅</span>Agenda</a>
+  <a href="../leads.html"      class="sb-link"><span class="sb-icon">🎯</span>Leads</a>
+  <a href="../portfolio.html"  class="sb-link"><span class="sb-icon">🖼️</span>Portfolio</a>
+  <a href="../parametres.html" class="sb-link"><span class="sb-icon">⚙️</span>Paramètres</a>
+  <div class="sb-section">IA</div>
+  <a href="index.html"  class="sb-link active"><span class="sb-icon">🤖</span>Loïc IA</a>
+  <a href="/devis" class="sb-link" target="_blank"><span class="sb-icon">🔗</span>Page Devis <span style="font-size:.65rem">↗</span></a>
+  <div class="sb-bottom"><div class="sb-user"><div class="sb-avatar">CA</div><div><div style="color:var(--white);font-weight:600;font-size:.75rem">CA-TECH</div><div style="font-size:.68rem">Admin</div></div></div></div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-title">🤖 Loïc IA — Qualification</div>
+    <div class="topbar-right">
+      <button class="btn-sec" onclick="loadLeads()">🔄 Actualiser</button>
+    </div>
+  </div>
+  <nav class="subnav">
+    <a href="index.html"         class="subnav-link">🏠 Hub</a>
+    <a href="devis.html"         class="subnav-link">📄 Devis IA</a>
+    <a href="qualification.html" class="subnav-link active">🎯 Qualification</a>
+    <a href="crm.html"           class="subnav-link">👥 CRM IA</a>
+    <a href="stripe.html"        class="subnav-link">💳 Stripe IA</a>
+    <a href="agenda.html"        class="subnav-link">📅 Agenda IA</a>
+  </nav>
+  <div class="content">
+    <p style="font-size:.78rem;color:var(--text3);margin-bottom:1.2rem;line-height:1.6">
+      🧠 Score de qualification calculé par Loïc IA selon : budget, urgence, type de projet et source du lead.
+    </p>
+    <div id="leadsList">
+      <div style="display:flex;align-items:center;gap:.6rem;color:var(--text3);padding:2rem"><div class="spinner"></div> Analyse en cours…</div>
+    </div>
+  </div>
+</main>
+
+<script>
+const TYPE_LABELS={'site-vitrine':'Site Vitrine','site-ecommerce':'Site E-commerce','landing-page':'Landing Page','logo':'Logo','flyer':'Flyer','identite-visuelle':'Identité Visuelle','sur-mesure':'Sur mesure','ia-automatisation':'IA & Auto.'};
+const BUDGET_SCORE={'<500':10,'500-1000':30,'1000-2500':50,'2500-5000':75,'>5000':95};
+const DEADLINE_SCORE={urgent:30,normal:15,large:5,flexible:10};
+const TYPE_SCORE={'sur-mesure':20,'ia-automatisation':20,'site-ecommerce':15,'site-vitrine':10,'landing-page':8,'identite-visuelle':8,'logo':5,'flyer':3};
+
+function scoreLeads(devis) {
+  const map=new Map();
+  devis.forEach(d=>{
+    if(!d.contact_email) return;
+    const key=d.contact_email;
+    if(!map.has(key)){
+      const bs=BUDGET_SCORE[d.budget_range]||20;
+      const ds=DEADLINE_SCORE[d.deadline]||10;
+      const ts=TYPE_SCORE[d.project_type]||5;
+      const ss=d.seo_option?5:0;
+      const ms=d.maintenance_option&&d.maintenance_option!=='none'?5:0;
+      const total=Math.min(100,bs+ds+ts+ss+ms);
+      map.set(key,{email:key,name:d.contact_name||'',phone:d.contact_phone||'',company:d.company_name||'',project_type:d.project_type,budget:d.budget_range,deadline:d.deadline,total:d.total||0,score:total,status:d.status,created_at:d.created_at});
+    }
+  });
+  return Array.from(map.values()).sort((a,b)=>b.score-a.score);
+}
+
+async function loadLeads(){
+  try{
+    const res=await fetch('/api/devis?action=list&limit=200');
+    const devis=await res.json();
+    const leads=scoreLeads(devis);
+
+    if(leads.length===0){
+      document.getElementById('leadsList').innerHTML='<div class="empty-state"><div class="empty-icon">🎯</div><div class="empty-title">Aucun lead à qualifier</div><div class="empty-desc">Les leads apparaissent ici dès qu\'un prospect soumet le formulaire /devis.</div></div>';
+      return;
+    }
+
+    const DEADLINE_LBL={urgent:'Urgent',normal:'Normal',large:'Sans presse',flexible:'Flexible'};
+    const BUDGET_LBL={'<500':'<500€','500-1000':'500-1k€','1000-2500':'1k-2.5k€','2500-5000':'2.5k-5k€','>5000':'>5k€'};
+
+    document.getElementById('leadsList').innerHTML=leads.map(l=>{
+      const cls=l.score>=70?'high':l.score>=40?'mid':'low';
+      return `<div class="lead-card">
+        <div class="score-ring ${cls}">${l.score}</div>
+        <div class="lead-info">
+          <div class="lead-name">${l.name||l.email}</div>
+          <div class="lead-meta">${l.email}${l.company?' · '+l.company:''}</div>
+          <div class="lead-tags">
+            ${l.project_type?`<span class="lead-tag tag-type">${TYPE_LABELS[l.project_type]||l.project_type}</span>`:''}
+            ${l.budget?`<span class="lead-tag tag-budget">${BUDGET_LBL[l.budget]||l.budget}</span>`:''}
+            ${l.deadline?`<span class="lead-tag tag-urgence">${DEADLINE_LBL[l.deadline]||l.deadline}</span>`:''}
+            <span class="lead-tag tag-source">devis_form</span>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:.8rem;font-weight:800;color:var(--white)">${(l.total||0).toLocaleString('fr-FR',{maximumFractionDigits:0})} €</div>
+          <span class="badge ${l.status}" style="font-size:.6rem;margin-top:.3rem;display:inline-flex">${l.status}</span>
+        </div>
+      </div>`;
+    }).join('');
+  }catch(e){
+    document.getElementById('leadsList').innerHTML=`<div style="color:var(--red);padding:1rem;font-size:.8rem">Erreur : ${e.message}</div>`;
+  }
+}
+loadLeads();
+</script>
 </body>
 </html>
