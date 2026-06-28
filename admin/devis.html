@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CA-TECH Manager — Devis</title>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --blue:#0066FF;--blue-dk:#0A2540;--cyan:#00D4FF;--green:#10b981;--orange:#f59e0b;--red:#ef4444;--purple:#8b5cf6;
+    --white:#fff;--dark:#050d1a;--dark2:#0a1628;--dark3:#0f1d32;
+    --text:rgba(255,255,255,1);--text2:rgba(255,255,255,.72);--text3:rgba(255,255,255,.42);
+    --border:rgba(255,255,255,.08);--sidebar-w:220px;
+  }
+  html,body{height:100%;overflow:hidden}
+  body{font-family:'Inter',-apple-system,sans-serif;background:var(--dark);color:var(--text);-webkit-font-smoothing:antialiased;display:flex}
+
+  /* ── SIDEBAR ─────────────────────────────────────────────────────────── */
+  .sidebar{width:var(--sidebar-w);background:var(--dark2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;height:100vh;overflow-y:auto}
+  .sb-logo{padding:1.4rem 1.4rem 1rem;display:flex;align-items:center;gap:.7rem;border-bottom:1px solid var(--border)}
+  .sb-logo img{height:28px;filter:drop-shadow(0 0 6px rgba(0,102,255,.4))}
+  .sb-logo-name{font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:700;letter-spacing:2px;color:var(--white)}
+  .sb-logo-sub{font-size:.42rem;color:var(--cyan);letter-spacing:2px;text-transform:uppercase;display:block}
+  .sb-section{padding:.8rem 1rem .3rem;font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3)}
+  .sb-link{display:flex;align-items:center;gap:.7rem;padding:.55rem 1rem;border-radius:8px;margin:2px .6rem;text-decoration:none;color:var(--text3);font-size:.8rem;font-weight:500;transition:all .2s;cursor:pointer;border:none;background:none;width:calc(100% - 1.2rem);text-align:left;font-family:inherit}
+  .sb-link:hover{background:rgba(255,255,255,.05);color:var(--text2)}
+  .sb-link.active{background:rgba(0,102,255,.12);color:var(--white);font-weight:600}
+  .sb-link.active .sb-icon{color:var(--blue)}
+  .sb-icon{font-size:1rem;width:18px;text-align:center;flex-shrink:0}
+  .sb-badge{margin-left:auto;background:var(--blue);color:white;font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:10px;min-width:18px;text-align:center}
+  .sb-bottom{margin-top:auto;padding:1rem;border-top:1px solid var(--border)}
+  .sb-user{display:flex;align-items:center;gap:.7rem;font-size:.76rem;color:var(--text3)}
+  .sb-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--blue-dk),var(--blue));display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:white;flex-shrink:0}
+
+  /* ── MAIN ────────────────────────────────────────────────────────────── */
+  .main{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+  .topbar{height:60px;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0;gap:1rem}
+  .topbar-title{font-size:1rem;font-weight:800;color:var(--white);display:flex;align-items:center;gap:.5rem}
+  .topbar-right{display:flex;align-items:center;gap:.8rem}
+  .btn-primary{background:var(--blue);color:white;border:none;border-radius:8px;padding:8px 18px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:.5rem;transition:all .2s;box-shadow:0 0 16px rgba(0,102,255,.25)}
+  .btn-primary:hover{background:#1a7aff;transform:translateY(-1px)}
+  .btn-sec{background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--text2);border-radius:8px;padding:8px 16px;font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;display:flex;align-items:center;gap:.5rem}
+  .btn-sec:hover{border-color:rgba(0,102,255,.3);color:var(--white)}
+  .content{flex:1;overflow-y:auto;padding:1.8rem 2rem}
+
+  /* ── STATS ───────────────────────────────────────────────────────────── */
+  .stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;margin-bottom:1.8rem}
+  .stat-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.3rem;position:relative;overflow:hidden;transition:border-color .2s}
+  .stat-card:hover{border-color:rgba(0,102,255,.25)}
+  .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+  .stat-card.s-all::before{background:var(--blue)}
+  .stat-card.s-sent::before{background:var(--cyan)}
+  .stat-card.s-acc::before{background:var(--green)}
+  .stat-card.s-ref::before{background:var(--red)}
+  .stat-card.s-ca::before{background:var(--purple)}
+  .stat-lbl{font-size:.65rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text3);margin-bottom:.5rem}
+  .stat-val{font-size:1.6rem;font-weight:900;color:var(--white);letter-spacing:-1px;line-height:1}
+  .stat-sub{font-size:.68rem;color:var(--text3);margin-top:.4rem}
+
+  /* ── FILTERS ─────────────────────────────────────────────────────────── */
+  .filters-bar{display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap}
+  .status-tabs{display:flex;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:9px;padding:3px;gap:2px}
+  .tab-btn{padding:6px 14px;border-radius:7px;font-size:.75rem;font-weight:600;cursor:pointer;border:none;background:none;color:var(--text3);font-family:inherit;transition:all .2s;white-space:nowrap}
+  .tab-btn.active{background:var(--blue);color:white;box-shadow:0 0 12px rgba(0,102,255,.3)}
+  .tab-btn:not(.active):hover{background:rgba(255,255,255,.05);color:var(--text2)}
+  .search-box{position:relative;flex:1;min-width:200px;max-width:320px}
+  .search-box input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:8px 14px 8px 36px;color:var(--white);font-family:'Inter',sans-serif;font-size:.8rem;outline:none;transition:all .25s}
+  .search-box input::placeholder{color:var(--text3)}
+  .search-box input:focus{border-color:var(--blue);background:rgba(0,102,255,.04)}
+  .search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:.85rem}
+  .filter-right{margin-left:auto;display:flex;align-items:center;gap:.6rem}
+
+  /* ── TABLE ───────────────────────────────────────────────────────────── */
+  .table-wrap{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+  .table-empty{text-align:center;padding:3rem;color:var(--text3);font-size:.85rem}
+  table{width:100%;border-collapse:collapse}
+  thead tr{background:rgba(255,255,255,.03);border-bottom:1px solid var(--border)}
+  thead th{padding:.75rem 1rem;font-size:.68rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text3);text-align:left;white-space:nowrap;cursor:pointer;user-select:none}
+  thead th:hover{color:var(--text2)}
+  tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s;cursor:pointer}
+  tbody tr:last-child{border-bottom:none}
+  tbody tr:hover{background:rgba(255,255,255,.03)}
+  td{padding:.75rem 1rem;font-size:.8rem;color:var(--text2);vertical-align:middle}
+  .td-num{font-weight:700;color:var(--white);font-size:.82rem;font-variant-numeric:tabular-nums}
+  .td-client{display:flex;flex-direction:column;gap:.2rem}
+  .td-name{font-weight:600;color:var(--white);font-size:.82rem}
+  .td-email{font-size:.72rem;color:var(--text3)}
+  .td-amount{font-weight:800;color:var(--white);font-variant-numeric:tabular-nums}
+  .td-date{font-size:.75rem;color:var(--text3)}
+  .td-actions{display:flex;align-items:center;gap:.4rem}
+  .act-btn{background:none;border:1px solid var(--border);color:var(--text3);border-radius:6px;padding:4px 9px;font-size:.72rem;cursor:pointer;font-family:inherit;transition:all .2s;white-space:nowrap}
+  .act-btn:hover{border-color:rgba(0,102,255,.35);color:var(--white)}
+  .act-btn.danger:hover{border-color:var(--red);color:var(--red)}
+
+  /* Status badges */
+  .badge{display:inline-flex;align-items:center;gap:.35rem;padding:3px 9px;border-radius:20px;font-size:.68rem;font-weight:700;letter-spacing:.3px;white-space:nowrap}
+  .badge.draft   {background:rgba(255,255,255,.07);color:var(--text2)}
+  .badge.sent    {background:rgba(0,212,255,.1);color:var(--cyan);border:1px solid rgba(0,212,255,.2)}
+  .badge.accepted{background:rgba(16,185,129,.1);color:var(--green);border:1px solid rgba(16,185,129,.2)}
+  .badge.refused {background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.2)}
+  .badge.expired {background:rgba(245,158,11,.08);color:var(--orange);border:1px solid rgba(245,158,11,.15)}
+  .badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+
+  /* ── MODAL ───────────────────────────────────────────────────────────── */
+  .modal-bg{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:1.5rem}
+  .modal-bg.open{display:flex}
+  .modal{background:var(--dark2);border:1px solid var(--border);border-radius:18px;width:100%;max-width:680px;max-height:90vh;overflow-y:auto;animation:mIn .25s ease}
+  @keyframes mIn{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none;scale:1}}
+  .modal-head{display:flex;align-items:center;justify-content:space-between;padding:1.4rem 1.8rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--dark2);z-index:2}
+  .modal-title{font-size:1rem;font-weight:800;color:var(--white);display:flex;align-items:center;gap:.6rem}
+  .modal-close{background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--text2);border-radius:8px;padding:6px 14px;font-size:.8rem;cursor:pointer;font-family:inherit;transition:all .2s}
+  .modal-close:hover{background:rgba(255,255,255,.1)}
+  .modal-body{padding:1.8rem}
+  .modal-section{margin-bottom:1.5rem}
+  .ms-title{font-size:.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--cyan);margin-bottom:.8rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
+  .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+  .info-row{display:flex;flex-direction:column;gap:.2rem}
+  .info-lbl{font-size:.68rem;color:var(--text3);font-weight:600}
+  .info-val{font-size:.83rem;color:var(--white);font-weight:500;word-break:break-word}
+  .items-table{width:100%;border-collapse:collapse;margin-top:.5rem}
+  .items-table th{font-size:.67rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text3);padding:.4rem .6rem;text-align:left;border-bottom:1px solid var(--border)}
+  .items-table td{font-size:.8rem;color:var(--text2);padding:.5rem .6rem;border-bottom:1px solid rgba(255,255,255,.04)}
+  .items-table tfoot td{font-weight:700;color:var(--white);border-top:1px solid var(--border);padding-top:.7rem}
+  .items-table tfoot tr:last-child td{font-size:.95rem;color:var(--cyan)}
+  .modal-actions{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;padding:1.2rem 1.8rem;border-top:1px solid var(--border);background:rgba(255,255,255,.02);border-radius:0 0 18px 18px}
+  .ma-btn{display:flex;align-items:center;gap:.4rem;padding:8px 16px;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit;border:none;transition:all .2s}
+  .ma-btn.blue  {background:var(--blue);color:white;box-shadow:0 0 14px rgba(0,102,255,.25)}
+  .ma-btn.green {background:rgba(16,185,129,.15);color:var(--green);border:1px solid rgba(16,185,129,.25)}
+  .ma-btn.red   {background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.2)}
+  .ma-btn.ghost {background:rgba(255,255,255,.05);color:var(--text2);border:1px solid var(--border)}
+  .ma-btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
+  .ma-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+  /* Relances log */
+  .rel-list{display:flex;flex-direction:column;gap:.4rem}
+  .rel-item{display:flex;align-items:center;gap:.6rem;font-size:.75rem;color:var(--text3);padding:.4rem .6rem;background:rgba(255,255,255,.02);border-radius:6px}
+  .rel-ch{font-weight:700;color:var(--text2)}
+
+  /* Toast */
+  .toast{position:fixed;bottom:2rem;right:2rem;z-index:9999;background:var(--dark3);border:1px solid var(--border);border-radius:10px;padding:.8rem 1.2rem;font-size:.8rem;color:var(--white);display:flex;align-items:center;gap:.6rem;box-shadow:0 8px 32px rgba(0,0,0,.5);animation:toastIn .3s ease;max-width:320px}
+  .toast.success{border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.08)}
+  .toast.error{border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.08)}
+  @keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+
+  /* Spinner */
+  .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.15);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* Empty state */
+  .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:4rem 2rem;color:var(--text3);text-align:center}
+  .empty-icon{font-size:3rem;opacity:.4}
+  .empty-title{font-size:.95rem;font-weight:700;color:var(--text2)}
+  .empty-desc{font-size:.8rem;max-width:280px;line-height:1.6}
+
+  /* Loading */
+  #loadingRow td{text-align:center;padding:2.5rem;color:var(--text3)}
+
+  @media(max-width:900px){
+    .sidebar{display:none}
+    .stats-grid{grid-template-columns:repeat(3,1fr)}
+  }
+  @media(max-width:600px){
+    .stats-grid{grid-template-columns:1fr 1fr}
+    .content{padding:1rem}
+    .topbar{padding:0 1rem}
+  }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <img src="../assets/logos/logo-ca-tech.png" alt="CA-TECH"/>
+    <div><span class="sb-logo-name">CA-TECH</span><span class="sb-logo-sub">Manager</span></div>
+  </div>
+  <div class="sb-section">Principal</div>
+  <a href="dashboard.html" class="sb-link"><span class="sb-icon">📊</span>Dashboard</a>
+  <a href="clients.html"   class="sb-link"><span class="sb-icon">👥</span>Clients</a>
+  <a href="projets.html"   class="sb-link"><span class="sb-icon">🚀</span>Projets</a>
+  <a href="devis.html"     class="sb-link active"><span class="sb-icon">📄</span>Devis<span class="sb-badge" id="sbBadge"></span></a>
+  <a href="factures.html"  class="sb-link"><span class="sb-icon">🧾</span>Factures</a>
+  <a href="paiements.html" class="sb-link"><span class="sb-icon">💳</span>Paiements</a>
+  <div class="sb-section">Outils</div>
+  <a href="agenda.html"     class="sb-link"><span class="sb-icon">📅</span>Agenda</a>
+  <a href="leads.html"      class="sb-link"><span class="sb-icon">🎯</span>Leads</a>
+  <a href="portfolio.html"  class="sb-link"><span class="sb-icon">🖼️</span>Portfolio</a>
+  <a href="parametres.html" class="sb-link"><span class="sb-icon">⚙️</span>Paramètres</a>
+  <div class="sb-section">IA</div>
+  <a href="loic-ia/index.html"  class="sb-link"><span class="sb-icon">🤖</span>Loïc IA</a>
+  <a href="/devis"              class="sb-link" target="_blank"><span class="sb-icon">🔗</span>Page Devis <span style="font-size:.65rem">↗</span></a>
+  <div class="sb-bottom">
+    <div class="sb-user">
+      <div class="sb-avatar">CA</div>
+      <div><div style="color:var(--white);font-weight:600;font-size:.75rem">CA-TECH</div><div style="font-size:.68rem">Admin</div></div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-title">📄 Gestion des Devis</div>
+    <div class="topbar-right">
+      <button class="btn-sec" onclick="loadDevis()">
+        <span id="refreshIcon">🔄</span> Actualiser
+      </button>
+      <a href="/devis" target="_blank" class="btn-primary" style="text-decoration:none">
+        ✚ Nouveau devis
+      </a>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card s-all"><div class="stat-lbl">Total</div><div class="stat-val" id="statTotal">—</div><div class="stat-sub">tous les devis</div></div>
+      <div class="stat-card s-sent"><div class="stat-lbl">Envoyés</div><div class="stat-val" id="statSent">—</div><div class="stat-sub">en attente de réponse</div></div>
+      <div class="stat-card s-acc"><div class="stat-lbl">Acceptés</div><div class="stat-val" id="statAcc">—</div><div class="stat-sub">ce mois</div></div>
+      <div class="stat-card s-ref"><div class="stat-lbl">Refusés</div><div class="stat-val" id="statRef">—</div><div class="stat-sub">à analyser</div></div>
+      <div class="stat-card s-ca"><div class="stat-lbl">CA potentiel</div><div class="stat-val" id="statCA">—</div><div class="stat-sub">devis acceptés</div></div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-bar">
+      <div class="status-tabs">
+        <button class="tab-btn active" data-status="" onclick="setTab(this,'')">Tous</button>
+        <button class="tab-btn" data-status="draft"    onclick="setTab(this,'draft')">Brouillons</button>
+        <button class="tab-btn" data-status="sent"     onclick="setTab(this,'sent')">Envoyés</button>
+        <button class="tab-btn" data-status="accepted" onclick="setTab(this,'accepted')">Acceptés</button>
+        <button class="tab-btn" data-status="refused"  onclick="setTab(this,'refused')">Refusés</button>
+        <button class="tab-btn" data-status="expired"  onclick="setTab(this,'expired')">Expirés</button>
+      </div>
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Rechercher client, email, référence…" oninput="filterTable()"/>
+      </div>
+      <div class="filter-right">
+        <span id="countLabel" style="font-size:.75rem;color:var(--text3)"></span>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Référence</th>
+            <th>Client</th>
+            <th>Projet</th>
+            <th>Montant TTC</th>
+            <th>Statut</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="devisTable">
+          <tr id="loadingRow"><td colspan="7"><div style="display:flex;align-items:center;justify-content:center;gap:.7rem;color:var(--text3)"><div class="spinner"></div> Chargement des devis…</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<!-- MODAL DÉTAIL DEVIS -->
+<div class="modal-bg" id="modalBg" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-head">
+      <div class="modal-title">
+        <span id="modalNum">DEV-2026-0001</span>
+        <span id="modalBadge"></span>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕ Fermer</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <!-- rempli dynamiquement -->
+    </div>
+    <div class="modal-actions" id="modalActions">
+      <!-- rempli dynamiquement -->
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── État ─────────────────────────────────────────────────────────────────────
+let allDevis = [];
+let currentFilter = '';
+let currentDevis = null;
+
+const BADGE_LABELS = { draft:'Brouillon', sent:'Envoyé', accepted:'Accepté', refused:'Refusé', expired:'Expiré' };
+const TYPE_LABELS  = {
+  'site-vitrine':'Site Vitrine','site-ecommerce':'Site E-commerce','landing-page':'Landing Page',
+  'logo':'Logo','flyer':'Flyer','identite-visuelle':'Identité Visuelle',
+  'sur-mesure':'Sur mesure','ia-automatisation':'IA & Auto.',
+};
+
+// ─── Formatage ────────────────────────────────────────────────────────────────
+const fmtEur = n => (n || 0).toLocaleString('fr-FR', { style:'currency', currency:'EUR', minimumFractionDigits:2 });
+const fmtDate = s => s ? new Date(s).toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'numeric' }) : '—';
+const fmtAge  = s => { if (!s) return ''; const d = Math.floor((Date.now() - new Date(s)) / 86400000); return d === 0 ? "Aujourd'hui" : d === 1 ? 'Hier' : `Il y a ${d} j`; };
+
+function badge(status) {
+  return `<span class="badge ${status}">${BADGE_LABELS[status] || status}</span>`;
+}
+
+// ─── Chargement ───────────────────────────────────────────────────────────────
+async function loadDevis() {
+  document.getElementById('refreshIcon').textContent = '⏳';
+  try {
+    const url = currentFilter ? `/api/devis?action=list&status=${currentFilter}&limit=200` : '/api/devis?action=list&limit=200';
+    const res  = await fetch(url);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    allDevis = await res.json();
+    renderTable(allDevis);
+    updateStats();
+  } catch (err) {
+    showToast('Erreur de chargement : ' + err.message, 'error');
+    document.getElementById('devisTable').innerHTML = `<tr><td colspan="7" class="table-empty">Impossible de charger les devis. Vérifiez la connexion API.</td></tr>`;
+  } finally {
+    document.getElementById('refreshIcon').textContent = '🔄';
+  }
+}
+
+function renderTable(list) {
+  const tbody = document.getElementById('devisTable');
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const filtered = list.filter(d =>
+    !search ||
+    (d.devis_number || '').toLowerCase().includes(search) ||
+    (d.contact_name || '').toLowerCase().includes(search) ||
+    (d.contact_email || '').toLowerCase().includes(search) ||
+    (d.company_name || '').toLowerCase().includes(search)
+  );
+  document.getElementById('countLabel').textContent = filtered.length + ' devis';
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7">
+      <div class="empty-state">
+        <div class="empty-icon">📄</div>
+        <div class="empty-title">Aucun devis trouvé</div>
+        <div class="empty-desc">${search ? 'Aucun résultat pour "' + search + '"' : 'Aucun devis dans cette catégorie'}</div>
+      </div></td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(d => `
+    <tr onclick="openModal('${d.id}')">
+      <td class="td-num">${d.devis_number}</td>
+      <td>
+        <div class="td-client">
+          <span class="td-name">${d.contact_name || '—'}</span>
+          <span class="td-email">${d.contact_email}${d.company_name ? ' · ' + d.company_name : ''}</span>
+        </div>
+      </td>
+      <td style="font-size:.78rem;color:var(--text2)">${TYPE_LABELS[d.project_type] || d.project_type || '—'}</td>
+      <td class="td-amount">${fmtEur(d.total)}</td>
+      <td>${badge(d.status)}</td>
+      <td class="td-date">${fmtAge(d.created_at)}<br><span style="font-size:.68rem">${fmtDate(d.created_at)}</span></td>
+      <td class="td-actions" onclick="event.stopPropagation()">
+        <button class="act-btn" onclick="openModal('${d.id}')">Voir</button>
+        ${d.status === 'draft' ? `<button class="act-btn" onclick="quickAction('${d.id}','send')">Envoyer</button>` : ''}
+        ${d.status === 'sent'  ? `<button class="act-btn" onclick="quickAction('${d.id}','relance')">Relance</button>` : ''}
+        ${['sent','draft'].includes(d.status) ? `<button class="act-btn" onclick="quickAction('${d.id}','accept')">Accepter</button>` : ''}
+      </td>
+    </tr>
+  `).join('');
+}
+
+function filterTable() { renderTable(allDevis); }
+
+function setTab(btn, status) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter = status;
+  loadDevis();
+}
+
+// ─── Stats ────────────────────────────────────────────────────────────────────
+function updateStats() {
+  // Reload stats from full list (all statuses)
+  fetch('/api/devis?action=list&limit=1000').then(r => r.json()).then(all => {
+    document.getElementById('statTotal').textContent = all.length;
+    document.getElementById('statSent').textContent  = all.filter(d => d.status === 'sent').length;
+    document.getElementById('statAcc').textContent   = all.filter(d => d.status === 'accepted').length;
+    document.getElementById('statRef').textContent   = all.filter(d => d.status === 'refused').length;
+    const ca = all.filter(d => d.status === 'accepted').reduce((s, d) => s + (d.total || 0), 0);
+    document.getElementById('statCA').textContent = ca >= 1000 ? (ca / 1000).toFixed(1) + ' k€' : fmtEur(ca);
+    const pending = all.filter(d => ['draft','sent'].includes(d.status)).length;
+    const badge = document.getElementById('sbBadge');
+    badge.textContent = pending || '';
+    badge.style.display = pending ? '' : 'none';
+  }).catch(() => {});
+}
+
+// ─── Modal ────────────────────────────────────────────────────────────────────
+async function openModal(id) {
+  document.getElementById('modalBg').classList.add('open');
+  document.getElementById('modalBody').innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text3)"><div class="spinner" style="margin:0 auto .8rem"></div>Chargement…</div>';
+  document.getElementById('modalActions').innerHTML = '';
+  try {
+    const res = await fetch(`/api/devis?action=get&id=${id}`);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const d = await res.json();
+    currentDevis = d;
+    renderModal(d);
+  } catch (err) {
+    document.getElementById('modalBody').innerHTML = `<div style="color:var(--red);padding:1rem">Erreur : ${err.message}</div>`;
+  }
+}
+
+function renderModal(d) {
+  document.getElementById('modalNum').textContent = d.devis_number;
+  document.getElementById('modalBadge').innerHTML = badge(d.status);
+
+  const items = Array.isArray(d.devis_items) ? d.devis_items : (d.items || []);
+  const relances = Array.isArray(d.devis_relances) ? d.devis_relances : [];
+
+  const fmtOpt = v => v ? '✅ Oui' : '—';
+  const MAINT  = { none:'Aucune', vitrine:'Vitrine Premium', ecommerce:'E-commerce Premium' };
+  const DEADLINE_LBL = { urgent:'Urgent (<1 semaine)', normal:'Normal (2-4 semaines)', large:'Sans presse (1-3 mois)', flexible:'Flexible' };
+  const BUDGET_LBL   = { '<500':'<500€', '500-1000':'500€–1000€', '1000-2500':'1000€–2500€', '2500-5000':'2500€–5000€', '>5000':'>5000€', undefined:'Non précisé' };
+
+  document.getElementById('modalBody').innerHTML = `
+    <div class="modal-section">
+      <div class="ms-title">Informations client</div>
+      <div class="info-grid">
+        <div class="info-row"><div class="info-lbl">Nom</div><div class="info-val">${d.contact_name || '—'}</div></div>
+        <div class="info-row"><div class="info-lbl">Email</div><div class="info-val"><a href="mailto:${d.contact_email}" style="color:var(--cyan)">${d.contact_email}</a></div></div>
+        <div class="info-row"><div class="info-lbl">Téléphone</div><div class="info-val">${d.contact_phone || '—'}</div></div>
+        <div class="info-row"><div class="info-lbl">Société</div><div class="info-val">${d.company_name || '—'}</div></div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="ms-title">Détails du projet</div>
+      <div class="info-grid">
+        <div class="info-row"><div class="info-lbl">Type</div><div class="info-val">${TYPE_LABELS[d.project_type] || d.project_type || '—'}</div></div>
+        <div class="info-row"><div class="info-lbl">Secteur</div><div class="info-val">${d.activity || '—'}</div></div>
+        <div class="info-row"><div class="info-lbl">Délai</div><div class="info-val">${DEADLINE_LBL[d.deadline] || d.deadline || '—'}</div></div>
+        <div class="info-row"><div class="info-lbl">Budget indicatif</div><div class="info-val">${BUDGET_LBL[d.budget_range] || d.budget_range || '—'}</div></div>
+        <div class="info-row"><div class="info-lbl">SEO avancé</div><div class="info-val">${fmtOpt(d.seo_option)}</div></div>
+        <div class="info-row"><div class="info-lbl">Maintenance</div><div class="info-val">${MAINT[d.maintenance_option] || d.maintenance_option || 'Aucune'}</div></div>
+        <div class="info-row"><div class="info-lbl">Hébergement</div><div class="info-val">${fmtOpt(d.hosting_option)}</div></div>
+        <div class="info-row"><div class="info-lbl">Identité visuelle</div><div class="info-val">${fmtOpt(d.branding_option)}</div></div>
+      </div>
+      ${Array.isArray(d.features) && d.features.length ? `
+        <div style="margin-top:.8rem">
+          <div class="info-lbl" style="margin-bottom:.4rem">Fonctionnalités</div>
+          <div style="display:flex;flex-wrap:wrap;gap:.35rem">
+            ${d.features.map(f => `<span style="background:rgba(0,102,255,.1);border:1px solid rgba(0,102,255,.2);border-radius:5px;padding:2px 8px;font-size:.7rem;color:var(--cyan)">${f}</span>`).join('')}
+          </div>
+        </div>` : ''}
+    </div>
+
+    <div class="modal-section">
+      <div class="ms-title">Lignes du devis</div>
+      <table class="items-table">
+        <thead><tr><th>Description</th><th>Qté</th><th>PU HT</th><th>Total HT</th></tr></thead>
+        <tbody>
+          ${items.map(it => `<tr><td>${it.description}</td><td>${it.quantity || 1}</td><td>${fmtEur(it.unit_price)}</td><td>${fmtEur(it.total)}</td></tr>`).join('') || '<tr><td colspan="4" style="color:var(--text3);text-align:center;padding:1rem">Aucune ligne</td></tr>'}
+        </tbody>
+        <tfoot>
+          <tr><td colspan="3">Sous-total HT</td><td>${fmtEur(d.subtotal)}</td></tr>
+          <tr><td colspan="3">TVA ${d.tax_rate || 20} %</td><td>${fmtEur(d.tax_amount)}</td></tr>
+          <tr><td colspan="3" style="color:var(--cyan);font-size:.9rem;font-weight:800">TOTAL TTC</td><td style="color:var(--cyan)">${fmtEur(d.total)}</td></tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="ms-title">Dates & Validité</div>
+      <div class="info-grid">
+        <div class="info-row"><div class="info-lbl">Créé le</div><div class="info-val">${fmtDate(d.created_at)}</div></div>
+        <div class="info-row"><div class="info-lbl">Valable jusqu'au</div><div class="info-val">${fmtDate(d.valid_until)}</div></div>
+        <div class="info-row"><div class="info-lbl">Envoyé le</div><div class="info-val">${fmtDate(d.sent_at)}</div></div>
+        <div class="info-row"><div class="info-lbl">Réponse</div><div class="info-val">${fmtDate(d.accepted_at || d.refused_at)}</div></div>
+      </div>
+    </div>
+
+    ${relances.length ? `
+      <div class="modal-section">
+        <div class="ms-title">Relances envoyées (${relances.length})</div>
+        <div class="rel-list">
+          ${relances.map(r => `<div class="rel-item"><span class="rel-ch">${r.channel.toUpperCase()}</span><span>${fmtDate(r.sent_at)}</span><span style="color:var(--green)">${r.status}</span></div>`).join('')}
+        </div>
+      </div>` : ''}
+
+    ${d.notes ? `
+      <div class="modal-section">
+        <div class="ms-title">Notes</div>
+        <div style="font-size:.82rem;color:var(--text2);line-height:1.7;white-space:pre-wrap">${d.notes}</div>
+      </div>` : ''}
+  `;
+
+  // Actions selon statut
+  const ma = document.getElementById('modalActions');
+  const actBtns = [];
+
+  if (d.status === 'draft') {
+    actBtns.push(`<button class="ma-btn blue" onclick="modalAction('send')">📤 Marquer Envoyé</button>`);
+    actBtns.push(`<button class="ma-btn green" onclick="modalAction('accept')">✅ Accepter</button>`);
+  }
+  if (d.status === 'sent') {
+    actBtns.push(`<button class="ma-btn green" onclick="modalAction('accept')">✅ Marquer Accepté</button>`);
+    actBtns.push(`<button class="ma-btn red" onclick="modalAction('refuse')">❌ Marquer Refusé</button>`);
+    actBtns.push(`<button class="ma-btn ghost" onclick="modalAction('relance')">🔔 Envoyer relance</button>`);
+  }
+  if (['draft','sent'].includes(d.status)) {
+    actBtns.push(`<button class="ma-btn ghost" onclick="modalAction('expire')">⏱ Expirer</button>`);
+  }
+  actBtns.push(`<button class="ma-btn ghost" onclick="downloadModalPDF()">📄 Voir PDF</button>`);
+
+  ma.innerHTML = actBtns.join('') + `<button class="ma-btn ghost" style="margin-left:auto" onclick="closeModal()">Fermer</button>`;
+}
+
+async function modalAction(action) {
+  if (!currentDevis) return;
+  const labels = { send:'Marquer comme envoyé ?', accept:'Marquer comme accepté ?', refuse:'Marquer comme refusé ?', expire:'Expirer ce devis ?', relance:'Envoyer une relance via toutes les notifications ?' };
+  if (!confirm(labels[action] || action)) return;
+
+  try {
+    const res = await fetch('/api/devis', {
+      method:'PATCH',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ id: currentDevis.id, action }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Erreur');
+    showToast('✅ ' + (data.status ? 'Statut mis à jour : ' + BADGE_LABELS[data.status] : 'Relance envoyée !'), 'success');
+    closeModal();
+    loadDevis();
+  } catch (err) {
+    showToast('❌ ' + err.message, 'error');
+  }
+}
+
+async function quickAction(id, action) {
+  try {
+    const res = await fetch('/api/devis', {
+      method:'PATCH',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ id, action }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Erreur');
+    showToast('✅ ' + (data.status ? 'Statut : ' + BADGE_LABELS[data.status] : 'Relance envoyée !'), 'success');
+    loadDevis();
+  } catch (err) {
+    showToast('❌ ' + err.message, 'error');
+  }
+}
+
+function downloadModalPDF() {
+  if (!currentDevis) return;
+  showToast('Fonctionnalité PDF disponible depuis la page /devis publique', '');
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modalBg')) return;
+  document.getElementById('modalBg').classList.remove('open');
+  currentDevis = null;
+}
+
+// ─── Toast ────────────────────────────────────────────────────────────────────
+function showToast(msg, type = '') {
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(20px)'; t.style.transition = 'all .3s'; setTimeout(() => t.remove(), 300); }, 3000);
+}
+
+// ─── Keyboard ─────────────────────────────────────────────────────────────────
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ─── Auto-refresh toutes les 60s ─────────────────────────────────────────────
+loadDevis();
+setInterval(loadDevis, 60000);
+</script>
+</body>
+</html>

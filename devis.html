@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Devis Gratuit en ligne | CA-TECH Agence Web</title>
+  <meta name="description" content="Obtenez votre devis personnalisé en 3 minutes avec Loïc, l'assistant CA-TECH. Estimation en temps réel, devis PDF professionnel instantané."/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://ca-tech.fr/devis"/>
+  <link rel="icon" type="image/x-icon" href="/public/favicon.ico"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --blue:#0066FF;--blue-dk:#0A2540;--cyan:#00D4FF;
+    --white:#ffffff;--dark:#050d1a;--dark2:#0a1628;--dark3:#0f1d32;
+    --text:rgba(255,255,255,1);--text2:rgba(255,255,255,.72);--text3:rgba(255,255,255,.42);
+    --border:rgba(255,255,255,.08);--green:#10b981;--nav-h:68px;
+  }
+  html{scroll-behavior:smooth;overflow-x:hidden}
+  body{font-family:'Inter',-apple-system,sans-serif;background:var(--dark);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+  /* ── NAV ───────────────────────────────────────────────────────────────── */
+  nav{position:fixed;inset:0 0 auto 0;z-index:200;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(5,13,26,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+  .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .logo img{height:34px;filter:drop-shadow(0 0 8px rgba(0,102,255,.4))}
+  .logo-name{font-family:'Rajdhani',sans-serif;font-size:1.2rem;font-weight:700;letter-spacing:2px;color:var(--white)}
+  .logo-sub{font-size:.45rem;color:var(--cyan);letter-spacing:2.5px;text-transform:uppercase;display:block}
+  .nav-right{display:flex;align-items:center;gap:1.2rem}
+  .nav-link{color:var(--text2);text-decoration:none;font-size:.78rem;font-weight:500;transition:color .2s}
+  .nav-link:hover{color:var(--cyan)}
+  .btn-back{background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--text2);border-radius:8px;padding:8px 18px;font-size:.75rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s;font-family:inherit}
+  .btn-back:hover{border-color:rgba(0,102,255,.4);color:var(--white)}
+
+  /* ── LAYOUT ───────────────────────────────────────────────────────────── */
+  .page{display:grid;grid-template-columns:1fr 340px;gap:0;min-height:100vh;padding-top:var(--nav-h)}
+  .chat-col{display:flex;flex-direction:column;min-height:calc(100vh - var(--nav-h));border-right:1px solid var(--border)}
+  .price-col{position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));overflow-y:auto;padding:2rem 1.8rem;display:flex;flex-direction:column;gap:1.2rem}
+
+  /* ── PROGRESS ─────────────────────────────────────────────────────────── */
+  .progress-bar{background:rgba(255,255,255,.05);border-bottom:1px solid var(--border);padding:1.2rem 2rem}
+  .progress-steps{display:flex;align-items:center;gap:0;overflow:hidden}
+  .p-step{display:flex;align-items:center;gap:.4rem;font-size:.68rem;font-weight:600;color:var(--text3);letter-spacing:.3px;white-space:nowrap;transition:color .3s;padding:0 .1rem}
+  .p-step.active{color:var(--blue)}
+  .p-step.done{color:var(--green)}
+  .p-dot{width:22px;height:22px;border-radius:50%;border:1.5px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:700;transition:all .3s;flex-shrink:0}
+  .p-step.active .p-dot{background:var(--blue);border-color:var(--blue);color:white;box-shadow:0 0 12px rgba(0,102,255,.4)}
+  .p-step.done .p-dot{background:var(--green);border-color:var(--green);color:white}
+  .p-line{flex:1;height:1px;background:rgba(255,255,255,.08);min-width:12px;margin:0 .3rem;transition:background .3s}
+  .p-line.done{background:var(--green)}
+  .prog-track{height:2px;background:rgba(255,255,255,.06);margin-top:1rem;border-radius:2px}
+  .prog-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:2px;transition:width .5s ease}
+
+  /* ── CHAT ─────────────────────────────────────────────────────────────── */
+  .chat-messages{flex:1;overflow-y:auto;padding:2rem 2rem 1rem;display:flex;flex-direction:column;gap:1.4rem}
+  .msg{display:flex;gap:.8rem;align-items:flex-start;animation:msgIn .35s ease}
+  @keyframes msgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .msg-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--blue-dk),var(--blue));display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:white;flex-shrink:0;border:1.5px solid rgba(0,102,255,.3);box-shadow:0 0 12px rgba(0,102,255,.2)}
+  .msg-bubble{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:0 14px 14px 14px;padding:1rem 1.2rem;max-width:520px;font-size:.86rem;line-height:1.65;color:var(--text2)}
+  .msg-bubble strong{color:var(--white)}
+  .msg.user{flex-direction:row-reverse}
+  .msg.user .msg-bubble{background:rgba(0,102,255,.12);border-color:rgba(0,102,255,.2);border-radius:14px 0 14px 14px;color:var(--white);text-align:right}
+  .typing{display:flex;align-items:center;gap:4px;padding:.6rem 1rem}
+  .typing span{width:6px;height:6px;border-radius:50%;background:var(--text3);animation:blink 1.2s infinite}
+  .typing span:nth-child(2){animation-delay:.2s}
+  .typing span:nth-child(3){animation-delay:.4s}
+  @keyframes blink{0%,80%,100%{transform:scale(.8);opacity:.5}40%{transform:scale(1.1);opacity:1}}
+
+  /* ── CHOICES ──────────────────────────────────────────────────────────── */
+  .choices-zone{padding:1rem 2rem 2rem;display:flex;flex-direction:column;gap:1rem}
+  .choice-grid{display:grid;gap:.7rem}
+  .choice-grid.c2{grid-template-columns:1fr 1fr}
+  .choice-grid.c3{grid-template-columns:1fr 1fr 1fr}
+  .choice-card{border:1px solid var(--border);border-radius:12px;padding:.9rem 1.1rem;cursor:pointer;transition:all .22s;background:rgba(255,255,255,.025);text-align:left;display:flex;align-items:center;gap:.8rem;font-family:inherit;position:relative;overflow:hidden}
+  .choice-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,102,255,.0),rgba(0,102,255,.0));transition:background .25s}
+  .choice-card:hover{border-color:rgba(0,102,255,.4);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+  .choice-card:hover::before{background:linear-gradient(135deg,rgba(0,102,255,.06),rgba(0,212,255,.03))}
+  .choice-card.selected{border-color:var(--blue);background:rgba(0,102,255,.1);box-shadow:0 0 0 1px rgba(0,102,255,.3),0 8px 24px rgba(0,0,0,.3)}
+  .c-icon{font-size:1.4rem;flex-shrink:0}
+  .c-info{flex:1;min-width:0}
+  .c-name{font-size:.83rem;font-weight:700;color:var(--white);display:block}
+  .c-desc{font-size:.72rem;color:var(--text3);margin-top:.15rem}
+  .c-price{font-size:.82rem;font-weight:800;color:var(--cyan);margin-left:auto;flex-shrink:0;white-space:nowrap}
+  .choice-card.selected .c-check{display:flex}
+  .c-check{display:none;width:18px;height:18px;border-radius:50%;background:var(--blue);color:white;font-size:.65rem;font-weight:900;align-items:center;justify-content:center;flex-shrink:0;margin-left:.4rem}
+
+  /* Checkboxes features */
+  .feature-list{display:flex;flex-direction:column;gap:.5rem}
+  .feat-item{display:flex;align-items:center;gap:.7rem;padding:.6rem .8rem;border:1px solid var(--border);border-radius:9px;cursor:pointer;transition:all .2s;background:rgba(255,255,255,.02)}
+  .feat-item:hover{border-color:rgba(0,102,255,.3);background:rgba(0,102,255,.04)}
+  .feat-item.checked{border-color:rgba(0,102,255,.35);background:rgba(0,102,255,.08)}
+  .feat-cb{width:16px;height:16px;accent-color:var(--blue);cursor:pointer;flex-shrink:0}
+  .feat-label{font-size:.82rem;color:var(--text2)}
+  .feat-item.checked .feat-label{color:var(--white)}
+
+  /* Toggle options */
+  .option-toggle{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.1rem;border:1px solid var(--border);border-radius:12px;cursor:pointer;transition:all .22s;background:rgba(255,255,255,.025)}
+  .option-toggle:hover{border-color:rgba(0,102,255,.3)}
+  .option-toggle.on{border-color:var(--blue);background:rgba(0,102,255,.08)}
+  .opt-info{display:flex;align-items:center;gap:.7rem}
+  .opt-icon{font-size:1.2rem}
+  .opt-text{font-size:.82rem;font-weight:600;color:var(--text2)}
+  .opt-sub{font-size:.7rem;color:var(--text3);display:block}
+  .opt-toggle-btn{width:40px;height:22px;border-radius:11px;background:rgba(255,255,255,.1);position:relative;transition:background .2s;flex-shrink:0}
+  .opt-toggle-btn::after{content:'';position:absolute;left:3px;top:3px;width:16px;height:16px;border-radius:50%;background:var(--text3);transition:all .2s}
+  .option-toggle.on .opt-toggle-btn{background:var(--blue)}
+  .option-toggle.on .opt-toggle-btn::after{left:calc(100% - 19px);background:white}
+
+  /* Contact form */
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+  .f-grp{display:flex;flex-direction:column;gap:.35rem}
+  .f-grp.full{grid-column:1/-1}
+  .f-grp label{font-size:.72rem;font-weight:700;color:var(--text3);letter-spacing:.3px}
+  .f-grp label .req{color:var(--cyan)}
+  .f-grp input{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--white);font-family:'Inter',sans-serif;font-size:.84rem;outline:none;width:100%;transition:all .25s}
+  .f-grp input::placeholder{color:var(--text3)}
+  .f-grp input:focus{border-color:var(--blue);background:rgba(0,102,255,.06);box-shadow:0 0 0 3px rgba(0,102,255,.12)}
+  .f-grp input.err{border-color:#ef4444}
+  .legal-check{display:flex;align-items:flex-start;gap:.7rem;font-size:.76rem;color:var(--text3);line-height:1.5;margin-top:.5rem}
+  .legal-check input{accent-color:var(--blue);width:14px;height:14px;margin-top:2px;flex-shrink:0;cursor:pointer}
+  .legal-check a{color:var(--cyan);text-decoration:none}
+
+  /* Action buttons */
+  .action-row{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+  .btn-next{background:var(--blue);color:white;border:none;border-radius:10px;padding:12px 30px;font-size:.84rem;font-weight:700;cursor:pointer;transition:all .25s;box-shadow:0 0 20px rgba(0,102,255,.3);font-family:inherit;letter-spacing:.3px}
+  .btn-next:hover{background:#1a7aff;transform:translateY(-2px);box-shadow:0 0 35px rgba(0,102,255,.45)}
+  .btn-next:disabled{opacity:.4;cursor:not-allowed;transform:none}
+  .btn-prev{background:none;border:1px solid var(--border);color:var(--text2);border-radius:10px;padding:12px 22px;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .25s;font-family:inherit}
+  .btn-prev:hover{border-color:rgba(0,102,255,.4);color:var(--white)}
+  .btn-skip{background:none;border:none;color:var(--text3);font-size:.76rem;cursor:pointer;font-family:inherit;padding:4px;text-decoration:underline;text-underline-offset:3px}
+  .btn-skip:hover{color:var(--text2)}
+
+  /* ── PRICE PANEL ──────────────────────────────────────────────────────── */
+  .price-panel{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:1.4rem;position:relative;overflow:hidden}
+  .price-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--cyan))}
+  .pp-title{font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem}
+  .pp-empty{font-size:.8rem;color:var(--text3);text-align:center;padding:1.5rem 0;font-style:italic}
+  .pp-lines{display:flex;flex-direction:column;gap:.3rem;margin-bottom:1rem}
+  .pp-line{display:flex;justify-content:space-between;align-items:flex-start;font-size:.79rem;padding:.3rem 0}
+  .pp-line:not(:last-child){border-bottom:1px solid rgba(255,255,255,.04)}
+  .pp-label{color:var(--text2);flex:1;padding-right:.5rem;line-height:1.4}
+  .pp-val{color:var(--white);font-weight:700;white-space:nowrap}
+  .pp-divider{height:1px;background:rgba(255,255,255,.08);margin:.6rem 0}
+  .pp-ht{display:flex;justify-content:space-between;font-size:.78rem;color:var(--text3);margin-bottom:.2rem}
+  .pp-tva{display:flex;justify-content:space-between;font-size:.78rem;color:var(--text3);margin-bottom:.6rem}
+  .pp-total{display:flex;justify-content:space-between;align-items:center}
+  .pp-total-lbl{font-size:.78rem;font-weight:700;color:var(--text2)}
+  .pp-total-val{font-size:1.5rem;font-weight:900;color:var(--white);letter-spacing:-1px}
+  .pp-badge{font-size:.65rem;color:var(--cyan);margin-top:.2rem}
+  .pp-valid{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.15);border-radius:8px;padding:.6rem .8rem;font-size:.72rem;color:#10b981;margin-top:1rem;display:none}
+  .pp-valid.show{display:block}
+
+  /* Trust badges */
+  .trust-badges{display:flex;flex-direction:column;gap:.5rem}
+  .trust-item{display:flex;align-items:center;gap:.6rem;font-size:.73rem;color:var(--text3)}
+  .trust-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
+
+  /* ── SUCCESS ──────────────────────────────────────────────────────────── */
+  .success-screen{display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 2rem;flex:1;gap:1.2rem;animation:msgIn .4s ease}
+  .success-screen.show{display:flex}
+  .success-icon{font-size:3.5rem}
+  .success-num{background:rgba(0,102,255,.12);border:1px solid rgba(0,102,255,.25);border-radius:10px;padding:.7rem 1.4rem;font-size:1.1rem;font-weight:900;color:var(--white);letter-spacing:.5px}
+  .success-screen h2{font-size:1.4rem;font-weight:900;color:var(--white)}
+  .success-screen p{font-size:.85rem;color:var(--text3);line-height:1.7;max-width:420px}
+  .btn-pdf{display:inline-flex;align-items:center;gap:.6rem;background:linear-gradient(135deg,var(--blue-dk),var(--blue));color:white;border:none;border-radius:10px;padding:14px 32px;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .3s;box-shadow:0 4px 24px rgba(0,102,255,.35);font-family:inherit;text-decoration:none}
+  .btn-pdf:hover{transform:translateY(-2px);box-shadow:0 8px 36px rgba(0,102,255,.5)}
+  .btn-pdf:disabled{opacity:.6;cursor:not-allowed;transform:none}
+  .success-actions{display:flex;flex-wrap:wrap;gap:.8rem;justify-content:center}
+  .btn-outline-w{display:inline-flex;align-items:center;gap:.5rem;background:none;border:1px solid rgba(255,255,255,.15);color:var(--text2);border-radius:10px;padding:12px 24px;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .25s;font-family:inherit;text-decoration:none}
+  .btn-outline-w:hover{border-color:rgba(0,102,255,.4);color:var(--white)}
+
+  /* ── MOBILE ───────────────────────────────────────────────────────────── */
+  .mobile-price-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(10,22,40,.97);border-top:1px solid var(--border);padding:.8rem 1.4rem;backdrop-filter:blur(16px)}
+  .mb-inner{display:flex;align-items:center;justify-content:space-between}
+  .mb-lbl{font-size:.7rem;color:var(--text3);font-weight:600}
+  .mb-total{font-size:1.2rem;font-weight:900;color:var(--white)}
+
+  @media(max-width:900px){
+    .page{grid-template-columns:1fr}
+    .price-col{display:none}
+    .mobile-price-bar{display:block}
+    .chat-messages{padding-bottom:80px}
+    .choices-zone{padding-bottom:100px}
+    .progress-steps .p-step span:not(.p-dot){display:none}
+    .p-step{padding:0}
+  }
+  @media(max-width:520px){
+    .choice-grid.c3{grid-template-columns:1fr 1fr}
+    .choice-grid.c2{grid-template-columns:1fr}
+    .form-grid{grid-template-columns:1fr}
+    .f-grp.full{grid-column:1}
+    .chat-messages{padding:1.2rem 1rem .5rem}
+    .choices-zone{padding:0 1rem 100px}
+    .progress-bar{padding:.8rem 1rem}
+  }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo">
+    <img src="assets/logos/logo-ca-tech.png" alt="CA-TECH"/>
+    <div><span class="logo-name">CA-TECH</span><span class="logo-sub">Agence Web & Design</span></div>
+  </a>
+  <div class="nav-right">
+    <a href="tarifs.html" class="nav-link">Voir les tarifs</a>
+    <a href="index.html" class="btn-back">← Retour</a>
+  </div>
+</nav>
+
+<div class="page" id="mainPage">
+
+  <!-- ── COLONNE CONVERSATION ───────────────────────────────────────────── -->
+  <div class="chat-col">
+    <!-- Progress -->
+    <div class="progress-bar">
+      <div class="progress-steps" id="progressSteps"></div>
+      <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+    </div>
+
+    <!-- Messages -->
+    <div class="chat-messages" id="chatMessages"></div>
+
+    <!-- Zone de choix -->
+    <div class="choices-zone" id="choicesZone"></div>
+
+    <!-- Écran succès -->
+    <div class="success-screen" id="successScreen">
+      <div class="success-icon">🎉</div>
+      <h2>Votre devis est prêt !</h2>
+      <div class="success-num" id="successNum">DEV-2026-0001</div>
+      <p>Merci <strong id="successName"></strong> ! Votre devis a été enregistré et vous sera envoyé à <strong id="successEmail"></strong> dans les meilleurs délais.<br>Vous pouvez également le télécharger dès maintenant.</p>
+      <div class="success-actions">
+        <button class="btn-pdf" id="btnPdf" onclick="downloadPDF()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          Télécharger mon devis PDF
+        </button>
+        <a href="index.html" class="btn-outline-w">🏠 Retour à l'accueil</a>
+        <a href="tarifs.html" class="btn-outline-w">💳 Commander directement</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PANNEAU PRIX ────────────────────────────────────────────────────── -->
+  <div class="price-col">
+    <div class="price-panel">
+      <div class="pp-title">Estimation en temps réel</div>
+      <div id="ppEmpty" class="pp-empty">Sélectionnez un type de projet pour voir l'estimation</div>
+      <div id="ppLines" class="pp-lines" style="display:none"></div>
+      <div id="ppTotals" style="display:none">
+        <div class="pp-divider"></div>
+        <div class="pp-ht"><span>Sous-total HT</span><span id="ppHT">0 €</span></div>
+        <div class="pp-tva"><span>TVA 20 %</span><span id="ppTVA">0 €</span></div>
+        <div class="pp-divider"></div>
+        <div class="pp-total">
+          <div>
+            <div class="pp-total-lbl">TOTAL TTC</div>
+            <div class="pp-badge" id="ppBadge"></div>
+          </div>
+          <div class="pp-total-val" id="ppTotal">0 €</div>
+        </div>
+      </div>
+      <div class="pp-valid show" id="ppValid">✅ Devis valable 30 jours · Sans engagement</div>
+    </div>
+    <div class="trust-badges">
+      <div class="trust-item"><span class="trust-dot"></span>Devis gratuit sous 24h</div>
+      <div class="trust-item"><span class="trust-dot"></span>Sans engagement</div>
+      <div class="trust-item"><span class="trust-dot"></span>Paiement sécurisé Stripe</div>
+      <div class="trust-item"><span class="trust-dot"></span>Satisfaction garantie</div>
+    </div>
+    <div style="font-size:.68rem;color:var(--text3);line-height:1.6">
+      Les prix affichés sont indicatifs et peuvent varier selon la complexité de votre projet. Le devis final sera établi après étude de votre demande.
+    </div>
+  </div>
+
+</div>
+
+<!-- Mobile price bar -->
+<div class="mobile-price-bar" id="mobilePriceBar" style="display:none">
+  <div class="mb-inner">
+    <div><div class="mb-lbl">Estimation TTC</div><div class="mb-total" id="mbTotal">—</div></div>
+    <div style="font-size:.68rem;color:var(--text3);text-align:right">30 jours · Sans engagement</div>
+  </div>
+</div>
+
+<!-- jsPDF CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+// ─── Constantes ───────────────────────────────────────────────────────────────
+const STEPS = ['Projet','Secteur','Fonctions','Options','Délai','Budget','Contact','Récap'];
+const TVA = 20;
+
+const PRICES = {
+  'site-vitrine':      590,
+  'site-ecommerce':   1090,
+  'landing-page':      270,
+  'logo':              180,
+  'flyer':             139,
+  'identite-visuelle': 500,
+  'sur-mesure':       2500,
+  'ia-automatisation': 800,
+};
+
+const LABELS = {
+  'site-vitrine':      'Site Vitrine',
+  'site-ecommerce':    'Site E-commerce',
+  'landing-page':      'Landing Page',
+  'logo':              'Logo Professionnel',
+  'flyer':             'Flyer Professionnel',
+  'identite-visuelle': 'Identité Visuelle',
+  'sur-mesure':        'Développement Sur Mesure',
+  'ia-automatisation': 'IA & Automatisation',
+};
+
+const FEATURES_MAP = {
+  'site-vitrine':      ['Blog / Actualités','Portfolio / Galerie photos','Formulaire de contact avancé','Système de prise de RDV','Témoignages clients','Multi-langue','FAQ interactive','Carte Google Maps'],
+  'site-ecommerce':    ['Catalogue produits illimité','Paiement Stripe sécurisé','Gestion des stocks','Espace client (login)','Codes promo / réductions','Module de livraison','Factures automatiques','Avis produits'],
+  'landing-page':      ['Formulaire de capture (lead)','Vidéo d'arrière-plan','Compteur urgence (timer)','Intégration CRM / Mailchimp','Section témoignages','Pop-up de sortie','Chat en direct'],
+  'logo':              ['3 propositions créatives','Version fond clair + sombre','Formats PNG + SVG + PDF','Guide d'utilisation','Déclinaisons réseaux sociaux','Fichiers sources éditables'],
+  'flyer':             ['Format A5 recto simple','Format A5 recto/verso','Format A4 recto/verso','Version numérique (web)','Fichiers impression HD','Jusqu'à 3 modifications'],
+  'identite-visuelle': ['Logo + charte graphique','Palette de couleurs officielle','Typographies recommandées','Papier à en-tête + carte de visite','Modèles réseaux sociaux','Fichiers sources complets'],
+  'sur-mesure':        ['Analyse fonctionnelle complète','Maquettes UI/UX','Développement front-end','Développement back-end','API / intégrations tierces','Tests & recette','Documentation technique'],
+  'ia-automatisation': ['Analyse des processus existants','Chatbot intelligent','Automatisation des tâches répétitives','Intégration API IA (Claude, GPT)','Dashboard de pilotage','Formation & accompagnement'],
+};
+
+// ─── État ─────────────────────────────────────────────────────────────────────
+let state = {
+  step: 0,
+  project_type: null,
+  activity: null,
+  features: [],
+  seo_option: false,
+  maintenance_option: 'none',
+  hosting_option: false,
+  branding_option: false,
+  budget_range: null,
+  deadline: null,
+  contact_name: '',
+  contact_email: '',
+  contact_phone: '',
+  company_name: '',
+  devis_number: null,
+  devis_id: null,
+  total_ttc: 0,
+};
+
+// ─── Calcul prix ──────────────────────────────────────────────────────────────
+function calcPrice() {
+  const lines = [];
+  const baseTTC = PRICES[state.project_type] || 0;
+  if (baseTTC) lines.push({ label: LABELS[state.project_type], ttc: baseTTC });
+  if (state.seo_option) lines.push({ label: 'Référencement SEO avancé', ttc: 200 });
+  if (state.maintenance_option === 'vitrine') lines.push({ label: 'Maintenance mensuelle', ttc: 89.99, badge: '/mois' });
+  else if (state.maintenance_option === 'ecommerce') lines.push({ label: 'Maintenance E-commerce', ttc: 120, badge: '/mois' });
+  if (state.hosting_option) lines.push({ label: 'Hébergement géré', ttc: 30, badge: '/mois' });
+  if (state.branding_option && state.project_type !== 'identite-visuelle') lines.push({ label: 'Identité visuelle', ttc: 500 });
+
+  const totalTTC = lines.reduce((s, l) => s + l.ttc, 0);
+  const totalHT  = totalTTC / (1 + TVA / 100);
+  const tvaAmt   = totalTTC - totalHT;
+  return { lines, totalTTC, totalHT, tvaAmt };
+}
+
+function updatePricePanel() {
+  const { lines, totalTTC, totalHT, tvaAmt } = calcPrice();
+  state.total_ttc = totalTTC;
+
+  const fmt = n => n.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' €';
+
+  if (lines.length === 0) {
+    document.getElementById('ppEmpty').style.display = '';
+    document.getElementById('ppLines').style.display = 'none';
+    document.getElementById('ppTotals').style.display = 'none';
+    document.getElementById('mobilePriceBar').style.display = 'none';
+    return;
+  }
+
+  document.getElementById('ppEmpty').style.display = 'none';
+  const linesEl = document.getElementById('ppLines');
+  linesEl.style.display = '';
+  linesEl.innerHTML = lines.map(l =>
+    `<div class="pp-line"><span class="pp-label">${l.label}${l.badge ? ' <span style="font-size:.67rem;color:var(--text3)">'+l.badge+'</span>' : ''}</span><span class="pp-val">${fmt(l.ttc)}</span></div>`
+  ).join('');
+
+  document.getElementById('ppTotals').style.display = '';
+  document.getElementById('ppHT').textContent   = fmt(totalHT);
+  document.getElementById('ppTVA').textContent  = fmt(tvaAmt);
+  document.getElementById('ppTotal').textContent = fmt(totalTTC);
+
+  const hasSub = state.maintenance_option !== 'none' || state.hosting_option;
+  document.getElementById('ppBadge').textContent = hasSub ? '+ abonnement mensuel' : '';
+
+  const mb = document.getElementById('mobilePriceBar');
+  mb.style.display = '';
+  document.getElementById('mbTotal').textContent = fmt(totalTTC);
+}
+
+// ─── Build progress ────────────────────────────────────────────────────────────
+function buildProgress() {
+  const container = document.getElementById('progressSteps');
+  container.innerHTML = '';
+  STEPS.forEach((label, i) => {
+    if (i > 0) {
+      const line = document.createElement('div');
+      line.className = 'p-line' + (i <= state.step ? ' done' : '');
+      container.appendChild(line);
+    }
+    const wrap = document.createElement('div');
+    wrap.className = 'p-step' + (i === state.step ? ' active' : i < state.step ? ' done' : '');
+    wrap.innerHTML = `<div class="p-dot">${i < state.step ? '✓' : i+1}</div><span>${label}</span>`;
+    container.appendChild(wrap);
+  });
+  const pct = Math.round((state.step / (STEPS.length - 1)) * 100);
+  document.getElementById('progFill').style.width = pct + '%';
+}
+
+// ─── Loïc messages ────────────────────────────────────────────────────────────
+let msgQueue = Promise.resolve();
+
+function addMessage(text, isUser = false, delay = 0) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const messages = document.getElementById('chatMessages');
+      if (!isUser) {
+        const typing = document.createElement('div');
+        typing.className = 'msg';
+        typing.innerHTML = `<div class="msg-avatar">L</div><div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div>`;
+        messages.appendChild(typing);
+        messages.scrollTop = messages.scrollHeight;
+        setTimeout(() => {
+          typing.querySelector('.msg-bubble').innerHTML = text;
+          messages.scrollTop = messages.scrollHeight;
+          resolve();
+        }, 900);
+      } else {
+        const el = document.createElement('div');
+        el.className = 'msg user';
+        el.innerHTML = `<div class="msg-avatar" style="background:rgba(255,255,255,.1);font-size:.7rem;">👤</div><div class="msg-bubble">${text}</div>`;
+        messages.appendChild(el);
+        messages.scrollTop = messages.scrollHeight;
+        resolve();
+      }
+    }, delay);
+  });
+}
+
+function queueMsg(text, delay = 0) {
+  msgQueue = msgQueue.then(() => addMessage(text, false, delay));
+  return msgQueue;
+}
+
+// ─── Étapes ───────────────────────────────────────────────────────────────────
+function showStep(n) {
+  state.step = n;
+  buildProgress();
+  document.getElementById('choicesZone').innerHTML = '';
+  const fns = [stepProject, stepActivity, stepFeatures, stepOptions, stepDeadline, stepBudget, stepContact, stepRecap];
+  if (fns[n]) fns[n]();
+}
+
+// STEP 0 — Type de projet
+function stepProject() {
+  queueMsg('Bonjour ! 👋 Je suis <strong>Loïc</strong>, l\'assistant commercial de CA-TECH. Je vais vous aider à créer votre devis personnalisé en quelques minutes.<br><br>Pour commencer, quel type de projet vous intéresse ?').then(() => {
+    const choices = [
+      { id:'site-vitrine',      icon:'🖥️', name:'Site Vitrine',       desc:'Site professionnel sur mesure', price:'590 €' },
+      { id:'site-ecommerce',    icon:'🛒', name:'Site E-commerce',     desc:'Boutique en ligne complète',    price:'1 090 €' },
+      { id:'landing-page',      icon:'🎯', name:'Landing Page',        desc:'Page de conversion efficace',   price:'270 €' },
+      { id:'logo',              icon:'✏️', name:'Logo Professionnel',  desc:'Identité visuelle de marque',   price:'180 €' },
+      { id:'flyer',             icon:'🗞️', name:'Flyer Professionnel', desc:'Communication print & digital', price:'139 €' },
+      { id:'identite-visuelle', icon:'🎨', name:'Identité Visuelle',   desc:'Logo + charte graphique',      price:'500 €' },
+      { id:'sur-mesure',        icon:'💻', name:'Développement',       desc:'Solution sur mesure',           price:'dès 2 500 €' },
+      { id:'ia-automatisation', icon:'🤖', name:'IA & Automatisation', desc:'Chatbots, workflows IA',        price:'dès 800 €' },
+    ];
+    const grid = document.createElement('div');
+    grid.className = 'choice-grid c2';
+    choices.forEach(c => {
+      const card = document.createElement('div');
+      card.className = 'choice-card' + (state.project_type === c.id ? ' selected' : '');
+      card.innerHTML = `<span class="c-icon">${c.icon}</span><div class="c-info"><span class="c-name">${c.name}</span><span class="c-desc">${c.desc}</span></div><span class="c-price">${c.price}</span><span class="c-check">✓</span>`;
+      card.onclick = () => {
+        state.project_type = c.id;
+        state.features = [];
+        if (state.maintenance_option !== 'none' && !['site-vitrine','site-ecommerce'].includes(c.id)) state.maintenance_option = 'none';
+        updatePricePanel();
+        addMessage(c.icon + ' ' + c.name, true);
+        setTimeout(() => showStep(1), 400);
+      };
+      grid.appendChild(card);
+    });
+    document.getElementById('choicesZone').appendChild(grid);
+  });
+}
+
+// STEP 1 — Secteur d'activité
+function stepActivity() {
+  const prev = LABELS[state.project_type] || 'votre projet';
+  queueMsg(`Excellent choix ! Un <strong>${prev}</strong> va parfaitement valoriser votre activité. 🎯<br><br>Dans quel secteur êtes-vous ?`).then(() => {
+    const sectors = [
+      { id:'commerce',     icon:'🏪', name:'Commerce & Retail' },
+      { id:'restaurant',   icon:'🍽️', name:'Restaurant / Hôtel' },
+      { id:'artisan',      icon:'🔧', name:'Artisan / BTP' },
+      { id:'liberal',      icon:'💼', name:'Professionnel libéral' },
+      { id:'association',  icon:'🤝', name:'Association / ONG' },
+      { id:'startup',      icon:'🚀', name:'Startup / Tech' },
+      { id:'beaute',       icon:'💅', name:'Beauté / Bien-être' },
+      { id:'autre',        icon:'📌', name:'Autre secteur' },
+    ];
+    const zone = document.getElementById('choicesZone');
+    const grid = document.createElement('div');
+    grid.className = 'choice-grid c2';
+    sectors.forEach(s => {
+      const card = document.createElement('div');
+      card.className = 'choice-card' + (state.activity === s.id ? ' selected' : '');
+      card.innerHTML = `<span class="c-icon">${s.icon}</span><div class="c-info"><span class="c-name">${s.name}</span></div><span class="c-check">✓</span>`;
+      card.onclick = () => {
+        state.activity = s.id;
+        addMessage(s.icon + ' ' + s.name, true);
+        setTimeout(() => showStep(2), 400);
+      };
+      grid.appendChild(card);
+    });
+    zone.appendChild(grid);
+    // Bouton passer
+    const skip = document.createElement('button');
+    skip.className = 'btn-skip';
+    skip.textContent = 'Passer cette étape';
+    skip.onclick = () => { state.activity = 'non précisé'; showStep(2); };
+    zone.appendChild(skip);
+  });
+}
+
+// STEP 2 — Fonctionnalités
+function stepFeatures() {
+  const feats = FEATURES_MAP[state.project_type] || [];
+  queueMsg(`Quelles fonctionnalités souhaitez-vous inclure dans votre <strong>${LABELS[state.project_type]}</strong> ? Sélectionnez tout ce qui vous intéresse.`).then(() => {
+    const zone = document.getElementById('choicesZone');
+    if (feats.length === 0) { showStep(3); return; }
+    const list = document.createElement('div');
+    list.className = 'feature-list';
+    feats.forEach(f => {
+      const item = document.createElement('label');
+      item.className = 'feat-item' + (state.features.includes(f) ? ' checked' : '');
+      item.innerHTML = `<input type="checkbox" class="feat-cb" ${state.features.includes(f) ? 'checked' : ''}><span class="feat-label">${f}</span>`;
+      item.querySelector('input').onchange = e => {
+        item.classList.toggle('checked', e.target.checked);
+        if (e.target.checked) { if (!state.features.includes(f)) state.features.push(f); }
+        else state.features = state.features.filter(x => x !== f);
+      };
+      list.appendChild(item);
+    });
+    zone.appendChild(list);
+    const row = document.createElement('div');
+    row.className = 'action-row';
+    row.style.marginTop = '.8rem';
+    const btnN = document.createElement('button');
+    btnN.className = 'btn-next';
+    btnN.textContent = 'Continuer →';
+    btnN.onclick = () => { addMessage(state.features.length ? `${state.features.length} fonctionnalité(s) sélectionnée(s)` : 'Fonctionnalités de base', true); showStep(3); };
+    const btnP = document.createElement('button');
+    btnP.className = 'btn-prev';
+    btnP.textContent = '← Retour';
+    btnP.onclick = () => showStep(1);
+    row.appendChild(btnP);
+    row.appendChild(btnN);
+    zone.appendChild(row);
+  });
+}
+
+// STEP 3 — Options
+function stepOptions() {
+  queueMsg('Souhaitez-vous ajouter des options à votre projet ?').then(() => {
+    const zone = document.getElementById('choicesZone');
+    const opts = [];
+
+    // SEO
+    opts.push({
+      id:'seo', icon:'🔍', name:'Référencement SEO avancé',
+      sub:'Optimisation complète pour Google', price:'+200 €',
+      active: state.seo_option,
+      toggle: () => { state.seo_option = !state.seo_option; updatePricePanel(); },
+    });
+
+    // Maintenance (uniquement pour web)
+    if (['site-vitrine','landing-page'].includes(state.project_type)) {
+      opts.push({
+        id:'maint-v', icon:'🛡️', name:'Maintenance mensuelle',
+        sub:'Mises à jour, sécurité, support', price:'+89,99 €/mois',
+        active: state.maintenance_option === 'vitrine',
+        toggle: () => { state.maintenance_option = state.maintenance_option === 'vitrine' ? 'none' : 'vitrine'; updatePricePanel(); },
+      });
+    } else if (state.project_type === 'site-ecommerce') {
+      opts.push({
+        id:'maint-e', icon:'🛡️', name:'Maintenance E-commerce',
+        sub:'Surveillance 24/7, sauvegardes quotidiennes', price:'+120 €/mois',
+        active: state.maintenance_option === 'ecommerce',
+        toggle: () => { state.maintenance_option = state.maintenance_option === 'ecommerce' ? 'none' : 'ecommerce'; updatePricePanel(); },
+      });
+    }
+
+    // Hébergement (pour les projets web)
+    if (['site-vitrine','site-ecommerce','landing-page','sur-mesure'].includes(state.project_type)) {
+      opts.push({
+        id:'host', icon:'☁️', name:'Hébergement géré',
+        sub:'Domaine + SSL + CDN + emails pro', price:'+30 €/mois',
+        active: state.hosting_option,
+        toggle: () => { state.hosting_option = !state.hosting_option; updatePricePanel(); },
+      });
+    }
+
+    // Branding (pour web)
+    if (!['logo','flyer','identite-visuelle'].includes(state.project_type)) {
+      opts.push({
+        id:'brand', icon:'🎨', name:'Identité visuelle complète',
+        sub:'Logo + charte graphique intégrés', price:'+500 €',
+        active: state.branding_option,
+        toggle: () => { state.branding_option = !state.branding_option; updatePricePanel(); },
+      });
+    }
+
+    opts.forEach(o => {
+      const el = document.createElement('div');
+      el.className = 'option-toggle' + (o.active ? ' on' : '');
+      el.innerHTML = `<div class="opt-info"><span class="opt-icon">${o.icon}</span><div><span class="opt-text">${o.name} <span style="color:var(--cyan);font-size:.75rem">${o.price}</span></span><span class="opt-sub">${o.sub}</span></div></div><div class="opt-toggle-btn"></div>`;
+      el.onclick = () => {
+        o.active = !o.active;
+        el.classList.toggle('on', o.active);
+        o.toggle();
+      };
+      zone.appendChild(el);
+    });
+
+    const row = document.createElement('div');
+    row.className = 'action-row';
+    row.style.marginTop = '.8rem';
+    const btnN = document.createElement('button');
+    btnN.className = 'btn-next';
+    btnN.textContent = 'Continuer →';
+    btnN.onclick = () => {
+      const sel = [];
+      if (state.seo_option) sel.push('SEO');
+      if (state.maintenance_option !== 'none') sel.push('Maintenance');
+      if (state.hosting_option) sel.push('Hébergement');
+      if (state.branding_option) sel.push('Identité visuelle');
+      addMessage(sel.length ? sel.join(', ') + ' ajouté(s)' : 'Sans options supplémentaires', true);
+      showStep(4);
+    };
+    const btnP = document.createElement('button');
+    btnP.className = 'btn-prev'; btnP.textContent = '← Retour';
+    btnP.onclick = () => showStep(2);
+    row.appendChild(btnP); row.appendChild(btnN);
+    zone.appendChild(row);
+  });
+}
+
+// STEP 4 — Délai
+function stepDeadline() {
+  queueMsg('Dans quel délai souhaitez-vous votre projet ? Cela nous aide à organiser notre planning.').then(() => {
+    const options = [
+      { id:'urgent',    icon:'⚡', name:'Urgent',     desc:'Livraison en moins d\'une semaine' },
+      { id:'normal',    icon:'📅', name:'Normal',     desc:'Entre 2 et 4 semaines' },
+      { id:'large',     icon:'🗓️', name:'Sans presse', desc:'Dans 1 à 3 mois' },
+      { id:'flexible',  icon:'🔄', name:'Flexible',   desc:'Date à définir ensemble' },
+    ];
+    const grid = document.createElement('div');
+    grid.className = 'choice-grid c2';
+    options.forEach(o => {
+      const card = document.createElement('div');
+      card.className = 'choice-card' + (state.deadline === o.id ? ' selected' : '');
+      card.innerHTML = `<span class="c-icon">${o.icon}</span><div class="c-info"><span class="c-name">${o.name}</span><span class="c-desc">${o.desc}</span></div><span class="c-check">✓</span>`;
+      card.onclick = () => {
+        state.deadline = o.id;
+        addMessage(o.icon + ' ' + o.name, true);
+        setTimeout(() => showStep(5), 400);
+      };
+      grid.appendChild(card);
+    });
+    const zone = document.getElementById('choicesZone');
+    zone.appendChild(grid);
+    const btnP = document.createElement('button');
+    btnP.className = 'btn-prev'; btnP.textContent = '← Retour';
+    btnP.onclick = () => showStep(3);
+    zone.appendChild(btnP);
+  });
+}
+
+// STEP 5 — Budget
+function stepBudget() {
+  queueMsg('Quel est votre budget indicatif pour ce projet ? Cela ne vous engage à rien, c\'est juste pour adapter notre proposition.').then(() => {
+    const options = [
+      { id:'<500',        label:'Moins de 500 €' },
+      { id:'500-1000',    label:'500 € – 1 000 €' },
+      { id:'1000-2500',   label:'1 000 € – 2 500 €' },
+      { id:'2500-5000',   label:'2 500 € – 5 000 €' },
+      { id:'>5000',       label:'Plus de 5 000 €' },
+      { id:'undefined',   label:'Je ne sais pas encore' },
+    ];
+    const grid = document.createElement('div');
+    grid.className = 'choice-grid c2';
+    options.forEach(o => {
+      const card = document.createElement('div');
+      card.className = 'choice-card' + (state.budget_range === o.id ? ' selected' : '');
+      card.innerHTML = `<div class="c-info"><span class="c-name">${o.label}</span></div><span class="c-check">✓</span>`;
+      card.onclick = () => {
+        state.budget_range = o.id;
+        addMessage('💰 ' + o.label, true);
+        setTimeout(() => showStep(6), 400);
+      };
+      grid.appendChild(card);
+    });
+    const zone = document.getElementById('choicesZone');
+    zone.appendChild(grid);
+    const btnP = document.createElement('button');
+    btnP.className = 'btn-prev'; btnP.textContent = '← Retour';
+    btnP.onclick = () => showStep(4);
+    zone.appendChild(btnP);
+  });
+}
+
+// STEP 6 — Contact
+function stepContact() {
+  queueMsg('Parfait, nous y sommes presque ! 🎯<br><br>Pour finaliser votre devis, j\'ai besoin de vos coordonnées afin de vous l\'envoyer.').then(() => {
+    const zone = document.getElementById('choicesZone');
+    zone.innerHTML = `
+      <div class="form-grid">
+        <div class="f-grp">
+          <label>Prénom <span class="req">*</span></label>
+          <input type="text" id="fPrenom" placeholder="Jean" autocomplete="given-name" value="${state.contact_name.split(' ')[0] || ''}"/>
+        </div>
+        <div class="f-grp">
+          <label>Nom <span class="req">*</span></label>
+          <input type="text" id="fNom" placeholder="Dupont" autocomplete="family-name" value="${state.contact_name.split(' ').slice(1).join(' ') || ''}"/>
+        </div>
+        <div class="f-grp">
+          <label>Email <span class="req">*</span></label>
+          <input type="email" id="fEmail" placeholder="jean@exemple.fr" autocomplete="email" value="${state.contact_email}"/>
+        </div>
+        <div class="f-grp">
+          <label>Téléphone</label>
+          <input type="tel" id="fPhone" placeholder="+33 6 12 34 56 78" autocomplete="tel" value="${state.contact_phone}"/>
+        </div>
+        <div class="f-grp full">
+          <label>Société / Entreprise</label>
+          <input type="text" id="fSociete" placeholder="Ma Société (optionnel)" autocomplete="organization" value="${state.company_name}"/>
+        </div>
+      </div>
+      <label class="legal-check" style="margin-top:.5rem">
+        <input type="checkbox" id="fLegal"/>
+        J'accepte que CA-TECH conserve mes coordonnées pour traiter ma demande de devis conformément à la <a href="politique-de-confidentialite.html" target="_blank">politique de confidentialité</a>.
+      </label>
+      <div class="action-row" style="margin-top:1rem">
+        <button class="btn-prev" onclick="showStep(5)">← Retour</button>
+        <button class="btn-next" id="btnSubmit" onclick="submitForm()">Générer mon devis →</button>
+      </div>
+    `;
+    document.getElementById('fPrenom').focus();
+  });
+}
+
+// STEP 7 — Récap (atteint après succès API)
+function stepRecap() {} // géré dans submitForm
+
+// ─── Soumission ───────────────────────────────────────────────────────────────
+async function submitForm() {
+  const prenom  = document.getElementById('fPrenom')?.value.trim() || '';
+  const nom     = document.getElementById('fNom')?.value.trim()    || '';
+  const email   = document.getElementById('fEmail')?.value.trim()  || '';
+  const phone   = document.getElementById('fPhone')?.value.trim()  || '';
+  const societe = document.getElementById('fSociete')?.value.trim() || '';
+  const legal   = document.getElementById('fLegal')?.checked;
+
+  let valid = true;
+  if (!prenom) { document.getElementById('fPrenom').classList.add('err'); valid = false; }
+  if (!nom)    { document.getElementById('fNom').classList.add('err');    valid = false; }
+  if (!email || !email.includes('@')) { document.getElementById('fEmail').classList.add('err'); valid = false; }
+  if (!legal)  { alert('Veuillez accepter les conditions pour continuer.'); valid = false; }
+  if (!valid) return;
+
+  state.contact_name  = prenom + ' ' + nom;
+  state.contact_email = email;
+  state.contact_phone = phone;
+  state.company_name  = societe;
+
+  const btn = document.getElementById('btnSubmit');
+  btn.disabled = true;
+  btn.textContent = 'Génération en cours...';
+
+  try {
+    const res = await fetch('/api/devis', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contact_name:       state.contact_name,
+        contact_email:      state.contact_email,
+        contact_phone:      state.contact_phone,
+        company_name:       state.company_name,
+        project_type:       state.project_type,
+        activity:           state.activity,
+        features:           state.features,
+        seo_option:         state.seo_option,
+        maintenance_option: state.maintenance_option,
+        hosting_option:     state.hosting_option,
+        branding_option:    state.branding_option,
+        budget_range:       state.budget_range,
+        deadline:           state.deadline,
+      }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Erreur serveur');
+
+    state.devis_number = data.devis_number;
+    state.devis_id     = data.id;
+    state.total_ttc    = data.total;
+
+    showSuccess();
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = 'Générer mon devis →';
+    alert('Une erreur est survenue : ' + err.message + '\nVeuillez réessayer ou nous contacter directement.');
+  }
+}
+
+function showSuccess() {
+  document.getElementById('chatMessages').style.display = 'none';
+  document.getElementById('choicesZone').style.display  = 'none';
+  document.getElementById('progressSteps').closest('.progress-bar').style.display = 'none';
+
+  document.getElementById('successNum').textContent   = state.devis_number;
+  document.getElementById('successName').textContent  = state.contact_name.split(' ')[0];
+  document.getElementById('successEmail').textContent = state.contact_email;
+  document.getElementById('successScreen').classList.add('show');
+  document.getElementById('mobilePriceBar').style.display = 'none';
+
+  // Update price panel
+  updatePricePanel();
+  document.getElementById('ppValid').classList.add('show');
+}
+
+// ─── Génération PDF (jsPDF) ──────────────────────────────────────────────────
+async function downloadPDF() {
+  const btn = document.getElementById('btnPdf');
+  btn.disabled = true;
+  btn.textContent = 'Génération du PDF...';
+
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    const W = 210, M = 18;
+
+    // Couleurs
+    const DARK  = [10, 37, 64];
+    const BLUE  = [0, 102, 255];
+    const GREY  = [100, 116, 139];
+    const LIGHT = [248, 250, 252];
+    const BLACK = [15, 23, 42];
+
+    // ── Header ──
+    doc.setFillColor(...DARK);
+    doc.rect(0, 0, W, 38, 'F');
+    doc.setFillColor(...BLUE);
+    doc.rect(0, 36, W, 2, 'F');
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(22);
+    doc.setTextColor(255, 255, 255);
+    doc.text('CA-TECH', M, 16);
+
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(160, 185, 215);
+    doc.text('AGENCE WEB & DESIGN', M, 22);
+    doc.text('contact@ca-tech.fr  ·  ca-tech.fr  ·  +33 7 75 66 49 75', M, 28);
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(20);
+    doc.setTextColor(255, 255, 255);
+    doc.text('DEVIS', W - M, 16, { align: 'right' });
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(160, 185, 215);
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('fr-FR');
+    const valid = new Date(now); valid.setDate(valid.getDate() + 30);
+    const validStr = valid.toLocaleDateString('fr-FR');
+    doc.text(state.devis_number, W - M, 23, { align: 'right' });
+    doc.text('Date : ' + dateStr, W - M, 29, { align: 'right' });
+    doc.text('Valable jusqu\'au : ' + validStr, W - M, 35, { align: 'right' });
+
+    // ── Infos client / émetteur ──
+    let y = 50;
+    doc.setFillColor(...LIGHT);
+    doc.roundedRect(M, y, 80, 38, 3, 3, 'F');
+    doc.roundedRect(W - M - 80, y, 80, 38, 3, 3, 'F');
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7);
+    doc.setTextColor(...GREY);
+    doc.text('DESTINATAIRE', M + 5, y + 7);
+    doc.text('ÉMETTEUR', W - M - 80 + 5, y + 7);
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...BLACK);
+    doc.text(state.contact_name, M + 5, y + 15);
+    doc.text('CA-TECH', W - M - 80 + 5, y + 15);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(...GREY);
+    let cy = y + 21;
+    if (state.company_name) { doc.text(state.company_name, M + 5, cy); cy += 5; }
+    doc.text(state.contact_email, M + 5, cy); cy += 5;
+    if (state.contact_phone) doc.text(state.contact_phone, M + 5, cy);
+
+    doc.text('contact@ca-tech.fr', W - M - 80 + 5, y + 21);
+    doc.text('+33 7 75 66 49 75', W - M - 80 + 5, y + 27);
+    doc.text('Paris · Lyon · Dijon · Troyes', W - M - 80 + 5, y + 33);
+
+    // ── Lignes du devis ──
+    y = 100;
+    const colW = [105, 18, 28, 28];
+    const colX = [M, M + 105, M + 123, M + 151];
+
+    // Entête tableau
+    doc.setFillColor(...DARK);
+    doc.roundedRect(M, y, W - 2 * M, 9, 2, 2, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8);
+    doc.setTextColor(255, 255, 255);
+    doc.text('DESCRIPTION', colX[0] + 3, y + 6);
+    doc.text('QTÉ', colX[1] + 2, y + 6);
+    doc.text('P.U. HT', colX[2] + 2, y + 6);
+    doc.text('TOTAL HT', colX[3] + 2, y + 6);
+
+    y += 12;
+    const { lines } = calcPrice();
+    const subtotalHT = lines.reduce((s, l) => s + l.ttc / (1 + 20 / 100), 0);
+    const tvaAmt     = subtotalHT * 0.2;
+    const totalTTC   = subtotalHT + tvaAmt;
+    const fmtN = n => n.toFixed(2).replace('.', ',') + ' €';
+
+    lines.forEach((line, i) => {
+      const ht = line.ttc / (1 + 20 / 100);
+      doc.setFillColor(i % 2 === 0 ? 255 : 250, i % 2 === 0 ? 255 : 250, i % 2 === 0 ? 255 : 252);
+      doc.rect(M, y - 5, W - 2 * M, 9, 'F');
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(...BLACK);
+      doc.text(line.label + (line.badge ? ' (' + line.badge + ')' : ''), colX[0] + 3, y);
+      doc.text('1', colX[1] + 2, y);
+      doc.text(fmtN(ht), colX[2] + 2, y);
+      doc.text(fmtN(ht), colX[3] + 2, y);
+      y += 9;
+    });
+
+    // Ligne séparatrice
+    doc.setDrawColor(200, 210, 225);
+    doc.line(M, y, W - M, y);
+    y += 8;
+
+    // Totaux
+    const totX = W - M - 65;
+    const fmtRow = (label, val, bold = false) => {
+      if (bold) {
+        doc.setFillColor(...BLUE);
+        doc.roundedRect(totX - 3, y - 5, 65 + 3, 9, 2, 2, 'F');
+        doc.setTextColor(255, 255, 255);
+      } else {
+        doc.setTextColor(...GREY);
+      }
+      doc.setFont('helvetica', bold ? 'bold' : 'normal');
+      doc.setFontSize(bold ? 10 : 9);
+      doc.text(label, totX, y);
+      doc.text(val, W - M, y, { align: 'right' });
+      y += bold ? 11 : 7;
+    };
+    fmtRow('Sous-total HT :', fmtN(subtotalHT));
+    fmtRow('TVA 20 % :', fmtN(tvaAmt));
+    fmtRow('TOTAL TTC :', fmtN(totalTTC), true);
+
+    // ── Conditions / Footer ──
+    y = Math.max(y + 16, 210);
+    doc.setFillColor(...LIGHT);
+    doc.roundedRect(M, y, W - 2 * M, 40, 3, 3, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8);
+    doc.setTextColor(...GREY);
+    doc.text('CONDITIONS GÉNÉRALES', M + 5, y + 7);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7.5);
+    doc.setTextColor(...GREY);
+    const cg = [
+      '• Ce devis est valable 30 jours à compter de sa date d\'émission.',
+      '• Un acompte de 50 % est demandé à la signature du devis pour démarrer le projet.',
+      '• Le solde est dû à la livraison finale. Paiement par virement ou Stripe.',
+      '• Les modifications majeures hors cahier des charges feront l\'objet d\'un avenant.',
+      '• TVA non applicable si auto-entrepreneur, ou 20 % si société. Vérifiez votre régime fiscal.',
+    ];
+    cg.forEach((line, i) => { doc.text(line, M + 5, y + 14 + i * 5.5); });
+
+    // Page footer
+    doc.setFillColor(...DARK);
+    doc.rect(0, 282, W, 15, 'F');
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7.5);
+    doc.setTextColor(150, 175, 210);
+    doc.text('CA-TECH — Agence Web & Design  ·  contact@ca-tech.fr  ·  ca-tech.fr', W / 2, 290, { align: 'center' });
+
+    doc.save(`Devis-${state.devis_number}-CA-TECH.pdf`);
+  } catch (err) {
+    alert('Erreur lors de la génération du PDF : ' + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> Télécharger mon devis PDF`;
+  }
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+buildProgress();
+showStep(0);
+</script>
+</body>
+</html>
