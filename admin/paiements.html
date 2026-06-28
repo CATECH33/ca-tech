@@ -1,12 +1,58 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CA-TECH Manager — Paiements</title>
-    <meta name="robots" content="noindex, nofollow">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CA-TECH Manager — Paiements</title>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/admin.css"/>
 </head>
 <body>
-    <!-- CA-TECH Manager — Gestion des paiements -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <img src="../assets/logos/logo-ca-tech.png" alt="CA-TECH"/>
+    <div><span class="sb-logo-name">CA-TECH</span><span class="sb-logo-sub">Manager</span></div>
+  </div>
+  <div class="sb-section">Principal</div>
+  <a href="dashboard.html" class="sb-link"><span class="sb-icon">📊</span>Dashboard</a>
+  <a href="clients.html"   class="sb-link"><span class="sb-icon">👥</span>Clients</a>
+  <a href="projets.html"   class="sb-link"><span class="sb-icon">🚀</span>Projets</a>
+  <a href="devis.html"     class="sb-link"><span class="sb-icon">📄</span>Devis</a>
+  <a href="factures.html"  class="sb-link"><span class="sb-icon">🧾</span>Factures</a>
+  <a href="paiements.html" class="sb-link active"><span class="sb-icon">💳</span>Paiements</a>
+  <div class="sb-section">Outils</div>
+  <a href="agenda.html"     class="sb-link"><span class="sb-icon">📅</span>Agenda</a>
+  <a href="leads.html"      class="sb-link"><span class="sb-icon">🎯</span>Leads</a>
+  <a href="portfolio.html"  class="sb-link"><span class="sb-icon">🖼️</span>Portfolio</a>
+  <a href="parametres.html" class="sb-link"><span class="sb-icon">⚙️</span>Paramètres</a>
+  <div class="sb-section">IA</div>
+  <a href="loic-ia/index.html" class="sb-link"><span class="sb-icon">🤖</span>Loïc IA</a>
+  <a href="/devis" class="sb-link" target="_blank"><span class="sb-icon">🔗</span>Page Devis <span style="font-size:.65rem">↗</span></a>
+  <div class="sb-bottom"><div class="sb-user"><div class="sb-avatar">CA</div><div><div style="color:var(--white);font-weight:600;font-size:.75rem">CA-TECH</div><div style="font-size:.68rem">Admin</div></div></div></div>
+</aside>
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-title">💳 Paiements</div>
+    <div class="topbar-right"><a href="devis.html" class="btn-primary">📄 Devis</a></div>
+  </div>
+  <div class="content">
+    <div class="cs-panel">
+      <div class="cs-icon">💳</div>
+      <div class="cs-title">Suivi des paiements</div>
+      <div class="cs-desc">Visualisez tous les paiements Stripe en temps réel — abonnements, paiements uniques, remboursements et historique complet.</div>
+      <div class="cs-features">
+        <span class="cs-feat">Stripe Checkout</span>
+        <span class="cs-feat">Webhooks temps réel</span>
+        <span class="cs-feat">Abonnements</span>
+        <span class="cs-feat">Remboursements</span>
+        <span class="cs-feat">Exports comptables</span>
+      </div>
+      <div class="cs-eta">Paiements Stripe actifs — tableau de bord en développement</div>
+    </div>
+  </div>
+</main>
 </body>
 </html>

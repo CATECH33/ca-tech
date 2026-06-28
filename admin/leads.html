@@ -1,12 +1,192 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CA-TECH Manager — Leads</title>
-    <meta name="robots" content="noindex, nofollow">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CA-TECH Manager — Leads</title>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/admin.css"/>
+  <style>
+  .td-name{font-weight:600;color:var(--white);font-size:.82rem}
+  .td-sub{font-size:.7rem;color:var(--text3)}
+  .td-bold{font-weight:700;color:var(--white);font-variant-numeric:tabular-nums}
+  .stat-row{display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap}
+  .stat-chip{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:.8rem 1.2rem;display:flex;flex-direction:column;gap:.3rem;min-width:130px}
+  .stat-chip-val{font-size:1.4rem;font-weight:900;color:var(--white);letter-spacing:-1px}
+  .stat-chip-lbl{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text3)}
+  </style>
 </head>
 <body>
-    <!-- CA-TECH Manager — Gestion des leads -->
+
+<aside class="sidebar">
+  <div class="sb-logo">
+    <img src="../assets/logos/logo-ca-tech.png" alt="CA-TECH"/>
+    <div><span class="sb-logo-name">CA-TECH</span><span class="sb-logo-sub">Manager</span></div>
+  </div>
+  <div class="sb-section">Principal</div>
+  <a href="dashboard.html" class="sb-link"><span class="sb-icon">📊</span>Dashboard</a>
+  <a href="clients.html"   class="sb-link"><span class="sb-icon">👥</span>Clients</a>
+  <a href="projets.html"   class="sb-link"><span class="sb-icon">🚀</span>Projets</a>
+  <a href="devis.html"     class="sb-link"><span class="sb-icon">📄</span>Devis</a>
+  <a href="factures.html"  class="sb-link"><span class="sb-icon">🧾</span>Factures</a>
+  <a href="paiements.html" class="sb-link"><span class="sb-icon">💳</span>Paiements</a>
+  <div class="sb-section">Outils</div>
+  <a href="agenda.html"     class="sb-link"><span class="sb-icon">📅</span>Agenda</a>
+  <a href="leads.html"      class="sb-link active"><span class="sb-icon">🎯</span>Leads</a>
+  <a href="portfolio.html"  class="sb-link"><span class="sb-icon">🖼️</span>Portfolio</a>
+  <a href="parametres.html" class="sb-link"><span class="sb-icon">⚙️</span>Paramètres</a>
+  <div class="sb-section">IA</div>
+  <a href="loic-ia/index.html" class="sb-link"><span class="sb-icon">🤖</span>Loïc IA</a>
+  <a href="/devis" class="sb-link" target="_blank"><span class="sb-icon">🔗</span>Page Devis <span style="font-size:.65rem">↗</span></a>
+  <div class="sb-bottom">
+    <div class="sb-user">
+      <div class="sb-avatar">CA</div>
+      <div><div style="color:var(--white);font-weight:600;font-size:.75rem">CA-TECH</div><div style="font-size:.68rem">Admin</div></div>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-title">🎯 Leads</div>
+    <div class="topbar-right">
+      <button class="btn-sec" onclick="loadLeads()">🔄 Actualiser</button>
+      <a href="/devis" target="_blank" class="btn-primary">✚ Nouveau lead</a>
+    </div>
+  </div>
+  <div class="content">
+
+    <div class="stat-row" id="statRow">
+      <div class="stat-chip"><div class="stat-chip-val" id="sTotal">—</div><div class="stat-chip-lbl">Total leads</div></div>
+      <div class="stat-chip"><div class="stat-chip-val" id="sNew">—</div><div class="stat-chip-lbl">Ce mois</div></div>
+      <div class="stat-chip"><div class="stat-chip-val" id="sBudget">—</div><div class="stat-chip-lbl">Budget potentiel</div></div>
+      <div class="stat-chip"><div class="stat-chip-val" id="sSources">—</div><div class="stat-chip-lbl">Source devis</div></div>
+    </div>
+
+    <div class="filters-bar">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Nom, email, société…" oninput="renderTable()"/>
+      </div>
+      <span id="countLabel" style="font-size:.75rem;color:var(--text3);margin-left:auto"></span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Prospect</th>
+            <th>Téléphone</th>
+            <th>Société</th>
+            <th>Projet</th>
+            <th>Budget</th>
+            <th>Statut</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="leadsTable">
+          <tr><td colspan="7"><div style="display:flex;align-items:center;justify-content:center;gap:.7rem;padding:2rem;color:var(--text3)"><div class="spinner"></div> Chargement…</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</main>
+
+<script>
+const fmtEur = n => (n||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0});
+const fmtDate = s => s ? new Date(s).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'}) : '—';
+const fmtAge  = s => { if(!s) return ''; const d=Math.floor((Date.now()-new Date(s))/86400000); return d===0?"Auj.":d===1?'Hier':`Il y a ${d}j`; };
+const TYPE_LABELS = {'site-vitrine':'Site Vitrine','site-ecommerce':'Site E-commerce','landing-page':'Landing Page','logo':'Logo','flyer':'Flyer','identite-visuelle':'Identité Visuelle','sur-mesure':'Sur mesure','ia-automatisation':'IA & Auto.'};
+const STATUS_LABELS = {new:'Nouveau',qualified:'Qualifié',contacted:'Contacté',converted:'Converti',lost:'Perdu'};
+
+let allLeads = [];
+
+async function loadLeads() {
+  try {
+    const res = await fetch('/api/devis?action=list&limit=200');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const devis = await res.json();
+
+    // Dédupliquer par email
+    const map = new Map();
+    devis.forEach(d => {
+      if (!d.contact_email) return;
+      if (!map.has(d.contact_email)) {
+        map.set(d.contact_email, {
+          email: d.contact_email,
+          name: d.contact_name || '',
+          phone: d.contact_phone || '',
+          company: d.company_name || '',
+          project_type: d.project_type,
+          budget: d.total || 0,
+          status: 'qualified',
+          source: 'devis_form',
+          created_at: d.created_at,
+          devis_count: 1,
+        });
+      } else {
+        const l = map.get(d.contact_email);
+        l.devis_count++;
+        l.budget = Math.max(l.budget, d.total || 0);
+        if (new Date(d.created_at) < new Date(l.created_at)) l.created_at = d.created_at;
+      }
+    });
+
+    allLeads = Array.from(map.values()).sort((a,b) => new Date(b.created_at)-new Date(a.created_at));
+
+    const thisMonth = new Date(); thisMonth.setDate(1); thisMonth.setHours(0,0,0,0);
+    document.getElementById('sTotal').textContent = allLeads.length;
+    document.getElementById('sNew').textContent = allLeads.filter(l => new Date(l.created_at) >= thisMonth).length;
+    document.getElementById('sBudget').textContent = fmtEur(allLeads.reduce((s,l)=>s+l.budget,0));
+    document.getElementById('sSources').textContent = allLeads.filter(l=>l.source==='devis_form').length;
+
+    renderTable();
+  } catch(err) {
+    document.getElementById('leadsTable').innerHTML = `<tr><td colspan="7" style="color:var(--red);padding:1rem;text-align:center">Erreur : ${err.message}</td></tr>`;
+  }
+}
+
+function renderTable() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const filtered = allLeads.filter(l =>
+    !q ||
+    (l.name||'').toLowerCase().includes(q) ||
+    (l.email||'').toLowerCase().includes(q) ||
+    (l.company||'').toLowerCase().includes(q)
+  );
+  document.getElementById('countLabel').textContent = filtered.length + ' lead(s)';
+
+  if (filtered.length === 0) {
+    document.getElementById('leadsTable').innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">🎯</div><div class="empty-title">Aucun lead trouvé</div><div class="empty-desc">${q?'Aucun résultat pour "'+q+'"':'Créez votre premier devis pour voir les leads apparaître ici.'}</div></div></td></tr>`;
+    return;
+  }
+
+  document.getElementById('leadsTable').innerHTML = filtered.map(l => `
+    <tr>
+      <td>
+        <div class="td-name">${l.name||'—'}</div>
+        <div class="td-sub">${l.email}</div>
+      </td>
+      <td class="td-sub">${l.phone||'—'}</td>
+      <td class="td-sub">${l.company||'—'}</td>
+      <td style="font-size:.78rem;color:var(--text2)">${TYPE_LABELS[l.project_type]||l.project_type||'—'}</td>
+      <td class="td-bold">${fmtEur(l.budget)}</td>
+      <td><span class="badge ${l.status}">${STATUS_LABELS[l.status]||l.status}</span></td>
+      <td><div style="font-size:.75rem;color:var(--text3)">${fmtAge(l.created_at)}<br>${fmtDate(l.created_at)}</div></td>
+    </tr>
+  `).join('');
+}
+
+function showToast(msg, type='') {
+  const t=document.createElement('div'); t.className='toast '+type; t.textContent=msg; document.body.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300)},3000);
+}
+
+loadLeads();
+</script>
 </body>
 </html>

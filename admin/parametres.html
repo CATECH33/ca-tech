@@ -1,12 +1,156 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CA-TECH Manager — Paramètres</title>
-    <meta name="robots" content="noindex, nofollow">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CA-TECH Manager — Paramètres</title>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/admin.css"/>
+  <style>
+  .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+  .settings-section{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+  .ss-head{padding:1.1rem 1.4rem;border-bottom:1px solid var(--border);font-size:.82rem;font-weight:700;color:var(--white);display:flex;align-items:center;gap:.5rem}
+  .ss-body{padding:1.2rem 1.4rem;display:flex;flex-direction:column;gap:.8rem}
+  .channel-row{display:flex;align-items:center;gap:.9rem;padding:.8rem 1rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:10px}
+  .ch-icon{font-size:1.3rem;width:32px;text-align:center;flex-shrink:0}
+  .ch-info{flex:1}
+  .ch-name{font-size:.82rem;font-weight:700;color:var(--white)}
+  .ch-desc{font-size:.7rem;color:var(--text3);margin-top:.1rem}
+  .ch-status{font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:20px}
+  .ch-status.env{background:rgba(0,102,255,.08);color:var(--cyan);border:1px solid rgba(0,102,255,.15)}
+  .info-row{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.8rem}
+  .info-row:last-child{border-bottom:none}
+  .info-lbl{color:var(--text3)}
+  .info-val{color:var(--white);font-weight:600}
+  .link-btn{display:flex;align-items:center;gap:.5rem;padding:8px 14px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--text2);font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;text-decoration:none}
+  .link-btn:hover{border-color:rgba(0,102,255,.3);color:var(--white)}
+  @media(max-width:900px){.settings-grid{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
-    <!-- CA-TECH Manager — Paramètres -->
+
+<aside class="sidebar">
+  <div class="sb-logo">
+    <img src="../assets/logos/logo-ca-tech.png" alt="CA-TECH"/>
+    <div><span class="sb-logo-name">CA-TECH</span><span class="sb-logo-sub">Manager</span></div>
+  </div>
+  <div class="sb-section">Principal</div>
+  <a href="dashboard.html" class="sb-link"><span class="sb-icon">📊</span>Dashboard</a>
+  <a href="clients.html"   class="sb-link"><span class="sb-icon">👥</span>Clients</a>
+  <a href="projets.html"   class="sb-link"><span class="sb-icon">🚀</span>Projets</a>
+  <a href="devis.html"     class="sb-link"><span class="sb-icon">📄</span>Devis</a>
+  <a href="factures.html"  class="sb-link"><span class="sb-icon">🧾</span>Factures</a>
+  <a href="paiements.html" class="sb-link"><span class="sb-icon">💳</span>Paiements</a>
+  <div class="sb-section">Outils</div>
+  <a href="agenda.html"     class="sb-link"><span class="sb-icon">📅</span>Agenda</a>
+  <a href="leads.html"      class="sb-link"><span class="sb-icon">🎯</span>Leads</a>
+  <a href="portfolio.html"  class="sb-link"><span class="sb-icon">🖼️</span>Portfolio</a>
+  <a href="parametres.html" class="sb-link active"><span class="sb-icon">⚙️</span>Paramètres</a>
+  <div class="sb-section">IA</div>
+  <a href="loic-ia/index.html" class="sb-link"><span class="sb-icon">🤖</span>Loïc IA</a>
+  <a href="/devis" class="sb-link" target="_blank"><span class="sb-icon">🔗</span>Page Devis <span style="font-size:.65rem">↗</span></a>
+  <div class="sb-bottom">
+    <div class="sb-user">
+      <div class="sb-avatar">CA</div>
+      <div><div style="color:var(--white);font-weight:600;font-size:.75rem">CA-TECH</div><div style="font-size:.68rem">Admin</div></div>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-title">⚙️ Paramètres</div>
+    <div class="topbar-right">
+      <button class="btn-sec" onclick="testApis()">🧪 Tester les API</button>
+    </div>
+  </div>
+  <div class="content">
+    <div class="settings-grid">
+
+      <div class="settings-section">
+        <div class="ss-head">🔔 Canaux de notification</div>
+        <div class="ss-body">
+          <div class="channel-row">
+            <div class="ch-icon">✉️</div>
+            <div class="ch-info"><div class="ch-name">Email — Resend</div><div class="ch-desc">Notifications email professionnel</div></div>
+            <span class="ch-status env">Via env var</span>
+          </div>
+          <div class="channel-row">
+            <div class="ch-icon">✈️</div>
+            <div class="ch-info"><div class="ch-name">Telegram Bot</div><div class="ch-desc">Alertes instantanées Telegram</div></div>
+            <span class="ch-status env">Via env var</span>
+          </div>
+          <div class="channel-row">
+            <div class="ch-icon">💬</div>
+            <div class="ch-info"><div class="ch-name">WhatsApp — CallMeBot</div><div class="ch-desc">Notifications WhatsApp</div></div>
+            <span class="ch-status env">Via env var</span>
+          </div>
+          <p style="font-size:.71rem;color:var(--text3);line-height:1.65">
+            Clés configurées via variables d'environnement Vercel.<br>
+            <a href="https://vercel.com" target="_blank" style="color:var(--blue)">Vercel → Settings → Environment Variables</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="ss-head">🔌 Statut des API</div>
+        <div class="ss-body" id="apiStatus">
+          <div style="display:flex;align-items:center;gap:.6rem;color:var(--text3)"><div class="spinner"></div> Vérification…</div>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="ss-head">ℹ️ Informations système</div>
+        <div class="ss-body">
+          <div class="info-row"><span class="info-lbl">Application</span><span class="info-val">CA-TECH Manager</span></div>
+          <div class="info-row"><span class="info-lbl">Version</span><span class="info-val">1.0.0</span></div>
+          <div class="info-row"><span class="info-lbl">Hébergement</span><span class="info-val">Vercel</span></div>
+          <div class="info-row"><span class="info-lbl">Base de données</span><span class="info-val">Supabase (PostgreSQL)</span></div>
+          <div class="info-row"><span class="info-lbl">Paiements</span><span class="info-val">Stripe Checkout</span></div>
+          <div class="info-row"><span class="info-lbl">Domaine</span><span class="info-val">www.ca-tech.fr</span></div>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="ss-head">🔗 Liens rapides</div>
+        <div class="ss-body">
+          <a href="/devis" target="_blank" class="link-btn">📄 Formulaire devis public ↗</a>
+          <a href="devis.html" class="link-btn">📋 Gestion des devis</a>
+          <a href="dashboard.html" class="link-btn">📊 Dashboard</a>
+          <a href="/api/devis?action=list&limit=5" target="_blank" class="link-btn">🔌 API Devis JSON ↗</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<script>
+async function testApis() {
+  const c = document.getElementById('apiStatus');
+  c.innerHTML = '<div style="display:flex;align-items:center;gap:.6rem;color:var(--text3)"><div class="spinner"></div> Test en cours…</div>';
+  const tests = [
+    {label:'GET /api/devis (list)', url:'/api/devis?action=list&limit=1'},
+    {label:'GET /api/products', url:'/api/products'},
+    {label:'POST /api/devis (validation 400)', url:'/api/devis', method:'POST', body:{}, expect:400},
+  ];
+  const results = await Promise.all(tests.map(async t => {
+    try {
+      const opts = t.method === 'POST' ? {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(t.body)} : {};
+      const r = await fetch(t.url, opts);
+      return {label:t.label, status:r.status, ok: t.expect ? r.status===t.expect : r.ok};
+    } catch(e) { return {label:t.label, status:'ERR', ok:false}; }
+  }));
+  c.innerHTML = results.map(r => `
+    <div class="info-row">
+      <span class="info-lbl" style="font-size:.75rem">${r.label}</span>
+      <span style="font-size:.72rem;font-weight:700;color:${r.ok?'var(--green)':'var(--red)'}">${r.ok?'✅':'❌'} HTTP ${r.status}</span>
+    </div>`).join('');
+}
+testApis();
+</script>
 </body>
 </html>
