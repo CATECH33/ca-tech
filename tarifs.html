@@ -188,6 +188,15 @@
   .p-reassurance{font-size:.76rem;color:#94a3b8;line-height:1.55;font-style:italic;margin-bottom:1.4rem;padding:.75rem 1rem;background:#f8fafc;border-radius:8px;border-left:3px solid rgba(0,102,255,.2)}
   .p-card.maintenance .p-btn{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 4px 16px rgba(0,102,255,.2)}
   .p-card.maintenance .p-btn:hover{background:#1a7aff;box-shadow:0 8px 28px rgba(0,102,255,.4);transform:translateY(-1px)}
+  .p-btn-group{display:flex;flex-direction:column;gap:.6rem;margin-top:auto}
+  .p-btn-secondary{display:block;width:100%;text-align:center;padding:11px 20px;border-radius:10px;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .3s;letter-spacing:.3px;font-family:inherit;text-decoration:none;border:1.5px solid #dde5f0;background:transparent;color:#64748b}
+  .p-btn-secondary:hover{border-color:#94a3b8;color:var(--blue-dk);background:#f8fafc}
+  .cancelled-banner{background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:1rem 1.4rem;margin-bottom:2rem;display:flex;align-items:flex-start;gap:.9rem;font-size:.85rem;color:#92400e;line-height:1.5}
+  .cancelled-banner-icon{font-size:1.3rem;flex-shrink:0;line-height:1.2}
+  .cancelled-banner strong{color:#78350f}
+  .toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--blue-dk);color:#fff;padding:14px 20px;border-radius:12px;font-size:.85rem;font-weight:600;box-shadow:0 8px 32px rgba(10,37,64,.25);opacity:0;transform:translateY(12px);transition:opacity .3s,transform .3s;pointer-events:none;max-width:320px}
+  .toast.show{opacity:1;transform:translateY(0)}
+  .toast.error{background:#ef4444}
   .tarifs-social-proof{text-align:center;margin-top:2.5rem;padding:1.2rem 2rem;background:linear-gradient(135deg,rgba(0,102,255,.05),rgba(0,212,255,.04));border:1px solid rgba(0,102,255,.12);border-radius:14px;font-size:.88rem;color:#475569;line-height:1.6}
   .tarifs-social-proof strong{color:var(--blue-dk)}
   @media(max-width:640px){.p-features-grid{grid-template-columns:1fr}.maintenance-header{flex-direction:column;gap:.8rem}}
@@ -429,6 +438,10 @@
 
 <!-- TARIFS -->
 <section id="tarifs">
+  <div id="cancelled-banner" class="cancelled-banner" style="display:none;max-width:900px;margin:0 auto 2rem">
+    <span class="cancelled-banner-icon">ℹ️</span>
+    <div><strong>Paiement annulé.</strong> Pas d'inquiétude, aucun montant n'a été débité. Retrouvez votre service ci-dessous pour reprendre votre commande quand vous le souhaitez.</div>
+  </div>
   <div class="tarifs-header">
     <h2 class="tarifs-title reveal">Nos Offres & Tarifs</h2>
     <p class="tarifs-desc reveal d1">Des solutions professionnelles adaptées aux entreprises, artisans, associations et entrepreneurs.</p>
@@ -449,7 +462,10 @@
         <li>Version fond clair et fond sombre</li>
         <li>Livraison rapide</li>
       </ul>
-      <button class="p-btn" onclick="openDevis()">Commander mon logo</button>
+      <div class="p-btn-group">
+        <button class="p-btn" onclick="openCheckout('logo')">Commander mon logo →</button>
+        <button class="p-btn-secondary" onclick="openLoicWidget()">💬 Parler avec Loïc</button>
+      </div>
     </div>
 
     <!-- Landing Page -->
@@ -466,7 +482,10 @@
         <li>Optimisation SEO de base</li>
         <li>Livraison clé en main</li>
       </ul>
-      <button class="p-btn" onclick="openDevis()">Créer ma landing page</button>
+      <div class="p-btn-group">
+        <button class="p-btn" onclick="openCheckout('landing-page')">Commander ma landing page →</button>
+        <button class="p-btn-secondary" onclick="openLoicWidget()">💬 Parler avec Loïc</button>
+      </div>
     </div>
 
     <!-- Site Vitrine + Maintenance Bundle -->
@@ -489,7 +508,10 @@
           <li>Hébergement configurable</li>
           <li>Livraison rapide</li>
         </ul>
-        <button class="p-btn" onclick="openDevis()">Créer mon site vitrine</button>
+        <div class="p-btn-group">
+          <button class="p-btn" onclick="openCheckout('site-vitrine')">Commander mon site vitrine →</button>
+          <button class="p-btn-secondary" onclick="openLoicWidget()">💬 Parler avec Loïc</button>
+        </div>
       </div>
 
       <!-- Connector -->
@@ -528,7 +550,10 @@
           <li>Support Email / WhatsApp</li>
         </ul>
         <p class="p-reassurance">La maintenance n'est pas obligatoire, mais elle est fortement recommandée afin de garantir la sécurité, les performances et la disponibilité de votre site.</p>
-        <button class="p-btn" onclick="openDevis()">Souscrire à la maintenance</button>
+        <div class="p-btn-group">
+          <button class="p-btn" onclick="openCheckout('maintenance-vitrine')">Souscrire à la maintenance →</button>
+          <button class="p-btn-secondary" onclick="openLoicWidget()">💬 Parler avec Loïc</button>
+        </div>
       </div>
 
     </div>
@@ -553,7 +578,10 @@
           <li>Responsive mobile</li>
           <li>Formation incluse</li>
         </ul>
-        <button class="p-btn" onclick="openDevis()">Créer ma boutique</button>
+        <div class="p-btn-group">
+          <button class="p-btn" onclick="openCheckout('site-ecommerce')">Commander ma boutique →</button>
+          <button class="p-btn-secondary" onclick="openLoicWidget()">💬 Parler avec Loïc</button>
+        </div>
       </div>
 
       <!-- Connector -->
@@ -593,7 +621,10 @@
           <li>Support Email / WhatsApp</li>
         </ul>
         <p class="p-reassurance">La maintenance n'est pas obligatoire, mais elle est fortement recommandée afin de garantir la sécurité, les performances et la disponibilité de votre site.</p>
-        <button class="p-btn" onclick="openDevis()">Souscrire à la maintenance</button>
+        <div class="p-btn-group">
+          <button class="p-btn" onclick="openCheckout('maintenance-ecommerce')">Souscrire à la maintenance →</button>
+          <button class="p-btn-secondary" onclick="openLoicWidget()">💬 Parler avec Loïc</button>
+        </div>
       </div>
 
     </div>
@@ -611,7 +642,10 @@
         <li>Version numérique</li>
         <li>Jusqu'à 2 modifications</li>
       </ul>
-      <button class="p-btn" onclick="openDevis()">Commander mon flyer</button>
+      <div class="p-btn-group">
+        <button class="p-btn" onclick="openCheckout('flyer')">Commander mon flyer →</button>
+        <button class="p-btn-secondary" onclick="openLoicWidget()">💬 Parler avec Loïc</button>
+      </div>
     </div>
 
   </div>
@@ -989,6 +1023,51 @@ function prevStep(){if(currentStep>1){currentStep--;updateStepUI()}}
 document.querySelectorAll('#project-choices .choice-card').forEach(card=>{card.addEventListener('click',()=>card.classList.toggle('selected'))});
 function selectDelai(el){document.querySelectorAll('#delai-choices .choice-card').forEach(c=>c.classList.remove('selected'));el.classList.add('selected')}
 function updateBudget(val){val=parseInt(val);document.getElementById('budget-display').textContent=val>=50000?'50 000 €+':val.toLocaleString('fr-FR')+' €'}
+
+// Stripe Checkout
+async function openCheckout(productId) {
+  showToast('Redirection vers le paiement sécurisé…');
+  try {
+    const res = await fetch('/api/create-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ productId }),
+    });
+    const data = await res.json();
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      showToast('Erreur : ' + (data.error || 'impossible de créer la session.'), true);
+    }
+  } catch {
+    showToast('Erreur de connexion. Veuillez réessayer.', true);
+  }
+}
+
+function openLoicWidget() {
+  if (window.loicWidget && typeof window.loicWidget.open === 'function') {
+    window.loicWidget.open();
+  } else {
+    window.open('https://wa.me/33775664975', '_blank');
+  }
+}
+
+function showToast(msg, isError) {
+  let t = document.getElementById('toast-notify');
+  if (!t) { t = document.createElement('div'); t.id = 'toast-notify'; t.className = 'toast'; document.body.appendChild(t); }
+  t.textContent = msg;
+  t.classList.toggle('error', !!isError);
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+if (new URLSearchParams(location.search).get('cancelled') === '1') {
+  const b = document.getElementById('cancelled-banner');
+  if (b) {
+    b.style.display = 'flex';
+    setTimeout(() => document.getElementById('tarifs')?.scrollIntoView({ behavior: 'smooth' }), 150);
+  }
+}
 
 // EmailJS
 const EJS_PUBLIC_KEY  = 'VOTRE_PUBLIC_KEY';

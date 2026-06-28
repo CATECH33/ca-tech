@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Commande confirmée — CA-TECH</title>
+  <meta name="robots" content="noindex,nofollow"/>
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/public/favicon.ico"/>
+  <link rel="icon" type="image/png" sizes="16x16" href="/public/favicon-16x16.png"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png"/>
+  <link rel="manifest" href="/public/site.webmanifest"/>
+  <meta name="theme-color" content="#0066FF"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --blue:#0066FF;--blue-dk:#0A2540;--cyan:#00D4FF;
+    --white:#ffffff;--dark:#050d1a;
+    --text2:rgba(255,255,255,.7);--border:rgba(255,255,255,.08);--nav-h:72px;
+  }
+  html{scroll-behavior:smooth;overflow-x:hidden}
+  body{font-family:'Inter',-apple-system,sans-serif;color:#1a1a2e;background:#fff;overflow-x:hidden;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+
+  nav{position:fixed;inset:0 0 auto 0;z-index:1000;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(5,13,26,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+  .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .logo img{height:36px;width:auto;object-fit:contain;filter:drop-shadow(0 0 8px rgba(0,102,255,.4))}
+  .logo-text{line-height:1.1}
+  .logo-name{font-family:'Rajdhani',sans-serif;font-size:1.25rem;font-weight:700;letter-spacing:2px;color:var(--white);display:block}
+  .logo-sub{font-size:.48rem;color:var(--cyan);letter-spacing:2.5px;text-transform:uppercase;display:block}
+
+  main{flex:1;display:flex;align-items:center;justify-content:center;padding:calc(var(--nav-h) + 60px) 5% 80px;background:linear-gradient(160deg,#f8fafc 0%,#eef4ff 100%)}
+  .card{background:#fff;border:1px solid #e2eaf5;border-radius:24px;padding:3rem 2.5rem;max-width:560px;width:100%;box-shadow:0 8px 48px rgba(10,37,64,.08);text-align:center}
+
+  .success-anim{width:72px;height:72px;background:linear-gradient(135deg,#ecfdf5,#d1fae5);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;animation:popIn .5s cubic-bezier(.34,1.56,.64,1)}
+  @keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+  .success-icon-svg{width:36px;height:36px;stroke:#10b981;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+  .card-title{font-size:1.6rem;font-weight:900;color:var(--blue-dk);letter-spacing:-.4px;margin-bottom:.5rem}
+  .card-subtitle{font-size:.95rem;color:#64748b;line-height:1.65;margin-bottom:2rem}
+  .card-subtitle strong{color:var(--blue-dk)}
+
+  .order-box{background:#f8fafc;border:1px solid #e2eaf5;border-radius:14px;padding:1.4rem 1.6rem;margin-bottom:1.8rem;text-align:left}
+  .order-box-label{font-size:.6rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--blue);margin-bottom:1rem}
+  .order-row{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;padding:.45rem 0;border-bottom:1px solid #f1f5f9}
+  .order-row:last-child{border-bottom:none}
+  .order-row-key{color:#64748b}
+  .order-row-val{font-weight:700;color:var(--blue-dk)}
+
+  .next-box{background:rgba(0,102,255,.04);border:1px solid rgba(0,102,255,.12);border-radius:14px;padding:1.2rem 1.6rem;margin-bottom:2rem;text-align:left}
+  .next-box-title{font-size:.75rem;font-weight:700;color:var(--blue-dk);margin-bottom:.5rem}
+  .next-box-text{font-size:.84rem;color:#475569;line-height:1.65}
+  .next-box-text strong{color:var(--blue-dk)}
+
+  .btn-wa{display:inline-flex;align-items:center;gap:.7rem;background:#25D366;color:#fff;text-decoration:none;padding:14px 28px;border-radius:12px;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .3s;border:none;font-family:inherit;margin-bottom:.8rem;width:100%;justify-content:center}
+  .btn-wa:hover{background:#22c55e;transform:translateY(-2px);box-shadow:0 8px 24px rgba(37,211,102,.3)}
+  .btn-home{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;color:#64748b;text-decoration:none;padding:12px 28px;border-radius:12px;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .3s;border:1.5px solid #dde5f0;background:transparent;width:100%;font-family:inherit}
+  .btn-home:hover{border-color:#94a3b8;color:var(--blue-dk)}
+
+  .loading-state{padding:2rem;color:#64748b;font-size:.9rem}
+  .skeleton{background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:6px;height:16px;margin:.4rem 0}
+  @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+  .skeleton.short{width:60%}
+  .skeleton.long{width:100%}
+
+  .error-state{padding:1.5rem;background:#fef2f2;border:1px solid #fecaca;border-radius:12px;color:#dc2626;font-size:.88rem;line-height:1.6}
+
+  footer{background:#050d1a;border-top:1px solid rgba(255,255,255,.07);padding:1.5rem 5%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+  .f-copy{color:rgba(255,255,255,.4);font-size:.75rem}
+  .f-copy a{color:rgba(255,255,255,.4);text-decoration:none}
+  .f-copy a:hover{color:rgba(255,255,255,.7)}
+
+  @media(max-width:640px){
+    .card{padding:2rem 1.4rem;border-radius:16px}
+    .card-title{font-size:1.3rem}
+  }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">
+    <img src="assets/logos/logo-ca-tech.png" alt="CA-TECH Logo"/>
+    <div class="logo-text"><span class="logo-name">CA-TECH</span><span class="logo-sub">Agence Web & Design</span></div>
+  </a>
+</nav>
+
+<main>
+  <div class="card">
+    <div id="loading-view" class="loading-state">
+      <div class="skeleton long"></div>
+      <div class="skeleton short"></div>
+      <div class="skeleton long"></div>
+    </div>
+
+    <div id="success-view" style="display:none">
+      <div class="success-anim">
+        <svg class="success-icon-svg" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h1 class="card-title">Commande confirmée !</h1>
+      <p class="card-subtitle">Merci <strong id="customer-firstname"></strong>, votre paiement a bien été reçu. Un email de confirmation vous a été envoyé.</p>
+
+      <div class="order-box">
+        <div class="order-box-label">Détails de votre commande</div>
+        <div class="order-row"><span class="order-row-key">Service</span><span class="order-row-val" id="order-product"></span></div>
+        <div class="order-row"><span class="order-row-key">Montant</span><span class="order-row-val" id="order-amount"></span></div>
+        <div class="order-row"><span class="order-row-key">Email</span><span class="order-row-val" id="order-email"></span></div>
+      </div>
+
+      <div class="next-box">
+        <div class="next-box-title">⏱️ Prochaine étape</div>
+        <p class="next-box-text">Notre équipe vous contactera dans les <strong>24h ouvrées</strong> pour démarrer votre projet et convenir d'un premier échange.</p>
+      </div>
+
+      <a href="https://wa.me/33775664975" class="btn-wa" target="_blank" rel="noopener">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+        Nous contacter sur WhatsApp
+      </a>
+      <a href="tarifs.html" class="btn-home">← Retour aux tarifs</a>
+    </div>
+
+    <div id="error-view" style="display:none">
+      <div class="error-state">
+        Impossible de récupérer les détails de votre commande. Si votre paiement a bien été effectué, vous recevrez un email de confirmation. Contactez-nous si besoin.
+      </div>
+      <br/>
+      <a href="tarifs.html" class="btn-home" style="margin-top:.5rem">← Retour aux tarifs</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <span class="f-copy">© 2026 CA-TECH — Agence Web & Design · <a href="mentions-legales.html">Mentions légales</a></span>
+  <span class="f-copy"><a href="mailto:contact@ca-tech.fr">contact@ca-tech.fr</a></span>
+</footer>
+
+<script>
+(async () => {
+  const params = new URLSearchParams(location.search);
+  const sessionId = params.get('session_id');
+
+  const loading = document.getElementById('loading-view');
+  const success = document.getElementById('success-view');
+  const error = document.getElementById('error-view');
+
+  if (!sessionId) {
+    loading.style.display = 'none';
+    error.style.display = 'block';
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/session-status?session_id=${encodeURIComponent(sessionId)}`);
+    const data = await res.json();
+
+    if (!res.ok || data.error) throw new Error(data.error || 'Erreur serveur');
+
+    const fmt = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: data.currency || 'EUR' });
+
+    document.getElementById('customer-firstname').textContent = data.firstName || 'Client';
+    document.getElementById('order-product').textContent = data.productName || '—';
+    document.getElementById('order-amount').textContent = fmt.format(data.amount || 0);
+    document.getElementById('order-email').textContent = data.customerEmail || '—';
+
+    loading.style.display = 'none';
+    success.style.display = 'block';
+  } catch {
+    loading.style.display = 'none';
+    error.style.display = 'block';
+  }
+})();
+</script>
+</body>
+</html>
