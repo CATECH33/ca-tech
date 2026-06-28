@@ -98,4 +98,14 @@ function getAllProducts() {
   return Object.values(PRODUCTS);
 }
 
-module.exports = { PRODUCTS, getProduct, getAllProducts };
+function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Cache-Control', 'public, max-age=300');
+  res.json(getAllProducts());
+}
+
+handler.PRODUCTS = PRODUCTS;
+handler.getProduct = getProduct;
+handler.getAllProducts = getAllProducts;
+
+module.exports = handler;
