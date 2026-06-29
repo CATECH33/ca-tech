@@ -2,6 +2,10 @@
   "name": "ca-tech",
   "version": "1.0.0",
   "private": true,
+  "scripts": {
+    "test": "node test-run-all.js",
+    "test:payment": "node test-payment.js"
+  },
   "engines": {
     "node": ">=20"
   },
