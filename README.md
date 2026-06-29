@@ -1,5 +1,7 @@
 # CA-TECH
 
+[![Tests](https://github.com/CATECH33/ca-tech/actions/workflows/test.yml/badge.svg)](https://github.com/CATECH33/ca-tech/actions/workflows/test.yml)
+
 Site web & back-office de CA-TECH — agence web & design (Paris · Lyon · Dijon · Troyes).
 
 ## Stack
