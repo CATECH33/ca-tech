@@ -43,7 +43,7 @@ npm run test:payment            # parcours paiement Stripe (nécessite SUPABASE_
 | Admin — Pages | `test-admin-pages.js` | 80 |
 | Loïc IA | `test-loic-ia.js` | 66 |
 
-**Total : 398 assertions · 🟢 TOUT PASS** — CI vérifié à chaque push
+**Total : 398 assertions · 🟢 TOUT PASS**
 
 ## Déploiement
 
