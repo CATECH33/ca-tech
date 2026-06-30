@@ -3,7 +3,7 @@ node_modules/
 manager/node_modules/
 
 # Build output
-manager/dist/
+# manager/dist/ — commis intentionnellement pour Vercel (pas de buildCommand configuré)
 
 # Environment variables
 .env
