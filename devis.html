@@ -875,7 +875,6 @@ async function downloadPDF() {
     let pageNum = 1;
 
     const drawFooter = () => {
-      const savedPage = doc.getCurrentPageInfo().pageNumber;
       doc.setPage(pageNum);
       doc.setFillColor(...NAVY);
       doc.rect(0, H - 13, W, 13, 'F');
@@ -887,7 +886,6 @@ async function downloadPDF() {
       doc.text('CA-TECH — Agence Web & Design  ·  contact@ca-tech.fr  ·  www.ca-tech.fr  ·  Paris • Lyon • Dijon • Troyes', W / 2, H - 7, { align: 'center' });
       doc.setTextColor(...CYAN);
       doc.text('Page ' + pageNum, W - MR, H - 7, { align: 'right' });
-      doc.setPage(savedPage);
     };
 
     const addPage = () => {
@@ -1133,7 +1131,7 @@ async function downloadPDF() {
       }
       doc.text(label, TX + 5, y + (highlight ? 7.5 : 6));
       doc.setFont('helvetica', 'bold');
-      doc.setTextColor(highlight ? WHITE : TEXT);
+      doc.setTextColor(...(highlight ? WHITE : TEXT));
       doc.text(val, TX + TW - 4, y + (highlight ? 7.5 : 6), { align: 'right' });
       y += highlight ? 14 : 11;
     };
