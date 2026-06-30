@@ -27,3 +27,9 @@ Thumbs.db
 supabase/.temp/
 
 .vercel
+
+# Test artifacts (screenshots & PDFs générés par les tests Playwright)
+test-screenshot-*.png
+pdf-screenshot-*.png
+pdf-devis-preview.pdf
+test-pdf-*.png
