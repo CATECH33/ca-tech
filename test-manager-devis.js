@@ -6,7 +6,7 @@
 const { chromium } = require('playwright');
 
 const BASE  = process.argv[2] || 'https://www.ca-tech.fr';
-const EMAIL = process.env.MANAGER_EMAIL    || 'pemoustaskit@gmail.com';
+const EMAIL = process.env.MANAGER_EMAIL    || 'contact@ca-tech.fr';
 const PASS  = process.env.MANAGER_PASSWORD || '';
 
 if (!PASS) {
