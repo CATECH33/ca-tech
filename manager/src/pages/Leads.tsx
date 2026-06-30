@@ -15,7 +15,7 @@ import { Modal } from '@/components/ui/Modal'
 import { Table, Thead, Tbody, Tr, Th, Td, EmptyRow } from '@/components/ui/Table'
 import { formatCurrency, formatDate, cn } from '@/lib/utils'
 import {
-  useLeads, useCreateLead, useUpdateLead,
+  useLeads, useLeadsRealtime, useCreateLead, useUpdateLead,
   useUpdateLeadStatus, useDeleteLead, useConvertLeadToClient,
 } from '@/hooks/useLeads'
 import type { Lead, LeadStatus } from '@/types'
@@ -592,6 +592,7 @@ export function Leads() {
   const [convertLead, setConvertLead] = useState<Lead | null>(null)
 
   const { data: leads = [], isLoading } = useLeads()
+  useLeadsRealtime()
   const createLead      = useCreateLead()
   const updateLead      = useUpdateLead()
   const updateStatus    = useUpdateLeadStatus()

@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { Lead, LeadStatus } from '@/types'
@@ -115,6 +116,26 @@ export function useDeleteLead() {
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: Q }),
   })
+}
+
+export function useLeadsRealtime() {
+  const qc = useQueryClient()
+  useEffect(() => {
+    const channel = supabase
+      .channel('leads-realtime')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'leads' },
+        (payload) => {
+          qc.setQueryData(['leads'], (old: Lead[] | undefined) => {
+            const newLead = mapRow(payload.new as Record<string, any>)
+            return [newLead, ...(old ?? [])]
+          })
+        }
+      )
+      .subscribe()
+    return () => { supabase.removeChannel(channel) }
+  }, [qc])
 }
 
 export function useConvertLeadToClient() {

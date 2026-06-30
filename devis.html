@@ -288,9 +288,15 @@
 
 <!-- jsPDF CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- Supabase CDN (upload PDF) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 
 <script>
 // ─── Constantes ───────────────────────────────────────────────────────────────
+const SUPABASE_URL = 'https://jhcyooksjeivajdjicka.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoY3lvb2tzamVpdmFqZGppY2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5NzEwMjQsImV4cCI6MjA5NzU0NzAyNH0.pFYDxJUDD5oZyVfGSDDKnPAnyc-jkXd0scS0LvGdlFk';
+const WEB_PROJECTS = ['site-vitrine', 'site-ecommerce', 'landing-page'];
+
 const STEPS = ['Projet','Secteur','Fonctions','Options','Délai','Budget','Contact','Récap'];
 const TVA = 20;
 
@@ -343,9 +349,14 @@ let state = {
   contact_email: '',
   contact_phone: '',
   company_name: '',
+  city: '',
+  has_logo: null,
+  has_domain: null,
+  page_count: null,
   devis_number: null,
   devis_id: null,
   total_ttc: 0,
+  pdf_url: null,
 };
 
 // ─── Calcul prix ──────────────────────────────────────────────────────────────
@@ -559,7 +570,14 @@ function stepFeatures() {
     const btnN = document.createElement('button');
     btnN.className = 'btn-next';
     btnN.textContent = 'Continuer →';
-    btnN.onclick = () => { addMessage(state.features.length ? `${state.features.length} fonctionnalité(s) sélectionnée(s)` : 'Fonctionnalités de base', true); showStep(3); };
+    btnN.onclick = () => {
+      addMessage(state.features.length ? `${state.features.length} fonctionnalité(s) sélectionnée(s)` : 'Fonctionnalités de base', true);
+      if (WEB_PROJECTS.includes(state.project_type)) {
+        setTimeout(() => askLogo(), 400);
+      } else {
+        showStep(3);
+      }
+    };
     const btnP = document.createElement('button');
     btnP.className = 'btn-prev';
     btnP.textContent = '← Retour';
@@ -567,6 +585,70 @@ function stepFeatures() {
     row.appendChild(btnP);
     row.appendChild(btnN);
     zone.appendChild(row);
+  });
+}
+
+// STEP 2b/2c/2d — Questions web (logo, domaine, pages)
+function askLogo() {
+  document.getElementById('choicesZone').innerHTML = '';
+  queueMsg('Avez-vous déjà un <strong>logo</strong> pour votre entreprise ?').then(() => {
+    const zone = document.getElementById('choicesZone');
+    const grid = document.createElement('div');
+    grid.className = 'choice-grid c2';
+    [{id: true, icon:'✅', name:'Oui, j\'ai un logo'}, {id: false, icon:'🎨', name:'Non, à créer'}].forEach(o => {
+      const card = document.createElement('div');
+      card.className = 'choice-card';
+      card.innerHTML = `<span class="c-icon">${o.icon}</span><div class="c-info"><span class="c-name">${o.name}</span></div><span class="c-check">✓</span>`;
+      card.onclick = () => {
+        state.has_logo = o.id;
+        addMessage(o.icon + ' ' + o.name, true);
+        setTimeout(() => askDomain(), 300);
+      };
+      grid.appendChild(card);
+    });
+    zone.appendChild(grid);
+  });
+}
+
+function askDomain() {
+  document.getElementById('choicesZone').innerHTML = '';
+  queueMsg('Avez-vous déjà un <strong>nom de domaine</strong> (ex: monsite.fr) ?').then(() => {
+    const zone = document.getElementById('choicesZone');
+    const grid = document.createElement('div');
+    grid.className = 'choice-grid c2';
+    [{id: true, icon:'🌐', name:'Oui, j\'ai un domaine'}, {id: false, icon:'🔗', name:'Non, à créer'}].forEach(o => {
+      const card = document.createElement('div');
+      card.className = 'choice-card';
+      card.innerHTML = `<span class="c-icon">${o.icon}</span><div class="c-info"><span class="c-name">${o.name}</span></div><span class="c-check">✓</span>`;
+      card.onclick = () => {
+        state.has_domain = o.id;
+        addMessage(o.icon + ' ' + o.name, true);
+        setTimeout(() => askPageCount(), 300);
+      };
+      grid.appendChild(card);
+    });
+    zone.appendChild(grid);
+  });
+}
+
+function askPageCount() {
+  document.getElementById('choicesZone').innerHTML = '';
+  queueMsg('Combien de <strong>pages</strong> estimez-vous pour votre site ?').then(() => {
+    const zone = document.getElementById('choicesZone');
+    const grid = document.createElement('div');
+    grid.className = 'choice-grid c2';
+    [{id:'1-5', icon:'📄', name:'1 à 5 pages', desc:'Site vitrine simple'}, {id:'5-10', icon:'📋', name:'5 à 10 pages', desc:'Site standard'}, {id:'10-20', icon:'📚', name:'10 à 20 pages', desc:'Site complet'}, {id:'20+', icon:'🗂️', name:'20 pages et +', desc:'Grand site / e-commerce'}].forEach(o => {
+      const card = document.createElement('div');
+      card.className = 'choice-card';
+      card.innerHTML = `<span class="c-icon">${o.icon}</span><div class="c-info"><span class="c-name">${o.name}</span><span class="c-desc">${o.desc}</span></div><span class="c-check">✓</span>`;
+      card.onclick = () => {
+        state.page_count = o.id;
+        addMessage(o.icon + ' ' + o.name, true);
+        setTimeout(() => showStep(3), 400);
+      };
+      grid.appendChild(card);
+    });
+    zone.appendChild(grid);
   });
 }
 
@@ -742,51 +824,127 @@ function stepContact() {
           <label>Téléphone</label>
           <input type="tel" id="fPhone" placeholder="+33 6 12 34 56 78" autocomplete="tel" value="${state.contact_phone}"/>
         </div>
-        <div class="f-grp full">
+        <div class="f-grp">
           <label>Société / Entreprise</label>
           <input type="text" id="fSociete" placeholder="Ma Société (optionnel)" autocomplete="organization" value="${state.company_name}"/>
         </div>
+        <div class="f-grp">
+          <label>Ville</label>
+          <input type="text" id="fVille" placeholder="Paris" autocomplete="address-level2" value="${state.city}"/>
+        </div>
       </div>
       <label class="legal-check" style="margin-top:.5rem">
-        <input type="checkbox" id="fLegal"/>
+        <input type="checkbox" id="fLegal" ${state.contact_email ? 'checked' : ''}/>
         J'accepte que CA-TECH conserve mes coordonnées pour traiter ma demande de devis conformément à la <a href="politique-de-confidentialite.html" target="_blank">politique de confidentialité</a>.
       </label>
       <div class="action-row" style="margin-top:1rem">
         <button class="btn-prev" onclick="showStep(5)">← Retour</button>
-        <button class="btn-next" id="btnSubmit" onclick="submitForm()">Générer mon devis →</button>
+        <button class="btn-next" id="btnSubmit" onclick="goToRecap()">Voir le récapitulatif →</button>
       </div>
     `;
     document.getElementById('fPrenom').focus();
   });
 }
 
-// STEP 7 — Récap (atteint après succès API)
-function stepRecap() {} // géré dans submitForm
-
-// ─── Soumission ───────────────────────────────────────────────────────────────
-async function submitForm() {
+function goToRecap() {
   const prenom  = document.getElementById('fPrenom')?.value.trim() || '';
   const nom     = document.getElementById('fNom')?.value.trim()    || '';
   const email   = document.getElementById('fEmail')?.value.trim()  || '';
   const phone   = document.getElementById('fPhone')?.value.trim()  || '';
   const societe = document.getElementById('fSociete')?.value.trim() || '';
+  const ville   = document.getElementById('fVille')?.value.trim()  || '';
   const legal   = document.getElementById('fLegal')?.checked;
 
   let valid = true;
-  if (!prenom) { document.getElementById('fPrenom').classList.add('err'); valid = false; }
-  if (!nom)    { document.getElementById('fNom').classList.add('err');    valid = false; }
-  if (!email || !email.includes('@')) { document.getElementById('fEmail').classList.add('err'); valid = false; }
-  if (!legal)  { alert('Veuillez accepter les conditions pour continuer.'); valid = false; }
+  document.getElementById('fPrenom').classList.toggle('err', !prenom);
+  document.getElementById('fNom').classList.toggle('err', !nom);
+  document.getElementById('fEmail').classList.toggle('err', !email || !email.includes('@'));
+  if (!prenom || !nom || !email || !email.includes('@')) valid = false;
+  if (!legal) { alert('Veuillez accepter les conditions pour continuer.'); valid = false; }
   if (!valid) return;
 
   state.contact_name  = prenom + ' ' + nom;
   state.contact_email = email;
   state.contact_phone = phone;
   state.company_name  = societe;
+  state.city          = ville;
 
-  const btn = document.getElementById('btnSubmit');
-  btn.disabled = true;
-  btn.textContent = 'Génération en cours...';
+  addMessage(`${prenom} ${nom} · ${email}${ville ? ' · ' + ville : ''}`, true);
+  setTimeout(() => showStep(7), 400);
+}
+
+// STEP 7 — Récapitulatif avant soumission
+function stepRecap() {
+  const prenom = state.contact_name.split(' ')[0] || 'vous';
+  queueMsg(`Parfait <strong>${prenom}</strong> ! Voici le récapitulatif complet de votre projet. Vérifiez bien les informations avant de valider.`).then(() => {
+    const { totalTTC, totalHT, tvaAmt } = calcPrice();
+    const fmt = n => n.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' €';
+    const DLBL = { urgent: 'Urgent (< 1 sem.)', normal: 'Standard (2–3 sem.)', large: 'Sans presse (4–6 sem.)', flexible: 'Flexible' };
+    const BLBL = { '<500': '< 500 €', '500-1000': '500 – 1 000 €', '1000-2500': '1 000 – 2 500 €', '2500-5000': '2 500 – 5 000 €', '>5000': '> 5 000 €' };
+
+    const rows = [
+      ['🖥️ Projet',    LABELS[state.project_type] || '—'],
+      ['🏢 Activité',  state.activity || '—'],
+      ...(WEB_PROJECTS.includes(state.project_type) ? [
+        ['🎨 Logo',    state.has_logo === true ? 'Oui, déjà un logo' : state.has_logo === false ? 'À créer' : '—'],
+        ['🌐 Domaine', state.has_domain === true ? 'Oui, déjà un domaine' : state.has_domain === false ? 'À créer' : '—'],
+        ['📄 Pages',   state.page_count || '—'],
+      ] : []),
+      ['⚡ Délai',     DLBL[state.deadline] || '—'],
+      ['💰 Budget',    BLBL[state.budget_range] || '—'],
+      ['👤 Contact',   state.contact_name],
+      ['📧 Email',     state.contact_email],
+      ...(state.contact_phone ? [['📞 Tél', state.contact_phone]] : []),
+      ...(state.company_name  ? [['🏢 Société', state.company_name]] : []),
+      ...(state.city          ? [['📍 Ville', state.city]] : []),
+    ];
+
+    const zone = document.getElementById('choicesZone');
+
+    const recap = document.createElement('div');
+    recap.className = 'price-panel';
+    const rowsHtml = rows.map(([k,v]) =>
+      `<div class="pp-line"><span class="pp-label" style="font-size:.77rem">${k}</span><span class="pp-val" style="font-size:.77rem;max-width:55%;text-align:right;word-break:break-word">${v}</span></div>`
+    ).join('');
+    recap.innerHTML = `
+      <div class="pp-title">Récapitulatif de votre projet</div>
+      <div class="pp-lines" style="display:flex;flex-direction:column;gap:.15rem;margin-bottom:1rem">${rowsHtml}</div>
+      <div class="pp-divider"></div>
+      <div class="pp-ht"><span>Sous-total HT</span><span>${fmt(totalHT)}</span></div>
+      <div class="pp-tva"><span>TVA 20 %</span><span>${fmt(tvaAmt)}</span></div>
+      <div class="pp-divider"></div>
+      <div class="pp-total">
+        <div><div class="pp-total-lbl">ESTIMATION TTC</div><div class="pp-badge">Valable 30 jours · Sans engagement</div></div>
+        <div class="pp-total-val" style="font-size:1.35rem">${fmt(totalTTC)}</div>
+      </div>
+    `;
+    zone.appendChild(recap);
+
+    const row = document.createElement('div');
+    row.className = 'action-row';
+    row.style.marginTop = '1rem';
+
+    const btnM = document.createElement('button');
+    btnM.className = 'btn-prev';
+    btnM.textContent = '✏️ Modifier';
+    btnM.onclick = () => showStep(6);
+
+    const btnV = document.createElement('button');
+    btnV.className = 'btn-next';
+    btnV.id = 'btnValidate';
+    btnV.innerHTML = '✅ Je valide et envoie ma demande';
+    btnV.onclick = () => submitForm();
+
+    row.appendChild(btnM);
+    row.appendChild(btnV);
+    zone.appendChild(row);
+  });
+}
+
+// ─── Soumission ───────────────────────────────────────────────────────────────
+async function submitForm() {
+  const btn = document.getElementById('btnValidate');
+  if (btn) { btn.disabled = true; btn.textContent = 'Envoi en cours…'; }
 
   try {
     const res = await fetch('/api/devis', {
@@ -795,8 +953,12 @@ async function submitForm() {
       body: JSON.stringify({
         contact_name:       state.contact_name,
         contact_email:      state.contact_email,
-        contact_phone:      state.contact_phone,
-        company_name:       state.company_name,
+        contact_phone:      state.contact_phone  || null,
+        company_name:       state.company_name   || null,
+        city:               state.city           || null,
+        has_logo:           state.has_logo,
+        has_domain:         state.has_domain,
+        page_count:         state.page_count     || null,
         project_type:       state.project_type,
         activity:           state.activity,
         features:           state.features,
@@ -806,6 +968,20 @@ async function submitForm() {
         branding_option:    state.branding_option,
         budget_range:       state.budget_range,
         deadline:           state.deadline,
+        conversation_data: {
+          project_type: state.project_type,
+          activity:     state.activity,
+          features:     state.features,
+          has_logo:     state.has_logo,
+          has_domain:   state.has_domain,
+          page_count:   state.page_count,
+          seo_option:   state.seo_option,
+          maintenance_option: state.maintenance_option,
+          hosting_option:     state.hosting_option,
+          branding_option:    state.branding_option,
+          budget_range: state.budget_range,
+          deadline:     state.deadline,
+        },
       }),
     });
 
@@ -817,9 +993,10 @@ async function submitForm() {
     state.total_ttc    = data.total;
 
     showSuccess();
+    // Génération + upload PDF automatique (non-bloquant)
+    generateAndUploadPDF();
   } catch (err) {
-    btn.disabled = false;
-    btn.textContent = 'Générer mon devis →';
+    if (btn) { btn.disabled = false; btn.innerHTML = '✅ Je valide et envoie ma demande'; }
     alert('Une erreur est survenue : ' + err.message + '\nVeuillez réessayer ou nous contacter directement.');
   }
 }
@@ -835,18 +1012,20 @@ function showSuccess() {
   document.getElementById('successScreen').classList.add('show');
   document.getElementById('mobilePriceBar').style.display = 'none';
 
-  // Update price panel
+  // Préparer le bouton PDF en état "chargement"
+  const pdfBtn = document.getElementById('btnPdf');
+  pdfBtn.disabled = true;
+  pdfBtn.textContent = 'Génération du PDF…';
+  pdfBtn.removeAttribute('onclick');
+
   updatePricePanel();
   document.getElementById('ppValid').classList.add('show');
 }
 
 // ─── Génération PDF premium (jsPDF) ──────────────────────────────────────────
-async function downloadPDF() {
-  const btn = document.getElementById('btnPdf');
-  btn.disabled = true;
-  btn.textContent = 'Génération du PDF…';
+const PDF_BTN_HTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> Télécharger mon devis PDF';
 
-  try {
+function buildPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ unit: 'mm', format: 'a4', compress: true });
 
@@ -1391,16 +1570,72 @@ async function downloadPDF() {
     doc.setFontSize(6.5);
     doc.text('Date et signature', s2x + 6, y + 42);
 
-    // ═══════════════════════════════════════════════════════════
-    // SAUVEGARDE
-    // ═══════════════════════════════════════════════════════════
-    doc.save('Devis-' + (state.devis_number || 'CA-TECH') + '-CA-TECH.pdf');
+    return doc;
+}
 
+// Téléchargement direct (fallback)
+async function downloadPDF() {
+  const btn = document.getElementById('btnPdf');
+  btn.disabled = true;
+  btn.textContent = 'Génération du PDF…';
+  try {
+    const doc = buildPDF();
+    doc.save('Devis-' + (state.devis_number || 'CA-TECH') + '-CA-TECH.pdf');
   } catch (err) {
     alert('Erreur lors de la génération du PDF : ' + err.message);
   } finally {
     btn.disabled = false;
-    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> Télécharger mon devis PDF';
+    btn.innerHTML = PDF_BTN_HTML;
+  }
+}
+
+// Génération + upload automatique vers Supabase Storage
+async function generateAndUploadPDF() {
+  const btn = document.getElementById('btnPdf');
+  const fileName = (state.devis_number || 'devis') + '-' + Date.now() + '.pdf';
+  try {
+    const doc = buildPDF();
+    btn.textContent = 'Upload en cours…';
+
+    const pdfBlob = new Blob([doc.output('arraybuffer')], { type: 'application/pdf' });
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const { error: upErr } = await sb.storage
+      .from('devis-pdfs')
+      .upload(fileName, pdfBlob, { contentType: 'application/pdf', upsert: true });
+    if (upErr) throw upErr;
+
+    const { data: { publicUrl } } = sb.storage.from('devis-pdfs').getPublicUrl(fileName);
+    state.pdf_url = publicUrl;
+
+    // Notifier le backend (email client + stockage URL) — non-bloquant
+    fetch('/api/devis', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: state.devis_id, action: 'update_pdf', pdf_url: publicUrl }),
+    }).catch(() => {});
+
+    // Téléchargement local immédiat
+    doc.save('Devis-' + (state.devis_number || 'CA-TECH') + '-CA-TECH.pdf');
+
+    // Bouton pointe vers l'URL Cloud
+    btn.disabled = false;
+    btn.innerHTML = PDF_BTN_HTML;
+    btn.onclick = () => {
+      const a = document.createElement('a');
+      a.href = publicUrl;
+      a.download = 'Devis-' + state.devis_number + '-CA-TECH.pdf';
+      a.target = '_blank';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    };
+
+  } catch (err) {
+    console.error('[PDF upload]', err.message);
+    // Fallback : téléchargement local sur clic
+    btn.disabled = false;
+    btn.innerHTML = PDF_BTN_HTML;
+    btn.onclick = downloadPDF;
   }
 }
 

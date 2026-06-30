@@ -23,16 +23,16 @@ function mapClient(c: Record<string, any>) {
 }
 
 function mapRow(row: Record<string, any>): Devis {
-  const tva_rate = Number(row.tva_rate ?? 20)
+  const tva_rate = Number(row.tax_rate ?? row.tva_rate ?? 20)
   return {
     id: row.id,
     created_at: row.created_at,
     updated_at: row.updated_at,
-    numero: row.quote_number,
+    numero: row.devis_number ?? row.quote_number,
     client_id: row.client_id,
     client: row.clients ? mapClient(row.clients) : undefined,
     status: STATUS_FROM_DB[row.status] ?? 'brouillon',
-    lignes: (row.quote_items ?? []).map((i: any) => ({
+    lignes: (row.devis_items ?? row.quote_items ?? []).map((i: any) => ({
       id: i.id, service_id: i.service_id ?? undefined,
       description: i.description,
       quantite: Number(i.quantity), prix_unitaire: Number(i.unit_price),
@@ -54,14 +54,14 @@ function mapRow(row: Record<string, any>): Devis {
 async function nextDevisNumber() {
   const year = new Date().getFullYear()
   const { data: latest } = await supabase
-    .from('quotes')
-    .select('quote_number')
-    .like('quote_number', `DEV-${year}-%`)
-    .order('quote_number', { ascending: false })
+    .from('devis')
+    .select('devis_number')
+    .like('devis_number', `DEV-${year}-%`)
+    .order('devis_number', { ascending: false })
     .limit(1)
     .maybeSingle()
-  const lastNum = latest ? parseInt(latest.quote_number.split('-')[2] ?? '0') : 0
-  return `DEV-${year}-${String(lastNum + 1).padStart(3, '0')}`
+  const lastNum = latest ? parseInt(latest.devis_number.split('-')[2] ?? '0') : 0
+  return `DEV-${year}-${String(lastNum + 1).padStart(4, '0')}`
 }
 
 async function nextFactureNumber() {
@@ -84,8 +84,8 @@ export function useDevis() {
     queryKey: Q,
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('quotes')
-        .select('*, clients(*), quote_items(*)')
+        .from('devis')
+        .select('*, clients(*), devis_items(*)')
         .order('created_at', { ascending: false })
       if (error) throw error
       return (data ?? []).map(mapRow)
@@ -101,10 +101,10 @@ export function useUpdateDevisStatus() {
       if (status === 'envoye') update.sent_at = new Date().toISOString()
       if (status === 'accepte') update.accepted_at = new Date().toISOString()
       const { data, error } = await supabase
-        .from('quotes')
+        .from('devis')
         .update(update)
         .eq('id', id)
-        .select('*, clients(*), quote_items(*)')
+        .select('*, clients(*), devis_items(*)')
         .single()
       if (error) throw error
       return mapRow(data)
@@ -123,27 +123,28 @@ export function useCreateDevis() {
       tva_rate?: number
       lignes: Array<{ description: string; quantite: number; prix_unitaire: number }>
     }) => {
-      const quote_number = await nextDevisNumber()
+      const devis_number = await nextDevisNumber()
       const rate = d.tva_rate ?? 20
       const subtotal = d.lignes.reduce((s, l) => s + l.quantite * l.prix_unitaire, 0)
       const tax_amount = subtotal * (rate / 100)
       const total = subtotal + tax_amount
 
-      const { data: quote, error: qErr } = await supabase
-        .from('quotes')
+      const { data: dv, error: qErr } = await supabase
+        .from('devis')
         .insert([{
-          quote_number, client_id: d.client_id, notes: d.notes || null,
+          devis_number, client_id: d.client_id, notes: d.notes || null,
           valid_until: d.valid_until || null, subtotal, tax_amount, total,
-          tva_rate: rate, status: 'draft',
+          tax_rate: rate, status: 'draft',
+          contact_name: '', contact_email: '',
         }])
         .select('id')
         .single()
       if (qErr) throw qErr
 
       if (d.lignes.length > 0) {
-        const { error: iErr } = await supabase.from('quote_items').insert(
+        const { error: iErr } = await supabase.from('devis_items').insert(
           d.lignes.map((l, idx) => ({
-            quote_id: quote.id, description: l.description,
+            devis_id: dv.id, description: l.description,
             quantity: l.quantite, unit_price: l.prix_unitaire,
             total: l.quantite * l.prix_unitaire, sort_order: idx,
           }))
@@ -151,7 +152,7 @@ export function useCreateDevis() {
         if (iErr) throw iErr
       }
 
-      const { data, error } = await supabase.from('quotes').select('*, clients(*), quote_items(*)').eq('id', quote.id).single()
+      const { data, error } = await supabase.from('devis').select('*, clients(*), devis_items(*)').eq('id', dv.id).single()
       if (error) throw error
       return mapRow(data)
     },
@@ -186,23 +187,23 @@ export function useUpdateDevis() {
         const rate = d.tva_rate ?? 20
         const subtotal = d.lignes.reduce((s, l) => s + l.quantite * l.prix_unitaire, 0)
         updates.subtotal = subtotal
-        updates.tva_rate = rate
+        updates.tax_rate = rate
         updates.tax_amount = subtotal * (rate / 100)
         updates.total = subtotal * (1 + rate / 100)
-        await supabase.from('quote_items').delete().eq('quote_id', d.id)
+        await supabase.from('devis_items').delete().eq('devis_id', d.id)
         if (d.lignes.length > 0) {
-          await supabase.from('quote_items').insert(
+          await supabase.from('devis_items').insert(
             d.lignes.map((l, idx) => ({
-              quote_id: d.id, description: l.description,
+              devis_id: d.id, description: l.description,
               quantity: l.quantite, unit_price: l.prix_unitaire,
               total: l.quantite * l.prix_unitaire, sort_order: idx,
             }))
           )
         }
       } else if (d.tva_rate !== undefined) {
-        updates.tva_rate = d.tva_rate
+        updates.tax_rate = d.tva_rate
       }
-      const { data, error } = await supabase.from('quotes').update(updates).eq('id', d.id).select('*, clients(*), quote_items(*)').single()
+      const { data, error } = await supabase.from('devis').update(updates).eq('id', d.id).select('*, clients(*), devis_items(*)').single()
       if (error) throw error
       return mapRow(data)
     },
@@ -214,7 +215,7 @@ export function useDeleteDevis() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('quotes').delete().eq('id', id)
+      const { error } = await supabase.from('devis').delete().eq('id', id)
       if (error) throw error
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: Q }),
@@ -225,30 +226,31 @@ export function useDuplicateDevis() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async (devis: Devis) => {
-      const quote_number = await nextDevisNumber()
-      const { data: quote, error: qErr } = await supabase
-        .from('quotes')
+      const devis_number = await nextDevisNumber()
+      const { data: dv, error: qErr } = await supabase
+        .from('devis')
         .insert([{
-          quote_number, client_id: devis.client_id,
+          devis_number, client_id: devis.client_id,
           notes: devis.notes || null, valid_until: null,
           subtotal: devis.sous_total_ht, tax_amount: devis.tva_total,
-          total: devis.total_ttc, tva_rate: devis.tva_rate, status: 'draft',
+          total: devis.total_ttc, tax_rate: devis.tva_rate, status: 'draft',
+          contact_name: '', contact_email: '',
         }])
         .select('id')
         .single()
       if (qErr) throw qErr
 
       if (devis.lignes.length > 0) {
-        await supabase.from('quote_items').insert(
+        await supabase.from('devis_items').insert(
           devis.lignes.map((l, idx) => ({
-            quote_id: quote.id, description: l.description,
+            devis_id: dv.id, description: l.description,
             quantity: l.quantite, unit_price: l.prix_unitaire,
             total: l.quantite * l.prix_unitaire, sort_order: idx,
           }))
         )
       }
 
-      const { data, error } = await supabase.from('quotes').select('*, clients(*), quote_items(*)').eq('id', quote.id).single()
+      const { data, error } = await supabase.from('devis').select('*, clients(*), devis_items(*)').eq('id', dv.id).single()
       if (error) throw error
       return mapRow(data)
     },
@@ -288,7 +290,7 @@ export function useConvertDevisToFacture() {
       }
 
       await supabase
-        .from('quotes')
+        .from('devis')
         .update({ status: 'accepted', accepted_at: new Date().toISOString() })
         .eq('id', devis.id)
 

@@ -125,6 +125,23 @@ const TEMPLATES = {
     }),
   }),
 
+  devis_client: (d) => ({
+    subject: `📄 Votre devis CA-TECH — ${d.devisNumber}`,
+    telegram: null,
+    whatsapp: null,
+    emailHtml: buildEmailHtml({
+      title: 'Votre devis est prêt !',
+      icon: '🎉',
+      lines: [
+        ['Référence', d.devisNumber],
+        ['Prestation', d.projectLabel || '—'],
+        ['Montant TTC', fmtAmount(d.amount)],
+        ['Valable jusqu\'au', d.validUntil || '—'],
+        ...(d.pdfUrl ? [['Votre devis PDF', `<a href="${d.pdfUrl}" style="color:#0066FF;font-weight:600">Télécharger ici →</a>`]] : []),
+      ],
+    }),
+  }),
+
   devis_accepte: (d) => ({
     subject: `✅ Devis accepté — ${d.devisNumber}`,
     telegram: [
@@ -365,8 +382,10 @@ async function notify(type, data, supabase) {
   const messageSnippet = tpl.telegram?.slice(0, 200);
 
   // Email
-  if (channelSettings.email) {
-    const emailTo = process.env.ADMIN_EMAIL || 'contact@ca-tech.fr';
+  if (channelSettings.email && tpl.emailHtml) {
+    const emailTo = (type === 'devis_client' && data.clientEmail)
+      ? data.clientEmail
+      : (process.env.ADMIN_EMAIL || 'contact@ca-tech.fr');
     const result = await sendEmail({ subject: tpl.subject, htmlBody: tpl.emailHtml, to: emailTo });
     await logNotification(supabase, {
       type, channel: 'email', status: result.status,
@@ -377,7 +396,7 @@ async function notify(type, data, supabase) {
   }
 
   // Telegram
-  if (channelSettings.telegram) {
+  if (channelSettings.telegram && tpl.telegram) {
     const result = await sendTelegram({ text: tpl.telegram });
     await logNotification(supabase, {
       type, channel: 'telegram', status: result.status,
@@ -388,7 +407,7 @@ async function notify(type, data, supabase) {
   }
 
   // WhatsApp
-  if (channelSettings.whatsapp) {
+  if (channelSettings.whatsapp && tpl.whatsapp) {
     const result = await sendWhatsApp({ text: tpl.whatsapp });
     await logNotification(supabase, {
       type, channel: 'whatsapp', status: result.status,

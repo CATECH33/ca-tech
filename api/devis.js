@@ -102,12 +102,15 @@ function buildItems(data) {
 // ── Handlers ─────────────────────────────────────────────────────────────────
 
 async function handleCreate(body, supabase) {
+  console.log('[STEP 1/7] Calcul du devis et génération du numéro...');
   const { items, subtotal, taxAmount, total } = buildItems(body);
   const devisNumber = await generateDevisNumber(supabase);
 
   const validUntil = new Date();
   validUntil.setDate(validUntil.getDate() + 30);
+  const validUntilStr = validUntil.toISOString().split('T')[0];
 
+  console.log(`[STEP 2/7] Insertion devis ${devisNumber} dans la BDD...`);
   const { data: devis, error } = await supabase
     .from('devis')
     .insert({
@@ -133,22 +136,30 @@ async function handleCreate(body, supabase) {
       tax_rate:           TVA,
       tax_amount:         taxAmount,
       total,
-      valid_until:        validUntil.toISOString().split('T')[0],
+      valid_until:        validUntilStr,
       conversation_id:    body.conversation_id || null,
+      city:               body.city            || null,
+      has_logo:           body.has_logo        ?? null,
+      has_domain:         body.has_domain      ?? null,
+      page_count:         body.page_count      || null,
+      conversation_data:  body.conversation_data || null,
     })
     .select()
     .single();
 
-  if (error) throw new Error(`Création devis : ${error.message}`);
+  if (error) throw new Error(`[STEP 2/7] Création devis : ${error.message}`);
+  console.log(`[STEP 2/7] ✓ Devis ${devisNumber} créé (id: ${devis.id})`);
 
-  // Insérer les lignes
+  console.log('[STEP 3/7] Insertion des lignes devis...');
   if (items.length > 0) {
-    await supabase.from('devis_items').insert(
+    const { error: itemsErr } = await supabase.from('devis_items').insert(
       items.map(it => ({ ...it, devis_id: devis.id }))
     );
+    if (itemsErr) console.error('[STEP 3/7] Erreur lignes:', itemsErr.message);
+    else console.log(`[STEP 3/7] ✓ ${items.length} ligne(s) insérée(s)`);
   }
 
-  // Créer ou retrouver le lead
+  console.log('[STEP 4/7] Création ou mise à jour du prospect...');
   if (body.contact_email) {
     const { data: existingLead } = await supabase
       .from('leads')
@@ -158,21 +169,32 @@ async function handleCreate(body, supabase) {
 
     if (!existingLead) {
       const nameParts = (body.contact_name || '').trim().split(' ');
-      await supabase.from('leads').insert({
+      const notesParts = [
+        `Devis ${devisNumber} — ${body.project_type || ''}`,
+        body.activity  ? `Secteur : ${body.activity}` : null,
+        body.city      ? `Ville : ${body.city}` : null,
+        body.deadline  ? `Délai : ${body.deadline}` : null,
+        body.budget_range ? `Budget : ${body.budget_range}` : null,
+      ].filter(Boolean).join('\n');
+      const { error: leadErr } = await supabase.from('leads').insert({
         first_name: nameParts[0] || '',
         last_name:  nameParts.slice(1).join(' ') || '',
         email:      body.contact_email,
         phone:      body.contact_phone || null,
         company:    body.company_name  || null,
-        notes:      `Devis ${devisNumber} — ${body.project_type || ''}`,
+        notes:      notesParts,
         source:     'devis_form',
         status:     'qualified',
         budget_max: total || null,
       });
+      if (leadErr) console.error('[STEP 4/7] Erreur prospect:', leadErr.message);
+      else console.log('[STEP 4/7] ✓ Prospect créé');
+    } else {
+      console.log('[STEP 4/7] ✓ Prospect existant (pas de doublon)');
     }
   }
 
-  // Log audit (fire-and-forget, non-bloquant)
+  console.log('[STEP 5/7] Log audit...');
   try {
     await supabase.from('audit_logs').insert({
       action:     'DEVIS_CREATED',
@@ -185,16 +207,21 @@ async function handleCreate(body, supabase) {
         total,
       },
     });
-  } catch {}
+    console.log('[STEP 5/7] ✓ Audit log enregistré');
+  } catch (auditErr) {
+    console.error('[STEP 5/7] Audit log non critique:', auditErr.message);
+  }
 
-  // Notifications
+  console.log('[STEP 6/7] Notification admin (Telegram + email)...');
   await notify('nouveau_devis', {
     devisNumber,
     clientName: body.contact_name || body.contact_email,
     amount:     total,
-  }, supabase).catch(console.error);
+  }, supabase).catch(err => console.error('[STEP 6/7] Notification admin:', err.message));
+  console.log('[STEP 6/7] ✓ Notification admin envoyée');
 
-  return { devis_number: devisNumber, id: devis.id, total, valid_until: devis.valid_until };
+  console.log('[STEP 7/7] Devis créé avec succès.');
+  return { devis_number: devisNumber, id: devis.id, total, valid_until: validUntilStr };
 }
 
 async function handleList(query, supabase) {
@@ -255,6 +282,31 @@ async function handlePatch(body, supabase) {
   if (action === 'expire') {
     await supabase.from('devis').update({ status: 'expired' }).eq('id', id);
     return { ok: true, status: 'expired' };
+  }
+
+  if (action === 'update_pdf') {
+    const { pdf_url } = body;
+    if (!pdf_url) throw new Error('pdf_url manquant');
+    const { error: updErr } = await supabase.from('devis').update({ pdf_url }).eq('id', id);
+    if (updErr) throw new Error(`Mise à jour pdf_url : ${updErr.message}`);
+
+    const TYPE_LABELS = {
+      'site-vitrine': 'Site Vitrine', 'site-ecommerce': 'Site E-commerce',
+      'landing-page': 'Landing Page', 'logo': 'Logo Professionnel',
+      'flyer': 'Flyer', 'identite-visuelle': 'Identité Visuelle',
+      'sur-mesure': 'Développement Sur Mesure', 'ia-automatisation': 'IA & Automatisation',
+    };
+
+    await notify('devis_client', {
+      clientEmail:  devis.contact_email,
+      devisNumber:  devis.devis_number,
+      projectLabel: TYPE_LABELS[devis.project_type] || devis.project_type || '—',
+      amount:       devis.total,
+      pdfUrl:       pdf_url,
+      validUntil:   devis.valid_until,
+    }, supabase).catch(err => console.error('[update_pdf] Email client:', err.message));
+
+    return { ok: true };
   }
 
   if (action === 'relance') {
