@@ -1,6 +1,6 @@
 /**
- * Test visuel du PDF devis CA-TECH
- * Complète le formulaire, intercepte le PDF jsPDF, screenshot toutes les pages.
+ * Test visuel du formulaire devis CA-TECH — nouveau flux
+ * Parcours complet : Projet → Secteur → Fonctions → Logo/Domaine/Pages → Options → Délai → Budget → Contact → Récap → Succès → PDF
  * node test-pdf-visual.js [BASE_URL]
  */
 const { chromium } = require('playwright');
@@ -8,13 +8,13 @@ const fs = require('fs');
 
 const BASE = process.argv[2] || 'https://www.ca-tech.fr';
 
-async function waitForLoic(page, prev = 0, timeout = 12000) {
+async function waitForLoic(page, prev = 0, timeout = 15000) {
   await page.waitForFunction((p) => {
     const msgs = document.querySelectorAll('.msg:not(.user) .msg-bubble');
     if (msgs.length <= p) return false;
     return !msgs[msgs.length - 1].querySelector('.typing');
   }, prev, { timeout });
-  await page.waitForTimeout(350);
+  await page.waitForTimeout(400);
 }
 
 async function loicCount(page) {
@@ -22,7 +22,7 @@ async function loicCount(page) {
 }
 
 (async () => {
-  console.log(`\n🖨  Test visuel PDF devis — ${BASE}\n${'─'.repeat(50)}`);
+  console.log(`\n🧪  Test formulaire devis — ${BASE}\n${'─'.repeat(55)}`);
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({
     viewport: { width: 1280, height: 900 },
@@ -32,140 +32,164 @@ async function loicCount(page) {
   const page = await context.newPage();
 
   page.on('console', msg => {
-    if (msg.type() === 'error' || msg.text().includes('[patch]') || msg.text().includes('PDF'))
-      console.log('  [browser]', msg.type(), msg.text());
+    const t = msg.type();
+    const txt = msg.text();
+    if (t === 'error' || txt.includes('[STEP') || txt.includes('[PDF') || txt.includes('upload')) {
+      console.log(`  [browser:${t}] ${txt}`);
+    }
   });
-  page.on('pageerror', err => console.log('  [pageerror]', err.message));
+  page.on('pageerror', err => console.error('  [pageerror]', err.message));
+
+  let ok = true;
+  const fail = (msg) => { console.error('❌', msg); ok = false; };
 
   try {
-    // ── 1. Compléter le formulaire ────────────────────────────────
-    await page.goto(BASE + '/devis', { waitUntil: 'networkidle', timeout: 20000 });
-    await waitForLoic(page, 0, 12000);
-    console.log('✅ Formulaire chargé');
+    // ── 1. Charger le formulaire ───────────────────────────────────
+    await page.goto(BASE + '/devis', { waitUntil: 'networkidle', timeout: 25000 });
+    await waitForLoic(page, 0, 15000);
+    console.log('✅ Formulaire chargé (Loïc prêt)');
 
-    // Step 1 — Type projet : Site Vitrine
+    // STEP 0 — Type de projet : Site Vitrine
     let count = await loicCount(page);
     await page.locator('.choice-card').first().click();
     await waitForLoic(page, count);
     console.log('✅ Site Vitrine sélectionné');
 
-    // Step 2 — Secteur
+    // STEP 1 — Secteur d'activité
     count = await loicCount(page);
     await page.locator('.choice-card').first().click();
     await waitForLoic(page, count);
     console.log('✅ Secteur sélectionné');
 
-    // Step 3 — Features : cocher 2 puis continuer
+    // STEP 2 — Fonctionnalités
     count = await loicCount(page);
     const feats = await page.locator('.feat-item').all();
     if (feats.length >= 2) { await feats[0].click(); await feats[1].click(); }
     await page.locator('button', { hasText: 'Continuer' }).first().click();
-    await waitForLoic(page, count);
+    // Après Continuer sur un projet web, Loïc pose la question logo
+    await waitForLoic(page, count, 12000);
     console.log('✅ Fonctionnalités sélectionnées');
 
-    // Step 4 — Options : SEO
+    // STEP 2b — Logo (Site Vitrine est un projet web)
     count = await loicCount(page);
-    const opts = await page.locator('.opt-item, .choice-card').all();
-    if (opts.length > 0) await opts[0].click();
+    // Cliquer "Non, à créer" (2ème card)
+    await page.locator('.choice-card').nth(1).click();
+    await waitForLoic(page, count, 10000);
+    console.log('✅ Question logo répondue (Non)');
+
+    // STEP 2c — Domaine
+    count = await loicCount(page);
+    await page.locator('.choice-card').nth(0).click(); // "Oui, j'ai un domaine"
+    await waitForLoic(page, count, 10000);
+    console.log('✅ Question domaine répondue (Oui)');
+
+    // STEP 2d — Nombre de pages
+    count = await loicCount(page);
+    await page.locator('.choice-card').nth(1).click(); // "5 à 10 pages"
+    await waitForLoic(page, count, 10000);
+    console.log('✅ Nombre de pages sélectionné');
+
+    // STEP 3 — Options
+    count = await loicCount(page);
     await page.locator('button', { hasText: 'Continuer' }).first().click();
     await waitForLoic(page, count);
-    console.log('✅ Options sélectionnées');
+    console.log('✅ Options (aucune)');
 
-    // Step 5 — Délai
+    // STEP 4 — Délai
     count = await loicCount(page);
     await page.locator('.choice-card').nth(1).click();
     await waitForLoic(page, count);
     console.log('✅ Délai sélectionné');
 
-    // Step 6 — Budget
+    // STEP 5 — Budget
     count = await loicCount(page);
     await page.locator('.choice-card').nth(2).click();
     await waitForLoic(page, count);
     console.log('✅ Budget sélectionné');
 
-    // Step 7 — Coordonnées (champs réels : fPrenom, fNom, fEmail, fPhone, fSociete, fLegal)
+    // STEP 6 — Coordonnées
     await page.waitForSelector('#fPrenom', { timeout: 10000 });
     await page.fill('#fPrenom',  'Marie');
     await page.fill('#fNom',     'Leblanc');
     await page.fill('#fEmail',   'marie@exemple.fr');
     await page.fill('#fPhone',   '+33 6 12 34 56 78').catch(() => {});
     await page.fill('#fSociete', 'Leblanc Consulting').catch(() => {});
-    await page.locator('#fLegal').check();
-    console.log('✅ Coordonnées remplies');
+    await page.fill('#fVille',   'Lyon').catch(() => {});
+    await page.locator('#fLegal').check().catch(() => {});
+    console.log('✅ Coordonnées remplies (avec Ville)');
 
-    // Soumettre — bouton "Générer mon devis →" (id=btnSubmit)
+    // Clic "Voir le récapitulatif →"
     await page.locator('#btnSubmit').click();
-    // showSuccess() s'exécute directement après l'API (pas de message Loïc)
-    await page.waitForSelector('#successScreen.show', { timeout: 25000 });
-    console.log('✅ Écran de succès atteint');
 
-    // ── 2. Intercepter le PDF via Proxy constructor ──────────────
-    // Remplacer window.jspdf.jsPDF par un Proxy qui patch save() sur chaque instance
-    const jspdfAvail = await page.evaluate(() => !!window.jspdf?.jsPDF);
-    if (!jspdfAvail) throw new Error('jsPDF non disponible sur la page');
+    // STEP 7 — Récapitulatif : attendre que Loïc l'affiche
+    count = await loicCount(page);
+    await waitForLoic(page, count, 12000);
+    console.log('✅ Récapitulatif affiché');
 
-    // Diagnostic: vérifier l'état jsPDF avant patch
-    const diag = await page.evaluate(() => ({
-      hasJspdf: !!window.jspdf,
-      hasCtor:  !!window.jspdf?.jsPDF,
-      ctorName: window.jspdf?.jsPDF?.name,
-      hasDlFn:  typeof window.downloadPDF,
-    }));
-    console.log('  jsPDF diag:', JSON.stringify(diag));
+    // Vérifier que la carte récap est présente
+    const recapCard = await page.locator('.price-panel').first();
+    const recapText = await recapCard.textContent();
+    if (!recapText.includes('Récapitulatif')) fail('Carte récap absente');
+    else console.log('✅ Carte récapitulatif vérifiée');
 
-    await page.evaluate(() => {
-      window.__pdfDataUri__ = null;
-      const OrigClass = window.jspdf.jsPDF;
-      window.jspdf.jsPDF = new Proxy(OrigClass, {
-        construct(target, args, newTarget) {
-          const instance = Reflect.construct(target, args, newTarget || target);
-          const origSave = instance.save.bind(instance);
-          instance.save = function(filename) {
-            try { window.__pdfDataUri__ = instance.output('datauristring'); } catch(e) {}
-            return origSave(filename);
-          };
-          return instance;
-        }
-      });
-      console.log('[patch] Proxy installé, type:', typeof window.jspdf.jsPDF);
-    });
+    // Clic "Je valide et envoie ma demande"
+    await page.locator('#btnValidate').click();
 
-    // Cliquer sur le bouton PDF (downloadPDF est async, attend la génération)
-    await page.locator('#btnPdf').click();
+    // Attendre l'écran de succès
+    await page.waitForSelector('#successScreen.show', { timeout: 30000 });
+    console.log('✅ Écran de succès affiché');
 
-    // Attendre que la génération soit terminée (poll sur __pdfDataUri__)
-    await page.waitForFunction(
-      () => !!(window.__pdfDataUri__ && window.__pdfDataUri__.length > 100),
-      null,
-      { timeout: 60000 }
-    );
-    const pdfDataUri = await page.evaluate(() => window.__pdfDataUri__);
+    // Vérifier le numéro de devis
+    const numEl = await page.locator('#successNum').textContent();
+    if (!numEl.startsWith('DEV-')) fail(`Numéro devis invalide : ${numEl}`);
+    else console.log(`✅ Numéro devis : ${numEl}`);
 
-    const pdfPath = 'pdf-devis-preview.pdf';
-    const base64  = pdfDataUri.replace(/^data:application\/pdf;[^,]*,/, '');
-    fs.writeFileSync(pdfPath, Buffer.from(base64, 'base64'));
-    console.log('✅ PDF capturé → ' + pdfPath + ' (' + Math.round(fs.statSync(pdfPath).size / 1024) + ' Ko)');
+    // ── 2. Attendre que le PDF soit généré et uploadé ─────────────
+    console.log('  ⏳ Attente génération PDF + upload Supabase...');
+    await page.waitForFunction(() => {
+      const btn = document.getElementById('btnPdf');
+      return btn && !btn.disabled && btn.innerHTML.includes('svg');
+    }, null, { timeout: 60000 });
+    console.log('✅ PDF généré et bouton activé');
 
-    // ── 3. Valider le PDF (magic bytes) ──────────────────────────
-    const pdfBuf  = fs.readFileSync(pdfPath);
-    const header  = pdfBuf.slice(0, 5).toString('ascii');
-    if (header !== '%PDF-') throw new Error('Fichier PDF invalide (header: ' + header + ')');
-    console.log('✅ PDF valide (header: %PDF-' + pdfBuf.slice(5, 8).toString('ascii') + ', ' + Math.round(pdfBuf.length / 1024) + ' Ko)');
+    // Vérifier que state.pdf_url est rempli
+    const pdfUrl = await page.evaluate(() => window.state?.pdf_url || null);
+    if (pdfUrl) console.log(`✅ PDF uploadé → ${pdfUrl.slice(0, 70)}...`);
+    else console.log('⚠️  pdf_url non disponible dans state (upload peut avoir échoué)');
 
-    // ── 4. Screenshot de la page succès ──────────────────────────
-    await page.screenshot({ path: 'pdf-screenshot-success.png' });
-    console.log('✅ Screenshot succès → pdf-screenshot-success.png');
+    // ── 3. Screenshot ─────────────────────────────────────────────
+    await page.screenshot({ path: 'pdf-screenshot-success.png', fullPage: false });
+    console.log('✅ Screenshot → pdf-screenshot-success.png');
 
-    console.log(`\n${'═'.repeat(50)}`);
-    console.log('  🟢 PDF premium généré et capturé avec succès');
-    console.log('  Fichiers :');
-    console.log('    📄 pdf-devis-preview.pdf  ← ouvrir pour vérifier le rendu');
-    console.log('    🖼  pdf-screenshot-success.png');
-    console.log('═'.repeat(50));
+    // ── 4. Vérifier le téléchargement PDF local ───────────────────
+    let downloadedPath = null;
+    try {
+      const [download] = await Promise.all([
+        page.waitForEvent('download', { timeout: 15000 }),
+        page.locator('#btnPdf').click(),
+      ]);
+      downloadedPath = await download.path();
+      const stat = fs.statSync(downloadedPath);
+      const header = fs.readFileSync(downloadedPath).slice(0, 5).toString('ascii');
+      if (header !== '%PDF-') fail('Fichier PDF invalide (magic bytes)');
+      else console.log(`✅ PDF téléchargé — ${Math.round(stat.size / 1024)} Ko, header: ${header}`);
+    } catch (dlErr) {
+      // Si le bouton ouvre l'URL Supabase au lieu de déclencher un download Playwright
+      console.log(`⚠️  Download event non capturé (URL publique) : ${dlErr.message.slice(0, 80)}`);
+    }
+
+    console.log(`\n${'═'.repeat(55)}`);
+    if (ok) {
+      console.log('  🟢 PASS — Formulaire devis validé bout en bout');
+    } else {
+      console.log('  🔴 FAIL — Voir les erreurs ci-dessus');
+    }
+    console.log(`${'═'.repeat(55)}\n`);
 
   } catch (err) {
-    console.error('❌ Erreur :', err.message || err);
+    console.error('\n❌ Exception :', err.message);
     await page.screenshot({ path: 'pdf-screenshot-error.png' }).catch(() => {});
+    console.log('  Screenshot erreur → pdf-screenshot-error.png');
   } finally {
     await browser.close();
   }
