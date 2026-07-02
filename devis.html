@@ -240,6 +240,7 @@
         </button>
         <a href="index.html" class="btn-outline-w">🏠 Retour à l'accueil</a>
         <a href="tarifs.html" class="btn-outline-w">💳 Commander directement</a>
+        <button class="btn-outline-w" id="btnNewDevis" style="display:none" onclick="resetForm()">🔄 Nouveau devis</button>
       </div>
     </div>
   </div>
@@ -431,6 +432,7 @@ function buildProgress() {
 
 // ─── Loïc messages ────────────────────────────────────────────────────────────
 let msgQueue = Promise.resolve();
+let submitting = false;
 
 function addMessage(text, isUser = false, delay = 0) {
   return new Promise(resolve => {
@@ -943,6 +945,8 @@ function stepRecap() {
 
 // ─── Soumission ───────────────────────────────────────────────────────────────
 async function submitForm() {
+  if (submitting) return;
+  submitting = true;
   const btn = document.getElementById('btnValidate');
   if (btn) { btn.disabled = true; btn.textContent = 'Envoi en cours…'; }
 
@@ -996,6 +1000,7 @@ async function submitForm() {
     // Génération + upload PDF automatique (non-bloquant)
     generateAndUploadPDF();
   } catch (err) {
+    submitting = false;
     if (btn) { btn.disabled = false; btn.innerHTML = '✅ Je valide et envoie ma demande'; }
     alert('Une erreur est survenue : ' + err.message + '\nVeuillez réessayer ou nous contacter directement.');
   }
@@ -1629,6 +1634,7 @@ async function generateAndUploadPDF() {
       a.click();
       document.body.removeChild(a);
     };
+    document.getElementById('btnNewDevis').style.display = '';
 
   } catch (err) {
     console.error('[PDF upload]', err.message);
@@ -1636,7 +1642,40 @@ async function generateAndUploadPDF() {
     btn.disabled = false;
     btn.innerHTML = PDF_BTN_HTML;
     btn.onclick = downloadPDF;
+    document.getElementById('btnNewDevis').style.display = '';
   }
+}
+
+// ─── Reset (nouveau devis) ─────────────────────────────────────────────────────
+function resetForm() {
+  state = {
+    step: 0, project_type: null, activity: null, features: [],
+    seo_option: false, maintenance_option: 'none', hosting_option: false,
+    branding_option: false, budget_range: null, deadline: null,
+    contact_name: '', contact_email: '', contact_phone: '',
+    company_name: '', city: '', has_logo: null, has_domain: null,
+    page_count: null, devis_number: null, devis_id: null,
+    total_ttc: 0, pdf_url: null,
+  };
+  submitting = false;
+
+  const chatMessages = document.getElementById('chatMessages');
+  chatMessages.innerHTML = '';
+  chatMessages.style.display = '';
+  const choicesZone = document.getElementById('choicesZone');
+  choicesZone.innerHTML = '';
+  choicesZone.style.display = '';
+  document.getElementById('progressSteps').closest('.progress-bar').style.display = '';
+  document.getElementById('successScreen').classList.remove('show');
+  document.getElementById('mobilePriceBar').style.display = 'none';
+  document.getElementById('ppEmpty').style.display = '';
+  document.getElementById('ppLines').style.display = 'none';
+  document.getElementById('ppTotals').style.display = 'none';
+  document.getElementById('ppValid').classList.remove('show');
+
+  msgQueue = Promise.resolve();
+  buildProgress();
+  showStep(0);
 }
 
 // ─── Init ─────────────────────────────────────────────────────────────────────

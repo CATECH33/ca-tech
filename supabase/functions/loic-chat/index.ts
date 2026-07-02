@@ -1,5 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { notify, getPriority, type NotificationTrigger } from './notifications/notificationService.ts'
+import { sendClientConfirmation } from './notifications/email.ts'
 
 const ANTHROPIC_KEY      = Deno.env.get('ANTHROPIC_API_KEY')
 const SUPABASE_URL       = Deno.env.get('SUPABASE_URL')!
@@ -126,30 +127,105 @@ Deno.serve(async (req: Request) => {
 
     if (action?.type === 'create_lead' && action.data) {
       const d = action.data
-      if (d.prenom)    newMeta.prenom    = d.prenom
-      if (d.nom)       newMeta.nom       = d.nom
-      if (d.email)     newMeta.email     = d.email
-      if (d.telephone) newMeta.telephone = d.telephone
+      if (d.prenom)     newMeta.prenom     = d.prenom
+      if (d.nom)        newMeta.nom        = d.nom
+      if (d.email)      newMeta.email      = d.email
+      if (d.telephone)  newMeta.telephone  = d.telephone
       if (d.entreprise) newMeta.entreprise = d.entreprise
-      if (d.projet)    newMeta.projet    = d.projet
+      if (d.projet)     newMeta.projet     = d.projet
       if (d.budget !== undefined) newMeta.budget = d.budget
-      if (d.ville)     newMeta.ville     = d.ville
+      if (d.ville)      newMeta.ville      = d.ville
 
       if (!newMeta.lead_created) {
-        const { data: lead } = await supabase.from('leads').insert([{
-          first_name: d.prenom ?? '',
-          last_name:  d.nom ?? '',
-          email:      d.email ?? '',
-          phone:      d.telephone ?? null,
-          company:    d.entreprise ?? null,
-          notes:      d.projet ?? null,
-          budget_max: d.budget ?? null,
-          source:     'loic_widget',
-          status:     'qualified',
-        }]).select().single()
-        if (lead) leadId = lead.id
+        const wfSteps: string[] = []
+
+        // ── STEP 1/6 : Enregistrement lead ─────────────────────────────────
+        console.log('[STEP 1/6] Enregistrement du lead...')
+        try {
+          const notes = [d.projet, d.ville ? `Ville: ${d.ville}` : ''].filter(Boolean).join(' | ')
+          const { data: lead, error: leadErr } = await supabase.from('leads').insert([{
+            first_name: d.prenom ?? '',
+            last_name:  d.nom ?? '',
+            email:      d.email ?? '',
+            phone:      d.telephone ?? null,
+            company:    d.entreprise ?? null,
+            notes:      notes || null,
+            budget_max: d.budget ?? null,
+            source:     'loic_widget',
+            status:     'new',
+          }]).select().single()
+          if (leadErr) throw leadErr
+          leadId = lead.id
+          wfSteps.push('✓ Lead enregistré')
+          console.log(`[STEP 1/6] ✓ Lead: ${lead.id}`)
+        } catch (e) {
+          wfSteps.push(`✗ Lead: ${String(e)}`)
+          console.error('[STEP 1/6] ✗ Lead:', e)
+        }
+
+        // ── STEP 2/6 : Création du devis automatique ────────────────────────
+        console.log('[STEP 2/6] Création du devis automatique...')
+        let devisNumber: string | null = null
+        let devisId: string | null = null
+        try {
+          const year = new Date().getFullYear()
+          const { count: devisCount } = await supabase
+            .from('devis').select('*', { count: 'exact', head: true })
+          devisNumber = `DEV-${year}-${String((devisCount ?? 0) + 1).padStart(4, '0')}`
+          const validUntil = new Date()
+          validUntil.setDate(validUntil.getDate() + 30)
+          const { data: devisData, error: devisErr } = await supabase.from('devis').insert([{
+            devis_number:    devisNumber,
+            status:          'draft',
+            contact_name:    `${d.prenom ?? ''} ${d.nom ?? ''}`.trim(),
+            contact_email:   d.email ?? '',
+            contact_phone:   d.telephone ?? null,
+            company_name:    d.entreprise ?? null,
+            city:            d.ville ?? null,
+            notes:           d.projet ?? null,
+            budget_range:    d.budget ? String(d.budget) : null,
+            lead_id:         leadId,
+            conversation_id: convId,
+            subtotal:        0, discount: 0, tax_rate: 20, tax_amount: 0, total: 0,
+            valid_until:     validUntil.toISOString().split('T')[0],
+          }]).select().single()
+          if (devisErr) throw devisErr
+          devisId = devisData.id
+          newMeta.devis_id     = devisId
+          newMeta.devis_number = devisNumber
+          wfSteps.push(`✓ Devis créé: ${devisNumber}`)
+          console.log(`[STEP 2/6] ✓ Devis: ${devisNumber}`)
+        } catch (e) {
+          wfSteps.push(`✗ Devis: ${String(e)}`)
+          console.error('[STEP 2/6] ✗ Devis:', e)
+        }
+
+        // ── STEP 3/6 : Email de confirmation au client ──────────────────────
+        console.log('[STEP 3/6] Email confirmation client...')
+        if (d.email) {
+          try {
+            const { ok: cOk, error: cErr } = await sendClientConfirmation({
+              clientEmail: d.email,
+              clientName:  `${d.prenom ?? ''} ${d.nom ?? ''}`.trim() || 'Vous',
+              devisNumber: devisNumber ?? '—',
+              projet:      d.projet ?? 'Projet à définir',
+              budget:      d.budget,
+            })
+            wfSteps.push(cOk ? '✓ Email client envoyé' : `✗ Email client: ${cErr}`)
+            console.log(`[STEP 3/6] Email client: ${cOk ? '✓' : '✗ ' + cErr}`)
+          } catch (e) {
+            wfSteps.push(`✗ Email client: ${String(e)}`)
+            console.error('[STEP 3/6] ✗ Email client:', e)
+          }
+        } else {
+          wfSteps.push('⚠ Email client: email non disponible')
+          console.log('[STEP 3/6] ⚠ Email client: email absent')
+        }
+
+        newMeta.lead_created   = true
+        newMeta.workflow_steps = wfSteps
+        console.log('[Loïc Workflow]', wfSteps.join(' | '))
       }
-      newMeta.lead_created = true
       triggers.push('create_lead')
 
     } else if (action?.type === 'escalate') {
