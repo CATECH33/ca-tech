@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect, useRef, useCallback } from 'react'
 import {
   Search, Send, FileText, Plus, Trash2, X, ArrowLeft,
   Edit, Copy, Check, Receipt, ChevronRight, Printer,
-  PenLine, Type, RotateCcw,
+  PenLine, Type, RotateCcw, Download, Paperclip,
 } from 'lucide-react'
 import { Layout } from '@/components/layout/Layout'
 import { Button } from '@/components/ui/Button'
@@ -13,6 +13,10 @@ import { Card } from '@/components/ui/Card'
 import { Modal } from '@/components/ui/Modal'
 import { Table, Thead, Tbody, Tr, Th, Td, EmptyRow } from '@/components/ui/Table'
 import { FileUpload, type FileEntry } from '@/components/ui/FileUpload'
+import {
+  useDocuments, useUploadDocuments, useDeleteDocument,
+  getSignedUrl, type DocumentRecord,
+} from '@/hooks/useDocuments'
 import { formatCurrency, formatDate, cn } from '@/lib/utils'
 import {
   useDevis, useCreateDevis, useUpdateDevis, useUpdateDevisStatus,
@@ -63,6 +67,104 @@ function computeTotals(lignes: LigneForm[], tvaRate: number) {
   const ht = lignes.reduce((s, l) => s + (parseFloat(l.quantite) || 0) * (parseFloat(l.prix_unitaire) || 0), 0)
   const tva = ht * (tvaRate / 100)
   return { ht, tva, ttc: ht + tva }
+}
+
+/* ─── Helpers ────────────────────────────────────────────────── */
+
+function fmtFileSize(b: number) {
+  if (b < 1024) return `${b} o`
+  if (b < 1_048_576) return `${Math.round(b / 1024)} Ko`
+  return `${(b / 1_048_576).toFixed(1)} Mo`
+}
+
+/* ─── DevisDocuments ─────────────────────────────────────────── */
+
+function DevisDocuments({ devisId }: { devisId: string }) {
+  const { data: docs = [], isLoading } = useDocuments('quote', devisId)
+  const deleteMutation = useDeleteDocument()
+  const [downloading, setDownloading] = useState<string | null>(null)
+
+  const handleDownload = async (doc: DocumentRecord) => {
+    if (!doc.storage_path) return
+    setDownloading(doc.id)
+    try {
+      const url = await getSignedUrl(doc.storage_path)
+      window.open(url, '_blank', 'noopener,noreferrer')
+    } finally {
+      setDownloading(null)
+    }
+  }
+
+  const handleDelete = (doc: DocumentRecord) => {
+    if (!doc.storage_path) return
+    deleteMutation.mutate({
+      id: doc.id,
+      storagePath: doc.storage_path,
+      entityType: 'quote',
+      entityId: devisId,
+    })
+  }
+
+  if (isLoading) return null
+  if (docs.length === 0) return null
+
+  return (
+    <div className="px-8 py-6 border-t border-gray-100 bg-gray-50/60">
+      <div className="flex items-center gap-2 mb-3">
+        <Paperclip className="h-3.5 w-3.5 text-gray-400" />
+        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+          Pièces jointes ({docs.length})
+        </p>
+      </div>
+      <div className="flex flex-col gap-1.5">
+        {docs.map(doc => (
+          <div
+            key={doc.id}
+            className="flex items-center gap-3 px-3 py-2 bg-white rounded-xl border border-gray-100"
+          >
+            <div className="shrink-0 h-8 w-8 rounded-lg bg-brand-50 flex items-center justify-center">
+              <span className="text-[9px] font-bold text-brand-600 uppercase leading-none">
+                {doc.extension ?? '?'}
+              </span>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-medium text-gray-800 truncate">
+                {doc.original_filename ?? doc.extension}
+              </p>
+              {doc.size != null && (
+                <p className="text-[11px] text-gray-400 leading-none mt-0.5">
+                  {fmtFileSize(doc.size)}
+                </p>
+              )}
+            </div>
+            <div className="flex items-center gap-1 shrink-0">
+              <button
+                type="button"
+                onClick={() => handleDownload(doc)}
+                disabled={downloading === doc.id}
+                className="flex items-center gap-1 text-xs text-brand-500 hover:text-brand-600 font-medium px-2 py-1 rounded-lg hover:bg-brand-50 transition disabled:opacity-50"
+              >
+                {downloading === doc.id
+                  ? <span className="block h-3 w-3 rounded-full border-2 border-brand-400 border-t-transparent animate-spin" />
+                  : <Download className="h-3 w-3" />
+                }
+                Télécharger
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDelete(doc)}
+                disabled={deleteMutation.isPending}
+                className="p-1.5 text-gray-300 hover:text-red-400 hover:bg-red-50 rounded-lg transition disabled:opacity-50"
+                title="Supprimer"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
 }
 
 /* ─── SignatureModal ─────────────────────────────────────────── */
@@ -429,10 +531,11 @@ function DevisFiche({
   isConverting: boolean
 }) {
   const [editMode, setEditMode]         = useState(false)
-  const [showDelete, setShowDelete]       = useState(false)
-  const [showSignature, setShowSignature] = useState(false)
-  const [convertedTo, setConvertedTo]     = useState<string | null>(null)
+  const [showDelete, setShowDelete]           = useState(false)
+  const [showSignature, setShowSignature]     = useState(false)
+  const [convertedTo, setConvertedTo]         = useState<string | null>(null)
   const [editAttachments, setEditAttachments] = useState<FileEntry[]>([])
+  const uploadDocsMutation = useUploadDocuments()
   const [form, setForm] = useState({
     client_id:   devis.client_id,
     valid_until: devis.date_expiration ?? '',
@@ -478,6 +581,16 @@ function DevisFiche({
         prix_unitaire: parseFloat(l.prix_unitaire) || 0,
       })),
     })
+    const readyFiles = editAttachments.filter(e => e.status === 'ready')
+    await Promise.allSettled(
+      readyFiles.map(e =>
+        uploadDocsMutation.mutateAsync({
+          file: e.file,
+          opts: { entityType: 'quote', entityId: devis.id, quoteId: devis.id },
+        })
+      )
+    )
+    setEditAttachments([])
     setEditMode(false)
   }
 
@@ -746,6 +859,9 @@ function DevisFiche({
             </div>
           )}
 
+          {/* Pièces jointes */}
+          <DevisDocuments devisId={devis.id} />
+
           {/* Signature */}
           <div className="px-8 py-6 border-t border-gray-100">
             <div className="grid grid-cols-2 gap-8">
@@ -831,6 +947,7 @@ export function Devis() {
   const [ficheDevis, setFicheDevis]     = useState<DevisType | null>(null)
   const [form, setForm]                 = useState(FORM_INIT)
   const [attachments, setAttachments]   = useState<FileEntry[]>([])
+  const uploadDocs = useUploadDocuments()
 
   const { data: devis = [], isLoading } = useDevis()
   const { data: clients = [] }          = useClients()
@@ -872,16 +989,25 @@ export function Devis() {
   const handleCreate = async () => {
     if (!form.client_id) return
     const created = await createDevis.mutateAsync({
-      client_id:  form.client_id,
-      notes:      form.notes,
+      client_id:   form.client_id,
+      notes:       form.notes,
       valid_until: form.valid_until,
-      tva_rate:   form.tva_rate,
-      lignes:     form.lignes.map(l => ({
+      tva_rate:    form.tva_rate,
+      lignes:      form.lignes.map(l => ({
         description:   l.description,
         quantite:      parseFloat(l.quantite) || 1,
         prix_unitaire: parseFloat(l.prix_unitaire) || 0,
       })),
     })
+    const readyFiles = attachments.filter(e => e.status === 'ready')
+    await Promise.allSettled(
+      readyFiles.map(e =>
+        uploadDocs.mutateAsync({
+          file: e.file,
+          opts: { entityType: 'quote', entityId: created.id, quoteId: created.id },
+        })
+      )
+    )
     setShowAdd(false)
     setForm(FORM_INIT)
     setAttachments([])
