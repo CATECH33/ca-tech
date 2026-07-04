@@ -358,6 +358,7 @@ let state = {
   devis_id: null,
   total_ttc: 0,
   pdf_url: null,
+  pendingFiles: [],
 };
 
 // ─── Calcul prix ──────────────────────────────────────────────────────────────
@@ -845,7 +846,86 @@ function stepContact() {
       </div>
     `;
     document.getElementById('fPrenom').focus();
+
+    // ── Section documents ──────────────────────────────────────────────────────
+    const docsSection = document.createElement('div');
+    docsSection.id = 'docsSection';
+    docsSection.style.cssText = 'margin-top:1.5rem';
+    docsSection.innerHTML = `
+      <div style="font-size:.78rem;font-weight:600;color:var(--text1);margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+        Documents de votre projet <span style="font-size:.68rem;color:var(--text3);font-weight:400">(optionnel)</span>
+      </div>
+      <p style="font-size:.72rem;color:var(--text3);margin-bottom:.75rem;line-height:1.5">
+        Joignez logo, cahier des charges, captures d'écran ou tout document utile à votre projet.
+      </p>
+      <label id="docsDropzone" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;padding:1.25rem;border:1.5px dashed rgba(255,255,255,.15);border-radius:12px;background:rgba(255,255,255,.04);cursor:pointer;transition:border-color .2s,background .2s"
+        onmouseenter="this.style.borderColor='rgba(0,102,255,.5)';this.style.background='rgba(0,102,255,.06)'"
+        onmouseleave="this.style.borderColor='rgba(255,255,255,.15)';this.style.background='rgba(255,255,255,.04)'">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(0,102,255,.7)" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <div style="text-align:center">
+          <div style="font-size:.78rem;font-weight:600;color:var(--text1)">Glissez vos fichiers ou cliquez</div>
+          <div style="font-size:.68rem;color:var(--text3);margin-top:.2rem">PDF, DOC, XLS, PNG, JPG, ZIP · max 10 Mo</div>
+        </div>
+        <input id="docsInput" type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg,.webp,.svg,.zip" style="display:none" onchange="handleDocsSelected(this.files)"/>
+      </label>
+      <div id="docsFileList" style="display:flex;flex-direction:column;gap:.4rem;margin-top:.6rem"></div>
+    `;
+    zone.appendChild(docsSection);
+
+    // Drag & drop on the drop zone
+    const dropzone = docsSection.querySelector('#docsDropzone');
+    dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.style.borderColor = 'rgba(0,102,255,.6)'; dropzone.style.background = 'rgba(0,102,255,.08)'; });
+    dropzone.addEventListener('dragleave', () => { dropzone.style.borderColor = 'rgba(255,255,255,.15)'; dropzone.style.background = 'rgba(255,255,255,.04)'; });
+    dropzone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropzone.style.borderColor = 'rgba(255,255,255,.15)';
+      dropzone.style.background = 'rgba(255,255,255,.04)';
+      handleDocsSelected(e.dataTransfer.files);
+    });
   });
+}
+
+function handleDocsSelected(fileList) {
+  const MAX_MB = 10;
+  const ALLOWED = ['.pdf','.doc','.docx','.xls','.xlsx','.ppt','.pptx','.png','.jpg','.jpeg','.webp','.svg','.zip'];
+  const files = Array.from(fileList);
+  files.forEach(file => {
+    const ext = '.' + (file.name.split('.').pop() || '').toLowerCase();
+    if (!ALLOWED.includes(ext)) return;
+    if (file.size > MAX_MB * 1_048_576) return;
+    if (state.pendingFiles.some(f => f.name === file.name && f.size === file.size)) return;
+    state.pendingFiles.push(file);
+  });
+  renderDocsList();
+}
+
+function renderDocsList() {
+  const list = document.getElementById('docsFileList');
+  if (!list) return;
+  list.innerHTML = '';
+  state.pendingFiles.forEach((file, i) => {
+    const ext = (file.name.split('.').pop() || '').toUpperCase();
+    const sizeFmt = file.size < 1_048_576
+      ? Math.round(file.size / 1024) + ' Ko'
+      : (file.size / 1_048_576).toFixed(1) + ' Mo';
+    const item = document.createElement('div');
+    item.style.cssText = 'display:flex;align-items:center;gap:.6rem;padding:.5rem .75rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px';
+    item.innerHTML = `
+      <span style="font-size:.65rem;font-weight:700;background:rgba(0,102,255,.15);color:#60a5fa;padding:.15rem .4rem;border-radius:4px;min-width:30px;text-align:center">${ext}</span>
+      <span style="flex:1;font-size:.75rem;color:var(--text1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${file.name}</span>
+      <span style="font-size:.68rem;color:var(--text3);white-space:nowrap">${sizeFmt}</span>
+      <button type="button" onclick="removeDocFile(${i})" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.3);padding:.2rem;line-height:1;display:flex;align-items:center" title="Supprimer">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    `;
+    list.appendChild(item);
+  });
+}
+
+function removeDocFile(index) {
+  state.pendingFiles.splice(index, 1);
+  renderDocsList();
 }
 
 function goToRecap() {
@@ -997,6 +1077,8 @@ async function submitForm() {
     state.total_ttc    = data.total;
 
     showSuccess();
+    // Upload des documents joints (non-bloquant)
+    uploadPendingFiles();
     // Génération + upload PDF automatique (non-bloquant)
     generateAndUploadPDF();
   } catch (err) {
@@ -1592,6 +1674,41 @@ async function downloadPDF() {
     btn.disabled = false;
     btn.innerHTML = PDF_BTN_HTML;
   }
+}
+
+// Upload des documents joints par le prospect
+async function uploadPendingFiles() {
+  if (!state.devis_id || !state.pendingFiles || state.pendingFiles.length === 0) return;
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  for (const file of state.pendingFiles) {
+    try {
+      const ext = (file.name.split('.').pop() || '').toLowerCase();
+      const storedName = crypto.randomUUID() + '.' + ext;
+      const path = 'quote/' + state.devis_id + '/' + storedName;
+      const { error: upErr } = await sb.storage
+        .from('client-documents')
+        .upload(path, file, { contentType: file.type, upsert: false });
+      if (upErr) { console.error('Storage upload error:', upErr); continue; }
+      await sb.from('documents').insert({
+        entity_type:       'quote',
+        entity_id:         state.devis_id,
+        quote_id:          state.devis_id,
+        original_filename: file.name,
+        stored_filename:   storedName,
+        mime_type:         file.type,
+        extension:         ext,
+        size:              file.size,
+        storage_path:      path,
+        name:              file.name,
+        file_url:          path,
+        file_type:         file.type,
+        file_size:         file.size,
+      });
+    } catch (e) {
+      console.error('File upload failed:', e);
+    }
+  }
+  state.pendingFiles = [];
 }
 
 // Génération + upload automatique vers Supabase Storage

@@ -1,7 +1,9 @@
-import { useState, type ReactNode } from 'react'
+import { useState, useCallback, type ReactNode } from 'react'
 import { Sidebar } from './Sidebar'
 import { Header } from './Header'
 import { Breadcrumbs } from './Breadcrumbs'
+import { ToastContainer, type ToastMessage } from '@/components/ui/Toast'
+import { useDocumentInsertListener } from '@/hooks/useDocuments'
 
 interface LayoutProps {
   children: ReactNode
@@ -12,7 +14,30 @@ interface LayoutProps {
 export function Layout({ children, title, actions }: LayoutProps) {
   const [collapsed, setCollapsed] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [toasts, setToasts] = useState<ToastMessage[]>([])
   const sidebarWidth = collapsed ? 60 : 220
+
+  const removeToast = useCallback((id: string) => {
+    setToasts(prev => prev.filter(t => t.id !== id))
+  }, [])
+
+  useDocumentInsertListener(
+    useCallback((doc) => {
+      if (!doc.storage_path) return
+      const name = doc.original_filename ?? doc.name ?? 'Document'
+      const src = doc.entity_type === 'conversation' ? 'Loïc' : 'Formulaire devis'
+      setToasts(prev => [
+        ...prev,
+        {
+          id: doc.id + '-' + Date.now(),
+          title: 'Nouveau document reçu',
+          body: `${name} — via ${src}`,
+          icon: 'document',
+          duration: 6000,
+        },
+      ])
+    }, []),
+  )
 
   return (
     <div className="min-h-screen bg-gray-50/60 font-sans">
@@ -45,6 +70,8 @@ export function Layout({ children, title, actions }: LayoutProps) {
           {children}
         </div>
       </main>
+
+      <ToastContainer messages={toasts} onClose={removeToast} />
     </div>
   )
 }

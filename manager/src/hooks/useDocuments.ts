@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 
 const BUCKET = 'client-documents'
@@ -20,6 +21,11 @@ export interface DocumentRecord {
   storage_path?: string
   uploaded_by?: string
   created_at: string
+  // legacy columns
+  name?: string
+  file_url?: string
+  file_type?: string
+  file_size?: number
 }
 
 export interface UploadOptions {
@@ -159,6 +165,65 @@ export function useDeleteDocument() {
     }) => deleteDocument(id, storagePath),
     onSuccess: (_, { entityType, entityId }) => {
       qc.invalidateQueries({ queryKey: ['documents', entityType, entityId] })
+      qc.invalidateQueries({ queryKey: ['all-documents'] })
     },
   })
+}
+
+// ─── All-documents hook (page Documents) ──────────────────────────────────────
+
+export interface DocumentWithContext extends DocumentRecord {
+  lead?: { first_name: string; last_name: string; email: string } | null
+  quote?: { quote_number: string; total: number } | null
+}
+
+const QA = ['all-documents'] as const
+
+export function useAllDocuments() {
+  const qc = useQueryClient()
+
+  useEffect(() => {
+    const channel = supabase
+      .channel('all-documents-rt')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'documents' },
+        () => { qc.invalidateQueries({ queryKey: QA }) },
+      )
+      .subscribe()
+    return () => { supabase.removeChannel(channel) }
+  }, [qc])
+
+  return useQuery({
+    queryKey: QA,
+    queryFn: async (): Promise<DocumentWithContext[]> => {
+      const { data, error } = await supabase
+        .from('documents')
+        .select(`
+          *,
+          lead:leads!prospect_id(first_name, last_name, email),
+          quote:quotes!quote_id(quote_number, total)
+        `)
+        .not('storage_path', 'is', null)
+        .order('created_at', { ascending: false })
+        .limit(500)
+      if (error) throw error
+      return (data ?? []) as DocumentWithContext[]
+    },
+    staleTime: 15_000,
+  })
+}
+
+export function useDocumentInsertListener(onInsert: (doc: DocumentRecord) => void) {
+  useEffect(() => {
+    const channel = supabase
+      .channel('document-insert-notify')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'documents' },
+        (payload) => { onInsert(payload.new as DocumentRecord) },
+      )
+      .subscribe()
+    return () => { supabase.removeChannel(channel) }
+  }, [onInsert])
 }

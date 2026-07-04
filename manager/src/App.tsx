@@ -21,6 +21,7 @@ import { Support } from './pages/Support'
 import { Parametres } from './pages/Parametres'
 import { Loic } from './pages/Loic'
 import { Notifications } from './pages/Notifications'
+import { Documents } from './pages/Documents'
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { staleTime: 5 * 60 * 1000, retry: 1 } },
@@ -46,6 +47,7 @@ function ProtectedApp() {
       <Route path="/messages/*" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
       <Route path="/support/*" element={<ProtectedRoute><Support /></ProtectedRoute>} />
       <Route path="/parametres/*" element={<ProtectedRoute><Parametres /></ProtectedRoute>} />
+      <Route path="/documents/*" element={<ProtectedRoute><Documents /></ProtectedRoute>} />
       <Route path="/loic/*" element={<ProtectedRoute><Loic /></ProtectedRoute>} />
       <Route path="/notifications/*" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
     </Routes>

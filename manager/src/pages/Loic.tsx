@@ -18,9 +18,10 @@ import {
   TrendingUp, Archive, Mail, Phone,
   User, Calendar, ExternalLink,
   Loader2, ChevronRight, Globe, Monitor,
-  Wifi,
+  Wifi, Paperclip, X,
 } from 'lucide-react'
 import type { LoicMessage, AIConversation } from '@/hooks/useLoic'
+import { uploadDocument } from '@/hooks/useDocuments'
 
 const WELCOME: LoicMessage = {
   role: 'assistant',
@@ -128,10 +129,13 @@ export function Loic() {
   const [leadDone, setLeadDone] = useState(false)
   const [escalated, setEscalated] = useState(false)
   const [hoverConv, setHoverConv] = useState<string | null>(null)
+  const [loicAttachments, setLoicAttachments] = useState<{ name: string }[]>([])
+  const [attachUploading, setAttachUploading] = useState(false)
 
   const endRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const textareaRef = inputRef
+  const fileAttachRef = useRef<HTMLInputElement>(null)
 
   const activeConv = conversations.find(c => c.id === activeId)
 
@@ -150,6 +154,7 @@ export function Loic() {
     setLocalMeta(conv.metadata ?? {})
     setLeadDone(!!conv.metadata?.lead_created)
     setEscalated(!!conv.metadata?.escalated)
+    setLoicAttachments([])
   }, [activeId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleNew = async () => {
@@ -257,6 +262,21 @@ export function Loic() {
       inputRef.current?.focus()
     }
   }, [input, activeId, localMsgs, localMeta, leadDone, isTyping, createLead, updateConv])
+
+  const handleAttachFile = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file || !activeId) return
+    setAttachUploading(true)
+    try {
+      await uploadDocument(file, { entityType: 'conversation', entityId: activeId })
+      setLoicAttachments(prev => [...prev, { name: file.name }])
+    } catch (err) {
+      console.error('Attach upload failed:', err)
+    } finally {
+      setAttachUploading(false)
+    }
+  }, [activeId])
 
   // Qualification progress
   const qualFields = [
@@ -520,6 +540,25 @@ export function Loic() {
                       style={{ minHeight: '44px', maxHeight: '120px' }}
                     />
                     <button
+                      type="button"
+                      onClick={() => fileAttachRef.current?.click()}
+                      disabled={!activeId || attachUploading}
+                      title="Joindre un document"
+                      className="h-11 w-11 flex items-center justify-center text-gray-400 hover:text-brand-500 hover:bg-brand-50 disabled:opacity-30 disabled:cursor-not-allowed rounded-xl transition-colors shrink-0"
+                    >
+                      {attachUploading
+                        ? <Loader2 className="h-4 w-4 animate-spin" />
+                        : <Paperclip className="h-4 w-4" />
+                      }
+                    </button>
+                    <input
+                      ref={fileAttachRef}
+                      type="file"
+                      accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg,.webp,.svg,.zip"
+                      onChange={handleAttachFile}
+                      className="sr-only"
+                    />
+                    <button
                       onClick={send}
                       disabled={!input.trim() || isTyping}
                       className="h-11 w-11 flex items-center justify-center bg-brand-500 hover:bg-brand-600 disabled:bg-gray-200 disabled:cursor-not-allowed text-white rounded-xl transition-colors shrink-0"
@@ -530,6 +569,26 @@ export function Loic() {
                       }
                     </button>
                   </div>
+                  {loicAttachments.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mt-2 px-1">
+                      {loicAttachments.map((a, i) => (
+                        <span
+                          key={i}
+                          className="inline-flex items-center gap-1 text-[10px] bg-brand-50 text-brand-600 border border-brand-100 rounded-md px-1.5 py-0.5"
+                        >
+                          <Paperclip className="h-2.5 w-2.5 shrink-0" />
+                          <span className="max-w-[120px] truncate">{a.name}</span>
+                          <button
+                            type="button"
+                            onClick={() => setLoicAttachments(prev => prev.filter((_, j) => j !== i))}
+                            className="text-brand-400 hover:text-brand-600 ml-0.5"
+                          >
+                            <X className="h-2.5 w-2.5" />
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
                   <p className="text-[10px] text-gray-300 mt-1.5 px-1">
                     Loïc est alimenté par Claude · CA-TECH 2026
                   </p>

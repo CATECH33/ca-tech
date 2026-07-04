@@ -2,7 +2,7 @@ import { NavLink, useLocation } from 'react-router-dom'
 import {
   LayoutDashboard, Users, UserPlus, FileText, Receipt, FolderKanban,
   CheckSquare, Briefcase, CreditCard, Image, MessageSquare, Headphones,
-  Settings, ChevronLeft, ChevronRight, Zap, Calendar, Bot, Bell,
+  Settings, ChevronLeft, ChevronRight, Zap, Calendar, Bot, Bell, Paperclip,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -25,6 +25,7 @@ const navItems: NavItem[] = [
   { label: 'Paiements', icon: CreditCard, to: '/paiements' },
   { label: 'Portfolio', icon: Image, to: '/portfolio' },
   { label: 'Agenda', icon: Calendar, to: '/agenda' },
+  { label: 'Documents', icon: Paperclip, to: '/documents' },
   { label: 'Loïc IA', icon: Bot, to: '/loic' },
   { label: 'Notifications', icon: Bell, to: '/notifications' },
   { label: 'Messages', icon: MessageSquare, to: '/messages' },
