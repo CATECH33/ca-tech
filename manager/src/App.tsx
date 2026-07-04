@@ -3,6 +3,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AuthProvider } from './contexts/AuthContext'
 import { ProtectedRoute } from './components/auth/ProtectedRoute'
 import { Login } from './pages/Login'
+import { ForgotPassword } from './pages/ForgotPassword'
+import { ResetPassword } from './pages/ResetPassword'
 import { Dashboard } from './pages/Dashboard'
 import { Clients } from './pages/Clients'
 import { Leads } from './pages/Leads'
@@ -28,6 +30,8 @@ function ProtectedApp() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/clients/*" element={<ProtectedRoute><Clients /></ProtectedRoute>} />
       <Route path="/leads/*" element={<ProtectedRoute><Leads /></ProtectedRoute>} />

@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Navigate, Link } from 'react-router-dom'
 import { Zap, Eye, EyeOff, Loader2 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
@@ -55,7 +55,15 @@ export function Login() {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1.5">Mot de passe</label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-xs font-medium text-gray-700">Mot de passe</label>
+                <Link
+                  to="/forgot-password"
+                  className="text-xs text-brand-500 hover:text-brand-600 transition"
+                >
+                  Mot de passe oublié ?
+                </Link>
+              </div>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
