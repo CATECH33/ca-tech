@@ -44,7 +44,7 @@
     { "source": "/manager/apple-touch-icon.png", "destination": "/manager/dist/apple-touch-icon.png" },
     { "source": "/manager/site.webmanifest", "destination": "/manager/dist/site.webmanifest" },
     { "source": "/manager/icons.svg", "destination": "/manager/dist/icons.svg" },
-    { "source": "/manager", "destination": "/manager/dist/index.html" },
-    { "source": "/manager/(.*)", "destination": "/manager/dist/index.html" }
+    { "source": "/manager", "destination": "/manager/dist/" },
+    { "source": "/manager/(.*)", "destination": "/manager/dist/" }
   ]
 }
