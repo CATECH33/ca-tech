@@ -12,6 +12,7 @@ import { Avatar } from '@/components/ui/Avatar'
 import { Card } from '@/components/ui/Card'
 import { Modal } from '@/components/ui/Modal'
 import { Table, Thead, Tbody, Tr, Th, Td, EmptyRow } from '@/components/ui/Table'
+import { FileUpload, type FileEntry } from '@/components/ui/FileUpload'
 import { formatCurrency, formatDate, cn } from '@/lib/utils'
 import {
   useDevis, useCreateDevis, useUpdateDevis, useUpdateDevisStatus,
@@ -428,9 +429,10 @@ function DevisFiche({
   isConverting: boolean
 }) {
   const [editMode, setEditMode]         = useState(false)
-  const [showDelete, setShowDelete]     = useState(false)
+  const [showDelete, setShowDelete]       = useState(false)
   const [showSignature, setShowSignature] = useState(false)
-  const [convertedTo, setConvertedTo]   = useState<string | null>(null)
+  const [convertedTo, setConvertedTo]     = useState<string | null>(null)
+  const [editAttachments, setEditAttachments] = useState<FileEntry[]>([])
   const [form, setForm] = useState({
     client_id:   devis.client_id,
     valid_until: devis.date_expiration ?? '',
@@ -629,6 +631,12 @@ function DevisFiche({
               onChange={e => setForm(f => ({ ...f, notes: e.target.value }))}
               rows={3}
             />
+            <FileUpload
+              label="Pièces jointes"
+              maxSizeMB={10}
+              maxFiles={10}
+              onFilesChange={setEditAttachments}
+            />
           </div>
           <div className="flex justify-end gap-2 mt-5 pt-4 border-t border-gray-100">
             <Button variant="outline" onClick={() => setEditMode(false)}>Annuler</Button>
@@ -822,6 +830,7 @@ export function Devis() {
   const [showAdd, setShowAdd]           = useState(false)
   const [ficheDevis, setFicheDevis]     = useState<DevisType | null>(null)
   const [form, setForm]                 = useState(FORM_INIT)
+  const [attachments, setAttachments]   = useState<FileEntry[]>([])
 
   const { data: devis = [], isLoading } = useDevis()
   const { data: clients = [] }          = useClients()
@@ -875,6 +884,7 @@ export function Devis() {
     })
     setShowAdd(false)
     setForm(FORM_INIT)
+    setAttachments([])
     setFicheDevis(created)
   }
 
@@ -1053,12 +1063,12 @@ export function Devis() {
       {/* Create modal */}
       <Modal
         open={showAdd}
-        onClose={() => setShowAdd(false)}
+        onClose={() => { setShowAdd(false); setAttachments([]) }}
         title="Nouveau devis"
         size="xl"
         footer={
           <>
-            <Button variant="outline" onClick={() => setShowAdd(false)}>Annuler</Button>
+            <Button variant="outline" onClick={() => { setShowAdd(false); setAttachments([]) }}>Annuler</Button>
             <Button onClick={handleCreate} disabled={createDevis.isPending || !form.client_id}>
               {createDevis.isPending ? 'Création…' : 'Créer le devis'}
             </Button>
@@ -1095,6 +1105,12 @@ export function Devis() {
             value={form.notes}
             onChange={e => setForm(f => ({ ...f, notes: e.target.value }))}
             rows={3}
+          />
+          <FileUpload
+            label="Pièces jointes"
+            maxSizeMB={10}
+            maxFiles={10}
+            onFilesChange={setAttachments}
           />
         </div>
       </Modal>
