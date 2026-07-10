@@ -42,8 +42,8 @@ async function fetchProspects(): Promise<ProspectRow[]> {
   return (data ?? []) as ProspectRow[]
 }
 
-export function useProspects() {
-  return useQuery({ queryKey: Q, queryFn: fetchProspects })
+export function useProspects(opts?: { refetchInterval?: number }) {
+  return useQuery({ queryKey: Q, queryFn: fetchProspects, ...opts })
 }
 
 export interface CreateProspectInput {

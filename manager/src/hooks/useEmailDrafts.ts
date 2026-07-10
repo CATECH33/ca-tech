@@ -77,8 +77,8 @@ async function fetchDrafts(): Promise<DraftRow[]> {
 
 /* ─── Hooks ───────────────────────────────────────────────────────────────── */
 
-export function useEmailDrafts() {
-  return useQuery({ queryKey: Q, queryFn: fetchDrafts })
+export function useEmailDrafts(opts?: { refetchInterval?: number }) {
+  return useQuery({ queryKey: Q, queryFn: fetchDrafts, ...opts })
 }
 
 export function useCreateDraft() {
