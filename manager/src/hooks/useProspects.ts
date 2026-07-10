@@ -119,3 +119,89 @@ export function useDeleteProspect() {
     onSuccess: () => qc.invalidateQueries({ queryKey: Q }),
   })
 }
+
+// ── Qualification IA ──────────────────────────────────────────────────────────
+
+export type QualSource = 'manual' | 'auto'
+
+export interface QualCriterion {
+  value: boolean | null
+  source: QualSource
+}
+
+export interface ProspectQualification {
+  version: 1
+  website_url: string
+  has_https: QualCriterion
+  is_responsive: QualCriterion
+  has_form: QualCriterion
+  has_google_business: QualCriterion
+  ai_comment: string
+  commercial_opportunity: string
+  score: number
+  qualified_at: string | null
+  qualified_by: QualSource | null
+}
+
+const QUAL_WEIGHTS = {
+  has_https: 2.0,
+  is_responsive: 2.5,
+  has_form: 1.5,
+  has_google_business: 2.0,
+  commercial_opportunity: 2.0,
+} as const
+
+export function computeQualScore(q: Partial<ProspectQualification>): number {
+  let score = 0
+  if (q.has_https?.value === true)          score += QUAL_WEIGHTS.has_https
+  if (q.is_responsive?.value === true)      score += QUAL_WEIGHTS.is_responsive
+  if (q.has_form?.value === true)           score += QUAL_WEIGHTS.has_form
+  if (q.has_google_business?.value === true) score += QUAL_WEIGHTS.has_google_business
+  if (q.commercial_opportunity?.trim())     score += QUAL_WEIGHTS.commercial_opportunity
+  return Math.round(score * 10) / 10
+}
+
+export function getQualification(prospect: ProspectRow): ProspectQualification | null {
+  const meta = prospect.metadata as Record<string, unknown> | null
+  return (meta?.qualification as ProspectQualification) ?? null
+}
+
+/**
+ * FUTURE: Brancher les API externes ici
+ * - HTTPS        → vérifier le protocole + redirection HTTP→HTTPS
+ * - Responsive   → Google PageSpeed Insights API (strategy=mobile)
+ * - Formulaire   → scraping HTML, détection <form> / Typeform / HubSpot
+ * - Google Biz   → Google Places API (Text Search ou Find Place)
+ * - Commentaire  → Anthropic API, prompt de qualification commerciale
+ * - Opportunité  → Anthropic API, analyse du secteur + besoins probables
+ */
+export async function autoQualifyProspect(
+  _websiteUrl: string,
+): Promise<Partial<ProspectQualification>> {
+  // Non connecté — retourne vide pour que l'UI reste inchangée
+  return {}
+}
+
+export function useQualifyProspect() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({
+      prospect,
+      qualification,
+    }: {
+      prospect: ProspectRow
+      qualification: ProspectQualification
+    }) => {
+      const existingMeta = (prospect.metadata ?? {}) as Record<string, unknown>
+      const { error } = await supabase
+        .from('prospects')
+        .update({
+          metadata: { ...existingMeta, qualification },
+          score: Math.round(qualification.score * 10),
+        })
+        .eq('id', prospect.id)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: Q }),
+  })
+}
