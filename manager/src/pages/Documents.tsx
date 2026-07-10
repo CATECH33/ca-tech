@@ -58,7 +58,7 @@ function prospectName(doc: DocumentWithContext): string {
 }
 
 function quoteRef(doc: DocumentWithContext): string {
-  if (doc.quote) return doc.quote.quote_number
+  if (doc.quote) return doc.quote.devis_number
   return '—'
 }
 

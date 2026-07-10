@@ -174,7 +174,7 @@ export function useDeleteDocument() {
 
 export interface DocumentWithContext extends DocumentRecord {
   lead?: { first_name: string; last_name: string; email: string } | null
-  quote?: { quote_number: string; total: number } | null
+  quote?: { devis_number: string; total: number } | null
 }
 
 const QA = ['all-documents'] as const
@@ -202,7 +202,7 @@ export function useAllDocuments() {
         .select(`
           *,
           lead:leads!prospect_id(first_name, last_name, email),
-          quote:quotes!quote_id(quote_number, total)
+          quote:devis!quote_id(devis_number, total)
         `)
         .not('storage_path', 'is', null)
         .order('created_at', { ascending: false })

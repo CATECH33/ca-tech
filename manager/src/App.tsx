@@ -22,6 +22,14 @@ import { Parametres } from './pages/Parametres'
 import { Loic } from './pages/Loic'
 import { Notifications } from './pages/Notifications'
 import { Documents } from './pages/Documents'
+import { ProspectionDashboard } from './pages/prospection/ProspectionDashboard'
+import { ProspectionProspects } from './pages/prospection/ProspectionProspects'
+import { ProspectionRecherche } from './pages/prospection/ProspectionRecherche'
+import { ProspectionQualification } from './pages/prospection/ProspectionQualification'
+import { ProspectionBrouillons } from './pages/prospection/ProspectionBrouillons'
+import { ProspectionRelances } from './pages/prospection/ProspectionRelances'
+import { ProspectionStatistiques } from './pages/prospection/ProspectionStatistiques'
+import { ProspectionParametres } from './pages/prospection/ProspectionParametres'
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { staleTime: 5 * 60 * 1000, retry: 1 } },
@@ -50,6 +58,14 @@ function ProtectedApp() {
       <Route path="/documents/*" element={<ProtectedRoute><Documents /></ProtectedRoute>} />
       <Route path="/loic/*" element={<ProtectedRoute><Loic /></ProtectedRoute>} />
       <Route path="/notifications/*" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
+      <Route path="/prospection" element={<ProtectedRoute><ProspectionDashboard /></ProtectedRoute>} />
+      <Route path="/prospection/prospects" element={<ProtectedRoute><ProspectionProspects /></ProtectedRoute>} />
+      <Route path="/prospection/recherche" element={<ProtectedRoute><ProspectionRecherche /></ProtectedRoute>} />
+      <Route path="/prospection/qualification" element={<ProtectedRoute><ProspectionQualification /></ProtectedRoute>} />
+      <Route path="/prospection/brouillons" element={<ProtectedRoute><ProspectionBrouillons /></ProtectedRoute>} />
+      <Route path="/prospection/relances" element={<ProtectedRoute><ProspectionRelances /></ProtectedRoute>} />
+      <Route path="/prospection/statistiques" element={<ProtectedRoute><ProspectionStatistiques /></ProtectedRoute>} />
+      <Route path="/prospection/config" element={<ProtectedRoute><ProspectionParametres /></ProtectedRoute>} />
     </Routes>
   )
 }
