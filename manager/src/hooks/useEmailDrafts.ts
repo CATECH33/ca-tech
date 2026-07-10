@@ -1,7 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { EmailDraftStatus, EmailDraftTone } from '@/types'
-import { MAIL_STATUS } from '@/services/mailProvider'
+
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string
 
 /* ─── Types ───────────────────────────────────────────────────────────────── */
 
@@ -140,22 +142,51 @@ export function useDeleteDraft() {
   })
 }
 
-/**
- * FUTURE: connecter un MailProvider ici
- * Étapes :
- *   1. Implémenter mailProvider dans src/services/mailProvider.ts
- *   2. Appeler mailProvider.send({ to, subject, body, draftId })
- *   3. Mettre à jour status → 'sent' + sent_at dans Supabase
- *   4. Enregistrer une ProspectActivity 'email_sent'
- */
+export interface SendDraftInput {
+  draftId: string
+  to: string
+  toName?: string
+  subject: string
+  body: string
+}
+
+export interface SendDraftResult {
+  messageId: string
+  threadId: string
+  sentAt: string
+  from: string
+}
+
 export function useSendDraft() {
+  const qc = useQueryClient()
   return useMutation({
-    mutationFn: async (_id: string): Promise<never> => {
-      if (!MAIL_STATUS.isConnected) {
-        throw new Error(MAIL_STATUS.disabledReason)
-      }
-      throw new Error('Provider non implémenté')
+    mutationFn: async (input: SendDraftInput): Promise<SendDraftResult> => {
+      // Tente d'abord avec le JWT de session (auth activée), sinon utilise la anon key (mode solo)
+      let authToken = SUPABASE_ANON_KEY
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session?.access_token) authToken = session.access_token
+
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/gmail-send`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`,
+          'apikey': SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({
+          to: input.to,
+          toName: input.toName,
+          subject: input.subject,
+          body: input.body,
+          draftId: input.draftId,
+        }),
+      })
+
+      const result = await res.json() as SendDraftResult & { error?: string }
+      if (!res.ok) throw new Error(result.error ?? 'Erreur envoi Gmail')
+      return result
     },
+    onSettled: () => qc.invalidateQueries({ queryKey: Q }),
   })
 }
 

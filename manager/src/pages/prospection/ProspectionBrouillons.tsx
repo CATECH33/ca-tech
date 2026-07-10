@@ -1,9 +1,9 @@
 import { useState, useMemo } from 'react'
 import {
-  FilePen, Plus, Search, X, RefreshCw, Send, Lock,
+  FilePen, Plus, Search, X, RefreshCw, Send,
   Mail, CheckCircle2, Clock, AlertCircle, Trash2, Pencil,
-  ChevronLeft, ChevronRight, Eye, Wand2, Building2,
-  User, Hash, Palette,
+  ChevronRight, Eye, Wand2, Building2,
+  User, Hash, Palette, ExternalLink, History,
 } from 'lucide-react'
 import { Layout } from '@/components/layout/Layout'
 import { Button } from '@/components/ui/Button'
@@ -13,15 +13,15 @@ import { Modal } from '@/components/ui/Modal'
 import { cn, formatDate } from '@/lib/utils'
 import {
   useEmailDrafts, useCreateDraft, useUpdateDraft,
-  useSetDraftStatus, useDeleteDraft, useProspectsForDraft,
+  useSetDraftStatus, useDeleteDraft, useProspectsForDraft, useSendDraft,
   type DraftRow, type CreateDraftInput, type UpdateDraftInput,
 } from '@/hooks/useEmailDrafts'
-import { MAIL_STATUS } from '@/services/mailProvider'
+import { useGoogleIntegration } from '@/hooks/useGoogleIntegration'
 import type { EmailDraftStatus, EmailDraftTone } from '@/types'
 
 /* ─── CONSTANTES ──────────────────────────────────────────────────────────── */
 
-type FilterTab = 'all' | EmailDraftStatus
+type FilterTab = 'all' | 'draft' | 'ready' | 'sent' | 'failed'
 type PanelMode = 'preview' | 'edit'
 
 const TONE_CONFIG: Record<EmailDraftTone, { label: string; color: string }> = {
@@ -32,10 +32,10 @@ const TONE_CONFIG: Record<EmailDraftTone, { label: string; color: string }> = {
 }
 
 const STATUS_CONFIG: Record<EmailDraftStatus, { label: string; color: string; dot: string; icon: React.ElementType }> = {
-  draft:  { label: 'Brouillon',       color: 'bg-gray-50 text-gray-600 border-gray-200',    dot: 'bg-gray-400',    icon: FilePen },
-  ready:  { label: 'Prêt à envoyer',  color: 'bg-emerald-50 text-emerald-700 border-emerald-200', dot: 'bg-emerald-500', icon: CheckCircle2 },
-  sent:   { label: 'Envoyé',          color: 'bg-blue-50 text-blue-700 border-blue-200',    dot: 'bg-blue-500',    icon: Mail },
-  failed: { label: 'Échec',           color: 'bg-red-50 text-red-600 border-red-200',       dot: 'bg-red-500',     icon: AlertCircle },
+  draft:  { label: 'Brouillon',       color: 'bg-gray-50 text-gray-600 border-gray-200',         dot: 'bg-gray-400',    icon: FilePen },
+  ready:  { label: 'Validé',          color: 'bg-emerald-50 text-emerald-700 border-emerald-200', dot: 'bg-emerald-500', icon: CheckCircle2 },
+  sent:   { label: 'Envoyé',          color: 'bg-blue-50 text-blue-700 border-blue-200',          dot: 'bg-blue-500',    icon: Mail },
+  failed: { label: 'Erreur',          color: 'bg-red-50 text-red-600 border-red-200',             dot: 'bg-red-500',     icon: AlertCircle },
 }
 
 const TONE_OPTIONS: { value: EmailDraftTone; label: string }[] = [
@@ -60,21 +60,72 @@ function contactLabel(d: DraftRow) {
 
 /* ─── SEND BUTTON ─────────────────────────────────────────────────────────── */
 
-function SendButton() {
+function SendButton({
+  draft,
+  onSend,
+  sending,
+  isGmailConnected,
+}: {
+  draft: DraftRow
+  onSend: () => void
+  sending: boolean
+  isGmailConnected: boolean
+}) {
+  const canSend = isGmailConnected && draft.status === 'ready' && !!draft.contact?.email
+
+  if (!isGmailConnected) {
+    return (
+      <div className="flex flex-col items-end gap-1">
+        <button disabled className="inline-flex items-center gap-2 h-9 px-4 text-sm font-medium rounded-lg bg-gray-100 text-gray-400 cursor-not-allowed opacity-60">
+          <Send className="h-3.5 w-3.5" /> Envoyer
+        </button>
+        <span className="text-[10px] text-gray-400">Gmail non connecté — Paramètres &gt; Intégrations</span>
+      </div>
+    )
+  }
+
+  if (draft.status !== 'ready') {
+    return (
+      <div className="flex flex-col items-end gap-1">
+        <button disabled className="inline-flex items-center gap-2 h-9 px-4 text-sm font-medium rounded-lg bg-gray-100 text-gray-400 cursor-not-allowed opacity-60">
+          <Send className="h-3.5 w-3.5" /> Envoyer
+        </button>
+        <span className="text-[10px] text-gray-400">Validez d'abord le brouillon pour activer l'envoi</span>
+      </div>
+    )
+  }
+
+  if (!draft.contact?.email) {
+    return (
+      <div className="flex flex-col items-end gap-1">
+        <button disabled className="inline-flex items-center gap-2 h-9 px-4 text-sm font-medium rounded-lg bg-gray-100 text-gray-400 cursor-not-allowed opacity-60">
+          <Send className="h-3.5 w-3.5" /> Envoyer
+        </button>
+        <span className="text-[10px] text-red-400">Aucun email pour ce contact</span>
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col items-end gap-1">
       <button
-        disabled
-        className="inline-flex items-center gap-2 h-9 px-4 text-sm font-medium rounded-lg bg-gray-100 text-gray-400 cursor-not-allowed opacity-60"
-        title={MAIL_STATUS.disabledReason}
+        onClick={onSend}
+        disabled={!canSend || sending}
+        className={cn(
+          'inline-flex items-center gap-2 h-9 px-4 text-sm font-medium rounded-lg transition',
+          canSend && !sending
+            ? 'bg-brand-600 text-white hover:bg-brand-700 shadow-sm'
+            : 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-60',
+        )}
       >
-        <Lock className="h-3.5 w-3.5" />
-        <Send className="h-3.5 w-3.5" />
-        Envoyer
+        {sending
+          ? <><RefreshCw className="h-3.5 w-3.5 animate-spin" /> Envoi…</>
+          : <><Send className="h-3.5 w-3.5" /> Envoyer via Gmail</>
+        }
       </button>
-      <span className="text-[10px] text-gray-400 flex items-center gap-1">
-        <Lock className="h-2.5 w-2.5" />
-        {MAIL_STATUS.disabledReason}
+      <span className="text-[10px] text-emerald-600 flex items-center gap-1">
+        <CheckCircle2 className="h-2.5 w-2.5" />
+        Gmail connecté · {draft.contact.email}
       </span>
     </div>
   )
@@ -100,10 +151,7 @@ function DraftListRow({
         selected ? 'bg-brand-50 border-l-2 border-l-brand-500' : 'hover:bg-gray-50 border-l-2 border-l-transparent',
       )}
     >
-      {/* Status dot */}
       <div className={cn('h-2 w-2 rounded-full shrink-0', st.dot)} />
-
-      {/* Main content */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-0.5">
           <span className="text-xs font-semibold text-gray-700 truncate">
@@ -125,8 +173,6 @@ function DraftListRow({
           {draft.body.replace(/\n/g, ' ').slice(0, 120)}…
         </p>
       </div>
-
-      {/* Meta */}
       <div className="flex flex-col items-end gap-1.5 shrink-0">
         <span className="text-[10px] text-gray-400">{formatDate(draft.updated_at)}</span>
         <div className="flex items-center gap-1">
@@ -136,8 +182,6 @@ function DraftListRow({
           <span className="text-[10px] text-gray-400">#{draft.sequence_step}</span>
         </div>
       </div>
-
-      {/* Delete (hover) */}
       <button
         onClick={e => { e.stopPropagation(); onDelete() }}
         className="p-1 rounded-md opacity-0 group-hover:opacity-100 hover:bg-red-50 hover:text-red-500 text-gray-400 transition shrink-0"
@@ -151,27 +195,28 @@ function DraftListRow({
 /* ─── DRAFT PANEL ─────────────────────────────────────────────────────────── */
 
 function DraftPanel({
-  draft, onClose, onSave, onSetStatus, onDelete,
+  draft, onClose, onSave, onSetStatus, onDelete, isGmailConnected,
 }: {
   draft: DraftRow
   onClose: () => void
   onSave: (data: UpdateDraftInput) => Promise<void>
   onSetStatus: (id: string, status: EmailDraftStatus) => Promise<void>
   onDelete: (id: string) => Promise<void>
+  isGmailConnected: boolean
 }) {
-  const [mode, setMode]     = useState<PanelMode>('preview')
-  const [saving, setSaving] = useState(false)
+  const [mode, setMode]         = useState<PanelMode>('preview')
+  const [saving, setSaving]     = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [statusBusy, setStatusBusy] = useState(false)
+  const [sendError, setSendError]   = useState<string | null>(null)
+
+  const sendDraft = useSendDraft()
+
   const [editForm, setEditForm] = useState<UpdateDraftInput>({
-    id: draft.id,
-    subject: draft.subject,
-    body: draft.body,
-    tone: draft.tone,
-    sequence_step: draft.sequence_step,
+    id: draft.id, subject: draft.subject, body: draft.body,
+    tone: draft.tone, sequence_step: draft.sequence_step,
   })
 
-  // Sync form when draft changes (panel stays open, data refreshes)
   useMemo(() => {
     setEditForm({ id: draft.id, subject: draft.subject, body: draft.body, tone: draft.tone, sequence_step: draft.sequence_step })
   }, [draft.id, draft.updated_at]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -179,6 +224,8 @@ function DraftPanel({
   const st = STATUS_CONFIG[draft.status]
   const tn = TONE_CONFIG[draft.tone]
   const to = contactLabel(draft)
+
+  const meta = draft.metadata as Record<string, string> | null
 
   const handleSave = async () => {
     setSaving(true)
@@ -200,6 +247,25 @@ function DraftPanel({
     onClose()
   }
 
+  const handleSend = async () => {
+    if (!draft.contact?.email) return
+    setSendError(null)
+    try {
+      await sendDraft.mutateAsync({
+        draftId: draft.id,
+        to: draft.contact.email,
+        toName: `${draft.contact.first_name} ${draft.contact.last_name}`,
+        subject: draft.subject,
+        body: draft.body,
+      })
+    } catch (e) {
+      setSendError(e instanceof Error ? e.message : 'Erreur lors de l\'envoi')
+    }
+  }
+
+  const isSent   = draft.status === 'sent'
+  const isFailed = draft.status === 'failed'
+
   return (
     <div className="fixed inset-0 z-40 flex justify-end">
       <div className="absolute inset-0 bg-black/20 backdrop-blur-[1px]" onClick={onClose} />
@@ -220,19 +286,13 @@ function DraftPanel({
             </span>
           </div>
           <div className="flex items-center gap-1.5">
-            {mode === 'preview' && (
-              <button
-                onClick={() => setMode('edit')}
-                className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-900 px-2 py-1 rounded-lg hover:bg-gray-100 transition"
-              >
+            {mode === 'preview' && !isSent && !isFailed && (
+              <button onClick={() => setMode('edit')} className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-900 px-2 py-1 rounded-lg hover:bg-gray-100 transition">
                 <Pencil className="h-3.5 w-3.5" /> Modifier
               </button>
             )}
             {mode === 'edit' && (
-              <button
-                onClick={() => setMode('preview')}
-                className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-900 px-2 py-1 rounded-lg hover:bg-gray-100 transition"
-              >
+              <button onClick={() => setMode('preview')} className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-900 px-2 py-1 rounded-lg hover:bg-gray-100 transition">
                 <Eye className="h-3.5 w-3.5" /> Aperçu
               </button>
             )}
@@ -245,14 +305,16 @@ function DraftPanel({
         {/* ── Body ── */}
         <div className="flex-1 overflow-y-auto">
 
-          {/* ── MODE PRÉVISUALISATION ── */}
+          {/* MODE PRÉVISUALISATION */}
           {mode === 'preview' && (
             <div className="p-5">
               {/* Email header */}
               <div className="bg-gray-50 rounded-xl p-4 mb-4 space-y-2 border border-gray-100">
                 <div className="grid grid-cols-[56px_1fr] gap-2 text-xs">
                   <span className="text-gray-400 font-medium pt-0.5">De</span>
-                  <span className="text-gray-500 italic">votre adresse email (à configurer)</span>
+                  <span className="text-gray-700 font-medium">
+                    {isGmailConnected ? 'Votre compte Gmail connecté' : <span className="text-gray-400 italic">Gmail non connecté</span>}
+                  </span>
                 </div>
                 {to && (
                   <div className="grid grid-cols-[56px_1fr] gap-2 text-xs">
@@ -276,36 +338,73 @@ function DraftPanel({
                   <span className="text-gray-400 font-medium pt-0.5">Date</span>
                   <span className="text-gray-500">{formatDate(draft.updated_at, 'dd/MM/yyyy HH:mm')}</span>
                 </div>
-                {draft.ai_model && (
-                  <div className="grid grid-cols-[56px_1fr] gap-2 text-xs">
-                    <span className="text-gray-400 font-medium pt-0.5">IA</span>
-                    <span className="text-brand-600 flex items-center gap-1">
-                      <Wand2 className="h-3 w-3" />{draft.ai_model}
-                    </span>
-                  </div>
-                )}
               </div>
 
-              {/* Body */}
+              {/* Corps */}
               <div className="bg-white border border-gray-100 rounded-xl p-5">
                 <pre className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed font-sans">
                   {draft.body}
                 </pre>
               </div>
 
-              {draft.sent_at && (
-                <p className="text-xs text-emerald-600 mt-3 flex items-center gap-1.5">
-                  <Mail className="h-3.5 w-3.5" />
-                  Envoyé le {formatDate(draft.sent_at, 'dd/MM/yyyy à HH:mm')}
-                </p>
+              {/* Historique Gmail */}
+              {isSent && draft.sent_at && (
+                <div className="mt-4 bg-blue-50 border border-blue-100 rounded-xl p-4 space-y-2">
+                  <div className="flex items-center gap-2 text-blue-700 text-sm font-semibold mb-1">
+                    <Mail className="h-4 w-4" /> Envoyé avec succès
+                  </div>
+                  <div className="grid grid-cols-[80px_1fr] gap-1 text-xs">
+                    <span className="text-blue-400">Date</span>
+                    <span className="text-blue-700">{formatDate(draft.sent_at, 'dd/MM/yyyy à HH:mm')}</span>
+                  </div>
+                  {meta?.gmail_message_id && (
+                    <div className="grid grid-cols-[80px_1fr] gap-1 text-xs">
+                      <span className="text-blue-400">Message ID</span>
+                      <span className="text-blue-700 font-mono text-[10px] break-all">{meta.gmail_message_id}</span>
+                    </div>
+                  )}
+                  {meta?.gmail_thread_id && (
+                    <div className="grid grid-cols-[80px_1fr] gap-1 text-xs">
+                      <span className="text-blue-400">Thread ID</span>
+                      <span className="text-blue-700 font-mono text-[10px] break-all">{meta.gmail_thread_id}</span>
+                    </div>
+                  )}
+                  <a
+                    href="https://mail.google.com/mail/u/0/#sent"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[11px] text-blue-500 hover:text-blue-700 mt-1 transition"
+                  >
+                    <ExternalLink className="h-3 w-3" /> Voir dans Gmail
+                  </a>
+                </div>
+              )}
+
+              {isFailed && (
+                <div className="mt-4 bg-red-50 border border-red-100 rounded-xl p-4">
+                  <div className="flex items-center gap-2 text-red-600 text-sm font-semibold mb-1">
+                    <AlertCircle className="h-4 w-4" /> Envoi échoué
+                  </div>
+                  {meta?.error && (
+                    <p className="text-xs text-red-500">{meta.error}</p>
+                  )}
+                  {meta?.failed_at && (
+                    <p className="text-[11px] text-red-400 mt-1">{formatDate(meta.failed_at, 'dd/MM/yyyy à HH:mm')}</p>
+                  )}
+                </div>
+              )}
+
+              {sendError && (
+                <div className="mt-3 bg-red-50 border border-red-100 rounded-xl p-3 text-xs text-red-600">
+                  {sendError}
+                </div>
               )}
             </div>
           )}
 
-          {/* ── MODE ÉDITION ── */}
+          {/* MODE ÉDITION */}
           {mode === 'edit' && (
             <div className="p-5 space-y-4">
-              {/* AI generate placeholder */}
               <div className="bg-gradient-to-br from-brand-50 to-violet-50 rounded-xl p-3.5 border border-brand-100 flex items-start gap-3">
                 <Wand2 className="h-4 w-4 text-brand-400 shrink-0 mt-0.5" />
                 <div className="flex-1 min-w-0">
@@ -317,11 +416,8 @@ function DraftPanel({
                 </button>
               </div>
 
-              {/* Subject */}
               <div>
-                <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5 block">
-                  Objet
-                </label>
+                <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5 block">Objet</label>
                 <input
                   value={editForm.subject}
                   onChange={e => setEditForm(f => ({ ...f, subject: e.target.value }))}
@@ -329,7 +425,6 @@ function DraftPanel({
                 />
               </div>
 
-              {/* Tone + Seq */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5 flex items-center gap-1">
@@ -356,20 +451,15 @@ function DraftPanel({
                 </div>
               </div>
 
-              {/* Body */}
               <div>
-                <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5 block">
-                  Corps de l'email
-                </label>
+                <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5 block">Corps de l'email</label>
                 <textarea
                   value={editForm.body}
                   onChange={e => setEditForm(f => ({ ...f, body: e.target.value }))}
                   rows={14}
                   className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-400/30 focus:border-brand-400 resize-none transition leading-relaxed font-mono"
                 />
-                <p className="text-[11px] text-gray-400 mt-1 text-right">
-                  {editForm.body?.length ?? 0} caractères
-                </p>
+                <p className="text-[11px] text-gray-400 mt-1 text-right">{editForm.body?.length ?? 0} caractères</p>
               </div>
             </div>
           )}
@@ -379,46 +469,67 @@ function DraftPanel({
         <div className="px-5 py-4 border-t border-gray-100 shrink-0">
           {mode === 'preview' ? (
             <div className="space-y-3">
-              {/* Actions principales */}
-              <div className="flex items-center gap-2">
-                {draft.status !== 'sent' && draft.status !== 'failed' && (
-                  <Button
-                    variant={draft.status === 'ready' ? 'secondary' : 'primary'}
-                    size="sm"
-                    onClick={handleToggleReady}
-                    disabled={statusBusy}
-                  >
-                    {statusBusy ? (
-                      <RefreshCw className="h-3.5 w-3.5 animate-spin" />
-                    ) : draft.status === 'ready' ? (
-                      <><Clock className="h-3.5 w-3.5" /> Remettre en brouillon</>
-                    ) : (
-                      <><CheckCircle2 className="h-3.5 w-3.5" /> Marquer comme prêt</>
-                    )}
+              {!isSent && (
+                <div className="flex items-center gap-2">
+                  {!isFailed && (
+                    <Button
+                      variant={draft.status === 'ready' ? 'secondary' : 'primary'}
+                      size="sm"
+                      onClick={handleToggleReady}
+                      disabled={statusBusy}
+                    >
+                      {statusBusy
+                        ? <RefreshCw className="h-3.5 w-3.5 animate-spin" />
+                        : draft.status === 'ready'
+                          ? <><Clock className="h-3.5 w-3.5" /> Remettre en brouillon</>
+                          : <><CheckCircle2 className="h-3.5 w-3.5" /> Valider</>
+                      }
+                    </Button>
+                  )}
+                  {isFailed && (
+                    <Button variant="secondary" size="sm" onClick={handleToggleReady} disabled={statusBusy}>
+                      <RefreshCw className="h-3.5 w-3.5" /> Réessayer
+                    </Button>
+                  )}
+                  {!isSent && !isFailed && (
+                    <Button variant="ghost" size="sm" onClick={() => setMode('edit')}>
+                      <Pencil className="h-3.5 w-3.5" /> Modifier
+                    </Button>
+                  )}
+                  <Button variant="danger" size="sm" onClick={handleDelete} disabled={deleting} className="ml-auto">
+                    <Trash2 className="h-3.5 w-3.5" />
+                    {deleting ? 'Suppression…' : 'Supprimer'}
                   </Button>
-                )}
-                <Button variant="ghost" size="sm" onClick={() => setMode('edit')}>
-                  <Pencil className="h-3.5 w-3.5" /> Modifier
-                </Button>
-                <Button
-                  variant="danger" size="sm"
-                  onClick={handleDelete} disabled={deleting}
-                  className="ml-auto"
-                >
-                  <Trash2 className="h-3.5 w-3.5" />
-                  {deleting ? 'Suppression…' : 'Supprimer'}
-                </Button>
-              </div>
-              {/* Send button — toujours désactivé */}
-              <div className="pt-2 border-t border-gray-50">
-                <SendButton />
-              </div>
+                </div>
+              )}
+
+              {/* Bouton Envoyer — actif si Gmail connecté + statut validé */}
+              {!isSent && (
+                <div className="pt-2 border-t border-gray-50">
+                  <SendButton
+                    draft={draft}
+                    onSend={handleSend}
+                    sending={sendDraft.isPending}
+                    isGmailConnected={isGmailConnected}
+                  />
+                </div>
+              )}
+
+              {isSent && (
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-emerald-600 flex items-center gap-1.5">
+                    <Mail className="h-3.5 w-3.5" /> Email envoyé
+                  </span>
+                  <Button variant="danger" size="sm" onClick={handleDelete} disabled={deleting}>
+                    <Trash2 className="h-3.5 w-3.5" />
+                    {deleting ? 'Suppression…' : 'Supprimer'}
+                  </Button>
+                </div>
+              )}
             </div>
           ) : (
             <div className="flex items-center justify-between">
-              <Button variant="outline" size="sm" onClick={() => setMode('preview')}>
-                Annuler
-              </Button>
+              <Button variant="outline" size="sm" onClick={() => setMode('preview')}>Annuler</Button>
               <Button size="sm" onClick={handleSave} disabled={saving || !editForm.subject || !editForm.body}>
                 {saving ? 'Enregistrement…' : 'Enregistrer'}
               </Button>
@@ -432,15 +543,13 @@ function DraftPanel({
 
 /* ─── MODAL NOUVEAU BROUILLON ─────────────────────────────────────────────── */
 
-function NewDraftModal({
-  open, onClose, onCreate,
-}: {
+function NewDraftModal({ open, onClose, onCreate }: {
   open: boolean
   onClose: () => void
   onCreate: (data: CreateDraftInput) => Promise<void>
 }) {
   const { data: prospects = [], isLoading } = useProspectsForDraft()
-  const [form, setForm] = useState<CreateDraftInput>(EMPTY_CREATE)
+  const [form, setForm]     = useState<CreateDraftInput>(EMPTY_CREATE)
   const [creating, setCreating] = useState(false)
 
   const selectedProspect = prospects.find(p => p.id === form.prospect_id)
@@ -459,62 +568,45 @@ function NewDraftModal({
       setForm(f => ({ ...f, [k]: e.target.value }))
 
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      title="Nouveau brouillon"
-      size="xl"
+    <Modal open={open} onClose={onClose} title="Nouveau brouillon" size="xl"
       footer={
         <>
           <Button variant="outline" onClick={onClose}>Annuler</Button>
-          <Button
-            onClick={handleCreate}
-            disabled={creating || !form.prospect_id || !form.subject || !form.body}
-          >
+          <Button onClick={handleCreate} disabled={creating || !form.prospect_id || !form.subject || !form.body}>
             {creating ? 'Création…' : 'Créer le brouillon'}
           </Button>
         </>
       }
     >
       <div className="space-y-4">
-        {/* AI placeholder */}
         <div className="bg-gradient-to-br from-brand-50 to-violet-50 rounded-xl p-3 border border-brand-100 flex items-center gap-3">
           <Wand2 className="h-4 w-4 text-brand-400 shrink-0" />
-          <p className="text-xs text-brand-600 flex-1">
-            Génération automatique par IA — à connecter dans une prochaine étape.
-          </p>
+          <p className="text-xs text-brand-600 flex-1">Génération automatique par IA — à connecter dans une prochaine étape.</p>
           <button disabled className="text-xs px-3 py-1.5 bg-white border border-brand-200 rounded-lg text-brand-400 cursor-not-allowed opacity-60">
             Générer avec l'IA
           </button>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          {/* Prospect */}
           <div className="col-span-2">
             <label className="text-xs font-medium text-gray-700 mb-1.5 flex items-center gap-1 block">
               <Building2 className="h-3.5 w-3.5" /> Prospect *
             </label>
-            <select
-              value={form.prospect_id}
+            <select value={form.prospect_id}
               onChange={e => setForm(f => ({ ...f, prospect_id: e.target.value, prospect_contact_id: '' }))}
               className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand-400/30 focus:border-brand-400 transition"
             >
-              <option value="">
-                {isLoading ? 'Chargement…' : '— Sélectionner un prospect —'}
-              </option>
+              <option value="">{isLoading ? 'Chargement…' : '— Sélectionner un prospect —'}</option>
               {prospects.map(p => <option key={p.id} value={p.id}>{p.company_name}</option>)}
             </select>
           </div>
 
-          {/* Contact */}
           {selectedProspect && (
             <div className="col-span-2">
               <label className="text-xs font-medium text-gray-700 mb-1.5 flex items-center gap-1 block">
                 <User className="h-3.5 w-3.5" /> Contact destinataire
               </label>
-              <select
-                value={form.prospect_contact_id ?? ''}
-                onChange={set('prospect_contact_id')}
+              <select value={form.prospect_contact_id ?? ''} onChange={set('prospect_contact_id')}
                 className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand-400/30 focus:border-brand-400 transition"
               >
                 <option value="">— Aucun contact spécifique —</option>
@@ -527,7 +619,6 @@ function NewDraftModal({
             </div>
           )}
 
-          {/* Ton + Séquence */}
           <div>
             <label className="text-xs font-medium text-gray-700 mb-1.5 flex items-center gap-1 block">
               <Palette className="h-3.5 w-3.5" /> Ton
@@ -546,7 +637,6 @@ function NewDraftModal({
               className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-400/30 focus:border-brand-400 transition" />
           </div>
 
-          {/* Subject */}
           <div className="col-span-2">
             <label className="text-xs font-medium text-gray-700 mb-1.5 block">Objet *</label>
             <input value={form.subject} onChange={set('subject')} autoFocus
@@ -554,11 +644,8 @@ function NewDraftModal({
               className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-400/30 focus:border-brand-400 transition" />
           </div>
 
-          {/* Body */}
           <div className="col-span-2">
-            <label className="text-xs font-medium text-gray-700 mb-1.5 block">
-              Corps de l'email *
-            </label>
+            <label className="text-xs font-medium text-gray-700 mb-1.5 block">Corps de l'email *</label>
             <textarea value={form.body} onChange={set('body')} rows={8}
               placeholder="Bonjour [Prénom],&#10;&#10;Je me permets de vous contacter…"
               className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-400/30 focus:border-brand-400 resize-none transition leading-relaxed" />
@@ -569,25 +656,81 @@ function NewDraftModal({
   )
 }
 
+/* ─── HISTORIQUE ──────────────────────────────────────────────────────────── */
+
+function HistoryRow({ draft, onClick }: { draft: DraftRow; onClick: () => void }) {
+  const isSent   = draft.status === 'sent'
+  const isFailed = draft.status === 'failed'
+  const meta = draft.metadata as Record<string, string> | null
+
+  return (
+    <div
+      onClick={onClick}
+      className="flex items-center gap-4 px-4 py-3 hover:bg-gray-50 cursor-pointer group border-b border-gray-50 last:border-0"
+    >
+      <div className={cn(
+        'h-8 w-8 rounded-lg flex items-center justify-center shrink-0',
+        isSent ? 'bg-blue-100' : 'bg-red-100',
+      )}>
+        {isSent
+          ? <Mail className="h-4 w-4 text-blue-600" />
+          : <AlertCircle className="h-4 w-4 text-red-500" />
+        }
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-gray-800 truncate">{draft.subject}</p>
+        <div className="flex items-center gap-2 mt-0.5">
+          <span className="text-xs text-gray-500 truncate">
+            {draft.prospect?.company_name}
+            {draft.contact && ` · ${draft.contact.first_name} ${draft.contact.last_name}`}
+          </span>
+          {draft.contact?.email && (
+            <span className="text-[11px] text-gray-400 truncate">&lt;{draft.contact.email}&gt;</span>
+          )}
+        </div>
+        {isFailed && meta?.error && (
+          <p className="text-[11px] text-red-500 mt-0.5 truncate">{meta.error}</p>
+        )}
+      </div>
+      <div className="flex flex-col items-end gap-1 shrink-0">
+        <span className={cn(
+          'text-[10px] font-semibold px-2 py-0.5 rounded-full',
+          isSent ? 'bg-blue-50 text-blue-600' : 'bg-red-50 text-red-500',
+        )}>
+          {isSent ? 'Envoyé' : 'Erreur'}
+        </span>
+        <span className="text-[11px] text-gray-400">
+          {formatDate(isSent ? (draft.sent_at ?? draft.updated_at) : draft.updated_at, 'dd/MM/yyyy HH:mm')}
+        </span>
+      </div>
+    </div>
+  )
+}
+
 /* ─── PAGE PRINCIPALE ─────────────────────────────────────────────────────── */
 
 export function ProspectionBrouillons() {
-  const [tab, setTab]         = useState<FilterTab>('all')
-  const [search, setSearch]   = useState('')
+  const [tab, setTab]           = useState<FilterTab>('all')
+  const [search, setSearch]     = useState('')
   const [selected, setSelected] = useState<DraftRow | null>(null)
-  const [showNew, setShowNew] = useState(false)
+  const [showNew, setShowNew]   = useState(false)
   const [confirmDelete, setConfirmDelete] = useState<DraftRow | null>(null)
+  const [showHistory, setShowHistory] = useState(false)
 
   const { data: drafts = [], isLoading, refetch, isFetching } = useEmailDrafts()
-  const createDraft  = useCreateDraft()
-  const updateDraft  = useUpdateDraft()
-  const setStatus    = useSetDraftStatus()
-  const deleteDraft  = useDeleteDraft()
+  const { isConnected: isGmailConnected } = useGoogleIntegration()
+  const createDraft = useCreateDraft()
+  const updateDraft = useUpdateDraft()
+  const setStatus   = useSetDraftStatus()
+  const deleteDraft = useDeleteDraft()
 
   /* Filtrage */
+  const activeDrafts  = useMemo(() => drafts.filter(d => d.status !== 'sent' && d.status !== 'failed'), [drafts])
+  const historyDrafts = useMemo(() => drafts.filter(d => d.status === 'sent' || d.status === 'failed'), [drafts])
+
   const filtered = useMemo(() => {
-    let list = drafts
-    if (tab !== 'all') list = list.filter(d => d.status === tab)
+    let list = showHistory ? historyDrafts : activeDrafts
+    if (!showHistory && tab !== 'all') list = list.filter(d => d.status === tab)
     if (search) {
       const q = search.toLowerCase()
       list = list.filter(d =>
@@ -597,16 +740,16 @@ export function ProspectionBrouillons() {
       )
     }
     return list
-  }, [drafts, tab, search])
+  }, [drafts, tab, search, showHistory, activeDrafts, historyDrafts])
 
   /* Stats */
   const counts = useMemo(() => ({
-    all:    drafts.length,
-    draft:  drafts.filter(d => d.status === 'draft').length,
-    ready:  drafts.filter(d => d.status === 'ready').length,
-    sent:   drafts.filter(d => d.status === 'sent').length,
-    failed: drafts.filter(d => d.status === 'failed').length,
-  }), [drafts])
+    all:    activeDrafts.length,
+    draft:  activeDrafts.filter(d => d.status === 'draft').length,
+    ready:  activeDrafts.filter(d => d.status === 'ready').length,
+    sent:   historyDrafts.filter(d => d.status === 'sent').length,
+    failed: historyDrafts.filter(d => d.status === 'failed').length,
+  }), [activeDrafts, historyDrafts])
 
   /* Handlers */
   const handleSave = async (data: UpdateDraftInput) => {
@@ -617,6 +760,8 @@ export function ProspectionBrouillons() {
 
   const handleSetStatus = async (id: string, status: EmailDraftStatus) => {
     await setStatus.mutateAsync({ id, status })
+    const fresh = drafts.find(d => d.id === id)
+    if (fresh) setSelected({ ...fresh, status })
   }
 
   const handleDelete = async (id: string) => {
@@ -629,7 +774,7 @@ export function ProspectionBrouillons() {
     await createDraft.mutateAsync(data)
   }
 
-  // Sync selected when data refreshes
+  // Sync selected quand les données se rafraîchissent
   useMemo(() => {
     if (selected) {
       const fresh = drafts.find(d => d.id === selected.id)
@@ -638,11 +783,9 @@ export function ProspectionBrouillons() {
   }, [drafts]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const TABS: { value: FilterTab; label: string; count: number }[] = [
-    { value: 'all',    label: 'Tous',             count: counts.all },
-    { value: 'draft',  label: 'Brouillons',        count: counts.draft },
-    { value: 'ready',  label: 'Prêts',             count: counts.ready },
-    { value: 'sent',   label: 'Envoyés',            count: counts.sent },
-    { value: 'failed', label: 'Échoués',            count: counts.failed },
+    { value: 'all',   label: 'Tous',       count: counts.all },
+    { value: 'draft', label: 'Brouillons', count: counts.draft },
+    { value: 'ready', label: 'Validés',    count: counts.ready },
   ]
 
   return (
@@ -650,90 +793,134 @@ export function ProspectionBrouillons() {
       title="Brouillons"
       actions={
         <div className="flex items-center gap-2">
+          {/* Statut Gmail */}
+          <div className={cn(
+            'hidden sm:flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg border',
+            isGmailConnected
+              ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+              : 'bg-gray-50 text-gray-500 border-gray-200',
+          )}>
+            <span className={cn('h-1.5 w-1.5 rounded-full', isGmailConnected ? 'bg-emerald-500' : 'bg-gray-400')} />
+            {isGmailConnected ? 'Gmail connecté' : 'Gmail non connecté'}
+          </div>
+
+          <Button
+            variant={showHistory ? 'primary' : 'outline'}
+            size="sm"
+            onClick={() => setShowHistory(h => !h)}
+          >
+            <History className="h-3.5 w-3.5" />
+            Historique
+            {(counts.sent + counts.failed) > 0 && (
+              <span className="ml-1 bg-white/30 text-inherit text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                {counts.sent + counts.failed}
+              </span>
+            )}
+          </Button>
+
           <Button variant="outline" size="sm" onClick={() => refetch()} disabled={isFetching}>
             <RefreshCw className={cn('h-3.5 w-3.5', isFetching && 'animate-spin')} />
           </Button>
-          <Button size="sm" onClick={() => setShowNew(true)}>
-            <Plus className="h-3.5 w-3.5" /> Nouveau brouillon
-          </Button>
+
+          {!showHistory && (
+            <Button size="sm" onClick={() => setShowNew(true)}>
+              <Plus className="h-3.5 w-3.5" /> Nouveau brouillon
+            </Button>
+          )}
         </div>
       }
     >
-
       {/* ── STATS ──────────────────────────────────────────────────────────── */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
         <Card>
-          <p className="text-xs text-gray-500 mb-1">Total</p>
+          <p className="text-xs text-gray-500 mb-1">Brouillons actifs</p>
           <p className="text-2xl font-bold text-gray-900">{counts.all}</p>
-          <p className="text-xs text-gray-400 mt-1">brouillons</p>
-        </Card>
-        <Card>
-          <div className="flex items-center gap-1.5 mb-1">
-            <span className="h-2 w-2 rounded-full bg-gray-400" />
-            <p className="text-xs text-gray-500">Brouillons</p>
-          </div>
-          <p className="text-2xl font-bold text-gray-700">{counts.draft}</p>
+          <p className="text-xs text-gray-400 mt-1">en cours</p>
         </Card>
         <Card>
           <div className="flex items-center gap-1.5 mb-1">
             <span className="h-2 w-2 rounded-full bg-emerald-500" />
-            <p className="text-xs text-gray-500">Prêts</p>
+            <p className="text-xs text-gray-500">Validés</p>
           </div>
           <p className="text-2xl font-bold text-emerald-600">{counts.ready}</p>
+          <p className="text-xs text-gray-400 mt-1">prêts à envoyer</p>
         </Card>
         <Card>
           <div className="flex items-center gap-1.5 mb-1">
-            <Lock className="h-3.5 w-3.5 text-gray-300" />
-            <p className="text-xs text-gray-500">Envoi</p>
+            <span className="h-2 w-2 rounded-full bg-blue-500" />
+            <p className="text-xs text-gray-500">Envoyés</p>
           </div>
-          <p className="text-xs text-gray-400 mt-2 leading-relaxed">
-            {MAIL_STATUS.disabledReason}
-          </p>
+          <p className="text-2xl font-bold text-blue-600">{counts.sent}</p>
+          <p className="text-xs text-gray-400 mt-1">via Gmail</p>
+        </Card>
+        <Card>
+          <div className="flex items-center gap-1.5 mb-1">
+            <span className="h-2 w-2 rounded-full bg-red-500" />
+            <p className="text-xs text-gray-500">Erreurs</p>
+          </div>
+          <p className="text-2xl font-bold text-red-500">{counts.failed}</p>
+          <p className="text-xs text-gray-400 mt-1">à corriger</p>
         </Card>
       </div>
 
-      {/* ── FILTRES ────────────────────────────────────────────────────────── */}
-      <div className="flex flex-wrap items-center gap-3 mb-4">
-        <div className="flex bg-gray-100 rounded-lg p-0.5 gap-0.5">
-          {TABS.map(t => (
-            <button
-              key={t.value}
-              onClick={() => setTab(t.value)}
-              className={cn(
-                'text-xs font-medium px-2.5 py-1.5 rounded-md transition flex items-center gap-1.5',
-                tab === t.value ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700',
-              )}
-            >
-              {t.label}
-              {t.count > 0 && (
-                <span className={cn(
-                  'text-[10px] font-bold px-1.5 py-0.5 rounded-full leading-none',
-                  tab === t.value ? 'bg-brand-100 text-brand-700' : 'bg-gray-200 text-gray-500',
-                )}>
-                  {t.count}
-                </span>
-              )}
-            </button>
-          ))}
-        </div>
+      {/* ── FILTRES (mode brouillons) ───────────────────────────────────────── */}
+      {!showHistory && (
+        <div className="flex flex-wrap items-center gap-3 mb-4">
+          <div className="flex bg-gray-100 rounded-lg p-0.5 gap-0.5">
+            {TABS.map(t => (
+              <button
+                key={t.value}
+                onClick={() => setTab(t.value)}
+                className={cn(
+                  'text-xs font-medium px-2.5 py-1.5 rounded-md transition flex items-center gap-1.5',
+                  tab === t.value ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700',
+                )}
+              >
+                {t.label}
+                {t.count > 0 && (
+                  <span className={cn(
+                    'text-[10px] font-bold px-1.5 py-0.5 rounded-full leading-none',
+                    tab === t.value ? 'bg-brand-100 text-brand-700' : 'bg-gray-200 text-gray-500',
+                  )}>
+                    {t.count}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
 
-        <Input
-          placeholder="Rechercher…"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          leading={<Search className="h-3.5 w-3.5" />}
-          className="w-56"
-        />
-        {search && (
-          <button onClick={() => setSearch('')}
-            className="text-[11px] text-gray-400 hover:text-gray-600 flex items-center gap-0.5 transition">
-            <X className="h-3 w-3" /> Effacer
-          </button>
-        )}
-        <span className="ml-auto text-xs text-gray-400">
-          {filtered.length} email{filtered.length !== 1 ? 's' : ''}
-        </span>
-      </div>
+          <Input
+            placeholder="Rechercher…"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            leading={<Search className="h-3.5 w-3.5" />}
+            className="w-56"
+          />
+          {search && (
+            <button onClick={() => setSearch('')} className="text-[11px] text-gray-400 hover:text-gray-600 flex items-center gap-0.5 transition">
+              <X className="h-3 w-3" /> Effacer
+            </button>
+          )}
+          <span className="ml-auto text-xs text-gray-400">{filtered.length} email{filtered.length !== 1 ? 's' : ''}</span>
+        </div>
+      )}
+
+      {/* ── TITRE HISTORIQUE ────────────────────────────────────────────────── */}
+      {showHistory && (
+        <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center gap-2">
+            <History className="h-4 w-4 text-gray-400" />
+            <span className="text-sm font-semibold text-gray-700">Historique des emails</span>
+          </div>
+          <Input
+            placeholder="Rechercher…"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            leading={<Search className="h-3.5 w-3.5" />}
+            className="w-56 ml-auto"
+          />
+        </div>
+      )}
 
       {/* ── LISTE ──────────────────────────────────────────────────────────── */}
       {isLoading ? (
@@ -744,20 +931,38 @@ export function ProspectionBrouillons() {
         <Card>
           <div className="flex flex-col items-center justify-center py-12 gap-4">
             <div className="h-12 w-12 rounded-2xl bg-gray-50 flex items-center justify-center">
-              <FilePen className="h-6 w-6 text-gray-300" />
+              {showHistory
+                ? <History className="h-6 w-6 text-gray-300" />
+                : <FilePen className="h-6 w-6 text-gray-300" />
+              }
             </div>
             <div className="text-center">
-              <p className="text-sm font-medium text-gray-500">Aucun brouillon</p>
+              <p className="text-sm font-medium text-gray-500">
+                {showHistory ? 'Aucun email dans l\'historique' : 'Aucun brouillon'}
+              </p>
               <p className="text-xs text-gray-400 mt-1">
-                {tab !== 'all' ? 'Aucun email dans cette catégorie' : 'Créez votre premier brouillon'}
+                {showHistory
+                  ? 'Les emails envoyés et les erreurs apparaîtront ici'
+                  : 'Créez votre premier brouillon pour commencer'
+                }
               </p>
             </div>
-            {tab === 'all' && (
+            {!showHistory && (
               <Button size="sm" onClick={() => setShowNew(true)}>
                 <Plus className="h-3.5 w-3.5" /> Nouveau brouillon
               </Button>
             )}
           </div>
+        </Card>
+      ) : showHistory ? (
+        <Card padding={false} className="overflow-hidden">
+          {filtered.map(d => (
+            <HistoryRow
+              key={d.id}
+              draft={d}
+              onClick={() => setSelected(d)}
+            />
+          ))}
         </Card>
       ) : (
         <Card padding={false} className="divide-y divide-gray-50 overflow-hidden">
@@ -773,7 +978,7 @@ export function ProspectionBrouillons() {
         </Card>
       )}
 
-      {/* ── PANEL ──────────────────────────────────────────────────────────── */}
+      {/* ── PANEL DÉTAIL ───────────────────────────────────────────────────── */}
       {selected && (
         <DraftPanel
           draft={selected}
@@ -781,6 +986,7 @@ export function ProspectionBrouillons() {
           onSave={handleSave}
           onSetStatus={handleSetStatus}
           onDelete={async () => { setConfirmDelete(selected) }}
+          isGmailConnected={isGmailConnected}
         />
       )}
 
@@ -808,9 +1014,7 @@ export function ProspectionBrouillons() {
       >
         {confirmDelete && (
           <div className="space-y-3">
-            <p className="text-sm text-gray-600">
-              Ce brouillon sera supprimé définitivement.
-            </p>
+            <p className="text-sm text-gray-600">Ce brouillon sera supprimé définitivement.</p>
             <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
               <p className="text-xs font-semibold text-gray-700 truncate">{confirmDelete.subject}</p>
               <p className="text-xs text-gray-400 mt-0.5">
