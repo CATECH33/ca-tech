@@ -27,9 +27,11 @@ import { ProspectionProspects } from './pages/prospection/ProspectionProspects'
 import { ProspectionRecherche } from './pages/prospection/ProspectionRecherche'
 import { ProspectionQualification } from './pages/prospection/ProspectionQualification'
 import { ProspectionBrouillons } from './pages/prospection/ProspectionBrouillons'
+import { ProspectionCampagnes } from './pages/prospection/ProspectionCampagnes'
 import { ProspectionRelances } from './pages/prospection/ProspectionRelances'
 import { ProspectionStatistiques } from './pages/prospection/ProspectionStatistiques'
 import { ProspectionParametres } from './pages/prospection/ProspectionParametres'
+import { GoogleOAuthCallback } from './pages/GoogleOAuthCallback'
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { staleTime: 5 * 60 * 1000, retry: 1 } },
@@ -63,9 +65,11 @@ function ProtectedApp() {
       <Route path="/prospection/recherche" element={<ProtectedRoute><ProspectionRecherche /></ProtectedRoute>} />
       <Route path="/prospection/qualification" element={<ProtectedRoute><ProspectionQualification /></ProtectedRoute>} />
       <Route path="/prospection/brouillons" element={<ProtectedRoute><ProspectionBrouillons /></ProtectedRoute>} />
+      <Route path="/prospection/campagnes" element={<ProtectedRoute><ProspectionCampagnes /></ProtectedRoute>} />
       <Route path="/prospection/relances" element={<ProtectedRoute><ProspectionRelances /></ProtectedRoute>} />
       <Route path="/prospection/statistiques" element={<ProtectedRoute><ProspectionStatistiques /></ProtectedRoute>} />
       <Route path="/prospection/config" element={<ProtectedRoute><ProspectionParametres /></ProtectedRoute>} />
+      <Route path="/auth/google/callback" element={<GoogleOAuthCallback />} />
     </Routes>
   )
 }

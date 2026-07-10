@@ -3,6 +3,7 @@ import {
   User, Building2, Receipt, Bell, Palette, Shield,
   Check, Eye, EyeOff, AlertTriangle, CreditCard,
   Clock, Monitor, Smartphone, LogOut, Mail, Send, MessageCircle,
+  Globe,
 } from 'lucide-react'
 import { Layout } from '@/components/layout/Layout'
 import { Card } from '@/components/ui/Card'
@@ -12,6 +13,8 @@ import { Avatar } from '@/components/ui/Avatar'
 import { supabase } from '@/lib/supabase'
 import { cn } from '@/lib/utils'
 import { useNotificationSettings, useUpdateNotificationChannel } from '@/hooks/useNotifications'
+import { useGoogleIntegration, type GoogleIntegrationRow } from '@/hooks/useGoogleIntegration'
+import { isGoogleConfigured, parseScopeLabels } from '@/lib/googleOAuth'
 
 // ─── Types & storage ──────────────────────────────────────────────────────────
 
@@ -40,7 +43,7 @@ interface Settings {
   }
 }
 
-type Tab = 'profil' | 'agence' | 'facturation' | 'notifications' | 'apparence' | 'securite'
+type Tab = 'profil' | 'agence' | 'facturation' | 'notifications' | 'apparence' | 'securite' | 'integrations'
 type NotifKey = keyof Settings['notifications']
 
 const STORAGE_KEY = 'catech_settings'
@@ -99,6 +102,7 @@ const TABS: { id: Tab; label: string; icon: React.ElementType }[] = [
   { id: 'notifications',  label: 'Notifications',  icon: Bell },
   { id: 'apparence',      label: 'Apparence',      icon: Palette },
   { id: 'securite',       label: 'Sécurité',       icon: Shield },
+  { id: 'integrations',   label: 'Intégrations',   icon: Globe },
 ]
 
 const NOTIF_ITEMS: { key: NotifKey; label: string; desc: string; icon: React.ElementType; color: string }[] = [
@@ -162,6 +166,175 @@ function SectionHeader({ title, desc }: { title: string; desc: string }) {
   )
 }
 
+// ─── Google Workspace card ────────────────────────────────────────────────────
+
+function GoogleWorkspaceCard({
+  integration,
+  isConnected,
+  isLoading,
+  connecting,
+  disconnecting,
+  error,
+  onClearError,
+  onConnect,
+  onDisconnect,
+}: {
+  integration: GoogleIntegrationRow | null
+  isConnected: boolean
+  isLoading: boolean
+  connecting: boolean
+  disconnecting: boolean
+  error: string | null
+  onClearError: () => void
+  onConnect: () => void
+  onDisconnect: () => void
+}) {
+  const scopeLabels = integration ? parseScopeLabels(integration.scope) : []
+  const connectedSince = integration
+    ? new Date(integration.connected_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+    : ''
+
+  return (
+    <Card>
+      <SectionHeader
+        title="Intégrations"
+        desc="Connectez des services externes à votre espace de travail CA-TECH"
+      />
+
+      {!isGoogleConfigured() && (
+        <div className="mb-5 flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl p-4">
+          <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
+          <div className="text-sm">
+            <p className="font-semibold text-amber-800 mb-1">Configuration requise</p>
+            <p className="text-amber-700 mb-2">
+              Ajoutez votre Google Client ID dans{' '}
+              <code className="bg-amber-100 px-1 py-0.5 rounded text-xs font-mono">.env.local</code> :
+            </p>
+            <code className="block bg-amber-100 text-amber-900 text-xs font-mono px-3 py-2 rounded-lg">
+              VITE_GOOGLE_CLIENT_ID=votre_client_id
+            </code>
+            <p className="text-amber-600 text-xs mt-2">
+              Créez vos identifiants OAuth dans la{' '}
+              <strong>Google Cloud Console</strong> → APIs &amp; Services → Identifiants.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Google Workspace row */}
+      <div className="border border-gray-200 rounded-xl p-5">
+        <div className="flex items-start gap-4">
+          {/* G logo */}
+          <div
+            className="h-10 w-10 rounded-xl shrink-0 flex items-center justify-center text-white text-base font-bold shadow-sm"
+            style={{ background: 'linear-gradient(135deg, #4285f4 0%, #34a853 50%, #fbbc05 75%, #ea4335 100%)' }}
+          >
+            G
+          </div>
+
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+              <div>
+                <p className="text-sm font-semibold text-gray-900">Google Workspace</p>
+                <p className="text-xs text-gray-400 mt-0.5">Gmail · Agenda · Drive</p>
+              </div>
+
+              {/* Status indicator */}
+              {isLoading ? (
+                <span className="text-xs text-gray-400">Chargement…</span>
+              ) : isConnected ? (
+                <span className="flex items-center gap-1.5 text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 inline-block" />
+                  Connecté
+                </span>
+              ) : (
+                <span className="flex items-center gap-1.5 text-xs font-medium text-red-600 bg-red-50 border border-red-200 px-2.5 py-1 rounded-full">
+                  <span className="h-1.5 w-1.5 rounded-full bg-red-500 inline-block" />
+                  Non connecté
+                </span>
+              )}
+            </div>
+
+            {/* Connected details */}
+            {isConnected && integration && (
+              <div className="mt-3 space-y-2">
+                <p className="text-xs text-gray-600">
+                  <span className="font-medium text-gray-800">{integration.email}</span>
+                  {' · '}Connecté le {connectedSince}
+                </p>
+                {scopeLabels.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5">
+                    {scopeLabels.map(label => (
+                      <span
+                        key={label}
+                        className="text-xs bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-full font-medium"
+                      >
+                        {label}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Not connected description */}
+            {!isConnected && !isLoading && (
+              <p className="text-xs text-gray-500 mt-2">
+                Connectez votre compte Google pour activer l'envoi d'emails via Gmail,
+                la synchronisation de l'agenda et l'accès aux fichiers Drive.
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Error */}
+        {error && (
+          <div className="mt-3 flex items-start gap-2 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+            <AlertTriangle className="h-3.5 w-3.5 text-red-500 shrink-0 mt-0.5" />
+            <p className="text-xs text-red-700 flex-1">{error}</p>
+            <button onClick={onClearError} className="text-red-400 hover:text-red-600 shrink-0">✕</button>
+          </div>
+        )}
+
+        {/* Actions */}
+        <div className="mt-4 flex justify-end">
+          {isConnected ? (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onDisconnect}
+              loading={disconnecting}
+              className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+            >
+              Déconnecter
+            </Button>
+          ) : (
+            <Button
+              size="sm"
+              onClick={onConnect}
+              loading={connecting}
+              disabled={!isGoogleConfigured()}
+            >
+              Connecter Google
+            </Button>
+          )}
+        </div>
+      </div>
+
+      {/* Setup guide */}
+      {isGoogleConfigured() && !isConnected && (
+        <div className="mt-4 bg-gray-50 rounded-xl p-4 text-xs text-gray-500 space-y-1">
+          <p className="font-medium text-gray-700 mb-2">Configuration dans Google Cloud Console :</p>
+          <p>1. Créez un projet et activez les APIs : Gmail, Calendar, Drive</p>
+          <p>2. Identifiants → Créer → ID client OAuth 2.0 → Application Web</p>
+          <p>3. URI de redirection autorisés : <code className="bg-white border border-gray-200 px-1 py-0.5 rounded font-mono">{window.location.origin}/manager/auth/google/callback</code></p>
+          <p>4. Ajoutez <code className="bg-white border border-gray-200 px-1 py-0.5 rounded font-mono">GOOGLE_CLIENT_ID</code> et <code className="bg-white border border-gray-200 px-1 py-0.5 rounded font-mono">GOOGLE_CLIENT_SECRET</code> dans les secrets Supabase</p>
+        </div>
+      )}
+    </Card>
+  )
+}
+
 // ─── Main component ───────────────────────────────────────────────────────────
 
 const CHANNEL_META: Record<string, { label: string; desc: string; icon: React.ElementType; color: string }> = {
@@ -177,6 +350,18 @@ export function Parametres() {
 
   const { data: channelSettings = [] } = useNotificationSettings()
   const updateChannel = useUpdateNotificationChannel()
+
+  const {
+    integration: googleIntegration,
+    isConnected: googleConnected,
+    isLoading: googleLoading,
+    connecting: googleConnecting,
+    disconnecting: googleDisconnecting,
+    error: googleError,
+    clearError: clearGoogleError,
+    connect: connectGoogle,
+    disconnect: disconnectGoogle,
+  } = useGoogleIntegration()
 
   const [pw, setPw] = useState({ current: '', next: '', confirm: '' })
   const [showPw, setShowPw] = useState(false)
@@ -619,6 +804,21 @@ export function Parametres() {
                 </div>
               </Card>
             </>
+          )}
+
+          {/* INTÉGRATIONS */}
+          {tab === 'integrations' && (
+            <GoogleWorkspaceCard
+              integration={googleIntegration}
+              isConnected={googleConnected}
+              isLoading={googleLoading}
+              connecting={googleConnecting}
+              disconnecting={googleDisconnecting}
+              error={googleError}
+              onClearError={clearGoogleError}
+              onConnect={connectGoogle}
+              onDisconnect={disconnectGoogle}
+            />
           )}
 
         </div>

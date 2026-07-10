@@ -5,7 +5,7 @@ import {
   CheckSquare, Briefcase, CreditCard, Image, MessageSquare, Headphones,
   Settings, ChevronLeft, ChevronRight, Zap, Calendar, Bot, Bell, Paperclip,
   Target, UsersRound, Search, Sparkles, FilePen, BellRing, BarChart3,
-  SlidersHorizontal, ChevronDown,
+  SlidersHorizontal, ChevronDown, Layers,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -41,6 +41,7 @@ const prospectionItems: NavItem[] = [
   { label: 'Recherche',         icon: Search,            to: '/prospection/recherche' },
   { label: 'Qualification IA',  icon: Sparkles,          to: '/prospection/qualification' },
   { label: 'Brouillons',        icon: FilePen,           to: '/prospection/brouillons' },
+  { label: 'Campagnes',         icon: Layers,            to: '/prospection/campagnes' },
   { label: 'Relances',          icon: BellRing,          to: '/prospection/relances' },
   { label: 'Statistiques',      icon: BarChart3,         to: '/prospection/statistiques' },
   { label: 'Paramètres',        icon: SlidersHorizontal, to: '/prospection/config' },
