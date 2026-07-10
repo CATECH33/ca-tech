@@ -282,3 +282,111 @@ export interface Notification {
   lu: boolean
   lien?: string
 }
+
+// ── Prospection IA ────────────────────────────────────────────────────────────
+
+export type ProspectStatus =
+  | 'new' | 'researching' | 'qualified' | 'contacted'
+  | 'responded' | 'meeting' | 'converted' | 'disqualified'
+
+export type ProspectSource =
+  | 'manual' | 'linkedin' | 'search' | 'referral' | 'import' | 'other'
+
+export type ProspectTaskStatus = 'pending' | 'in_progress' | 'done' | 'cancelled'
+export type ProspectTaskPriority = 'low' | 'normal' | 'high' | 'urgent'
+
+export type EmailDraftStatus = 'draft' | 'ready' | 'sent' | 'failed'
+export type EmailDraftTone = 'formal' | 'friendly' | 'direct' | 'professional'
+
+export type ProspectActivityType =
+  | 'email_sent' | 'email_opened' | 'email_replied' | 'call' | 'meeting'
+  | 'note_added' | 'status_changed' | 'score_updated' | 'task_completed' | 'contacted'
+
+export interface Prospect {
+  id: string
+  created_at: string
+  updated_at: string
+  company_name: string
+  website?: string
+  industry?: string
+  company_size?: string
+  country?: string
+  city?: string
+  status: ProspectStatus
+  score: number
+  score_reasons: Record<string, unknown>
+  source: ProspectSource
+  linkedin_url?: string
+  converted_to_lead_id?: string
+  tags: string[]
+  metadata: Record<string, unknown>
+  created_by?: string
+  // joins
+  contacts?: ProspectContact[]
+  activities?: ProspectActivity[]
+}
+
+export interface ProspectContact {
+  id: string
+  created_at: string
+  updated_at: string
+  prospect_id: string
+  first_name: string
+  last_name: string
+  email?: string
+  phone?: string
+  job_title?: string
+  linkedin_url?: string
+  is_primary: boolean
+}
+
+export interface ProspectNote {
+  id: string
+  created_at: string
+  updated_at: string
+  prospect_id: string
+  content: string
+  created_by?: string
+}
+
+export interface ProspectTask {
+  id: string
+  created_at: string
+  updated_at: string
+  prospect_id: string
+  title: string
+  description?: string
+  status: ProspectTaskStatus
+  priority: ProspectTaskPriority
+  due_at?: string
+  completed_at?: string
+  assigned_to?: string
+  created_by?: string
+}
+
+export interface EmailDraft {
+  id: string
+  created_at: string
+  updated_at: string
+  prospect_id: string
+  prospect_contact_id?: string
+  subject: string
+  body: string
+  status: EmailDraftStatus
+  tone: EmailDraftTone
+  sequence_step: number
+  sent_at?: string
+  ai_model?: string
+  metadata: Record<string, unknown>
+  created_by?: string
+}
+
+export interface ProspectActivity {
+  id: string
+  created_at: string
+  prospect_id: string
+  type: ProspectActivityType
+  description?: string
+  metadata: Record<string, unknown>
+  created_by?: string
+}
