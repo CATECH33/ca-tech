@@ -66,6 +66,15 @@ export function statusColor(status: string): string {
     resolu: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     ferme: 'bg-gray-50 text-gray-500 border-gray-200',
     critique: 'bg-red-50 text-red-700 border-red-200',
+    // Prospect statuses
+    new: 'bg-blue-50 text-blue-700 border-blue-200',
+    researching: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+    qualified: 'bg-violet-50 text-violet-700 border-violet-200',
+    contacted: 'bg-amber-50 text-amber-700 border-amber-200',
+    responded: 'bg-cyan-50 text-cyan-700 border-cyan-200',
+    meeting: 'bg-teal-50 text-teal-700 border-teal-200',
+    converted: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+    disqualified: 'bg-gray-50 text-gray-500 border-gray-200',
   }
   return map[status] ?? 'bg-gray-50 text-gray-600 border-gray-200'
 }
@@ -83,6 +92,10 @@ export function statusLabel(status: string): string {
     a_faire: 'À faire', bloque: 'Bloqué',
     basse: 'Basse', normale: 'Normale', haute: 'Haute', urgente: 'Urgente',
     ouvert: 'Ouvert', resolu: 'Résolu', ferme: 'Fermé', critique: 'Critique',
+    // Prospect statuses
+    new: 'Nouveau', researching: 'En recherche', qualified: 'Qualifié',
+    contacted: 'Contacté', responded: 'A répondu', meeting: 'RDV planifié',
+    converted: 'Converti', disqualified: 'Disqualifié',
   }
   return map[status] ?? status
 }
