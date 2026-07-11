@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { buildGoogleOAuthUrl } from '@/lib/googleOAuth'
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string
 const Q = ['google-integration'] as const
 
 /* ─── Types ──────────────────────────────────────────────────────────────── */
@@ -16,20 +17,24 @@ export interface GoogleIntegrationRow {
   expires_at: string | null
 }
 
-/* ─── Fetch ──────────────────────────────────────────────────────────────── */
+/* ─── Fetch (mode solo : pas besoin de session) ──────────────────────────── */
 
 async function fetchIntegration(): Promise<GoogleIntegrationRow | null> {
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return null
-
   const { data, error } = await supabase
     .from('google_integrations')
     .select('id, email, scope, connected_at, expires_at')
-    .eq('user_id', user.id)
+    .limit(1)
     .maybeSingle()
 
   if (error) throw error
   return data as GoogleIntegrationRow | null
+}
+
+/* ─── Auth token helper ──────────────────────────────────────────────────── */
+
+async function getAuthToken(): Promise<string> {
+  const { data: { session } } = await supabase.auth.getSession()
+  return session?.access_token ?? SUPABASE_ANON_KEY
 }
 
 /* ─── Hook ───────────────────────────────────────────────────────────────── */
@@ -41,16 +46,16 @@ export function useGoogleIntegration() {
     queryFn: fetchIntegration,
   })
 
-  const [connecting, setConnecting] = useState(false)
+  const [connecting, setConnecting]       = useState(false)
   const [disconnecting, setDisconnecting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError]                 = useState<string | null>(null)
 
   const connect = () => {
     setConnecting(true)
     setError(null)
 
     const left = Math.max(0, Math.round((window.screen.width - 520) / 2))
-    const top = Math.max(0, Math.round((window.screen.height - 650) / 2))
+    const top  = Math.max(0, Math.round((window.screen.height - 650) / 2))
 
     const popup = window.open(
       buildGoogleOAuthUrl(),
@@ -74,14 +79,14 @@ export function useGoogleIntegration() {
       }
 
       try {
-        const { data: { session } } = await supabase.auth.getSession()
-        if (!session) throw new Error('Session expirée — reconnectez-vous')
+        const token = await getAuthToken()
 
         const res = await fetch(`${SUPABASE_URL}/functions/v1/google-oauth`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${session.access_token}`,
+            'Authorization': `Bearer ${token}`,
+            'apikey': SUPABASE_ANON_KEY,
           },
           body: JSON.stringify({
             code: event.data.code,
@@ -115,12 +120,14 @@ export function useGoogleIntegration() {
     setDisconnecting(true)
     setError(null)
     try {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) throw new Error('Session expirée')
+      const token = await getAuthToken()
 
       const res = await fetch(`${SUPABASE_URL}/functions/v1/google-oauth`, {
         method: 'DELETE',
-        headers: { Authorization: `Bearer ${session.access_token}` },
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'apikey': SUPABASE_ANON_KEY,
+        },
       })
 
       if (!res.ok) {
