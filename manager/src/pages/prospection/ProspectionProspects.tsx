@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import {
   Plus, Search, X, LayoutGrid, List, Download, ExternalLink,
   Building2, MapPin, Globe, Phone, Mail, User, ChevronUp, ChevronDown,
@@ -596,6 +596,8 @@ function ProspectCalendarSection({ prospect }: { prospect: ProspectRow }) {
   const syncEvents                           = useSyncCalendarEvents()
   const [modalOpen, setModalOpen]            = useState(false)
   const [defaultType, setDefaultType]        = useState<CalendarEventType>('rdv')
+
+  useEffect(() => { syncEvents.mutate(prospect.id) }, [prospect.id])
 
   const upcoming = [...events]
     .filter(e => e.status !== 'cancelled')
