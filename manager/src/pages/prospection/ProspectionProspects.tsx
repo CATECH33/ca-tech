@@ -3,8 +3,13 @@ import {
   Plus, Search, X, LayoutGrid, List, Download, ExternalLink,
   Building2, MapPin, Globe, Phone, Mail, User, ChevronUp, ChevronDown,
   ChevronLeft, ChevronRight as ChevronRightIcon, Sparkles, Trash2,
-  Link2, RefreshCw, SlidersHorizontal,
+  Link2, RefreshCw, SlidersHorizontal, Calendar, Clock, Video,
+  CheckCircle2, AlertCircle, CalendarPlus,
 } from 'lucide-react'
+import {
+  useCalendarEvents, useCreateCalendarEvent, useDeleteCalendarEvent, useSyncCalendarEvents,
+  type CalendarEventType, type CreateCalendarEventInput,
+} from '@/hooks/useCalendarEvents'
 import { Layout } from '@/components/layout/Layout'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
@@ -429,6 +434,255 @@ function ProspectCard({ prospect, onOpen }: { prospect: ProspectRow; onOpen: () 
 
 type FicheForm = CreateProspectInput
 
+/* ─── GOOGLE AGENDA ───────────────────────────────────────────────────────── */
+
+const EVENT_CFG: Record<CalendarEventType, { label: string; color: string; Icon: React.ElementType }> = {
+  rdv:     { label: 'RDV',     color: 'bg-blue-50 text-blue-700 border-blue-200',       Icon: Calendar },
+  relance: { label: 'Relance', color: 'bg-amber-50 text-amber-700 border-amber-200',    Icon: Clock },
+  demo:    { label: 'Démo',    color: 'bg-purple-50 text-purple-700 border-purple-200', Icon: Video },
+}
+
+function CreateCalendarEventModal({
+  prospect, defaultType, onClose, creating,
+  onCreate,
+}: {
+  prospect: ProspectRow
+  defaultType: CalendarEventType
+  onClose: () => void
+  creating: boolean
+  onCreate: (data: CreateCalendarEventInput) => Promise<void>
+}) {
+  const contact = getPrimaryContact(prospect)
+  const [type, setType]             = useState<CalendarEventType>(defaultType)
+  const [title, setTitle]           = useState(`${EVENT_CFG[defaultType].label} — ${prospect.company_name}`)
+  const [description, setDesc]      = useState('')
+  const [location, setLocation]     = useState('')
+  const [date, setDate]             = useState(new Date().toISOString().slice(0, 10))
+  const [time, setTime]             = useState('09:00')
+  const [durMode, setDurMode]       = useState<'30'|'60'|'120'|'custom'>('60')
+  const [customDur, setCustomDur]   = useState(60)
+  const [error, setError]           = useState('')
+
+  const handleType = (t: CalendarEventType) => {
+    setType(t)
+    setTitle(`${EVENT_CFG[t].label} — ${prospect.company_name}`)
+  }
+
+  const handleCreate = async () => {
+    if (!title || !date || !time) return
+    setError('')
+    const start = new Date(`${date}T${time}:00`)
+    const dur   = durMode === 'custom' ? customDur : Number(durMode)
+    const end   = new Date(start.getTime() + dur * 60_000)
+    try {
+      await onCreate({ prospect_id: prospect.id, event_type: type, title, description: description || undefined, location: location || undefined, start_at: start.toISOString(), end_at: end.toISOString() })
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Erreur inattendue')
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={e => e.target === e.currentTarget && onClose()}>
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" onClick={onClose} />
+      <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-gray-100 p-5 z-10">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-base font-semibold text-gray-900 flex items-center gap-2">
+            <CalendarPlus className="h-4 w-4 text-brand-500" /> Nouvel événement
+          </h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition"><X className="h-4 w-4" /></button>
+        </div>
+
+        {/* Type */}
+        <div className="flex gap-2 mb-4">
+          {(Object.entries(EVENT_CFG) as [CalendarEventType, typeof EVENT_CFG[CalendarEventType]][]).map(([t, cfg]) => (
+            <button key={t} onClick={() => handleType(t)}
+              className={cn('flex-1 flex flex-col items-center gap-1 py-2.5 rounded-xl border text-[11px] font-medium transition',
+                type === t ? cfg.color + ' shadow-sm' : 'border-gray-200 text-gray-500 hover:bg-gray-50')}>
+              <cfg.Icon className="h-4 w-4" />{cfg.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="space-y-3">
+          <div>
+            <label className="text-xs font-medium text-gray-700 mb-1 block">Titre *</label>
+            <input value={title} onChange={e => setTitle(e.target.value)}
+              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-400/30 focus:border-brand-400 transition" />
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="text-xs font-medium text-gray-700 mb-1 block">Date *</label>
+              <input type="date" value={date} onChange={e => setDate(e.target.value)}
+                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-400/30 focus:border-brand-400 transition" />
+            </div>
+            <div>
+              <label className="text-xs font-medium text-gray-700 mb-1 block">Heure *</label>
+              <input type="time" value={time} onChange={e => setTime(e.target.value)}
+                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-400/30 focus:border-brand-400 transition" />
+            </div>
+          </div>
+
+          <div>
+            <label className="text-xs font-medium text-gray-700 mb-1 block">Durée</label>
+            <div className="flex gap-1.5">
+              {(['30','60','120','custom'] as const).map(d => (
+                <button key={d} onClick={() => setDurMode(d)}
+                  className={cn('text-[11px] px-2.5 py-1.5 rounded-lg border transition',
+                    durMode === d ? 'bg-brand-50 border-brand-300 text-brand-700' : 'border-gray-200 text-gray-500 hover:bg-gray-50')}>
+                  {d === '30' ? '30 min' : d === '60' ? '1h' : d === '120' ? '2h' : 'Autre'}
+                </button>
+              ))}
+            </div>
+            {durMode === 'custom' && (
+              <div className="mt-2 flex items-center gap-2">
+                <input type="number" min={15} max={480} value={customDur}
+                  onChange={e => setCustomDur(Number(e.target.value))}
+                  className="w-20 text-sm border border-gray-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-400/30 focus:border-brand-400 transition" />
+                <span className="text-xs text-gray-500">minutes</span>
+              </div>
+            )}
+          </div>
+
+          <div>
+            <label className="text-xs font-medium text-gray-700 mb-1 block">Lieu</label>
+            <input value={location} onChange={e => setLocation(e.target.value)}
+              placeholder="Paris, Visioconférence, Zoom…"
+              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-400/30 focus:border-brand-400 transition" />
+          </div>
+
+          <div>
+            <label className="text-xs font-medium text-gray-700 mb-1 block">Notes</label>
+            <textarea value={description} onChange={e => setDesc(e.target.value)} rows={2}
+              placeholder="Ordre du jour, contexte…"
+              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-400/30 focus:border-brand-400 transition resize-none" />
+          </div>
+
+          {contact && (
+            <div className="bg-gray-50 rounded-lg p-2.5 text-xs text-gray-500 flex items-center gap-2">
+              <User className="h-3 w-3 text-gray-400 shrink-0" />
+              <span>{contact.first_name} {contact.last_name}{contact.email ? ` · ${contact.email}` : ''}</span>
+            </div>
+          )}
+        </div>
+
+        {error && (
+          <div className="mt-3 flex items-center gap-2 text-xs text-red-600 bg-red-50 rounded-lg p-2.5">
+            <AlertCircle className="h-3.5 w-3.5 shrink-0" /> {error}
+          </div>
+        )}
+
+        <div className="flex gap-2 mt-4">
+          <button onClick={onClose}
+            className="flex-1 text-sm border border-gray-200 rounded-xl py-2 text-gray-600 hover:bg-gray-50 transition">
+            Annuler
+          </button>
+          <button onClick={handleCreate} disabled={creating || !title || !date || !time}
+            className="flex-1 text-sm bg-brand-600 text-white rounded-xl py-2 font-medium hover:bg-brand-700 disabled:opacity-50 transition flex items-center justify-center gap-1.5">
+            {creating
+              ? <><RefreshCw className="h-3.5 w-3.5 animate-spin" /> Création…</>
+              : <><Calendar className="h-3.5 w-3.5" /> Créer dans Google Agenda</>}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ProspectCalendarSection({ prospect }: { prospect: ProspectRow }) {
+  const { data: events = [], isLoading }     = useCalendarEvents(prospect.id)
+  const createEvent                          = useCreateCalendarEvent()
+  const deleteEvent                          = useDeleteCalendarEvent()
+  const syncEvents                           = useSyncCalendarEvents()
+  const [modalOpen, setModalOpen]            = useState(false)
+  const [defaultType, setDefaultType]        = useState<CalendarEventType>('rdv')
+
+  const upcoming = [...events]
+    .filter(e => e.status !== 'cancelled')
+    .sort((a, b) => new Date(a.start_at).getTime() - new Date(b.start_at).getTime())
+
+  const openModal = (t: CalendarEventType) => { setDefaultType(t); setModalOpen(true) }
+
+  return (
+    <>
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">Google Agenda</p>
+          <button onClick={() => syncEvents.mutate(prospect.id)} disabled={syncEvents.isPending}
+            className="text-[11px] text-gray-400 hover:text-brand-500 flex items-center gap-0.5 transition">
+            <RefreshCw className={cn('h-3 w-3', syncEvents.isPending && 'animate-spin')} /> Sync
+          </button>
+        </div>
+
+        {/* Boutons rapides */}
+        <div className="flex gap-1.5 mb-3">
+          {(Object.entries(EVENT_CFG) as [CalendarEventType, typeof EVENT_CFG[CalendarEventType]][]).map(([t, cfg]) => (
+            <button key={t} onClick={() => openModal(t)}
+              className={cn('flex items-center gap-1 text-[11px] font-medium px-2.5 py-1.5 rounded-lg border transition hover:opacity-80', cfg.color)}>
+              <cfg.Icon className="h-3 w-3" /> + {cfg.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Liste */}
+        {isLoading ? (
+          <p className="text-xs text-gray-400">Chargement…</p>
+        ) : upcoming.length === 0 ? (
+          <p className="text-xs text-gray-400 italic">Aucun événement planifié</p>
+        ) : (
+          <div className="space-y-2">
+            {upcoming.map(ev => {
+              const cfg = EVENT_CFG[ev.event_type]
+              const isPast = new Date(ev.start_at) < new Date()
+              return (
+                <div key={ev.id} className={cn('flex items-start gap-2.5 p-2.5 rounded-xl border', isPast ? 'bg-gray-50 border-gray-100 opacity-60' : 'bg-white border-gray-200')}>
+                  <div className={cn('p-1.5 rounded-lg shrink-0 border', cfg.color)}>
+                    <cfg.Icon className="h-3 w-3" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-medium text-gray-800 truncate">{ev.title}</p>
+                    <p className="text-[11px] text-gray-400 mt-0.5">
+                      {new Date(ev.start_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                      {' – '}
+                      {new Date(ev.end_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                    {ev.location && (
+                      <p className="text-[11px] text-gray-400 flex items-center gap-0.5 mt-0.5">
+                        <MapPin className="h-2.5 w-2.5" />{ev.location}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    {ev.google_event_id
+                      ? <CheckCircle2 className="h-3 w-3 text-emerald-500" title="Synchronisé" />
+                      : <AlertCircle className="h-3 w-3 text-gray-300" title="Non synchronisé" />}
+                    <button onClick={() => deleteEvent.mutate({ id: ev.id, googleEventId: ev.google_event_id, prospectId: prospect.id })}
+                      className="text-gray-300 hover:text-red-400 transition">
+                      <Trash2 className="h-3 w-3" />
+                    </button>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
+
+      {modalOpen && (
+        <CreateCalendarEventModal
+          prospect={prospect}
+          defaultType={defaultType}
+          creating={createEvent.isPending}
+          onCreate={async (data) => { await createEvent.mutateAsync(data); setModalOpen(false) }}
+          onClose={() => setModalOpen(false)}
+        />
+      )}
+    </>
+  )
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+
 function ProspectFiche({
   prospect, onClose, onSave, onDelete,
 }: {
@@ -674,6 +928,9 @@ function ProspectFiche({
               </div>
             </div>
           )}
+
+          {/* Calendrier */}
+          <ProspectCalendarSection prospect={prospect} />
 
           {/* Méta */}
           <div className="bg-gray-50 rounded-xl p-3 text-xs space-y-1 text-gray-500">
