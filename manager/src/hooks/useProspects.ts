@@ -83,11 +83,12 @@ export function useCreateProspect() {
       if (error) throw error
 
       // Créer automatiquement le dossier Google Drive (sans bloquer)
+      // 2e invalidation après création pour que la fiche affiche le lien Drive
       fetch(`${SUPABASE_URL}/functions/v1/google-drive`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` },
         body: JSON.stringify({ prospect_id: data.id, prospect_name: data.company_name }),
-      }).catch(() => { /* silencieux si Google non connecté */ })
+      }).then(() => qc.invalidateQueries({ queryKey: Q })).catch(() => { /* silencieux si Google non connecté */ })
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: Q }),
   })

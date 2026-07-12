@@ -1041,6 +1041,13 @@ export function ProspectionProspects() {
   const updateProspect = useUpdateProspect()
   const deleteProspect = useDeleteProspect()
 
+  // Sync fiche avec les données fraîches (ex: drive_folder_id mis à jour après création Drive)
+  useEffect(() => {
+    if (!fiche) return
+    const updated = prospects.find(p => p.id === fiche.id)
+    if (updated && updated !== fiche) setFiche(updated)
+  }, [prospects])
+
   /* Filtrage */
   const filtered = useMemo(() => {
     let list = prospects
