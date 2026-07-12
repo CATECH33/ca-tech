@@ -4,12 +4,13 @@ import {
   Building2, MapPin, Globe, Phone, Mail, User, ChevronUp, ChevronDown,
   ChevronLeft, ChevronRight as ChevronRightIcon, Sparkles, Trash2,
   Link2, RefreshCw, SlidersHorizontal, Calendar, Clock, Video,
-  CheckCircle2, AlertCircle, CalendarPlus,
+  CheckCircle2, AlertCircle, CalendarPlus, FolderOpen, FolderPlus,
 } from 'lucide-react'
 import {
   useCalendarEvents, useCreateCalendarEvent, useDeleteCalendarEvent, useSyncCalendarEvents,
   type CalendarEventType, type CreateCalendarEventInput,
 } from '@/hooks/useCalendarEvents'
+import { useCreateDriveFolder } from '@/hooks/useGoogleDrive'
 import { Layout } from '@/components/layout/Layout'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
@@ -683,6 +684,50 @@ function ProspectCalendarSection({ prospect }: { prospect: ProspectRow }) {
   )
 }
 
+/* ─── Google Drive ────────────────────────────────────────────────────────── */
+
+function ProspectDriveSection({ prospect }: { prospect: ProspectRow }) {
+  const createFolder = useCreateDriveFolder()
+
+  const handleCreate = () => {
+    createFolder.mutate({ prospect_id: prospect.id, prospect_name: prospect.company_name })
+  }
+
+  return (
+    <div>
+      <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-2">Google Drive</p>
+      {prospect.drive_folder_id ? (
+        <a
+          href={prospect.drive_folder_url ?? `https://drive.google.com/drive/folders/${prospect.drive_folder_id}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 text-xs px-3 py-2 bg-white border border-gray-100 rounded-lg hover:border-brand-300 hover:bg-brand-50 text-gray-700 transition group w-full"
+        >
+          <FolderOpen className="h-3.5 w-3.5 text-yellow-500 shrink-0" />
+          <span className="flex-1 truncate font-medium">{prospect.company_name}</span>
+          <ExternalLink className="h-3 w-3 text-gray-300 group-hover:text-brand-400 shrink-0" />
+        </a>
+      ) : (
+        <button
+          onClick={handleCreate}
+          disabled={createFolder.isPending}
+          className="flex items-center gap-2 text-xs px-3 py-2 bg-white border border-dashed border-gray-200 rounded-lg hover:border-brand-300 hover:bg-brand-50 text-gray-500 hover:text-brand-600 transition w-full disabled:opacity-50"
+        >
+          {createFolder.isPending
+            ? <><RefreshCw className="h-3.5 w-3.5 animate-spin shrink-0" /> Création en cours…</>
+            : <><FolderPlus className="h-3.5 w-3.5 shrink-0" /> Créer le dossier Drive</>}
+        </button>
+      )}
+      {createFolder.isError && (
+        <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+          <AlertCircle className="h-3 w-3 shrink-0" />
+          {(createFolder.error as Error).message}
+        </p>
+      )}
+    </div>
+  )
+}
+
 /* ─────────────────────────────────────────────────────────────────────────── */
 
 function ProspectFiche({
@@ -930,6 +975,9 @@ function ProspectFiche({
               </div>
             </div>
           )}
+
+          {/* Drive */}
+          <ProspectDriveSection prospect={prospect} />
 
           {/* Calendrier */}
           <ProspectCalendarSection prospect={prospect} />

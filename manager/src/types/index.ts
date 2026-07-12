@@ -321,6 +321,8 @@ export interface Prospect {
   tags: string[]
   metadata: Record<string, unknown>
   created_by?: string
+  drive_folder_id?: string | null
+  drive_folder_url?: string | null
   // joins
   contacts?: ProspectContact[]
   activities?: ProspectActivity[]

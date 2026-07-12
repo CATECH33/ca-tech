@@ -2,6 +2,9 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { Prospect, ProspectStatus, ProspectSource } from '@/types'
 
+const SUPABASE_URL  = import.meta.env.VITE_SUPABASE_URL  as string
+const SUPABASE_ANON = import.meta.env.VITE_SUPABASE_ANON_KEY as string
+
 export interface ProspectContact {
   id: string
   prospect_id: string
@@ -64,7 +67,7 @@ export function useCreateProspect() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async (input: CreateProspectInput) => {
-      const { error } = await supabase.from('prospects').insert({
+      const { data, error } = await supabase.from('prospects').insert({
         company_name: input.company_name,
         website: input.website || null,
         industry: input.industry || null,
@@ -76,8 +79,15 @@ export function useCreateProspect() {
         source: input.source ?? 'manual',
         linkedin_url: input.linkedin_url || null,
         tags: input.tags ?? [],
-      })
+      }).select('id, company_name').single()
       if (error) throw error
+
+      // Créer automatiquement le dossier Google Drive (sans bloquer)
+      fetch(`${SUPABASE_URL}/functions/v1/google-drive`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` },
+        body: JSON.stringify({ prospect_id: data.id, prospect_name: data.company_name }),
+      }).catch(() => { /* silencieux si Google non connecté */ })
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: Q }),
   })
