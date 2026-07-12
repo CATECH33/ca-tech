@@ -2,8 +2,10 @@ import { useState, useMemo, useEffect, useRef, useCallback } from 'react'
 import {
   Search, Send, FileText, Plus, Trash2, X, ArrowLeft,
   Edit, Copy, Check, Receipt, ChevronRight, Printer,
-  PenLine, Type, RotateCcw, Download, Paperclip,
+  PenLine, Type, RotateCcw, Download, Paperclip, Mail, Loader2,
 } from 'lucide-react'
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
 import { Layout } from '@/components/layout/Layout'
 import { Button } from '@/components/ui/Button'
 import { Input, Select, Textarea } from '@/components/ui/Input'
@@ -25,6 +27,7 @@ import {
 import { useClients } from '@/hooks/useClients'
 import { useServices } from '@/hooks/useServices'
 import type { Client, Devis as DevisType, DevisStatus, Service } from '@/types'
+import { useGmailSend } from '@/hooks/useGmailSend'
 
 /* ─── Types & constantes ────────────────────────────────────── */
 
@@ -332,6 +335,115 @@ function SignatureModal({ onSave, onClose }: { onSave: (sig: string) => void; on
   )
 }
 
+/* ─── SendByEmailModal ───────────────────────────────────────── */
+
+function SendByEmailModal({
+  devis,
+  onClose,
+  onSent,
+}: {
+  devis: DevisType
+  onClose: () => void
+  onSent: () => void
+}) {
+  const clientEmail = devis.client?.email ?? ''
+  const clientName = devis.client ? `${devis.client.prenom} ${devis.client.nom}` : ''
+
+  const defaultBody = [
+    `Bonjour ${devis.client?.prenom ?? ''},`,
+    ``,
+    `Veuillez trouver ci-dessous notre devis ${devis.numero} d'un montant total de ${new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(devis.total_ttc)}.`,
+    ``,
+    devis.date_expiration
+      ? `Ce devis est valable jusqu'au ${new Date(devis.date_expiration).toLocaleDateString('fr-FR')}.`
+      : '',
+    ``,
+    `N'hésitez pas à nous contacter pour toute question ou demande de modification.`,
+    ``,
+    `Cordialement,`,
+    `CA-TECH`,
+    `pemoustaskit@gmail.com`,
+  ].filter(l => l !== undefined).join('\n')
+
+  const [to, setTo] = useState(clientEmail)
+  const [subject, setSubject] = useState(`Devis ${devis.numero} — CA-TECH`)
+  const [body, setBody] = useState(defaultBody)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
+
+  const gmailSend = useGmailSend()
+
+  const handleSend = async () => {
+    if (!to) return
+    setError(null)
+    try {
+      await gmailSend.mutateAsync({ to, toName: clientName || undefined, subject, body })
+      setSuccess(true)
+      setTimeout(() => { onSent(); onClose() }, 1500)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Erreur inconnue')
+    }
+  }
+
+  return (
+    <Modal
+      open
+      onClose={onClose}
+      title="Envoyer le devis par email"
+      size="lg"
+      footer={
+        success ? (
+          <span className="inline-flex items-center gap-1.5 text-sm text-emerald-700 font-medium">
+            <Check className="h-4 w-4" />Email envoyé avec succès
+          </span>
+        ) : (
+          <>
+            <Button variant="outline" onClick={onClose} disabled={gmailSend.isPending}>Annuler</Button>
+            <Button onClick={handleSend} disabled={gmailSend.isPending || !to} className="gap-1.5">
+              {gmailSend.isPending
+                ? <><Loader2 className="h-3.5 w-3.5 animate-spin" />Envoi en cours…</>
+                : <><Send className="h-3.5 w-3.5" />Envoyer via Gmail</>
+              }
+            </Button>
+          </>
+        )
+      }
+    >
+      <div className="space-y-4">
+        {error && (
+          <div className="bg-red-50 border border-red-100 rounded-xl px-3 py-2 text-xs text-red-600">
+            {error}
+          </div>
+        )}
+        <Input
+          label="Destinataire"
+          type="email"
+          value={to}
+          onChange={e => setTo(e.target.value)}
+          placeholder="email@client.fr"
+        />
+        <Input
+          label="Objet"
+          value={subject}
+          onChange={e => setSubject(e.target.value)}
+        />
+        <div className="space-y-1">
+          <label className="text-xs font-medium text-gray-700">Message</label>
+          <textarea
+            value={body}
+            onChange={e => setBody(e.target.value)}
+            rows={10}
+            className="w-full text-sm px-3 py-2 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent resize-y font-mono"
+          />
+        </div>
+        <p className="text-[11px] text-gray-400">
+          L'email sera envoyé depuis votre compte Gmail connecté dans Intégrations.
+        </p>
+      </div>
+    </Modal>
+  )
+}
+
 /* ─── LignesEditor ───────────────────────────────────────────── */
 
 function LignesEditor({
@@ -530,11 +642,13 @@ function DevisFiche({
   isDuplicating: boolean
   isConverting: boolean
 }) {
-  const [editMode, setEditMode]         = useState(false)
-  const [showDelete, setShowDelete]           = useState(false)
-  const [showSignature, setShowSignature]     = useState(false)
-  const [convertedTo, setConvertedTo]         = useState<string | null>(null)
+  const [editMode, setEditMode]             = useState(false)
+  const [showDelete, setShowDelete]         = useState(false)
+  const [showSignature, setShowSignature]   = useState(false)
+  const [showSendEmail, setShowSendEmail]   = useState(false)
+  const [convertedTo, setConvertedTo]       = useState<string | null>(null)
   const [editAttachments, setEditAttachments] = useState<FileEntry[]>([])
+  const [pdfLoading, setPdfLoading]         = useState(false)
   const uploadDocsMutation = useUploadDocuments()
   const [form, setForm] = useState({
     client_id:   devis.client_id,
@@ -626,6 +740,40 @@ function DevisFiche({
     document.head.removeChild(style)
   }, [])
 
+  const handleDownloadPDF = useCallback(async () => {
+    const el = document.getElementById('devis-document')
+    if (!el) return
+    setPdfLoading(true)
+    try {
+      const canvas = await html2canvas(el, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+        logging: false,
+      })
+      const imgData = canvas.toDataURL('image/jpeg', 0.95)
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
+      const pdfW = pdf.internal.pageSize.getWidth()
+      const pdfH = (canvas.height * pdfW) / canvas.width
+      const pageH = pdf.internal.pageSize.getHeight()
+      let position = 0
+      if (pdfH <= pageH) {
+        pdf.addImage(imgData, 'JPEG', 0, 0, pdfW, pdfH)
+      } else {
+        let remaining = pdfH
+        while (remaining > 0) {
+          pdf.addImage(imgData, 'JPEG', 0, position, pdfW, pdfH)
+          remaining -= pageH
+          position -= pageH
+          if (remaining > 0) pdf.addPage()
+        }
+      }
+      pdf.save(`${devis.numero}.pdf`)
+    } finally {
+      setPdfLoading(false)
+    }
+  }, [devis.numero])
+
   const canEdit = devis.status === 'brouillon' || devis.status === 'envoye'
 
   return (
@@ -656,12 +804,15 @@ function DevisFiche({
 
         <div className="flex items-center gap-2 flex-wrap justify-end shrink-0">
           {devis.status === 'brouillon' && !editMode && (
-            <Button size="sm" onClick={() => onUpdateStatus('envoye')} disabled={isUpdating}>
-              <Send className="h-3.5 w-3.5" />Envoyer
+            <Button size="sm" onClick={() => setShowSendEmail(true)}>
+              <Send className="h-3.5 w-3.5" />Envoyer par email
             </Button>
           )}
           {devis.status === 'envoye' && !editMode && (
             <>
+              <Button size="sm" variant="ghost" onClick={() => setShowSendEmail(true)} title="Renvoyer">
+                <Mail className="h-3.5 w-3.5" />
+              </Button>
               <Button size="sm" variant="outline" onClick={() => onUpdateStatus('refuse')} disabled={isUpdating}>
                 <X className="h-3.5 w-3.5 text-red-400" />Refusé
               </Button>
@@ -682,8 +833,15 @@ function DevisFiche({
             </span>
           )}
 
-          <Button size="sm" variant="outline" onClick={handlePrint} title="Imprimer / PDF">
-            <Printer className="h-3.5 w-3.5" />PDF
+          <Button size="sm" variant="outline" onClick={handleDownloadPDF} disabled={pdfLoading} title="Télécharger PDF">
+            {pdfLoading
+              ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              : <Download className="h-3.5 w-3.5" />
+            }
+            PDF
+          </Button>
+          <Button size="sm" variant="ghost" onClick={handlePrint} title="Imprimer">
+            <Printer className="h-3.5 w-3.5" />
           </Button>
 
           {canEdit && !editMode && (
@@ -932,6 +1090,14 @@ function DevisFiche({
         <SignatureModal
           onSave={handleSaveSignature}
           onClose={() => setShowSignature(false)}
+        />
+      )}
+
+      {showSendEmail && (
+        <SendByEmailModal
+          devis={devis}
+          onClose={() => setShowSendEmail(false)}
+          onSent={() => onUpdateStatus('envoye')}
         />
       )}
     </div>
