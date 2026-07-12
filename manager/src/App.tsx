@@ -31,6 +31,7 @@ import { ProspectionCampagnes } from './pages/prospection/ProspectionCampagnes'
 import { ProspectionRelances } from './pages/prospection/ProspectionRelances'
 import { ProspectionStatistiques } from './pages/prospection/ProspectionStatistiques'
 import { ProspectionParametres } from './pages/prospection/ProspectionParametres'
+import { Integrations } from './pages/Integrations'
 import { GoogleOAuthCallback } from './pages/GoogleOAuthCallback'
 
 const queryClient = new QueryClient({
@@ -57,6 +58,7 @@ function ProtectedApp() {
       <Route path="/messages/*" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
       <Route path="/support/*" element={<ProtectedRoute><Support /></ProtectedRoute>} />
       <Route path="/parametres/*" element={<ProtectedRoute><Parametres /></ProtectedRoute>} />
+      <Route path="/integrations" element={<ProtectedRoute><Integrations /></ProtectedRoute>} />
       <Route path="/documents/*" element={<ProtectedRoute><Documents /></ProtectedRoute>} />
       <Route path="/loic/*" element={<ProtectedRoute><Loic /></ProtectedRoute>} />
       <Route path="/notifications/*" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />

@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/Badge'
 import { cn, formatDate } from '@/lib/utils'
 import { useSyncStatus, useSyncNow, type SyncAction, type SyncLog } from '@/hooks/useSheetsSync'
 import { useGoogleIntegration } from '@/hooks/useGoogleIntegration'
-import { buildGoogleOAuthUrl, hasSheetsScope } from '@/lib/googleOAuth'
+import { hasSheetsScope } from '@/lib/googleOAuth'
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -51,15 +51,14 @@ export function ProspectionParametres() {
   const [syncAction, setSyncAction] = useState<SyncAction>('sync')
   const [lastResult, setLastResult] = useState<{ success: boolean; msg: string } | null>(null)
 
-  const { data: googleIntegration } = useGoogleIntegration()
+  const { integration: googleIntegration, isConnected: isGoogleConnected, connect: connectGoogle } = useGoogleIntegration()
   const { data: syncData, isLoading: statusLoading } = useSyncStatus()
   const syncNow = useSyncNow()
 
   const config = syncData?.config ?? null
   const logs   = syncData?.logs ?? []
 
-  const isGoogleConnected = !!googleIntegration?.access_token
-  const hasSheetsAccess   = isGoogleConnected && hasSheetsScope(googleIntegration?.scope ?? '')
+  const hasSheetsAccess = isGoogleConnected && hasSheetsScope(googleIntegration?.scope ?? '')
 
   async function handleSync() {
     setLastResult(null)
@@ -122,12 +121,12 @@ export function ProspectionParametres() {
               <div className="flex-1">
                 <p className="text-xs font-semibold text-amber-800">Autorisation Google Sheets manquante</p>
                 <p className="text-xs text-amber-600 mt-0.5 mb-2">Le scope Sheets n'a pas encore été accordé. Reconnectez votre compte pour l'activer.</p>
-                <a
-                  href={buildGoogleOAuthUrl()}
+                <button
+                  onClick={connectGoogle}
                   className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-amber-500 hover:bg-amber-600 px-3 py-1.5 rounded-lg transition-colors"
                 >
                   <Zap className="h-3.5 w-3.5" /> Reconnecter Google
-                </a>
+                </button>
               </div>
             </div>
           )}

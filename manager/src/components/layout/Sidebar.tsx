@@ -5,7 +5,7 @@ import {
   CheckSquare, Briefcase, CreditCard, Image, MessageSquare, Headphones,
   Settings, ChevronLeft, ChevronRight, Zap, Calendar, Bot, Bell, Paperclip,
   Target, UsersRound, Search, Sparkles, FilePen, BellRing, BarChart3,
-  SlidersHorizontal, ChevronDown, Layers,
+  SlidersHorizontal, ChevronDown, Layers, Plug,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -33,6 +33,7 @@ const navItems: NavItem[] = [
   { label: 'Notifications', icon: Bell,            to: '/notifications' },
   { label: 'Messages',      icon: MessageSquare,   to: '/messages' },
   { label: 'Support',       icon: Headphones,      to: '/support' },
+  { label: 'Intégrations',  icon: Plug,            to: '/integrations' },
 ]
 
 const prospectionItems: NavItem[] = [
