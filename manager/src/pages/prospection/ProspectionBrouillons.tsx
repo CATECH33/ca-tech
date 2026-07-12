@@ -557,10 +557,15 @@ function NewDraftModal({ open, onClose, onCreate }: {
   const handleCreate = async () => {
     if (!form.prospect_id || !form.subject || !form.body) return
     setCreating(true)
-    await onCreate({ ...form, prospect_contact_id: form.prospect_contact_id || undefined })
-    setCreating(false)
-    onClose()
-    setForm(EMPTY_CREATE)
+    try {
+      await onCreate({ ...form, prospect_contact_id: form.prospect_contact_id || undefined })
+      onClose()
+      setForm(EMPTY_CREATE)
+    } catch (e) {
+      console.error('Erreur création brouillon:', e)
+    } finally {
+      setCreating(false)
+    }
   }
 
   const set = (k: keyof CreateDraftInput) =>

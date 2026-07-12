@@ -62,6 +62,9 @@ async function refreshAccessToken(
   return res.json()
 }
 
+// UUID fixe pour le mode solo (identique à google-oauth)
+const SOLO_USER_ID = '00000000-0000-0000-0000-000000000000'
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS })
   if (req.method !== 'POST') return json({ error: 'Méthode non autorisée' }, 405)
@@ -75,11 +78,11 @@ Deno.serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
     )
 
-    // Vérifier l'utilisateur
-    const { data: { user }, error: userError } = await supabase.auth.getUser(
-      authHeader.replace('Bearer ', ''),
-    )
-    if (userError || !user) return json({ error: 'Non autorisé' }, 401)
+    // Résolution de l'utilisateur : session auth ou fallback mode solo
+    let userId = SOLO_USER_ID
+    const token = authHeader.replace('Bearer ', '')
+    const { data: { user } } = await supabase.auth.getUser(token)
+    if (user?.id) userId = user.id
 
     const body = await req.json()
     const { to, toName, subject, body: emailBody, draftId } = body as {
@@ -94,11 +97,11 @@ Deno.serve(async (req) => {
       return json({ error: 'Paramètres manquants : to, subject, body requis' }, 400)
     }
 
-    // Récupérer l'intégration Google
+    // Récupérer l'intégration Google (user_id connu ou SOLO_USER_ID)
     const { data: integration, error: intError } = await supabase
       .from('google_integrations')
       .select('access_token, refresh_token, expires_at, email')
-      .eq('user_id', user.id)
+      .eq('user_id', userId)
       .maybeSingle()
 
     if (intError || !integration) {
@@ -128,7 +131,7 @@ Deno.serve(async (req) => {
       await supabase
         .from('google_integrations')
         .update({ access_token: accessToken, expires_at: newExpiry })
-        .eq('user_id', user.id)
+        .eq('user_id', userId)
     }
 
     // Construire le message RFC 2822 + encoder en base64url
