@@ -273,7 +273,7 @@ export function useConvertDevisToFacture() {
           invoice_number, client_id: devis.client_id,
           due_date, notes: devis.notes || null,
           subtotal: devis.sous_total_ht, tax_amount: devis.tva_total,
-          total: devis.total_ttc, status: 'draft',
+          total: devis.total_ttc, tva_rate: devis.tva_rate, status: 'draft',
         }])
         .select('id')
         .single()

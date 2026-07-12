@@ -4,7 +4,10 @@ import {
   Edit, Copy, Check, AlertCircle, ChevronRight,
   CreditCard, Calendar, Printer, Mail, Link,
   ClipboardCopy, ExternalLink, Clock, Banknote,
+  Download, Loader2,
 } from 'lucide-react'
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
 import { Layout } from '@/components/layout/Layout'
 import { Button } from '@/components/ui/Button'
 import { Input, Select, Textarea } from '@/components/ui/Input'
@@ -21,6 +24,7 @@ import {
 } from '@/hooks/useFactures'
 import { useClients } from '@/hooks/useClients'
 import { useServices } from '@/hooks/useServices'
+import { useGmailSend } from '@/hooks/useGmailSend'
 import type { Client, Facture, FactureStatus, Service } from '@/types'
 
 /* ─── Constantes ─────────────────────────────────────────────── */
@@ -253,55 +257,80 @@ function LignesEditor({
 function EmailModal({ facture, onSent, onClose }: {
   facture: Facture; onSent: () => Promise<void>; onClose: () => void
 }) {
-  const [body, setBody] = useState(() => generateEmailBody(facture))
-  const [sending, setSending] = useState(false)
-  const email = facture.client?.email ?? ''
+  const clientName = facture.client ? `${facture.client.prenom} ${facture.client.nom}` : ''
+  const [to, setTo]         = useState(facture.client?.email ?? '')
+  const [subject, setSubject] = useState(`Facture ${facture.numero} — CA-TECH`)
+  const [body, setBody]     = useState(() => generateEmailBody(facture))
+  const [error, setError]   = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
+  const gmailSend = useGmailSend()
 
   const handleSend = async () => {
-    setSending(true)
-    const subject = encodeURIComponent(`Facture ${facture.numero} — CA-TECH`)
-    const encodedBody = encodeURIComponent(body)
-    window.open(`mailto:${email}?subject=${subject}&body=${encodedBody}`, '_blank')
-    await onSent()
-    setSending(false)
-    onClose()
+    if (!to) return
+    setError(null)
+    try {
+      await gmailSend.mutateAsync({ to, toName: clientName || undefined, subject, body })
+      setSuccess(true)
+      await onSent()
+      setTimeout(() => onClose(), 1500)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Erreur inconnue')
+    }
   }
 
   return (
     <Modal
       open onClose={onClose}
       title="Envoyer la facture par email"
-      description={`${facture.numero} · ${facture.client?.prenom} ${facture.client?.nom}`}
+      description={`${facture.numero} · ${clientName}`}
       size="lg"
       footer={
-        <>
-          <Button variant="outline" onClick={onClose}>Annuler</Button>
-          <Button onClick={handleSend} disabled={sending || !email}>
-            <Mail className="h-3.5 w-3.5" />
-            {sending ? 'Ouverture…' : 'Ouvrir le client mail'}
-          </Button>
-        </>
+        success ? (
+          <span className="inline-flex items-center gap-1.5 text-sm text-emerald-700 font-medium">
+            <Check className="h-4 w-4" />Email envoyé avec succès
+          </span>
+        ) : (
+          <>
+            <Button variant="outline" onClick={onClose} disabled={gmailSend.isPending}>Annuler</Button>
+            <Button onClick={handleSend} disabled={gmailSend.isPending || !to} className="gap-1.5">
+              {gmailSend.isPending
+                ? <><Loader2 className="h-3.5 w-3.5 animate-spin" />Envoi en cours…</>
+                : <><Send className="h-3.5 w-3.5" />Envoyer via Gmail</>
+              }
+            </Button>
+          </>
+        )
       }
     >
-      <div className="space-y-3">
-        <div className="flex items-center gap-2 p-3 bg-blue-50 border border-blue-100 rounded-xl">
-          <Mail className="h-4 w-4 text-blue-500 shrink-0" />
-          <div>
-            <p className="text-xs font-semibold text-blue-800">Destinataire</p>
-            <p className="text-xs text-blue-600">{email || 'Email client non renseigné'}</p>
+      <div className="space-y-4">
+        {error && (
+          <div className="bg-red-50 border border-red-100 rounded-xl px-3 py-2 text-xs text-red-600">
+            {error}
           </div>
-        </div>
-        <div>
-          <label className="block text-xs font-medium text-gray-700 mb-1">Corps du message</label>
+        )}
+        <Input
+          label="Destinataire"
+          type="email"
+          value={to}
+          onChange={e => setTo(e.target.value)}
+          placeholder="email@client.fr"
+        />
+        <Input
+          label="Objet"
+          value={subject}
+          onChange={e => setSubject(e.target.value)}
+        />
+        <div className="space-y-1">
+          <label className="text-xs font-medium text-gray-700">Message</label>
           <textarea
             value={body}
             onChange={e => setBody(e.target.value)}
-            rows={12}
-            className="w-full text-xs px-3 py-2.5 border border-gray-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent font-mono"
+            rows={10}
+            className="w-full text-sm px-3 py-2 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent resize-y font-mono"
           />
         </div>
         <p className="text-[11px] text-gray-400">
-          Ouvre votre client mail avec le message pré-rempli. La facture sera marquée comme envoyée.
+          L'email sera envoyé depuis votre compte Gmail connecté dans Intégrations.
         </p>
       </div>
     </Modal>
@@ -575,6 +604,7 @@ function FactureFiche({
   const [showEmail, setShowEmail]     = useState(false)
   const [showStripe, setShowStripe]   = useState(false)
   const [copiedLink, setCopiedLink]   = useState(false)
+  const [pdfLoading, setPdfLoading]   = useState(false)
 
   const [form, setForm] = useState({
     client_id: facture.client_id,
@@ -630,6 +660,40 @@ function FactureFiche({
     window.print()
     document.head.removeChild(style)
   }, [])
+
+  const handleDownloadPDF = useCallback(async () => {
+    const el = document.getElementById('facture-document')
+    if (!el) return
+    setPdfLoading(true)
+    try {
+      const canvas = await html2canvas(el, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+        logging: false,
+      })
+      const imgData = canvas.toDataURL('image/jpeg', 0.95)
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
+      const pdfW = pdf.internal.pageSize.getWidth()
+      const pdfH = (canvas.height * pdfW) / canvas.width
+      const pageH = pdf.internal.pageSize.getHeight()
+      let position = 0
+      if (pdfH <= pageH) {
+        pdf.addImage(imgData, 'JPEG', 0, 0, pdfW, pdfH)
+      } else {
+        let remaining = pdfH
+        while (remaining > 0) {
+          pdf.addImage(imgData, 'JPEG', 0, position, pdfW, pdfH)
+          remaining -= pageH
+          position -= pageH
+          if (remaining > 0) pdf.addPage()
+        }
+      }
+      pdf.save(`${facture.numero}.pdf`)
+    } finally {
+      setPdfLoading(false)
+    }
+  }, [facture.numero])
 
   const handleCopyLink = () => {
     if (!facture.stripe_payment_link) return
@@ -735,8 +799,15 @@ function FactureFiche({
           <Button size="sm" variant="outline" onClick={() => setShowStripe(true)} title="Lien Stripe">
             <Link className="h-3.5 w-3.5" />Stripe
           </Button>
-          <Button size="sm" variant="outline" onClick={handlePrint} title="PDF">
-            <Printer className="h-3.5 w-3.5" />PDF
+          <Button size="sm" variant="outline" onClick={handleDownloadPDF} disabled={pdfLoading} title="Télécharger PDF">
+            {pdfLoading
+              ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              : <Download className="h-3.5 w-3.5" />
+            }
+            PDF
+          </Button>
+          <Button size="sm" variant="ghost" onClick={handlePrint} title="Imprimer">
+            <Printer className="h-3.5 w-3.5" />
           </Button>
           {(facture.status === 'envoyee' || facture.status === 'en_retard' || facture.status === 'partiellement_payee') && (
             <Button size="sm" variant="outline" onClick={() => onUpdateStatus('annulee')} disabled={isUpdating}>
