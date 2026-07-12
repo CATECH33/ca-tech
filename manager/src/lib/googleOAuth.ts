@@ -7,6 +7,7 @@ export const GOOGLE_SCOPES = [
   'https://www.googleapis.com/auth/gmail.readonly',
   'https://www.googleapis.com/auth/calendar',
   'https://www.googleapis.com/auth/drive.file',
+  'https://www.googleapis.com/auth/spreadsheets',
 ] as const
 
 export function isGoogleConfigured(): boolean {
@@ -32,5 +33,10 @@ export function parseScopeLabels(scope: string): string[] {
   if (scope.includes('gmail')) labels.push('Gmail')
   if (scope.includes('calendar')) labels.push('Google Agenda')
   if (scope.includes('drive')) labels.push('Google Drive')
+  if (scope.includes('spreadsheets')) labels.push('Google Sheets')
   return labels
+}
+
+export function hasSheetsScope(scope: string): boolean {
+  return scope.includes('spreadsheets')
 }
