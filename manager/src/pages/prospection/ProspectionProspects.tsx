@@ -5,14 +5,16 @@ import {
   ChevronLeft, ChevronRight as ChevronRightIcon, Sparkles, Trash2,
   Link2, RefreshCw, SlidersHorizontal, Calendar, Clock, Video,
   CheckCircle2, AlertCircle, CalendarPlus, FolderOpen, FolderPlus,
-  BarChart2, Gauge,
+  BarChart2, Gauge, Star,
 } from 'lucide-react'
 import { ProspectAnalysePanel } from '@/components/prospection/ProspectAnalysePanel'
 import { ProspectAuditPanel } from '@/components/prospection/ProspectAuditPanel'
 import { ProspectRecommendPanel } from '@/components/prospection/ProspectRecommendPanel'
+import { ProspectScorePanel } from '@/components/prospection/ProspectScorePanel'
 import { getAnalyse } from '@/hooks/useProspects'
 import { getAudit } from '@/hooks/useAudit'
 import { getRecommendations } from '@/hooks/useRecommendations'
+import { computeScoreCommercial, OPPORTUNITY_CONFIG } from '@/lib/scoreCommercial'
 import {
   useCalendarEvents, useCreateCalendarEvent, useDeleteCalendarEvent, useSyncCalendarEvents,
   type CalendarEventType, type CreateCalendarEventInput,
@@ -737,7 +739,7 @@ function ProspectDriveSection({ prospect }: { prospect: ProspectRow }) {
 
 /* ─────────────────────────────────────────────────────────────────────────── */
 
-type FicheTab = 'fiche' | 'analyse' | 'audit' | 'reco'
+type FicheTab = 'fiche' | 'analyse' | 'audit' | 'reco' | 'score'
 
 function ProspectFiche({
   prospect, onClose, onSave, onDelete,
@@ -749,9 +751,10 @@ function ProspectFiche({
 }) {
   const contact = getPrimaryContact(prospect)
   const [activeTab, setActiveTab] = useState<FicheTab>('fiche')
-  const analyse = getAnalyse(prospect)
-  const audit   = getAudit(prospect)
-  const reco    = getRecommendations(prospect)
+  const analyse        = getAnalyse(prospect)
+  const audit          = getAudit(prospect)
+  const reco           = getRecommendations(prospect)
+  const scoreCommercial = computeScoreCommercial(prospect, audit, analyse)
   const [form, setForm] = useState<FicheForm>({
     company_name: prospect.company_name,
     website: prospect.website ?? '',
@@ -915,6 +918,26 @@ function ProspectFiche({
               </span>
             )}
           </button>
+          <button
+            onClick={() => setActiveTab('score')}
+            className={cn(
+              'flex items-center gap-1.5 px-5 py-2.5 text-sm font-medium border-b-2 transition',
+              activeTab === 'score'
+                ? 'border-amber-400 text-amber-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700',
+            )}
+          >
+            <Star className="h-3.5 w-3.5" />
+            Score
+            {scoreCommercial.score > 0 && (
+              <span className={cn(
+                'ml-1 text-[10px] font-bold text-white px-1.5 py-0.5 rounded-full leading-none',
+                OPPORTUNITY_CONFIG[scoreCommercial.opportunity].dot,
+              )}>
+                {scoreCommercial.score.toFixed(1)}
+              </span>
+            )}
+          </button>
         </div>
 
         {/* Tab: Analyse */}
@@ -935,6 +958,13 @@ function ProspectFiche({
         {activeTab === 'reco' && (
           <div className="flex-1 overflow-hidden flex flex-col">
             <ProspectRecommendPanel prospect={prospect} />
+          </div>
+        )}
+
+        {/* Tab: Score commercial */}
+        {activeTab === 'score' && (
+          <div className="flex-1 overflow-hidden flex flex-col">
+            <ProspectScorePanel prospect={prospect} />
           </div>
         )}
 
