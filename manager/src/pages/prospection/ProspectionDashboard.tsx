@@ -7,14 +7,17 @@ import {
 import {
   UsersRound, Mail, Send, MessageSquare, Calendar, Trophy,
   TrendingUp, FilePen, RefreshCw, Plus, Sparkles, ArrowRight,
-  Activity, Target, Zap,
+  Activity, Target, Zap, Globe, ShieldAlert, Star, Flame,
 } from 'lucide-react'
 import { Layout } from '@/components/layout/Layout'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { cn, formatDate, statusLabel } from '@/lib/utils'
-import { useProspects } from '@/hooks/useProspects'
+import { useProspects, useProspectsRealtime, getAnalyse } from '@/hooks/useProspects'
 import { useEmailDrafts } from '@/hooks/useEmailDrafts'
+import { getAudit } from '@/hooks/useAudit'
+import { getRecommendations } from '@/hooks/useRecommendations'
+import { computeScoreCommercial } from '@/lib/scoreCommercial'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import type { ProspectStatus } from '@/types'
@@ -100,6 +103,8 @@ function ChartTooltip({ active, payload, label }: any) {
 
 export function ProspectionDashboard() {
   const navigate = useNavigate()
+
+  useProspectsRealtime()
 
   const {
     data: prospects = [], isLoading: pLoading, isFetching: pFetching, refetch: refetchP,
@@ -190,6 +195,84 @@ export function ProspectionDashboard() {
     }
   }, [prospects, drafts])
 
+  /* ── AI stats ─────────────────────────────────────────────────────────────── */
+  const aiStats = useMemo(() => {
+    const withAnalyse   = prospects.filter(p => getAnalyse(p) !== null).length
+    const withWebsite   = prospects.filter(p => !!p.website).length
+
+    const auditedProspects = prospects.filter(p => getAudit(p) !== null)
+    const noHttps = auditedProspects.filter(p =>
+      getAudit(p)!.checks.find(c => c.id === 'https')?.value === false).length
+    const noForm  = auditedProspects.filter(p =>
+      getAudit(p)!.checks.find(c => c.id === 'form')?.value === false).length
+
+    const commercialScores = prospects.map(p =>
+      computeScoreCommercial(p, getAudit(p), getAnalyse(p)))
+    const strongOpps   = commercialScores.filter(s => s.opportunity === 'very_high').length
+    const knownScores  = commercialScores.filter(s => s.score > 0).map(s => s.score)
+    const avgScore     = knownScores.length > 0
+      ? Math.round(knownScores.reduce((a, b) => a + b, 0) / knownScores.length * 10) / 10
+      : 0
+
+    /* Priority breakdown */
+    const priorityA = prospects.filter(p => getRecommendations(p)?.priority === 'A').length
+    const priorityB = prospects.filter(p => getRecommendations(p)?.priority === 'B').length
+    const priorityC = prospects.filter(p => getRecommendations(p)?.priority === 'C').length
+    const priorityData = [
+      { name: 'Priorité A', value: priorityA, color: '#10B981' },
+      { name: 'Priorité B', value: priorityB, color: '#F59E0B' },
+      { name: 'Priorité C', value: priorityC, color: '#9CA3AF' },
+    ]
+
+    /* Audit issues bar */
+    const auditIssues = [
+      { label: 'Sans HTTPS',      count: noHttps, color: '#EF4444' },
+      { label: 'Sans formulaire', count: noForm,  color: '#F97316' },
+      { label: 'Sans responsive', count: auditedProspects.filter(p =>
+          getAudit(p)!.checks.find(c => c.id === 'responsive')?.value === false).length, color: '#F59E0B' },
+      { label: 'Sans title SEO',  count: auditedProspects.filter(p =>
+          getAudit(p)!.checks.find(c => c.id === 'title_tag')?.value === false).length, color: '#6366F1' },
+      { label: 'Sans Analytics',  count: auditedProspects.filter(p =>
+          getAudit(p)!.checks.find(c => c.id === 'analytics')?.value === false).length, color: '#8B5CF6' },
+    ]
+
+    /* Score commercial distribution */
+    const commScoreBands = [
+      { range: '0–2',  min: 0,  max: 2  },
+      { range: '2–4',  min: 2,  max: 4  },
+      { range: '4–6',  min: 4,  max: 6  },
+      { range: '6–8',  min: 6,  max: 8  },
+      { range: '8–10', min: 8,  max: 11 },
+    ]
+    const commScoreData = commScoreBands.map(b => ({
+      range: b.range,
+      count: commercialScores.filter(s => s.score >= b.min && s.score < b.max && s.score > 0).length,
+    }))
+
+    /* Score moyen par secteur */
+    const sectorMap: Record<string, { total: number; count: number }> = {}
+    prospects.forEach(p => {
+      if (!p.industry) return
+      const s = computeScoreCommercial(p, getAudit(p), getAnalyse(p))
+      if (s.score === 0) return
+      if (!sectorMap[p.industry]) sectorMap[p.industry] = { total: 0, count: 0 }
+      sectorMap[p.industry].total += s.score
+      sectorMap[p.industry].count++
+    })
+    const sectorData = Object.entries(sectorMap)
+      .map(([sector, { total, count }]) => ({
+        sector: sector.length > 18 ? sector.slice(0, 18) + '…' : sector,
+        avg: Math.round(total / count * 10) / 10,
+      }))
+      .sort((a, b) => b.avg - a.avg)
+      .slice(0, 8)
+
+    return {
+      withAnalyse, withWebsite, noHttps, noForm, strongOpps, avgScore,
+      audited: auditedProspects.length, priorityData, auditIssues, commScoreData, sectorData,
+    }
+  }, [prospects])
+
   /* ── Render ──────────────────────────────────────────────────────────────── */
 
   return (
@@ -231,6 +314,206 @@ export function ProspectionDashboard() {
           loading={isLoading}
         />
       </div>
+
+      {/* ── KPI IA ─────────────────────────────────────────────────────────── */}
+      <div className="flex items-center gap-2 mb-3">
+        <Sparkles className="h-4 w-4 text-violet-500" />
+        <h2 className="text-sm font-semibold text-gray-700">Intelligence commerciale</h2>
+        <span className="text-[11px] text-gray-400 ml-1">Mise à jour en temps réel</span>
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
+        <KpiCard
+          label="Prospects analysés"
+          value={aiStats.withAnalyse}
+          sub={`sur ${prospects.length} total`}
+          icon={Sparkles}
+          color="bg-violet-500 text-violet-500"
+          loading={isLoading}
+        />
+        <KpiCard
+          label="Sites détectés"
+          value={aiStats.withWebsite}
+          sub="avec URL renseignée"
+          icon={Globe}
+          color="bg-brand-500 text-brand-500"
+          loading={isLoading}
+        />
+        <KpiCard
+          label="Sans HTTPS"
+          value={aiStats.noHttps}
+          sub={`sur ${aiStats.audited} audités`}
+          icon={ShieldAlert}
+          color="bg-red-500 text-red-500"
+          loading={isLoading}
+        />
+        <KpiCard
+          label="Sans formulaire"
+          value={aiStats.noForm}
+          sub="opportunité de contact"
+          icon={Mail}
+          color="bg-orange-500 text-orange-500"
+          loading={isLoading}
+        />
+        <KpiCard
+          label="Opport. fortes"
+          value={aiStats.strongOpps}
+          sub="score commercial < 4"
+          icon={Flame}
+          color="bg-emerald-500 text-emerald-500"
+          loading={isLoading}
+        />
+        <KpiCard
+          label="Score moyen"
+          value={aiStats.avgScore > 0 ? `${aiStats.avgScore}/10` : '—'}
+          sub="score commercial IA"
+          icon={Star}
+          color="bg-amber-500 text-amber-500"
+          loading={isLoading}
+        />
+      </div>
+
+      {/* ── CHARTS IA ──────────────────────────────────────────────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+
+        {/* Priorités IA donut */}
+        <Card>
+          <div className="mb-4">
+            <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-1.5">
+              <Sparkles className="h-3.5 w-3.5 text-violet-400" /> Priorités IA
+            </h3>
+            <p className="text-xs text-gray-400 mt-0.5">Répartition A / B / C</p>
+          </div>
+          {isLoading ? (
+            <div className="h-44 bg-gray-50 rounded-xl animate-pulse" />
+          ) : aiStats.priorityData.every(d => d.value === 0) ? (
+            <div className="h-44 flex flex-col items-center justify-center gap-2 text-sm text-gray-400">
+              <Sparkles className="h-6 w-6 text-gray-200" />
+              <p className="text-xs text-center">Générez des recommandations IA<br/>sur vos prospects</p>
+            </div>
+          ) : (
+            <div className="flex items-center gap-4">
+              <PieChart width={100} height={100}>
+                <Pie
+                  data={aiStats.priorityData.filter(d => d.value > 0)}
+                  cx={50} cy={50}
+                  innerRadius={28} outerRadius={46}
+                  dataKey="value"
+                  strokeWidth={2} stroke="#fff"
+                >
+                  {aiStats.priorityData.filter(d => d.value > 0).map((entry, i) => (
+                    <Cell key={i} fill={entry.color} />
+                  ))}
+                </Pie>
+              </PieChart>
+              <div className="flex-1 space-y-2">
+                {aiStats.priorityData.map(d => (
+                  <div key={d.name} className="flex items-center gap-2">
+                    <span className="h-2.5 w-2.5 rounded-full shrink-0" style={{ backgroundColor: d.color }} />
+                    <span className="text-xs text-gray-600 flex-1">{d.name}</span>
+                    <span className="text-sm font-bold text-gray-800">{d.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </Card>
+
+        {/* Problèmes audit bar */}
+        <Card>
+          <div className="mb-4">
+            <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-1.5">
+              <ShieldAlert className="h-3.5 w-3.5 text-red-400" /> Problèmes détectés
+            </h3>
+            <p className="text-xs text-gray-400 mt-0.5">Sur {aiStats.audited} sites audités</p>
+          </div>
+          {isLoading ? (
+            <div className="h-44 bg-gray-50 rounded-xl animate-pulse" />
+          ) : aiStats.audited === 0 ? (
+            <div className="h-44 flex flex-col items-center justify-center gap-2 text-sm text-gray-400">
+              <ShieldAlert className="h-6 w-6 text-gray-200" />
+              <p className="text-xs text-center">Lancez l'audit sur vos<br/>prospects pour voir ici</p>
+            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height={160}>
+              <BarChart
+                data={aiStats.auditIssues}
+                layout="vertical"
+                margin={{ left: 0, right: 20, top: 4, bottom: 4 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#F3F4F6" />
+                <XAxis type="number" tick={{ fontSize: 10, fill: '#9CA3AF' }} tickLine={false} axisLine={false} allowDecimals={false} />
+                <YAxis type="category" dataKey="label" tick={{ fontSize: 10, fill: '#6B7280' }} tickLine={false} axisLine={false} width={88} />
+                <Tooltip content={<ChartTooltip />} cursor={{ fill: '#F9FAFB' }} />
+                <Bar dataKey="count" name="Prospects" radius={[0, 4, 4, 0]} maxBarSize={14}>
+                  {aiStats.auditIssues.map((entry, i) => (
+                    <Cell key={i} fill={entry.color} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          )}
+        </Card>
+
+        {/* Score commercial distribution */}
+        <Card>
+          <div className="mb-4">
+            <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-1.5">
+              <Star className="h-3.5 w-3.5 text-amber-400" /> Score commercial
+            </h3>
+            <p className="text-xs text-gray-400 mt-0.5">Distribution /10 (opportunité inverse)</p>
+          </div>
+          {isLoading ? (
+            <div className="h-44 bg-gray-50 rounded-xl animate-pulse" />
+          ) : (
+            <ResponsiveContainer width="100%" height={160}>
+              <BarChart data={aiStats.commScoreData} margin={{ left: -16, right: 8, top: 4, bottom: 4 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
+                <XAxis dataKey="range" tick={{ fontSize: 10, fill: '#9CA3AF' }} tickLine={false} axisLine={false} />
+                <YAxis tick={{ fontSize: 10, fill: '#9CA3AF' }} tickLine={false} axisLine={false} allowDecimals={false} />
+                <Tooltip content={<ChartTooltip />} cursor={{ fill: '#F9FAFB' }} />
+                <Bar dataKey="count" name="Prospects" radius={[4, 4, 0, 0]} maxBarSize={28}>
+                  {aiStats.commScoreData.map((_, i) => {
+                    const colors = ['#10B981', '#3B82F6', '#F59E0B', '#F97316', '#EF4444']
+                    return <Cell key={i} fill={colors[i] ?? '#0066FF'} />
+                  })}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          )}
+          <div className="flex justify-between text-[10px] text-gray-400 mt-1">
+            <span className="text-emerald-600">⬅ Fort potentiel</span>
+            <span className="text-gray-400">Déjà équipé ➡</span>
+          </div>
+        </Card>
+      </div>
+
+      {/* Score moyen par secteur */}
+      {aiStats.sectorData.length > 0 && (
+        <Card className="mb-4">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-1.5">
+                <TrendingUp className="h-3.5 w-3.5 text-brand-400" /> Score moyen par secteur
+              </h3>
+              <p className="text-xs text-gray-400 mt-0.5">Top {aiStats.sectorData.length} secteurs — score commercial /10</p>
+            </div>
+          </div>
+          <ResponsiveContainer width="100%" height={180}>
+            <BarChart data={aiStats.sectorData} margin={{ left: -8, right: 16, top: 4, bottom: 4 }}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
+              <XAxis dataKey="sector" tick={{ fontSize: 10, fill: '#6B7280' }} tickLine={false} axisLine={false} />
+              <YAxis domain={[0, 10]} tick={{ fontSize: 10, fill: '#9CA3AF' }} tickLine={false} axisLine={false} allowDecimals={false} />
+              <Tooltip content={<ChartTooltip />} cursor={{ fill: '#F9FAFB' }} />
+              <Bar dataKey="avg" name="Score moyen" radius={[4, 4, 0, 0]} maxBarSize={36} fill="#0066FF">
+                {aiStats.sectorData.map((entry, i) => {
+                  const color = entry.avg < 4 ? '#10B981' : entry.avg < 7 ? '#F59E0B' : '#9CA3AF'
+                  return <Cell key={i} fill={color} />
+                })}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </Card>
+      )}
 
       {/* ── PIPELINE + SCORE ───────────────────────────────────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">

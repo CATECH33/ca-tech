@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { Prospect, ProspectStatus, ProspectSource } from '@/types'
 
@@ -47,6 +48,24 @@ async function fetchProspects(): Promise<ProspectRow[]> {
 
 export function useProspects(opts?: { refetchInterval?: number }) {
   return useQuery({ queryKey: Q, queryFn: fetchProspects, ...opts })
+}
+
+// ── Realtime sync ─────────────────────────────────────────────────────────────
+
+export function useProspectsRealtime() {
+  const qc = useQueryClient()
+  useEffect(() => {
+    const channel = supabase
+      .channel('prospects_realtime_v1')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'prospects' },
+        () => qc.invalidateQueries({ queryKey: Q }))
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'prospect_activities' },
+        () => qc.invalidateQueries({ queryKey: Q }))
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'prospect_contacts' },
+        () => qc.invalidateQueries({ queryKey: Q }))
+      .subscribe()
+    return () => { supabase.removeChannel(channel) }
+  }, [qc])
 }
 
 export interface CreateProspectInput {
