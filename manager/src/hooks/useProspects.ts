@@ -131,6 +131,96 @@ export function useDeleteProspect() {
   })
 }
 
+// ── Analyse IA ────────────────────────────────────────────────────────────────
+
+export type SocialNetwork = 'facebook' | 'instagram' | 'linkedin' | 'twitter' | 'youtube' | 'tiktok'
+
+export interface ProspectAnalyse {
+  version: 1
+  website_url: string
+  // Présence web
+  has_website:         QualCriterion
+  has_https:           QualCriterion
+  is_responsive:       QualCriterion
+  has_form:            QualCriterion
+  has_email:           QualCriterion
+  has_phone:           QualCriterion
+  has_google_business: QualCriterion
+  // Réseaux sociaux
+  social_networks: Record<SocialNetwork, boolean | null>
+  // Texte libre
+  ai_comment: string
+  commercial_opportunity: string
+  // Score calculé
+  score: number
+  analysed_at: string | null
+}
+
+export const SOCIAL_NETWORK_LABELS: Record<SocialNetwork, string> = {
+  facebook:  'Facebook',
+  instagram: 'Instagram',
+  linkedin:  'LinkedIn',
+  twitter:   'X / Twitter',
+  youtube:   'YouTube',
+  tiktok:    'TikTok',
+}
+
+const ANALYSE_WEIGHTS = {
+  has_website:         1.0,
+  has_https:           1.5,
+  is_responsive:       2.0,
+  has_form:            1.0,
+  has_email:           0.5,
+  has_phone:           0.5,
+  has_google_business: 1.5,
+  social:              0.5,
+  commercial_opportunity: 1.5,
+} as const
+
+export function computeAnalyseScore(a: Partial<ProspectAnalyse>): number {
+  let score = 0
+  if (a.has_website?.value === true)         score += ANALYSE_WEIGHTS.has_website
+  if (a.has_https?.value === true)           score += ANALYSE_WEIGHTS.has_https
+  if (a.is_responsive?.value === true)       score += ANALYSE_WEIGHTS.is_responsive
+  if (a.has_form?.value === true)            score += ANALYSE_WEIGHTS.has_form
+  if (a.has_email?.value === true)           score += ANALYSE_WEIGHTS.has_email
+  if (a.has_phone?.value === true)           score += ANALYSE_WEIGHTS.has_phone
+  if (a.has_google_business?.value === true) score += ANALYSE_WEIGHTS.has_google_business
+  if (a.social_networks && Object.values(a.social_networks).some(v => v === true))
+    score += ANALYSE_WEIGHTS.social
+  if (a.commercial_opportunity?.trim())      score += ANALYSE_WEIGHTS.commercial_opportunity
+  return Math.round(score * 10) / 10
+}
+
+export function getAnalyse(prospect: ProspectRow): ProspectAnalyse | null {
+  const meta = prospect.metadata as Record<string, unknown> | null
+  return (meta?.analyse as ProspectAnalyse) ?? null
+}
+
+export function useAnalyseProspect() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({
+      prospect,
+      analyse,
+    }: {
+      prospect: ProspectRow
+      analyse: ProspectAnalyse
+    }) => {
+      const existingMeta = (prospect.metadata ?? {}) as Record<string, unknown>
+      const { error } = await supabase
+        .from('prospects')
+        .update({
+          metadata: { ...existingMeta, analyse },
+          score: Math.round(analyse.score * 10),
+        })
+        .eq('id', prospect.id)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: Q }),
+  })
+}
+
 // ── Qualification IA ──────────────────────────────────────────────────────────
 
 export type QualSource = 'manual' | 'auto'

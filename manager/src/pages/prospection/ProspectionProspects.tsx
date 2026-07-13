@@ -5,7 +5,10 @@ import {
   ChevronLeft, ChevronRight as ChevronRightIcon, Sparkles, Trash2,
   Link2, RefreshCw, SlidersHorizontal, Calendar, Clock, Video,
   CheckCircle2, AlertCircle, CalendarPlus, FolderOpen, FolderPlus,
+  BarChart2,
 } from 'lucide-react'
+import { ProspectAnalysePanel } from '@/components/prospection/ProspectAnalysePanel'
+import { getAnalyse } from '@/hooks/useProspects'
 import {
   useCalendarEvents, useCreateCalendarEvent, useDeleteCalendarEvent, useSyncCalendarEvents,
   type CalendarEventType, type CreateCalendarEventInput,
@@ -730,6 +733,8 @@ function ProspectDriveSection({ prospect }: { prospect: ProspectRow }) {
 
 /* ─────────────────────────────────────────────────────────────────────────── */
 
+type FicheTab = 'fiche' | 'analyse'
+
 function ProspectFiche({
   prospect, onClose, onSave, onDelete,
 }: {
@@ -739,6 +744,8 @@ function ProspectFiche({
   onDelete: () => Promise<void>
 }) {
   const contact = getPrimaryContact(prospect)
+  const [activeTab, setActiveTab] = useState<FicheTab>('fiche')
+  const analyse = getAnalyse(prospect)
   const [form, setForm] = useState<FicheForm>({
     company_name: prospect.company_name,
     website: prospect.website ?? '',
@@ -834,8 +841,48 @@ function ProspectFiche({
           </div>
         </div>
 
-        {/* Body */}
-        <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5">
+        {/* Tabs */}
+        <div className="flex border-b border-gray-200 bg-white shrink-0">
+          <button
+            onClick={() => setActiveTab('fiche')}
+            className={cn(
+              'flex items-center gap-1.5 px-5 py-2.5 text-sm font-medium border-b-2 transition',
+              activeTab === 'fiche'
+                ? 'border-brand-500 text-brand-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700',
+            )}
+          >
+            <Building2 className="h-3.5 w-3.5" />
+            Fiche
+          </button>
+          <button
+            onClick={() => setActiveTab('analyse')}
+            className={cn(
+              'flex items-center gap-1.5 px-5 py-2.5 text-sm font-medium border-b-2 transition',
+              activeTab === 'analyse'
+                ? 'border-violet-500 text-violet-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700',
+            )}
+          >
+            <BarChart2 className="h-3.5 w-3.5" />
+            Analyse
+            {analyse && (
+              <span className="ml-1 text-[10px] font-bold text-white bg-violet-500 px-1.5 py-0.5 rounded-full leading-none">
+                {analyse.score.toFixed(1)}
+              </span>
+            )}
+          </button>
+        </div>
+
+        {/* Tab: Analyse */}
+        {activeTab === 'analyse' && (
+          <div className="flex-1 overflow-hidden flex flex-col">
+            <ProspectAnalysePanel prospect={prospect} />
+          </div>
+        )}
+
+        {/* Tab: Fiche — Body */}
+        {activeTab === 'fiche' && <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5">
 
           {/* Entreprise */}
           <div>
@@ -1001,21 +1048,23 @@ function ProspectFiche({
               <span className="font-medium text-gray-700">{prospect.activities.length}</span>
             </div>
           </div>
-        </div>
+        </div>}
 
-        {/* Footer */}
-        <div className="px-5 py-4 border-t border-gray-100 flex items-center justify-between shrink-0">
-          <Button variant="danger" size="sm" onClick={handleDelete} disabled={deleting}>
-            <Trash2 className="h-3.5 w-3.5" />
-            {deleting ? 'Suppression…' : 'Supprimer'}
-          </Button>
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={onClose}>Annuler</Button>
-            <Button size="sm" onClick={handleSave} disabled={saving || !form.company_name}>
-              {saving ? 'Enregistrement…' : 'Enregistrer'}
+        {/* Footer — onglet Fiche uniquement */}
+        {activeTab === 'fiche' && (
+          <div className="px-5 py-4 border-t border-gray-100 flex items-center justify-between shrink-0">
+            <Button variant="danger" size="sm" onClick={handleDelete} disabled={deleting}>
+              <Trash2 className="h-3.5 w-3.5" />
+              {deleting ? 'Suppression…' : 'Supprimer'}
             </Button>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" onClick={onClose}>Annuler</Button>
+              <Button size="sm" onClick={handleSave} disabled={saving || !form.company_name}>
+                {saving ? 'Enregistrement…' : 'Enregistrer'}
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   )
