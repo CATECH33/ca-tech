@@ -5,10 +5,12 @@ import {
   ChevronLeft, ChevronRight as ChevronRightIcon, Sparkles, Trash2,
   Link2, RefreshCw, SlidersHorizontal, Calendar, Clock, Video,
   CheckCircle2, AlertCircle, CalendarPlus, FolderOpen, FolderPlus,
-  BarChart2,
+  BarChart2, Gauge,
 } from 'lucide-react'
 import { ProspectAnalysePanel } from '@/components/prospection/ProspectAnalysePanel'
+import { ProspectAuditPanel } from '@/components/prospection/ProspectAuditPanel'
 import { getAnalyse } from '@/hooks/useProspects'
+import { getAudit } from '@/hooks/useAudit'
 import {
   useCalendarEvents, useCreateCalendarEvent, useDeleteCalendarEvent, useSyncCalendarEvents,
   type CalendarEventType, type CreateCalendarEventInput,
@@ -733,7 +735,7 @@ function ProspectDriveSection({ prospect }: { prospect: ProspectRow }) {
 
 /* ─────────────────────────────────────────────────────────────────────────── */
 
-type FicheTab = 'fiche' | 'analyse'
+type FicheTab = 'fiche' | 'analyse' | 'audit'
 
 function ProspectFiche({
   prospect, onClose, onSave, onDelete,
@@ -746,6 +748,7 @@ function ProspectFiche({
   const contact = getPrimaryContact(prospect)
   const [activeTab, setActiveTab] = useState<FicheTab>('fiche')
   const analyse = getAnalyse(prospect)
+  const audit   = getAudit(prospect)
   const [form, setForm] = useState<FicheForm>({
     company_name: prospect.company_name,
     website: prospect.website ?? '',
@@ -872,12 +875,36 @@ function ProspectFiche({
               </span>
             )}
           </button>
+          <button
+            onClick={() => setActiveTab('audit')}
+            className={cn(
+              'flex items-center gap-1.5 px-5 py-2.5 text-sm font-medium border-b-2 transition',
+              activeTab === 'audit'
+                ? 'border-slate-600 text-slate-700'
+                : 'border-transparent text-gray-500 hover:text-gray-700',
+            )}
+          >
+            <Gauge className="h-3.5 w-3.5" />
+            Audit
+            {audit && (
+              <span className="ml-1 text-[10px] font-bold text-white bg-slate-600 px-1.5 py-0.5 rounded-full leading-none">
+                {audit.score.toFixed(1)}
+              </span>
+            )}
+          </button>
         </div>
 
         {/* Tab: Analyse */}
         {activeTab === 'analyse' && (
           <div className="flex-1 overflow-hidden flex flex-col">
             <ProspectAnalysePanel prospect={prospect} />
+          </div>
+        )}
+
+        {/* Tab: Audit */}
+        {activeTab === 'audit' && (
+          <div className="flex-1 overflow-hidden flex flex-col">
+            <ProspectAuditPanel prospect={prospect} />
           </div>
         )}
 
