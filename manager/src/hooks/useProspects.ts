@@ -197,6 +197,48 @@ export function getAnalyse(prospect: ProspectRow): ProspectAnalyse | null {
   return (meta?.analyse as ProspectAnalyse) ?? null
 }
 
+// ── Résultat brut de la Edge Function ─────────────────────────────────────────
+
+export interface AutoAnalyseResult {
+  has_website:         boolean | null
+  has_https:           boolean | null
+  is_responsive:       boolean | null
+  has_form:            boolean | null
+  has_email:           boolean | null
+  has_phone:           boolean | null
+  has_google_business: boolean | null
+  social_networks: Record<SocialNetwork, boolean> | null
+  details: {
+    final_url?:         string
+    email_found?:       string
+    phone_found?:       string
+    social_found?:      string[]
+    performance_score?: number
+    place_name?:        string
+    warnings?:          string[]
+  }
+  error?: string
+}
+
+export function useAutoAnalyse() {
+  return useMutation({
+    mutationFn: async ({ url, company_name }: { url: string; company_name: string }) => {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/analyse-prospect`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          apikey: SUPABASE_ANON,
+          Authorization: `Bearer ${SUPABASE_ANON}`,
+        },
+        body: JSON.stringify({ url, company_name }),
+      })
+      const data = await res.json() as AutoAnalyseResult
+      if (!res.ok) throw new Error((data as { error?: string }).error ?? `HTTP ${res.status}`)
+      return data
+    },
+  })
+}
+
 export function useAnalyseProspect() {
   const qc = useQueryClient()
   return useMutation({

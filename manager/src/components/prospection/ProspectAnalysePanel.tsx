@@ -3,12 +3,13 @@ import {
   Globe, ShieldCheck, ShieldOff, Smartphone, SmartphoneNfc,
   FileText, FileX, MapPin, MapPinOff, Mail, MailX,
   Phone, PhoneOff, ExternalLink, Sparkles, Check, X,
-  Share2, Wand2, AlertCircle, Save, RotateCcw,
+  Share2, Wand2, AlertCircle, Save, RotateCcw, Loader2,
+  Zap, TriangleAlert,
 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 import {
-  useAnalyseProspect, computeAnalyseScore, getAnalyse,
+  useAnalyseProspect, useAutoAnalyse, computeAnalyseScore, getAnalyse,
   type ProspectRow, type ProspectAnalyse, type QualCriterion, type SocialNetwork,
   SOCIAL_NETWORK_LABELS,
 } from '@/hooks/useProspects'
@@ -211,7 +212,8 @@ export function ProspectAnalysePanel({ prospect }: { prospect: ProspectRow }) {
   const [saved, setSaved]     = useState(false)
   const [autoMsg, setAutoMsg] = useState<string | null>(null)
 
-  const analyse = useAnalyseProspect()
+  const analyse     = useAnalyseProspect()
+  const autoAnalyse = useAutoAnalyse()
 
   const setCrit = useCallback((key: keyof Pick<ProspectAnalyse,
     'has_website' | 'has_https' | 'is_responsive' | 'has_form' |
@@ -245,8 +247,34 @@ export function ProspectAnalysePanel({ prospect }: { prospect: ProspectRow }) {
     setAutoMsg(null)
   }
 
-  const handleAutoAnalyse = () => {
-    setAutoMsg('Analyse automatique non encore connectée — remplissez les critères manuellement.')
+  const handleAutoAnalyse = async () => {
+    if (!form.website_url) {
+      setAutoMsg("Renseignez d'abord l'URL du site.")
+      return
+    }
+    setAutoMsg(null)
+    try {
+      const result = await autoAnalyse.mutateAsync({
+        url: form.website_url,
+        company_name: prospect.company_name,
+      })
+      setForm(f => ({
+        ...f,
+        has_website:         result.has_website         !== null ? { value: result.has_website,         source: 'auto' } : f.has_website,
+        has_https:           result.has_https           !== null ? { value: result.has_https,           source: 'auto' } : f.has_https,
+        is_responsive:       result.is_responsive       !== null ? { value: result.is_responsive,       source: 'auto' } : f.is_responsive,
+        has_form:            result.has_form            !== null ? { value: result.has_form,            source: 'auto' } : f.has_form,
+        has_email:           result.has_email           !== null ? { value: result.has_email,           source: 'auto' } : f.has_email,
+        has_phone:           result.has_phone           !== null ? { value: result.has_phone,           source: 'auto' } : f.has_phone,
+        has_google_business: result.has_google_business !== null ? { value: result.has_google_business, source: 'auto' } : f.has_google_business,
+        social_networks:     result.social_networks ? { ...f.social_networks, ...result.social_networks } : f.social_networks,
+      }))
+      if (result.details.warnings?.length) {
+        setAutoMsg(`Analyse partielle — ${result.details.warnings.join('; ')}`)
+      }
+    } catch (e) {
+      setAutoMsg(e instanceof Error ? e.message : 'Erreur lors de l\'analyse')
+    }
   }
 
   const socialDetected = (Object.entries(form.social_networks) as [SocialNetwork, boolean | null][])
@@ -316,17 +344,32 @@ export function ProspectAnalysePanel({ prospect }: { prospect: ProspectRow }) {
           <Wand2 className="h-4 w-4 text-brand-500 shrink-0" />
           <div className="flex-1 min-w-0">
             <p className="text-xs font-semibold text-gray-800">Analyse automatique</p>
-            <p className="text-[11px] text-gray-500">Connecteurs API à venir</p>
+            <p className="text-[11px] text-gray-500">
+              {autoAnalyse.isPending ? 'Analyse en cours…' : 'PageSpeed · Places · HTML scraping'}
+            </p>
           </div>
-          <Button variant="outline" size="sm" onClick={handleAutoAnalyse} className="bg-white shrink-0">
-            <Sparkles className="h-3.5 w-3.5" />
-            Analyser
+          <Button
+            variant="outline" size="sm"
+            onClick={handleAutoAnalyse}
+            disabled={autoAnalyse.isPending}
+            className="bg-white shrink-0"
+          >
+            {autoAnalyse.isPending
+              ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              : <Zap className="h-3.5 w-3.5" />
+            }
+            {autoAnalyse.isPending ? 'Analyse…' : 'Analyser'}
           </Button>
         </div>
 
         {autoMsg && (
-          <div className="flex items-start gap-2 text-xs px-3 py-2.5 bg-amber-50 border border-amber-200 rounded-xl text-amber-700">
-            <AlertCircle className="h-3.5 w-3.5 shrink-0 mt-0.5" />
+          <div className={cn(
+            'flex items-start gap-2 text-xs px-3 py-2.5 rounded-xl border',
+            autoAnalyse.isError
+              ? 'bg-red-50 border-red-200 text-red-700'
+              : 'bg-amber-50 border-amber-200 text-amber-700',
+          )}>
+            <TriangleAlert className="h-3.5 w-3.5 shrink-0 mt-0.5" />
             {autoMsg}
           </div>
         )}
