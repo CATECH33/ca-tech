@@ -5,6 +5,7 @@ import type { EmailDraftTone } from '@/types'
 /* ─── Types ──────────────────────────────────────────────────────────────── */
 
 export type CampaignStatus = 'draft' | 'active' | 'paused' | 'archived'
+export type CampaignType   = 'email' | 'phone' | 'linkedin' | 'whatsapp'
 export type ProspectCampaignStatus = 'active' | 'paused' | 'completed' | 'unsubscribed'
 
 export interface CampaignStep {
@@ -31,18 +32,24 @@ export interface ProspectCampaignRow {
 }
 
 export interface CampaignBase {
-  id: string
-  created_at: string
-  updated_at: string
-  name: string
+  id:          string
+  created_at:  string
+  updated_at:  string
+  name:        string
   description: string | null
-  status: CampaignStatus
-  tags: string[]
-  created_by: string | null
+  objective:   string | null
+  type:        CampaignType
+  status:      CampaignStatus
+  emails_sent: number
+  replies:     number
+  meetings:    number
+  clients:     number
+  tags:        string[]
+  created_by:  string | null
 }
 
 export interface CampaignRow extends CampaignBase {
-  steps: CampaignStep[]
+  steps:    CampaignStep[]
   enrolled: ProspectCampaignRow[]
 }
 
@@ -75,9 +82,12 @@ export function useCampaigns() {
 }
 
 export interface CreateCampaignInput {
-  name: string
-  description?: string
-  tags?: string[]
+  name:        string
+  description?: string | null
+  objective?:  string | null
+  type?:       CampaignType
+  status?:     CampaignStatus
+  tags?:       string[]
 }
 
 export function useCreateCampaign() {
@@ -87,10 +97,12 @@ export function useCreateCampaign() {
       const { data, error } = await supabase
         .from('campaigns')
         .insert({
-          name: input.name,
+          name:        input.name,
           description: input.description ?? null,
-          tags: input.tags ?? [],
-          status: 'draft',
+          objective:   input.objective   ?? null,
+          type:        input.type        ?? 'email',
+          status:      input.status      ?? 'draft',
+          tags:        input.tags        ?? [],
         })
         .select()
         .single()
@@ -102,18 +114,27 @@ export function useCreateCampaign() {
 }
 
 export interface UpdateCampaignInput {
-  id: string
-  name?: string
+  id:           string
+  name?:        string
   description?: string | null
-  status?: CampaignStatus
-  tags?: string[]
+  objective?:   string | null
+  type?:        CampaignType
+  status?:      CampaignStatus
+  emails_sent?: number
+  replies?:     number
+  meetings?:    number
+  clients?:     number
+  tags?:        string[]
 }
 
 export function useUpdateCampaign() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async ({ id, ...data }: UpdateCampaignInput) => {
-      const { error } = await supabase.from('campaigns').update(data).eq('id', id)
+      const { error } = await supabase
+        .from('campaigns')
+        .update({ ...data, updated_at: new Date().toISOString() })
+        .eq('id', id)
       if (error) throw error
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: Q }),
@@ -124,6 +145,8 @@ export function useDeleteCampaign() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async (id: string) => {
+      await supabase.from('prospect_campaigns').delete().eq('campaign_id', id)
+      await supabase.from('campaign_steps').delete().eq('campaign_id', id)
       const { error } = await supabase.from('campaigns').delete().eq('id', id)
       if (error) throw error
     },
@@ -138,10 +161,16 @@ export function useDuplicateCampaign() {
       const { data: newCampaign, error: ce } = await supabase
         .from('campaigns')
         .insert({
-          name: `${campaign.name} (copie)`,
+          name:        `${campaign.name} (copie)`,
           description: campaign.description,
-          status: 'draft',
-          tags: campaign.tags,
+          objective:   campaign.objective,
+          type:        campaign.type,
+          status:      'draft',
+          tags:        campaign.tags,
+          emails_sent: 0,
+          replies:     0,
+          meetings:    0,
+          clients:     0,
         })
         .select()
         .single()
@@ -152,10 +181,10 @@ export function useDuplicateCampaign() {
           .map(s => ({
             campaign_id: (newCampaign as CampaignBase).id,
             step_number: s.step_number,
-            delay_days: s.delay_days,
-            subject: s.subject,
-            body: s.body,
-            tone: s.tone,
+            delay_days:  s.delay_days,
+            subject:     s.subject,
+            body:        s.body,
+            tone:        s.tone,
           }))
         const { error: se } = await supabase.from('campaign_steps').insert(steps)
         if (se) throw se
