@@ -9,8 +9,10 @@ import {
 } from 'lucide-react'
 import { ProspectAnalysePanel } from '@/components/prospection/ProspectAnalysePanel'
 import { ProspectAuditPanel } from '@/components/prospection/ProspectAuditPanel'
+import { ProspectRecommendPanel } from '@/components/prospection/ProspectRecommendPanel'
 import { getAnalyse } from '@/hooks/useProspects'
 import { getAudit } from '@/hooks/useAudit'
+import { getRecommendations } from '@/hooks/useRecommendations'
 import {
   useCalendarEvents, useCreateCalendarEvent, useDeleteCalendarEvent, useSyncCalendarEvents,
   type CalendarEventType, type CreateCalendarEventInput,
@@ -662,8 +664,8 @@ function ProspectCalendarSection({ prospect }: { prospect: ProspectRow }) {
                   </div>
                   <div className="flex items-center gap-1.5 shrink-0">
                     {ev.google_event_id
-                      ? <CheckCircle2 className="h-3 w-3 text-emerald-500" title="Synchronisé" />
-                      : <AlertCircle className="h-3 w-3 text-gray-300" title="Non synchronisé" />}
+                      ? <CheckCircle2 className="h-3 w-3 text-emerald-500" />
+                      : <AlertCircle className="h-3 w-3 text-gray-300" />}
                     <button onClick={() => deleteEvent.mutate({ id: ev.id, googleEventId: ev.google_event_id, prospectId: prospect.id })}
                       className="text-gray-300 hover:text-red-400 transition">
                       <Trash2 className="h-3 w-3" />
@@ -735,7 +737,7 @@ function ProspectDriveSection({ prospect }: { prospect: ProspectRow }) {
 
 /* ─────────────────────────────────────────────────────────────────────────── */
 
-type FicheTab = 'fiche' | 'analyse' | 'audit'
+type FicheTab = 'fiche' | 'analyse' | 'audit' | 'reco'
 
 function ProspectFiche({
   prospect, onClose, onSave, onDelete,
@@ -749,6 +751,7 @@ function ProspectFiche({
   const [activeTab, setActiveTab] = useState<FicheTab>('fiche')
   const analyse = getAnalyse(prospect)
   const audit   = getAudit(prospect)
+  const reco    = getRecommendations(prospect)
   const [form, setForm] = useState<FicheForm>({
     company_name: prospect.company_name,
     website: prospect.website ?? '',
@@ -892,6 +895,26 @@ function ProspectFiche({
               </span>
             )}
           </button>
+          <button
+            onClick={() => setActiveTab('reco')}
+            className={cn(
+              'flex items-center gap-1.5 px-5 py-2.5 text-sm font-medium border-b-2 transition',
+              activeTab === 'reco'
+                ? 'border-violet-500 text-violet-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700',
+            )}
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            IA
+            {reco && (
+              <span className={cn(
+                'ml-1 text-[10px] font-bold text-white px-1.5 py-0.5 rounded-full leading-none',
+                reco.priority === 'A' ? 'bg-emerald-500' : reco.priority === 'B' ? 'bg-amber-500' : 'bg-slate-400',
+              )}>
+                {reco.priority}
+              </span>
+            )}
+          </button>
         </div>
 
         {/* Tab: Analyse */}
@@ -905,6 +928,13 @@ function ProspectFiche({
         {activeTab === 'audit' && (
           <div className="flex-1 overflow-hidden flex flex-col">
             <ProspectAuditPanel prospect={prospect} />
+          </div>
+        )}
+
+        {/* Tab: Recommandations IA */}
+        {activeTab === 'reco' && (
+          <div className="flex-1 overflow-hidden flex flex-col">
+            <ProspectRecommendPanel prospect={prospect} />
           </div>
         )}
 

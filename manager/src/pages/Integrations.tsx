@@ -504,7 +504,7 @@ export function Integrations() {
     setTestingService('all')
     setTestResult(null)
     try {
-      const r = await testMutation.mutateAsync()
+      const r = await testMutation.mutateAsync(undefined)
       const allOk = r.results ? Object.values(r.results).every(s => s.ok) : false
       setTestResult({ success: allOk, msg: allOk ? 'Tous les services sont opérationnels' : 'Certains services ont des erreurs — consultez les cartes ci-dessous' })
     } catch (e) {
