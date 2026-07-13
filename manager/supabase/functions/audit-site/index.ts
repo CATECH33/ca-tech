@@ -160,6 +160,17 @@ function detectAnalytics(html: string): boolean {
   return /googletagmanager\.com|google-analytics\.com|gtag\(["']config|UA-\d+-\d+|G-[A-Z0-9]{6,}/i.test(html)
 }
 
+function detectTitleTag(html: string): boolean {
+  return /<title>[^<]{5,}<\/title>/i.test(html)
+}
+
+function detectMetaDescription(html: string): boolean {
+  return (
+    /<meta[^>]+name=["']description["'][^>]+content=["'][^"']{10,}["']/i.test(html) ||
+    /<meta[^>]+content=["'][^"']{10,}["'][^>]+name=["']description["']/i.test(html)
+  )
+}
+
 export function detectCMS(html: string): string | null {
   if (/elementor/i.test(html) && /wp-content/i.test(html)) return 'WordPress + Elementor'
   if (/divi/i.test(html) && /wp-content/i.test(html)) return 'WordPress + Divi'
@@ -224,6 +235,20 @@ const CHECKS: CheckDef[] = [
     },
   },
   // ── SEO ─────────────────────────────────────────────────────────────────────
+  {
+    id: 'title_tag',
+    label: 'Balise title renseignée',
+    category: 'seo',
+    weight: 0.5,
+    run: ctx => ctx.html !== null ? detectTitleTag(ctx.html) : null,
+  },
+  {
+    id: 'meta_description',
+    label: 'Meta description présente',
+    category: 'seo',
+    weight: 0.5,
+    run: ctx => ctx.html !== null ? detectMetaDescription(ctx.html) : null,
+  },
   {
     id: 'sitemap',
     label: 'Sitemap.xml',
