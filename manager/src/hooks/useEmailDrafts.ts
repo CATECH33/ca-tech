@@ -190,6 +190,47 @@ export function useSendDraft() {
   })
 }
 
+/* ─── Générateur IA ──────────────────────────────────────────────────────── */
+
+export type EmailTemplateType = 'vitrine' | 'ecommerce' | 'refonte' | 'seo' | 'maintenance'
+
+export interface GenerateEmailInput {
+  prospect_id:   string
+  template_type: EmailTemplateType
+  tone:          EmailDraftTone
+}
+
+export interface GeneratedEmail {
+  subject:       string
+  body:          string
+  ai_model:      string
+  template_type: EmailTemplateType
+  generated_at:  string
+}
+
+export function useGenerateEmailDraft() {
+  return useMutation({
+    mutationFn: async (input: GenerateEmailInput): Promise<GeneratedEmail> => {
+      let authToken = SUPABASE_ANON_KEY
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session?.access_token) authToken = session.access_token
+
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/generate-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization:  `Bearer ${authToken}`,
+          apikey:         SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify(input),
+      })
+      const data = await res.json() as GeneratedEmail & { error?: string }
+      if (!res.ok) throw new Error(data.error ?? `HTTP ${res.status}`)
+      return data
+    },
+  })
+}
+
 /* ─── Prospects pour le sélecteur ────────────────────────────────────────── */
 
 export interface ProspectOption {

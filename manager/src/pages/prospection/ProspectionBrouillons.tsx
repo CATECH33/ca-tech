@@ -4,6 +4,7 @@ import {
   Mail, CheckCircle2, Clock, AlertCircle, Trash2, Pencil,
   ChevronRight, Eye, Wand2, Building2,
   User, Hash, Palette, ExternalLink, History,
+  Globe, ShoppingBag, Layers, Wrench,
 } from 'lucide-react'
 import { Layout } from '@/components/layout/Layout'
 import { Button } from '@/components/ui/Button'
@@ -14,7 +15,8 @@ import { cn, formatDate } from '@/lib/utils'
 import {
   useEmailDrafts, useCreateDraft, useUpdateDraft,
   useSetDraftStatus, useDeleteDraft, useProspectsForDraft, useSendDraft,
-  type DraftRow, type CreateDraftInput, type UpdateDraftInput,
+  useGenerateEmailDraft,
+  type DraftRow, type CreateDraftInput, type UpdateDraftInput, type EmailTemplateType,
 } from '@/hooks/useEmailDrafts'
 import { useGoogleIntegration } from '@/hooks/useGoogleIntegration'
 import type { EmailDraftStatus, EmailDraftTone } from '@/types'
@@ -48,6 +50,14 @@ const TONE_OPTIONS: { value: EmailDraftTone; label: string }[] = [
 const EMPTY_CREATE: CreateDraftInput = {
   prospect_id: '', prospect_contact_id: '',
   subject: '', body: '', tone: 'professional', sequence_step: 1,
+}
+
+const TEMPLATE_CONFIG: Record<EmailTemplateType, { label: string; icon: React.ElementType; activeClass: string }> = {
+  vitrine:     { label: 'Site Vitrine',  icon: Globe,       activeClass: 'border-brand-400 bg-brand-100 text-brand-700' },
+  ecommerce:   { label: 'E-commerce',   icon: ShoppingBag, activeClass: 'border-violet-400 bg-violet-100 text-violet-700' },
+  refonte:     { label: 'Refonte',      icon: Layers,      activeClass: 'border-amber-400 bg-amber-100 text-amber-700' },
+  seo:         { label: 'SEO',          icon: Search,      activeClass: 'border-emerald-400 bg-emerald-100 text-emerald-700' },
+  maintenance: { label: 'Maintenance',  icon: Wrench,      activeClass: 'border-slate-400 bg-slate-100 text-slate-700' },
 }
 
 /* ─── UTILITAIRES ─────────────────────────────────────────────────────────── */
@@ -207,10 +217,26 @@ function DraftPanel({
   const [mode, setMode]         = useState<PanelMode>('preview')
   const [saving, setSaving]     = useState(false)
   const [deleting, setDeleting] = useState(false)
-  const [statusBusy, setStatusBusy] = useState(false)
-  const [sendError, setSendError]   = useState<string | null>(null)
+  const [statusBusy, setStatusBusy]   = useState(false)
+  const [sendError, setSendError]     = useState<string | null>(null)
+  const [aiTemplate, setAiTemplate]   = useState<EmailTemplateType | null>(null)
 
-  const sendDraft = useSendDraft()
+  const sendDraft    = useSendDraft()
+  const generateEmail = useGenerateEmailDraft()
+
+  const handleGenerate = async () => {
+    if (!aiTemplate) return
+    try {
+      const result = await generateEmail.mutateAsync({
+        prospect_id:   draft.prospect_id,
+        template_type: aiTemplate,
+        tone:          editForm.tone ?? 'professional',
+      })
+      setEditForm(f => ({ ...f, subject: result.subject, body: result.body }))
+    } catch {
+      // error shown via generateEmail.error
+    }
+  }
 
   const [editForm, setEditForm] = useState<UpdateDraftInput>({
     id: draft.id, subject: draft.subject, body: draft.body,
@@ -405,15 +431,64 @@ function DraftPanel({
           {/* MODE ÉDITION */}
           {mode === 'edit' && (
             <div className="p-5 space-y-4">
-              <div className="bg-gradient-to-br from-brand-50 to-violet-50 rounded-xl p-3.5 border border-brand-100 flex items-start gap-3">
-                <Wand2 className="h-4 w-4 text-brand-400 shrink-0 mt-0.5" />
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-semibold text-brand-700 mb-0.5">Génération IA</p>
-                  <p className="text-xs text-brand-500">Rédaction automatique par Claude — à connecter dans une prochaine étape.</p>
+              {/* ── Génération IA ── */}
+              <div className="bg-gradient-to-br from-brand-50 to-violet-50 rounded-xl p-3.5 border border-brand-100 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <Wand2 className="h-3.5 w-3.5 text-brand-500" />
+                    <span className="text-xs font-semibold text-brand-700">Génération IA Claude</span>
+                  </div>
+                  {generateEmail.isSuccess && (
+                    <span className="text-[11px] text-emerald-600 flex items-center gap-1">
+                      <CheckCircle2 className="h-3 w-3" /> Généré
+                    </span>
+                  )}
                 </div>
-                <button disabled className="text-xs px-2.5 py-1 bg-white border border-brand-200 rounded-lg text-brand-400 cursor-not-allowed opacity-60 shrink-0">
-                  Générer
-                </button>
+                <div className="flex flex-wrap gap-1">
+                  {(Object.keys(TEMPLATE_CONFIG) as EmailTemplateType[]).map(key => {
+                    const cfg  = TEMPLATE_CONFIG[key]
+                    const Icon = cfg.icon
+                    return (
+                      <button
+                        key={key}
+                        type="button"
+                        onClick={() => setAiTemplate(key)}
+                        className={cn(
+                          'flex items-center gap-1 text-[11px] font-medium px-2 py-1 rounded-md border transition',
+                          aiTemplate === key
+                            ? cfg.activeClass
+                            : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50',
+                        )}
+                      >
+                        <Icon className="h-2.5 w-2.5" /> {cfg.label}
+                      </button>
+                    )
+                  })}
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleGenerate}
+                    disabled={!aiTemplate || generateEmail.isPending}
+                    className={cn(
+                      'flex-1 flex items-center justify-center gap-1.5 text-xs font-semibold h-7 rounded-lg transition',
+                      aiTemplate && !generateEmail.isPending
+                        ? 'bg-brand-600 text-white hover:bg-brand-700 shadow-sm'
+                        : 'bg-gray-200 text-gray-400 cursor-not-allowed',
+                    )}
+                  >
+                    {generateEmail.isPending
+                      ? <><RefreshCw className="h-3 w-3 animate-spin" /> Génération…</>
+                      : <><Wand2 className="h-3 w-3" /> Générer</>
+                    }
+                  </button>
+                </div>
+                {generateEmail.isError && (
+                  <p className="text-[11px] text-red-500 flex items-center gap-1">
+                    <AlertCircle className="h-3 w-3 shrink-0" />
+                    {(generateEmail.error as Error).message}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -549,10 +624,26 @@ function NewDraftModal({ open, onClose, onCreate }: {
   onCreate: (data: CreateDraftInput) => Promise<void>
 }) {
   const { data: prospects = [], isLoading } = useProspectsForDraft()
-  const [form, setForm]     = useState<CreateDraftInput>(EMPTY_CREATE)
+  const [form, setForm]         = useState<CreateDraftInput>(EMPTY_CREATE)
   const [creating, setCreating] = useState(false)
+  const [aiTemplate, setAiTemplate] = useState<EmailTemplateType | null>(null)
+  const generateEmail = useGenerateEmailDraft()
 
   const selectedProspect = prospects.find(p => p.id === form.prospect_id)
+
+  const handleGenerate = async () => {
+    if (!form.prospect_id || !aiTemplate) return
+    try {
+      const result = await generateEmail.mutateAsync({
+        prospect_id:   form.prospect_id,
+        template_type: aiTemplate,
+        tone:          form.tone ?? 'professional',
+      })
+      setForm(f => ({ ...f, subject: result.subject, body: result.body }))
+    } catch {
+      // error shown via generateEmail.error
+    }
+  }
 
   const handleCreate = async () => {
     if (!form.prospect_id || !form.subject || !form.body) return
@@ -584,12 +675,65 @@ function NewDraftModal({ open, onClose, onCreate }: {
       }
     >
       <div className="space-y-4">
-        <div className="bg-gradient-to-br from-brand-50 to-violet-50 rounded-xl p-3 border border-brand-100 flex items-center gap-3">
-          <Wand2 className="h-4 w-4 text-brand-400 shrink-0" />
-          <p className="text-xs text-brand-600 flex-1">Génération automatique par IA — à connecter dans une prochaine étape.</p>
-          <button disabled className="text-xs px-3 py-1.5 bg-white border border-brand-200 rounded-lg text-brand-400 cursor-not-allowed opacity-60">
-            Générer avec l'IA
+        {/* ── Génération IA ── */}
+        <div className="bg-gradient-to-br from-brand-50 to-violet-50 rounded-xl p-3.5 border border-brand-100 space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Wand2 className="h-4 w-4 text-brand-500" />
+              <span className="text-xs font-semibold text-brand-700">Générer avec l'IA Claude</span>
+            </div>
+            {generateEmail.isSuccess && (
+              <span className="text-[11px] text-emerald-600 flex items-center gap-1">
+                <CheckCircle2 className="h-3 w-3" /> Email généré
+              </span>
+            )}
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            {(Object.keys(TEMPLATE_CONFIG) as EmailTemplateType[]).map(key => {
+              const cfg  = TEMPLATE_CONFIG[key]
+              const Icon = cfg.icon
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setAiTemplate(key)}
+                  className={cn(
+                    'flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-lg border transition',
+                    aiTemplate === key
+                      ? cfg.activeClass
+                      : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50',
+                  )}
+                >
+                  <Icon className="h-3 w-3" /> {cfg.label}
+                </button>
+              )
+            })}
+          </div>
+          <button
+            type="button"
+            onClick={handleGenerate}
+            disabled={!form.prospect_id || !aiTemplate || generateEmail.isPending}
+            className={cn(
+              'w-full flex items-center justify-center gap-2 text-xs font-semibold h-8 rounded-lg transition',
+              form.prospect_id && aiTemplate && !generateEmail.isPending
+                ? 'bg-brand-600 text-white hover:bg-brand-700 shadow-sm'
+                : 'bg-gray-200 text-gray-400 cursor-not-allowed',
+            )}
+          >
+            {generateEmail.isPending
+              ? <><RefreshCw className="h-3.5 w-3.5 animate-spin" /> Génération en cours…</>
+              : <><Wand2 className="h-3.5 w-3.5" /> Générer l'email</>
+            }
           </button>
+          {generateEmail.isError && (
+            <p className="text-[11px] text-red-500 flex items-center gap-1">
+              <AlertCircle className="h-3 w-3 shrink-0" />
+              {(generateEmail.error as Error).message}
+            </p>
+          )}
+          {!form.prospect_id && (
+            <p className="text-[11px] text-brand-400">Sélectionnez d'abord un prospect pour activer la génération</p>
+          )}
         </div>
 
         <div className="grid grid-cols-2 gap-3">
@@ -598,7 +742,11 @@ function NewDraftModal({ open, onClose, onCreate }: {
               <Building2 className="h-3.5 w-3.5" /> Prospect *
             </label>
             <select value={form.prospect_id}
-              onChange={e => setForm(f => ({ ...f, prospect_id: e.target.value, prospect_contact_id: '' }))}
+              onChange={e => {
+                setForm(f => ({ ...f, prospect_id: e.target.value, prospect_contact_id: '' }))
+                setAiTemplate(null)
+                generateEmail.reset()
+              }}
               className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand-400/30 focus:border-brand-400 transition"
             >
               <option value="">{isLoading ? 'Chargement…' : '— Sélectionner un prospect —'}</option>
