@@ -131,6 +131,74 @@ export function useDeleteProspect() {
   })
 }
 
+// ── Activités ────────────────────────────────────────────────────────────────
+
+export function useAddActivity() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({
+      prospectId,
+      type,
+      description,
+    }: { prospectId: string; type: string; description?: string }) => {
+      const { error } = await supabase
+        .from('prospect_activities')
+        .insert({ prospect_id: prospectId, type, description })
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: Q }),
+  })
+}
+
+// ── Notes ─────────────────────────────────────────────────────────────────────
+
+export function getNotes(prospect: ProspectRow): string {
+  return ((prospect.metadata as Record<string, unknown> | null)?.notes as string) ?? ''
+}
+
+export function useSaveNotes() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ prospectId, notes }: { prospectId: string; notes: string }) => {
+      const { data: cur } = await supabase.from('prospects').select('metadata').eq('id', prospectId).single()
+      const metadata = { ...((cur?.metadata as Record<string, unknown>) ?? {}), notes }
+      const { error } = await supabase.from('prospects').update({ metadata }).eq('id', prospectId)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: Q }),
+  })
+}
+
+// ── Relances ──────────────────────────────────────────────────────────────────
+
+export type RelanceType = 'email' | 'appel' | 'linkedin' | 'autre'
+
+export interface Relance {
+  id: string
+  date: string          // ISO date string
+  type: RelanceType
+  note?: string
+  done: boolean
+  created_at: string
+}
+
+export function getRelances(prospect: ProspectRow): Relance[] {
+  return ((prospect.metadata as Record<string, unknown> | null)?.relances as Relance[]) ?? []
+}
+
+export function useSaveRelances() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ prospectId, relances }: { prospectId: string; relances: Relance[] }) => {
+      const { data: cur } = await supabase.from('prospects').select('metadata').eq('id', prospectId).single()
+      const metadata = { ...((cur?.metadata as Record<string, unknown>) ?? {}), relances }
+      const { error } = await supabase.from('prospects').update({ metadata }).eq('id', prospectId)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: Q }),
+  })
+}
+
 // ── Analyse IA ────────────────────────────────────────────────────────────────
 
 export type SocialNetwork = 'facebook' | 'instagram' | 'linkedin' | 'twitter' | 'youtube' | 'tiktok'

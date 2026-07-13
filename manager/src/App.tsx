@@ -32,6 +32,7 @@ import { ProspectionRelances } from './pages/prospection/ProspectionRelances'
 import { ProspectionStatistiques } from './pages/prospection/ProspectionStatistiques'
 import { ProspectionParametres } from './pages/prospection/ProspectionParametres'
 import { ProspectionPipeline } from './pages/prospection/ProspectionPipeline'
+import { ProspectionProspectDetail } from './pages/prospection/ProspectionProspectDetail'
 import { Integrations } from './pages/Integrations'
 import { GoogleOAuthCallback } from './pages/GoogleOAuthCallback'
 
@@ -73,6 +74,7 @@ function ProtectedApp() {
       <Route path="/prospection/statistiques" element={<ProtectedRoute><ProspectionStatistiques /></ProtectedRoute>} />
       <Route path="/prospection/config" element={<ProtectedRoute><ProspectionParametres /></ProtectedRoute>} />
       <Route path="/prospection/pipeline" element={<ProtectedRoute><ProspectionPipeline /></ProtectedRoute>} />
+      <Route path="/prospection/prospects/:id" element={<ProtectedRoute><ProspectionProspectDetail /></ProtectedRoute>} />
       <Route path="/auth/google/callback" element={<GoogleOAuthCallback />} />
     </Routes>
   )

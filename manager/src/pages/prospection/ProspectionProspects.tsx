@@ -1,11 +1,12 @@
 import { useState, useMemo, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Plus, Search, X, LayoutGrid, List, Download, ExternalLink,
   Building2, MapPin, Globe, Phone, Mail, User, ChevronUp, ChevronDown,
   ChevronLeft, ChevronRight as ChevronRightIcon, Sparkles, Trash2,
   Link2, RefreshCw, SlidersHorizontal, Calendar, Clock, Video,
   CheckCircle2, AlertCircle, CalendarPlus, FolderOpen, FolderPlus,
-  BarChart2, Gauge, Star,
+  BarChart2, Gauge, Star, ArrowUpRight,
 } from 'lucide-react'
 import { ProspectAnalysePanel } from '@/components/prospection/ProspectAnalysePanel'
 import { ProspectAuditPanel } from '@/components/prospection/ProspectAuditPanel'
@@ -749,6 +750,7 @@ function ProspectFiche({
   onSave: (data: FicheForm) => Promise<void>
   onDelete: () => Promise<void>
 }) {
+  const navigate = useNavigate()
   const contact = getPrimaryContact(prospect)
   const [activeTab, setActiveTab] = useState<FicheTab>('fiche')
   const analyse        = getAnalyse(prospect)
@@ -815,6 +817,13 @@ function ProspectFiche({
             </div>
             <div className="flex items-center gap-2">
               <ScoreBadge score={prospect.score} />
+              <button
+                onClick={() => { onClose(); navigate(`/prospection/prospects/${prospect.id}`) }}
+                title="Voir la fiche complète"
+                className="flex items-center gap-1 p-1.5 hover:bg-white/60 rounded-lg transition text-gray-500 hover:text-brand-600"
+              >
+                <ArrowUpRight className="h-4 w-4" />
+              </button>
               <button onClick={onClose} className="p-1.5 hover:bg-white/60 rounded-lg transition">
                 <X className="h-4 w-4 text-gray-500" />
               </button>
