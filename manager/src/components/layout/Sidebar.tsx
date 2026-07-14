@@ -27,6 +27,7 @@ const prospectionItems: NavItem[] = [
   { label: 'Campagnes',         icon: Layers,            to: '/prospection/campagnes' },
   { label: 'Relances',          icon: BellRing,          to: '/prospection/relances' },
   { label: 'Statistiques',      icon: BarChart3,         to: '/prospection/statistiques' },
+  { label: 'Connecteurs',       icon: Plug,              to: '/prospection/connecteurs' },
   { label: 'Paramètres',        icon: SlidersHorizontal, to: '/prospection/config' },
 ]
 
