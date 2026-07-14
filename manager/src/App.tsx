@@ -22,6 +22,7 @@ import { Parametres } from './pages/Parametres'
 import { Loic } from './pages/Loic'
 import { Notifications } from './pages/Notifications'
 import { Documents } from './pages/Documents'
+import { ProspectionCommercialDashboard } from './pages/prospection/ProspectionCommercialDashboard'
 import { ProspectionDashboard } from './pages/prospection/ProspectionDashboard'
 import { ProspectionProspects } from './pages/prospection/ProspectionProspects'
 import { ProspectionRecherche } from './pages/prospection/ProspectionRecherche'
@@ -64,7 +65,8 @@ function ProtectedApp() {
       <Route path="/documents/*" element={<ProtectedRoute><Documents /></ProtectedRoute>} />
       <Route path="/loic/*" element={<ProtectedRoute><Loic /></ProtectedRoute>} />
       <Route path="/notifications/*" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
-      <Route path="/prospection" element={<ProtectedRoute><ProspectionDashboard /></ProtectedRoute>} />
+      <Route path="/prospection" element={<ProtectedRoute><ProspectionCommercialDashboard /></ProtectedRoute>} />
+      <Route path="/prospection/ia" element={<ProtectedRoute><ProspectionDashboard /></ProtectedRoute>} />
       <Route path="/prospection/prospects" element={<ProtectedRoute><ProspectionProspects /></ProtectedRoute>} />
       <Route path="/prospection/recherche" element={<ProtectedRoute><ProspectionRecherche /></ProtectedRoute>} />
       <Route path="/prospection/qualification" element={<ProtectedRoute><ProspectionQualification /></ProtectedRoute>} />
