@@ -252,3 +252,136 @@ export function useProspectsForDraft() {
     },
   })
 }
+
+/* ─── Relances ───────────────────────────────────────────────────────────── */
+
+export interface RelanceMeta {
+  is_relance: true
+  relance_day: 3 | 7 | 15
+  scheduled_for: string // YYYY-MM-DD
+  base_date: string     // YYYY-MM-DD
+}
+
+export interface RelanceDraft extends Omit<DraftRow, 'metadata'> {
+  metadata: RelanceMeta
+}
+
+export function computeRelanceStatus(
+  draft: RelanceDraft,
+): 'overdue' | 'due_today' | 'pending' | 'sent' {
+  if (draft.status === 'sent') return 'sent'
+  const today = new Date().toISOString().slice(0, 10)
+  const sched = draft.metadata?.scheduled_for ?? ''
+  if (!sched) return 'pending'
+  if (sched < today) return 'overdue'
+  if (sched === today) return 'due_today'
+  return 'pending'
+}
+
+const QR = ['relance-drafts'] as const
+
+export function useRelanceDrafts() {
+  return useQuery({
+    queryKey: QR,
+    queryFn: async (): Promise<RelanceDraft[]> => {
+      const { data, error } = await supabase
+        .from('email_drafts')
+        .select(`
+          *,
+          prospect:prospects!prospect_id(id, company_name, industry),
+          contact:prospect_contacts!prospect_contact_id(id, first_name, last_name, email, job_title)
+        `)
+        .filter('metadata->>is_relance', 'eq', 'true')
+        .order('created_at', { ascending: false })
+      if (error) throw error
+      return (data ?? []) as RelanceDraft[]
+    },
+  })
+}
+
+export interface GenerateRelancesResult {
+  relances: Array<{ day: number; subject: string; body: string }>
+  prospect_id: string
+  company_name: string
+  generated_at: string
+}
+
+export function useGenerateRelances() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (prospect_id: string): Promise<GenerateRelancesResult> => {
+      let authToken = SUPABASE_ANON_KEY
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session?.access_token) authToken = session.access_token
+
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/generate-relances`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization:  `Bearer ${authToken}`,
+          apikey:         SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({ prospect_id }),
+      })
+      const result = await res.json() as GenerateRelancesResult & { error?: string }
+      if (!res.ok) throw new Error(result.error ?? `HTTP ${res.status}`)
+
+      // Delete existing relances for this prospect before inserting new ones
+      await supabase
+        .from('email_drafts')
+        .delete()
+        .eq('prospect_id', prospect_id)
+        .filter('metadata->>is_relance', 'eq', 'true')
+
+      const today = new Date().toISOString().slice(0, 10)
+      const inserts = result.relances.map(r => {
+        const d = new Date()
+        d.setDate(d.getDate() + r.day)
+        return {
+          prospect_id,
+          subject: r.subject,
+          body: r.body,
+          tone: 'professional' as EmailDraftTone,
+          sequence_step: r.day,
+          status: 'draft',
+          ai_model: 'claude-haiku-4-5-20251001',
+          metadata: {
+            is_relance: true,
+            relance_day: r.day,
+            scheduled_for: d.toISOString().slice(0, 10),
+            base_date: today,
+          },
+        }
+      })
+
+      const { error: insertError } = await supabase.from('email_drafts').insert(inserts)
+      if (insertError) throw insertError
+
+      return result
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QR })
+      qc.invalidateQueries({ queryKey: Q })
+    },
+  })
+}
+
+export interface ProspectBasic {
+  id: string
+  company_name: string
+  industry?: string | null
+}
+
+export function useAllProspects() {
+  return useQuery({
+    queryKey: ['prospects-basic'],
+    queryFn: async (): Promise<ProspectBasic[]> => {
+      const { data, error } = await supabase
+        .from('prospects')
+        .select('id, company_name, industry')
+        .order('company_name')
+      if (error) throw error
+      return (data ?? []) as ProspectBasic[]
+    },
+  })
+}
