@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import {
   Building2, Globe, Search, X, MapPin, User, ExternalLink,
+  Sparkles, Mail, MessageSquare, Calendar, FileText, PenLine, CheckCircle2, Rocket,
 } from 'lucide-react'
 import { Layout } from '@/components/layout/Layout'
 import { cn } from '@/lib/utils'
@@ -14,26 +15,125 @@ import type { ProspectStatus } from '@/types'
 interface Stage {
   status: ProspectStatus
   label: string
+  icon: React.ElementType
+  headerBg: string
+  headerText: string
   borderColor: string
-  bgColor: string
+  dropBg: string
   accent: string
 }
 
 const STAGES: Stage[] = [
-  { status: 'new',          label: 'Nouveau',      borderColor: 'border-gray-200',    bgColor: 'bg-gray-50',     accent: 'bg-gray-400' },
-  { status: 'researching',  label: 'En recherche', borderColor: 'border-blue-200',    bgColor: 'bg-blue-50',     accent: 'bg-blue-400' },
-  { status: 'qualified',    label: 'Qualifié',     borderColor: 'border-indigo-200',  bgColor: 'bg-indigo-50',   accent: 'bg-indigo-500' },
-  { status: 'contacted',    label: 'Contacté',     borderColor: 'border-violet-200',  bgColor: 'bg-violet-50',   accent: 'bg-violet-500' },
-  { status: 'responded',    label: 'A répondu',    borderColor: 'border-amber-200',   bgColor: 'bg-amber-50',    accent: 'bg-amber-500' },
-  { status: 'meeting',      label: 'RDV planifié', borderColor: 'border-orange-200',  bgColor: 'bg-orange-50',   accent: 'bg-orange-500' },
-  { status: 'converted',    label: 'Converti',     borderColor: 'border-emerald-200', bgColor: 'bg-emerald-50',  accent: 'bg-emerald-500' },
+  {
+    status: 'new',
+    label: 'Nouveau prospect',
+    icon: Sparkles,
+    headerBg: 'bg-slate-100',
+    headerText: 'text-slate-600',
+    borderColor: 'border-slate-200',
+    dropBg: 'bg-slate-50/60',
+    accent: 'bg-slate-400',
+  },
+  {
+    status: 'qualified',
+    label: 'Qualifié',
+    icon: Building2,
+    headerBg: 'bg-blue-50',
+    headerText: 'text-blue-700',
+    borderColor: 'border-blue-200',
+    dropBg: 'bg-blue-50/40',
+    accent: 'bg-blue-500',
+  },
+  {
+    status: 'email_ready',
+    label: 'Email prêt',
+    icon: Mail,
+    headerBg: 'bg-indigo-50',
+    headerText: 'text-indigo-700',
+    borderColor: 'border-indigo-200',
+    dropBg: 'bg-indigo-50/40',
+    accent: 'bg-indigo-500',
+  },
+  {
+    status: 'contacted',
+    label: 'Email envoyé',
+    icon: Mail,
+    headerBg: 'bg-violet-50',
+    headerText: 'text-violet-700',
+    borderColor: 'border-violet-200',
+    dropBg: 'bg-violet-50/40',
+    accent: 'bg-violet-500',
+  },
+  {
+    status: 'responded',
+    label: 'Réponse reçue',
+    icon: MessageSquare,
+    headerBg: 'bg-cyan-50',
+    headerText: 'text-cyan-700',
+    borderColor: 'border-cyan-200',
+    dropBg: 'bg-cyan-50/40',
+    accent: 'bg-cyan-500',
+  },
+  {
+    status: 'meeting',
+    label: 'Rendez-vous',
+    icon: Calendar,
+    headerBg: 'bg-teal-50',
+    headerText: 'text-teal-700',
+    borderColor: 'border-teal-200',
+    dropBg: 'bg-teal-50/40',
+    accent: 'bg-teal-500',
+  },
+  {
+    status: 'proposal_sent',
+    label: 'Devis envoyé',
+    icon: FileText,
+    headerBg: 'bg-amber-50',
+    headerText: 'text-amber-700',
+    borderColor: 'border-amber-200',
+    dropBg: 'bg-amber-50/40',
+    accent: 'bg-amber-500',
+  },
+  {
+    status: 'contract_signed',
+    label: 'Contrat signé',
+    icon: PenLine,
+    headerBg: 'bg-orange-50',
+    headerText: 'text-orange-700',
+    borderColor: 'border-orange-200',
+    dropBg: 'bg-orange-50/40',
+    accent: 'bg-orange-500',
+  },
+  {
+    status: 'converted',
+    label: 'Client',
+    icon: CheckCircle2,
+    headerBg: 'bg-emerald-50',
+    headerText: 'text-emerald-700',
+    borderColor: 'border-emerald-200',
+    dropBg: 'bg-emerald-50/40',
+    accent: 'bg-emerald-500',
+  },
+  {
+    status: 'project_started',
+    label: 'Projet lancé',
+    icon: Rocket,
+    headerBg: 'bg-green-50',
+    headerText: 'text-green-700',
+    borderColor: 'border-green-200',
+    dropBg: 'bg-green-50/40',
+    accent: 'bg-green-500',
+  },
 ]
 
 const STAGE_DISQUALIFIED: Stage = {
   status: 'disqualified',
   label: 'Disqualifié',
+  icon: X,
+  headerBg: 'bg-red-50',
+  headerText: 'text-red-600',
   borderColor: 'border-red-200',
-  bgColor: 'bg-red-50',
+  dropBg: 'bg-red-50/40',
   accent: 'bg-red-400',
 }
 
@@ -84,10 +184,10 @@ function KanbanCard({
       onDragEnd={onDragEnd}
       onClick={onClick}
       className={cn(
-        'bg-white rounded-xl border p-3 cursor-pointer select-none transition-all group',
+        'bg-white rounded-xl border p-3 cursor-grab active:cursor-grabbing select-none transition-all group',
         dragging
           ? 'opacity-40 scale-95 shadow-lg border-gray-200'
-          : 'border-gray-100 shadow-sm hover:shadow-md hover:border-gray-200',
+          : 'border-gray-100 shadow-sm hover:shadow-md hover:border-gray-200 hover:-translate-y-0.5',
       )}
     >
       {/* Priority badge + score */}
@@ -102,7 +202,7 @@ function KanbanCard({
             </span>
           )}
           {prospect.tags.slice(0, 1).map(tag => (
-            <span key={tag} className="text-[10px] text-gray-400 bg-gray-50 px-1.5 py-0.5 rounded-full border border-gray-100 truncate max-w-[70px]">
+            <span key={tag} className="text-[10px] text-gray-400 bg-gray-50 px-1.5 py-0.5 rounded-full border border-gray-100 truncate max-w-[72px]">
               {tag}
             </span>
           ))}
@@ -142,7 +242,7 @@ function KanbanCard({
       {/* Footer */}
       <div className="flex items-center justify-between mt-2.5 pt-2 border-t border-gray-50">
         <span className="text-[10px] text-gray-300">
-          {days === 0 ? "Auj." : `${days}j`}
+          {days === 0 ? 'Auj.' : `${days}j`}
         </span>
         <div className="flex items-center gap-1.5">
           {audit && (
@@ -178,16 +278,23 @@ function KanbanColumn({
   onCardDragEnd: () => void
   onCardClick: (p: ProspectRow) => void
 }) {
+  const Icon = stage.icon
+
   return (
-    <div className="flex flex-col w-[264px] shrink-0">
+    <div className="flex flex-col w-[240px] shrink-0">
       {/* Column header */}
       <div className={cn(
         'flex items-center gap-2 rounded-t-xl px-3 py-2.5 border border-b-0',
-        stage.borderColor, stage.bgColor,
+        stage.headerBg, stage.borderColor,
       )}>
-        <span className={cn('h-2 w-2 rounded-full shrink-0', stage.accent)} />
-        <span className="text-xs font-semibold text-gray-700 flex-1 truncate">{stage.label}</span>
-        <span className="text-[11px] font-semibold text-gray-400 bg-white/70 px-1.5 py-0.5 rounded-full leading-none">
+        <Icon className={cn('h-3.5 w-3.5 shrink-0', stage.headerText)} />
+        <span className={cn('text-xs font-semibold flex-1 truncate', stage.headerText)}>
+          {stage.label}
+        </span>
+        <span className={cn(
+          'text-[11px] font-semibold px-1.5 py-0.5 rounded-full leading-none bg-white/80',
+          stage.headerText,
+        )}>
           {prospects.length}
         </span>
       </div>
@@ -201,10 +308,10 @@ function KanbanColumn({
           'flex-1 rounded-b-xl border border-t-0 p-2 space-y-2 transition-colors overflow-y-auto',
           stage.borderColor,
           isDropTarget && draggingId
-            ? 'bg-brand-50/80 border-brand-300'
-            : 'bg-gray-50/40',
+            ? 'bg-brand-50/70 border-brand-300'
+            : stage.dropBg,
         )}
-        style={{ minHeight: 180 }}
+        style={{ minHeight: 160 }}
       >
         {prospects.map(p => (
           <KanbanCard
@@ -218,14 +325,14 @@ function KanbanColumn({
         ))}
 
         {prospects.length === 0 && !(isDropTarget && draggingId) && (
-          <div className="flex items-center justify-center py-6 text-[11px] text-gray-300 select-none">
+          <div className="flex items-center justify-center py-8 text-[11px] text-gray-300 select-none">
             Vide
           </div>
         )}
 
         {isDropTarget && draggingId && (
           <div className="h-14 rounded-lg border-2 border-dashed border-brand-300 bg-brand-50/50 flex items-center justify-center">
-            <span className="text-xs text-brand-400 font-medium">Déposer ici</span>
+            <span className="text-xs text-brand-500 font-medium">Déposer ici</span>
           </div>
         )}
       </div>
@@ -247,22 +354,33 @@ function QuickPanel({
   const reco    = getRecommendations(prospect)
   const audit   = getAudit(prospect)
   const contact = prospect.contacts.find(c => c.is_primary) ?? prospect.contacts[0] ?? null
+  const stage   = ALL_STAGES_OPTIONS.find(s => s.status === prospect.status)
 
   return (
     <div className="w-[300px] shrink-0 bg-white border-l border-gray-200 h-full flex flex-col shadow-xl">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 shrink-0">
-        <div className="flex items-center gap-2 min-w-0">
-          <div className="h-7 w-7 rounded-lg bg-brand-50 flex items-center justify-center shrink-0">
-            <Building2 className="h-3.5 w-3.5 text-brand-500" />
+      <div className={cn(
+        'flex items-center justify-between px-4 py-3 border-b border-gray-100 shrink-0',
+        stage?.headerBg ?? 'bg-white',
+      )}>
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className={cn(
+            'h-8 w-8 rounded-xl flex items-center justify-center shrink-0',
+            'bg-white/80 shadow-sm',
+          )}>
+            <Building2 className={cn('h-4 w-4', stage?.headerText ?? 'text-brand-500')} />
           </div>
           <div className="min-w-0">
             <p className="text-sm font-semibold text-gray-900 truncate">{prospect.company_name}</p>
-            {prospect.industry && <p className="text-[11px] text-gray-400 truncate">{prospect.industry}</p>}
+            {prospect.industry && (
+              <p className={cn('text-[11px] truncate', stage?.headerText ?? 'text-gray-400')}>
+                {prospect.industry}
+              </p>
+            )}
           </div>
         </div>
-        <button onClick={onClose} className="p-1.5 hover:bg-gray-100 rounded-lg transition shrink-0 ml-2">
-          <X className="h-4 w-4 text-gray-400" />
+        <button onClick={onClose} className="p-1.5 hover:bg-white/60 rounded-lg transition shrink-0 ml-2">
+          <X className="h-4 w-4 text-gray-500" />
         </button>
       </div>
 
@@ -270,7 +388,7 @@ function QuickPanel({
 
         {/* Status select */}
         <div>
-          <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Statut</p>
+          <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Étape pipeline</p>
           <select
             value={prospect.status}
             onChange={e => onStatusChange(e.target.value as ProspectStatus)}
@@ -384,6 +502,32 @@ function QuickPanel({
   )
 }
 
+// ── Progress bar ──────────────────────────────────────────────────────────────
+
+function PipelineProgress({ prospects }: { prospects: ProspectRow[] }) {
+  const total = prospects.filter(p => p.status !== 'disqualified').length
+  if (total === 0) return null
+
+  const counts = STAGES.map(s => prospects.filter(p => p.status === s.status).length)
+
+  return (
+    <div className="flex items-center gap-0.5 h-1.5 rounded-full overflow-hidden bg-gray-100 w-48">
+      {STAGES.map((stage, i) => {
+        const pct = total > 0 ? (counts[i] / total) * 100 : 0
+        if (pct === 0) return null
+        return (
+          <div
+            key={stage.status}
+            className={cn('h-full transition-all', stage.accent)}
+            style={{ width: `${pct}%` }}
+            title={`${stage.label}: ${counts[i]}`}
+          />
+        )
+      })}
+    </div>
+  )
+}
+
 // ── Main page ─────────────────────────────────────────────────────────────────
 
 export function ProspectionPipeline() {
@@ -404,7 +548,9 @@ export function ProspectionPipeline() {
     (p.city ?? '').toLowerCase().includes(search.toLowerCase()),
   )
 
-  const activeCount = filtered.filter(p => p.status !== 'disqualified').length
+  const activeCount      = filtered.filter(p => p.status !== 'disqualified').length
+  const convertedCount   = filtered.filter(p => p.status === 'converted' || p.status === 'project_started').length
+  const conversionRate   = activeCount > 0 ? Math.round((convertedCount / filtered.length) * 100) : 0
 
   const handleDrop = (status: ProspectStatus) => {
     if (draggingId) update.mutate({ id: draggingId, status })
@@ -424,11 +570,19 @@ export function ProspectionPipeline() {
 
         {/* ── Header ── */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-white shrink-0">
-          <div>
-            <h1 className="text-lg font-bold text-gray-900">Pipeline commercial</h1>
-            <p className="text-xs text-gray-400 mt-0.5">
-              {activeCount} prospect{activeCount !== 1 ? 's' : ''} en cours
-            </p>
+          <div className="flex items-center gap-4">
+            <div>
+              <h1 className="text-lg font-bold text-gray-900">Pipeline commercial</h1>
+              <p className="text-xs text-gray-400 mt-0.5">
+                {activeCount} prospect{activeCount !== 1 ? 's' : ''} actifs
+                {convertedCount > 0 && (
+                  <span className="ml-2 text-emerald-500 font-medium">
+                    · {convertedCount} client{convertedCount !== 1 ? 's' : ''} ({conversionRate}%)
+                  </span>
+                )}
+              </p>
+            </div>
+            <PipelineProgress prospects={filtered} />
           </div>
 
           <div className="flex items-center gap-2.5">

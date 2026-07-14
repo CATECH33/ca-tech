@@ -286,8 +286,9 @@ export interface Notification {
 // ── Prospection IA ────────────────────────────────────────────────────────────
 
 export type ProspectStatus =
-  | 'new' | 'researching' | 'qualified' | 'contacted'
-  | 'responded' | 'meeting' | 'converted' | 'disqualified'
+  | 'new' | 'researching' | 'qualified' | 'email_ready' | 'contacted'
+  | 'responded' | 'meeting' | 'proposal_sent' | 'contract_signed'
+  | 'converted' | 'project_started' | 'disqualified'
 
 export type ProspectSource =
   | 'manual' | 'linkedin' | 'search' | 'referral' | 'import' | 'other'
