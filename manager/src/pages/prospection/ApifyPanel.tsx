@@ -15,6 +15,7 @@ import { CURATED_ACTORS, CATEGORY_LABEL } from '../../connectors/connectors/apif
 import type { CuratedActor } from '../../connectors/connectors/apify-actors'
 import { TERMINAL_STATUSES } from '../../connectors/connectors/apify-client'
 import { bulkImportProspects } from '@/lib/prospect-importer'
+import { runAutoAnalyse } from '@/lib/auto-analyse'
 import { useQueryClient } from '@tanstack/react-query'
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -170,6 +171,7 @@ function ManualProspectForm({ onDone }: { onDone: () => void }) {
       } else {
         setResult('success')
         queryClient.invalidateQueries({ queryKey: ['prospects'] })
+        runAutoAnalyse(report.importedIds)
         setForm(EMPTY_FORM)
       }
     } catch (err) {

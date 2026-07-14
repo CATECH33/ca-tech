@@ -6,6 +6,7 @@ import { connectorLogger } from '../connectors/logger'
 import { mapDatasetItems } from '../connectors/connectors/apify-mappers'
 import { bulkImportProspects } from '../lib/prospect-importer'
 import type { ImportReport } from '../lib/prospect-importer'
+import { runAutoAnalyse } from '../lib/auto-analyse'
 
 export type { ApifyUser, ApifyRun, ApifyActorMeta, ImportReport }
 
@@ -216,6 +217,9 @@ export function useApifyImport(apiKey: string) {
 
       // 4. Invalidate React Query cache so ProspectionProspects reflects new data
       qc.invalidateQueries({ queryKey: ['prospects'] })
+
+      // 5. Lancer l'analyse IA en arrière-plan pour chaque nouveau prospect
+      runAutoAnalyse(result.importedIds)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Erreur lors de l\'import')
       setStatus('error')

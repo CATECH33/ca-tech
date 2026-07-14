@@ -35,6 +35,7 @@ import {
   type ProspectRow, type CreateProspectInput,
 } from '@/hooks/useProspects'
 import { supabase } from '@/lib/supabase'
+import { runAutoAnalyse } from '@/lib/auto-analyse'
 import type { ProspectStatus, ProspectSource } from '@/types'
 
 /* ─── CONSTANTES ──────────────────────────────────────────────────────────── */
@@ -1273,6 +1274,8 @@ export function ProspectionProspects() {
       // Re-invalider après l'insert du contact pour que la fiche affiche le contact
       queryClient.invalidateQueries({ queryKey: ['prospects'] })
     }
+    // Lancer l'analyse IA en arrière-plan
+    if (prospect) runAutoAnalyse([prospect.id])
     setShowAdd(false)
     setForm(FORM_INIT)
     setFormPhone('')

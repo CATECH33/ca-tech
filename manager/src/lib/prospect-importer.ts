@@ -5,10 +5,11 @@ import { supabase } from '@/lib/supabase'
 import type { ProspectImport, ConnectorErrorDetail } from '../connectors/types'
 
 export interface ImportReport {
-  total:    number
-  imported: number
-  skipped:  number
-  errors:   ConnectorErrorDetail[]
+  total:       number
+  imported:    number
+  skipped:     number
+  errors:      ConnectorErrorDetail[]
+  importedIds: string[]
 }
 
 function normalizeWebsite(w: string | undefined): string | null {
@@ -53,6 +54,7 @@ export async function bulkImportProspects(
 
   // 3. Insert each prospect individually to capture ID for contacts
   let imported = 0
+  const importedIds: string[] = []
 
   for (const p of toInsert) {
     const { data: newProspect, error: insertErr } = await supabase
@@ -85,6 +87,7 @@ export async function bulkImportProspects(
     }
 
     imported++
+    importedIds.push(newProspect.id)
 
     // 4. Insert contacts if provided (phone, email from Google Maps etc.)
     if (p.contacts?.length) {
@@ -118,5 +121,5 @@ export async function bulkImportProspects(
     }
   }
 
-  return { total: prospects.length, imported, skipped, errors }
+  return { total: prospects.length, imported, skipped, errors, importedIds }
 }
