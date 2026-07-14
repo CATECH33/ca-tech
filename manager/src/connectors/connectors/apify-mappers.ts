@@ -89,7 +89,7 @@ function mapGoogleSearch(item: RawItem): ProspectImport | null {
 // ── Google Maps Scraper ───────────────────────────────────────────────────────
 // compass/google-maps-scraper
 // Item fields: title, website, phone, address, city, postalCode, countryCode,
-//              categoryName, totalScore, reviewsCount
+//              categoryName, totalScore, reviewsCount, url (Google Maps link)
 
 function mapGoogleMaps(item: RawItem): ProspectImport | null {
   const name = str(item.title || item.name)
@@ -97,20 +97,32 @@ function mapGoogleMaps(item: RawItem): ProspectImport | null {
 
   const website     = str(item.website) ? normalizeDomain(str(item.website)) : undefined
   const countryCode = str(item.countryCode)
+  const phone       = str(item.phone) || undefined
+  const email       = str(item.email) || undefined
+  const mapsUrl     = str(item.url) || undefined
 
   return {
     company_name: name,
     website,
+    industry:     str(item.categoryName) || undefined,
     city:         str(item.city) || undefined,
     country:      countryCode ? countryCodeToName(countryCode) : undefined,
     source:       'search',
     metadata: {
-      phone:    str(item.phone) || undefined,
-      address:  str(item.address) || undefined,
-      category: str(item.categoryName) || undefined,
-      rating:   typeof item.totalScore === 'number' ? item.totalScore : undefined,
-      reviews:  typeof item.reviewsCount === 'number' ? item.reviewsCount : undefined,
+      phone,
+      email,
+      address:        str(item.address) || undefined,
+      google_maps_url: mapsUrl,
+      rating:         typeof item.totalScore === 'number' ? item.totalScore : undefined,
+      reviews:        typeof item.reviewsCount === 'number' ? item.reviewsCount : undefined,
     },
+    contacts: (phone || email) ? [{
+      first_name:  name,
+      last_name:   '',
+      phone,
+      email,
+      is_primary:  true,
+    }] : undefined,
     _raw: item,
   }
 }
@@ -185,11 +197,11 @@ function mapGeneric(item: RawItem): ProspectImport | null {
 // ── Registry ──────────────────────────────────────────────────────────────────
 
 const MAPPERS: Record<string, Mapper> = {
-  'apify/google-search-scraper':     mapGoogleSearch,
-  'compass/google-maps-scraper':     mapGoogleMaps,
-  'vdrmota/contactinfoscraper':      mapContactInfo,
-  'apify/website-content-crawler':   mapWebsiteContent,
-  'apify/cheerio-scraper':           mapWebsiteContent,
+  'apify/google-search-scraper':      mapGoogleSearch,
+  'compass/crawler-google-places':    mapGoogleMaps,
+  'vdrmota/contactinfoscraper':       mapContactInfo,
+  'apify/website-content-crawler':    mapWebsiteContent,
+  'apify/cheerio-scraper':            mapWebsiteContent,
 }
 
 export function getMapper(actorId: string): Mapper {

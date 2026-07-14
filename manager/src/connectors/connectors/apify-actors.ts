@@ -27,7 +27,7 @@ export const CURATED_ACTORS: CuratedActor[] = [
     docsUrl: 'https://apify.com/apify/google-search-scraper',
   },
   {
-    id:          'compass/google-maps-scraper',
+    id:          'compass/crawler-google-places',
     name:        'Google Maps Scraper',
     description: 'Fiches d\'établissements Google Maps avec coordonnées et avis.',
     category:    'maps',
@@ -35,9 +35,9 @@ export const CURATED_ACTORS: CuratedActor[] = [
     inputTemplate: {
       searchStringsArray:         ['agence web'],
       locationQuery:              'Paris, France',
-      maxCrawledPlacesPerSearch:  50,
+      maxCrawledPlacesPerSearch:  5,
     },
-    docsUrl: 'https://apify.com/compass/google-maps-scraper',
+    docsUrl: 'https://apify.com/compass/crawler-google-places',
   },
   {
     id:          'apify/website-content-crawler',
