@@ -1,21 +1,27 @@
 import { useState } from 'react'
-import { Bell, Search, LogOut, User, ChevronDown, Menu } from 'lucide-react'
+import { Bell, Search, LogOut, User, ChevronDown, Menu, CheckCheck } from 'lucide-react'
 import { cn, formatDate } from '@/lib/utils'
 import { Avatar } from '@/components/ui/Avatar'
 import { useAuth } from '@/contexts/AuthContext'
-import type { Notification } from '@/types'
-
-const MOCK_NOTIFICATIONS: Notification[] = [
-  { id: '1', created_at: new Date().toISOString(), titre: 'Nouveau devis accepté', corps: 'Le devis DEV-2024-041 a été accepté par Martin SARL.', type: 'success', lu: false, lien: '/devis' },
-  { id: '2', created_at: new Date(Date.now() - 3600000).toISOString(), titre: 'Facture en retard', corps: 'La facture FAC-2024-018 est en retard de 5 jours.', type: 'warning', lu: false, lien: '/factures' },
-  { id: '3', created_at: new Date(Date.now() - 86400000).toISOString(), titre: 'Nouveau lead', corps: 'Un nouveau lead a rempli le formulaire de contact.', type: 'info', lu: true, lien: '/leads' },
-]
+import { useNavigate } from 'react-router-dom'
+import {
+  useInAppNotifications,
+  useInAppNotificationsRealtime,
+  useMarkNotificationRead,
+  useMarkAllNotificationsRead,
+} from '@/hooks/useInAppNotifications'
 
 const notifColors: Record<string, string> = {
   success: 'bg-emerald-50 text-emerald-600',
   warning: 'bg-amber-50 text-amber-600',
-  error: 'bg-red-50 text-red-600',
-  info: 'bg-blue-50 text-blue-600',
+  error:   'bg-red-50 text-red-600',
+  info:    'bg-blue-50 text-blue-600',
+}
+const notifIcons: Record<string, string> = {
+  success: '✓',
+  warning: '!',
+  error:   '✗',
+  info:    'i',
 }
 
 interface HeaderProps {
@@ -25,12 +31,25 @@ interface HeaderProps {
 
 export function Header({ sidebarWidth, onMobileMenuToggle }: HeaderProps) {
   const [notifOpen, setNotifOpen] = useState(false)
-  const [userOpen, setUserOpen] = useState(false)
+  const [userOpen,  setUserOpen]  = useState(false)
   const { user, signOut } = useAuth()
-  const unread = MOCK_NOTIFICATIONS.filter(n => !n.lu).length
+  const navigate = useNavigate()
 
-  const userEmail = user?.email ?? ''
+  const { data: notifications = [] } = useInAppNotifications()
+  useInAppNotificationsRealtime()
+  const markRead    = useMarkNotificationRead()
+  const markAllRead = useMarkAllNotificationsRead()
+
+  const unread = notifications.filter(n => !n.is_read).length
+
+  const userEmail  = user?.email ?? ''
   const displayName = userEmail.split('@')[0].replace(/[._-]/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+
+  const handleNotifClick = (n: typeof notifications[0]) => {
+    if (!n.is_read) markRead.mutate(n.id)
+    if (n.link) navigate(n.link)
+    setNotifOpen(false)
+  }
 
   return (
     <header
@@ -66,7 +85,7 @@ export function Header({ sidebarWidth, onMobileMenuToggle }: HeaderProps) {
           <Bell className="h-4 w-4" />
           {unread > 0 && (
             <span className="absolute -top-0.5 -right-0.5 h-4 w-4 bg-brand-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center leading-none">
-              {unread}
+              {unread > 9 ? '9+' : unread}
             </span>
           )}
         </button>
@@ -77,25 +96,56 @@ export function Header({ sidebarWidth, onMobileMenuToggle }: HeaderProps) {
             <div className="absolute right-0 top-10 w-80 bg-white border border-gray-100 rounded-xl shadow-modal z-50 overflow-hidden animate-slide-in">
               <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
                 <span className="text-sm font-semibold text-gray-900">Notifications</span>
-                {unread > 0 && <span className="text-xs text-brand-500 font-medium">{unread} non lues</span>}
+                <div className="flex items-center gap-2">
+                  {unread > 0 && (
+                    <span className="text-xs text-brand-500 font-medium">{unread} non lues</span>
+                  )}
+                  {unread > 0 && (
+                    <button
+                      onClick={e => { e.stopPropagation(); markAllRead.mutate() }}
+                      title="Tout marquer comme lu"
+                      className="text-gray-400 hover:text-gray-600 transition"
+                    >
+                      <CheckCheck className="h-3.5 w-3.5" />
+                    </button>
+                  )}
+                </div>
               </div>
               <div className="divide-y divide-gray-50 max-h-72 overflow-y-auto">
-                {MOCK_NOTIFICATIONS.map(n => (
-                  <div key={n.id} className={cn('flex gap-3 px-4 py-3 hover:bg-gray-50 cursor-pointer transition', !n.lu && 'bg-blue-50/30')}>
-                    <span className={cn('h-7 w-7 rounded-lg flex items-center justify-center text-xs shrink-0 mt-0.5', notifColors[n.type])}>
-                      {n.type === 'success' ? '✓' : n.type === 'warning' ? '!' : 'i'}
-                    </span>
-                    <div className="min-w-0">
-                      <p className="text-xs font-medium text-gray-900 truncate">{n.titre}</p>
-                      <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{n.corps}</p>
-                      <p className="text-[10px] text-gray-400 mt-1">{formatDate(n.created_at, 'dd/MM à HH:mm')}</p>
-                    </div>
-                    {!n.lu && <span className="h-1.5 w-1.5 rounded-full bg-brand-500 shrink-0 mt-2" />}
+                {notifications.length === 0 ? (
+                  <div className="px-4 py-6 text-center text-xs text-gray-400">
+                    Aucune notification
                   </div>
-                ))}
+                ) : (
+                  notifications.slice(0, 10).map(n => (
+                    <div
+                      key={n.id}
+                      onClick={() => handleNotifClick(n)}
+                      className={cn(
+                        'flex gap-3 px-4 py-3 hover:bg-gray-50 cursor-pointer transition',
+                        !n.is_read && 'bg-blue-50/30',
+                      )}
+                    >
+                      <span className={cn('h-7 w-7 rounded-lg flex items-center justify-center text-xs shrink-0 mt-0.5', notifColors[n.type])}>
+                        {notifIcons[n.type]}
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs font-medium text-gray-900 truncate">{n.title}</p>
+                        {n.message && <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{n.message}</p>}
+                        <p className="text-[10px] text-gray-400 mt-1">{formatDate(n.created_at, 'dd/MM à HH:mm')}</p>
+                      </div>
+                      {!n.is_read && <span className="h-1.5 w-1.5 rounded-full bg-brand-500 shrink-0 mt-2" />}
+                    </div>
+                  ))
+                )}
               </div>
               <div className="px-4 py-2.5 border-t border-gray-100 text-center">
-                <button className="text-xs text-brand-500 font-medium hover:underline">Voir tout</button>
+                <button
+                  onClick={() => { setNotifOpen(false); navigate('/notifications') }}
+                  className="text-xs text-brand-500 font-medium hover:underline"
+                >
+                  Voir tout
+                </button>
               </div>
             </div>
           </>

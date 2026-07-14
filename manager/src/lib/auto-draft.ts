@@ -90,8 +90,8 @@ async function insertDraft(
   prospect_id:    string,
   generated:      GeneratedEmail,
   template_type:  TemplateType,
-): Promise<void> {
-  await supabase.from('email_drafts').insert({
+): Promise<{ id: string } | null> {
+  const { data, error } = await supabase.from('email_drafts').insert({
     prospect_id,
     subject:        generated.subject,
     body:           generated.body,
@@ -105,6 +105,32 @@ async function insertDraft(
       template_type,
       generated_at:   generated.generated_at,
     },
+  }).select('id').single()
+  if (error) return null
+  return data as { id: string }
+}
+
+// ── Notification in-app ───────────────────────────────────────────────────────
+
+async function createWorkflowNotification(
+  prospect_id:  string,
+  companyName:  string,
+  draftSubject: string,
+  score:        number,
+): Promise<void> {
+  const scoreLabel = score >= 6 ? 'fort potentiel' : score >= 3 ? 'potentiel moyen' : 'faible potentiel'
+  // Récupérer l'user connecté pour la FK (peut être null si session expirée)
+  const { data: { user } } = await supabase.auth.getUser().catch(() => ({ data: { user: null } }))
+
+  await supabase.from('notifications').insert({
+    title:       `Workflow complet — ${companyName}`,
+    message:     `Score ${score}/9 (${scoreLabel}). Brouillon prêt : « ${draftSubject} »`,
+    type:        score >= 6 ? 'success' : 'info',
+    link:        '/manager/prospection/brouillons',
+    is_read:     false,
+    prospect_id,
+    user_id:     user?.id ?? null,
+    metadata:    { source: 'auto_workflow', draft_subject: draftSubject },
   })
 }
 
@@ -115,12 +141,15 @@ async function insertDraft(
  * - Choisit le template selon les résultats d'analyse
  * - Appelle generate-email (Claude Haiku) pour rédiger l'email
  * - Insère dans email_drafts avec status 'draft'
+ * - Crée une notification in-app dans CA-TECH Manager
  * - Ne crée pas de doublon si un brouillon auto existe déjà
  * - Ne jamais envoyer automatiquement
  */
 export async function generateAutoDraft(
-  prospect_id: string,
-  analyse:     AnalyseResult,
+  prospect_id:  string,
+  analyse:      AnalyseResult,
+  companyName?: string,
+  score?:       number,
 ): Promise<void> {
   // Éviter les doublons
   if (await hasAutoDraft(prospect_id)) return
@@ -129,5 +158,11 @@ export async function generateAutoDraft(
   const generated     = await callGenerateEmail(prospect_id, template_type)
   if (!generated) return
 
-  await insertDraft(prospect_id, generated, template_type)
+  const draft = await insertDraft(prospect_id, generated, template_type)
+
+  // Notification in-app dès que le brouillon est prêt
+  if (draft && companyName) {
+    const s = score ?? 0
+    await createWorkflowNotification(prospect_id, companyName, generated.subject, s).catch(() => {})
+  }
 }

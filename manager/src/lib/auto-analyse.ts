@@ -168,7 +168,7 @@ async function analyseOne(id: string): Promise<void> {
       social_networks:     null,
     }
     await saveAnalyse(prospect, noSiteResult)
-    await generateAutoDraft(prospect.id, noSiteResult).catch(() => {})
+    await generateAutoDraft(prospect.id, noSiteResult, prospect.company_name, 0).catch(() => {})
     return
   }
 
@@ -176,7 +176,8 @@ async function analyseOne(id: string): Promise<void> {
   if (!analyse) return
 
   await saveAnalyse(prospect, analyse)
-  await generateAutoDraft(prospect.id, analyse).catch(() => {})
+  const score = computeScore(analyse)
+  await generateAutoDraft(prospect.id, analyse, prospect.company_name, score).catch(() => {})
 }
 
 // ── Point d'entrée public ─────────────────────────────────────────────────────
