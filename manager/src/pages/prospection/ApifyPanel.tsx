@@ -3,6 +3,7 @@ import {
   X, ExternalLink, CheckCircle2, XCircle, Loader2,
   Play, Square, ChevronDown, ChevronUp, Clock, AlertCircle,
   Wifi, WifiOff, RefreshCw, User, Zap, Download, SkipForward,
+  PlusCircle, UserPlus,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useConfigureConnector, useConnectorLogs } from '@/hooks/useConnectors'
@@ -13,6 +14,8 @@ import type { ApifyRun } from '@/hooks/useApify'
 import { CURATED_ACTORS, CATEGORY_LABEL } from '../../connectors/connectors/apify-actors'
 import type { CuratedActor } from '../../connectors/connectors/apify-actors'
 import { TERMINAL_STATUSES } from '../../connectors/connectors/apify-client'
+import { bulkImportProspects } from '@/lib/prospect-importer'
+import { useQueryClient } from '@tanstack/react-query'
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -111,6 +114,205 @@ function SectionHeader({ label, icon }: { label: string; icon: React.ReactNode }
   )
 }
 
+// ── Manual prospect form ──────────────────────────────────────────────────────
+
+interface ManualForm {
+  company_name: string
+  website:      string
+  industry:     string
+  city:         string
+  country:      string
+  phone:        string
+  email:        string
+}
+
+const EMPTY_FORM: ManualForm = {
+  company_name: '', website: '', industry: '',
+  city: '', country: '', phone: '', email: '',
+}
+
+function ManualProspectForm({ onDone }: { onDone: () => void }) {
+  const queryClient = useQueryClient()
+  const [form, setForm]         = useState<ManualForm>(EMPTY_FORM)
+  const [saving, setSaving]     = useState(false)
+  const [result, setResult]     = useState<'idle' | 'success' | 'dup' | 'error'>('idle')
+  const [errMsg, setErrMsg]     = useState('')
+
+  const set = (k: keyof ManualForm) => (e: React.ChangeEvent<HTMLInputElement>) =>
+    setForm(f => ({ ...f, [k]: e.target.value }))
+
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!form.company_name.trim()) return
+    setSaving(true)
+    setResult('idle')
+    try {
+      const report = await bulkImportProspects([{
+        company_name: form.company_name.trim(),
+        website:      form.website.trim()   || undefined,
+        industry:     form.industry.trim()  || undefined,
+        city:         form.city.trim()      || undefined,
+        country:      form.country.trim()   || undefined,
+        source:       'manual',
+        contacts: (form.phone.trim() || form.email.trim()) ? [{
+          first_name:  form.company_name.trim(),
+          last_name:   '',
+          phone:       form.phone.trim()  || undefined,
+          email:       form.email.trim()  || undefined,
+          is_primary:  true,
+        }] : undefined,
+      }])
+      if (report.skipped > 0) {
+        setResult('dup')
+      } else if (report.errors.length > 0) {
+        setResult('error')
+        setErrMsg(report.errors[0].message)
+      } else {
+        setResult('success')
+        queryClient.invalidateQueries({ queryKey: ['prospects'] })
+        setForm(EMPTY_FORM)
+      }
+    } catch (err) {
+      setResult('error')
+      setErrMsg(err instanceof Error ? err.message : 'Erreur inconnue')
+    } finally {
+      setSaving(false)
+    }
+  }, [form, queryClient])
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-3">
+      {/* Nom (requis) */}
+      <div>
+        <label className="block text-xs font-medium text-gray-700 mb-1">
+          Nom de l'entreprise <span className="text-red-500">*</span>
+        </label>
+        <input
+          type="text"
+          value={form.company_name}
+          onChange={set('company_name')}
+          placeholder="Acme SAS"
+          required
+          className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-400"
+        />
+      </div>
+
+      {/* Site + Catégorie */}
+      <div className="grid grid-cols-2 gap-2">
+        <div>
+          <label className="block text-xs font-medium text-gray-700 mb-1">Site web</label>
+          <input
+            type="text"
+            value={form.website}
+            onChange={set('website')}
+            placeholder="acme.fr"
+            className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-400"
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-gray-700 mb-1">Catégorie</label>
+          <input
+            type="text"
+            value={form.industry}
+            onChange={set('industry')}
+            placeholder="Agence web"
+            className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-400"
+          />
+        </div>
+      </div>
+
+      {/* Ville + Pays */}
+      <div className="grid grid-cols-2 gap-2">
+        <div>
+          <label className="block text-xs font-medium text-gray-700 mb-1">Ville</label>
+          <input
+            type="text"
+            value={form.city}
+            onChange={set('city')}
+            placeholder="Paris"
+            className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-400"
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-gray-700 mb-1">Pays</label>
+          <input
+            type="text"
+            value={form.country}
+            onChange={set('country')}
+            placeholder="France"
+            className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-400"
+          />
+        </div>
+      </div>
+
+      {/* Téléphone + Email */}
+      <div className="grid grid-cols-2 gap-2">
+        <div>
+          <label className="block text-xs font-medium text-gray-700 mb-1">Téléphone</label>
+          <input
+            type="tel"
+            value={form.phone}
+            onChange={set('phone')}
+            placeholder="+33 1 23 45 67 89"
+            className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-400"
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-gray-700 mb-1">Email</label>
+          <input
+            type="email"
+            value={form.email}
+            onChange={set('email')}
+            placeholder="contact@acme.fr"
+            className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-400"
+          />
+        </div>
+      </div>
+
+      {/* Feedback */}
+      {result === 'success' && (
+        <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-xl text-sm text-green-800">
+          <CheckCircle2 className="h-4 w-4 text-green-600 shrink-0" />
+          Prospect ajouté avec succès.
+        </div>
+      )}
+      {result === 'dup' && (
+        <div className="flex items-center gap-2 p-3 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800">
+          <AlertCircle className="h-4 w-4 text-amber-600 shrink-0" />
+          Ce prospect existe déjà dans le CRM (même domaine).
+        </div>
+      )}
+      {result === 'error' && (
+        <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-800">
+          <XCircle className="h-4 w-4 text-red-600 shrink-0 mt-0.5" />
+          {errMsg}
+        </div>
+      )}
+
+      {/* Actions */}
+      <div className="flex gap-2 pt-1">
+        <button
+          type="submit"
+          disabled={!form.company_name.trim() || saving}
+          className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-brand-600 text-white text-sm font-medium rounded-lg hover:bg-brand-700 transition-colors disabled:opacity-40"
+        >
+          {saving
+            ? <><Loader2 className="h-4 w-4 animate-spin" /> Ajout…</>
+            : <><UserPlus className="h-4 w-4" /> Ajouter au CRM</>
+          }
+        </button>
+        <button
+          type="button"
+          onClick={onDone}
+          className="px-4 py-2 border border-gray-200 text-gray-600 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
+        >
+          Fermer
+        </button>
+      </div>
+    </form>
+  )
+}
+
 // ── Main panel ────────────────────────────────────────────────────────────────
 
 export function ApifyPanel({ onClose }: { onClose: () => void }) {
@@ -122,6 +324,7 @@ export function ApifyPanel({ onClose }: { onClose: () => void }) {
   const [inputJson, setInputJson]     = useState('')
   const [jsonError, setJsonError]     = useState<string | null>(null)
   const [showInput, setShowInput]     = useState(false)
+  const [showManual, setShowManual]   = useState(false)
 
   // ── Hooks ───────────────────────────────────────────────────────────────────
   const { configure }                               = useConfigureConnector('apify')
@@ -636,6 +839,27 @@ export function ApifyPanel({ onClose }: { onClose: () => void }) {
               )}
             </section>
           )}
+
+          {/* ── 7. Ajout manuel ───────────────────────────────────────────── */}
+          <section>
+            <button
+              onClick={() => setShowManual(v => !v)}
+              className="flex items-center gap-2 text-[11px] font-bold text-gray-400 uppercase tracking-widest hover:text-gray-600 transition-colors w-full"
+            >
+              <PlusCircle className="h-3.5 w-3.5" />
+              Ajouter un prospect manuellement
+              {showManual
+                ? <ChevronUp className="h-3.5 w-3.5 ml-auto" />
+                : <ChevronDown className="h-3.5 w-3.5 ml-auto" />
+              }
+            </button>
+
+            {showManual && (
+              <div className="mt-3 p-4 border border-gray-200 rounded-xl">
+                <ManualProspectForm onDone={() => setShowManual(false)} />
+              </div>
+            )}
+          </section>
         </div>
 
         {/* ── Footer actions ───────────────────────────────────────────────── */}
