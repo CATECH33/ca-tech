@@ -13,7 +13,7 @@ import { Card } from '@/components/ui/Card'
 import { Modal } from '@/components/ui/Modal'
 import { cn, formatDate } from '@/lib/utils'
 import {
-  useEmailDrafts, useCreateDraft, useUpdateDraft,
+  useEmailDrafts, useEmailDraftsRealtime, useCreateDraft, useUpdateDraft,
   useSetDraftStatus, useDeleteDraft, useProspectsForDraft, useSendDraft,
   useGenerateEmailDraft,
   type DraftRow, type CreateDraftInput, type UpdateDraftInput, type EmailTemplateType,
@@ -871,6 +871,7 @@ export function ProspectionBrouillons() {
   const [showHistory, setShowHistory] = useState(false)
 
   const { data: drafts = [], isLoading, refetch, isFetching } = useEmailDrafts()
+  useEmailDraftsRealtime()
   const { isConnected: isGmailConnected } = useGoogleIntegration()
   const createDraft = useCreateDraft()
   const updateDraft = useUpdateDraft()

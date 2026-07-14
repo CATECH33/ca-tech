@@ -2,6 +2,7 @@
 // Each step is independent and can be extended without modifying others.
 
 import { supabase } from '@/lib/supabase'
+import { generateAutoDraft } from '@/lib/auto-draft'
 
 const SUPABASE_URL  = import.meta.env.VITE_SUPABASE_URL  as string
 const SUPABASE_ANON = import.meta.env.VITE_SUPABASE_ANON_KEY as string
@@ -167,6 +168,7 @@ async function analyseOne(id: string): Promise<void> {
       social_networks:     null,
     }
     await saveAnalyse(prospect, noSiteResult)
+    await generateAutoDraft(prospect.id, noSiteResult).catch(() => {})
     return
   }
 
@@ -174,6 +176,7 @@ async function analyseOne(id: string): Promise<void> {
   if (!analyse) return
 
   await saveAnalyse(prospect, analyse)
+  await generateAutoDraft(prospect.id, analyse).catch(() => {})
 }
 
 // ── Point d'entrée public ─────────────────────────────────────────────────────

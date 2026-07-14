@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { EmailDraftStatus, EmailDraftTone } from '@/types'
 
@@ -81,6 +82,18 @@ async function fetchDrafts(): Promise<DraftRow[]> {
 
 export function useEmailDrafts(opts?: { refetchInterval?: number }) {
   return useQuery({ queryKey: Q, queryFn: fetchDrafts, ...opts })
+}
+
+export function useEmailDraftsRealtime() {
+  const qc = useQueryClient()
+  useEffect(() => {
+    const channel = supabase
+      .channel('email_drafts_realtime_v1')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'email_drafts' },
+        () => qc.invalidateQueries({ queryKey: Q }))
+      .subscribe()
+    return () => { supabase.removeChannel(channel) }
+  }, [qc])
 }
 
 export function useCreateDraft() {
