@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import {
   Search, Reply, Trash2, UserPlus, Send, LifeBuoy,
   Inbox, Mail, MailOpen, Archive, CheckCheck,
-  Check, MessageSquare, Plus, RefreshCw, X,
+  Check, MessageSquare, Plus, RefreshCw, X, Wand2, AlertCircle,
 } from 'lucide-react'
 import { format, isToday, isYesterday, isThisWeek, parseISO } from 'date-fns'
 import { fr } from 'date-fns/locale'
@@ -15,6 +15,7 @@ import { cn, formatDate } from '@/lib/utils'
 import {
   useMessages, useMarkMessage, useMarkAllRead, useReplyMessage,
   useArchiveMessage, useDeleteMessage, useCreateMessage,
+  useMessagesRealtime, useGenerateReply,
 } from '@/hooks/useMessages'
 import type { MessageRow } from '@/hooks/useMessages'
 import { useCreateLead, useLeads } from '@/hooks/useLeads'
@@ -167,6 +168,9 @@ export function Messages() {
   const createMessage  = useCreateMessage()
   const createLead     = useCreateLead()
   const createTicket   = useCreateTicket()
+  const generateReply  = useGenerateReply()
+
+  useMessagesRealtime()
 
   const [folder, setFolder]             = useState<Folder>('tous')
   const [srcFilter, setSrcFilter]       = useState('all')
@@ -240,6 +244,22 @@ export function Messages() {
     replyMessage.mutate({ id: selected.id, reply_body: replyText.trim() }, {
       onSuccess: () => { setShowReply(false); setReplyText('') },
     })
+  }
+
+  async function handleGenerateReply() {
+    if (!selected) return
+    try {
+      const reply = await generateReply.mutateAsync({
+        from_name:  selected.from_name,
+        from_email: selected.from_email,
+        subject:    selected.subject,
+        body:       selected.body,
+        source:     selected.source,
+      })
+      setReplyText(reply)
+    } catch {
+      // error shown in UI
+    }
   }
 
   function handleConvertToLead() {
@@ -626,31 +646,63 @@ export function Messages() {
 
               {/* Reply compose */}
               {showReply && (
-                <div className="border-t border-gray-100 p-4 bg-gray-50/60 shrink-0">
-                  <p className="text-xs text-gray-500 mb-2">
-                    À : <span className="font-medium text-gray-700">{selected.from_email}</span>
-                  </p>
-                  <Textarea
-                    value={replyText}
-                    onChange={e => setReplyText(e.target.value)}
-                    placeholder="Bonjour, merci pour votre message…"
-                    rows={4}
-                    className="mb-3"
-                  />
+                <div className="border-t border-gray-100 p-4 bg-gray-50/60 shrink-0 space-y-3">
+                  {/* IA generator */}
+                  <div className="flex items-center gap-2 bg-gradient-to-r from-brand-50 to-violet-50 rounded-lg px-3 py-2 border border-brand-100">
+                    <Wand2 className="h-3.5 w-3.5 text-brand-500 shrink-0" />
+                    <span className="text-xs text-brand-700 font-medium flex-1">Réponse automatique par l'IA</span>
+                    {generateReply.isError && (
+                      <span className="text-[11px] text-red-500 flex items-center gap-1">
+                        <AlertCircle className="h-3 w-3" />
+                        {(generateReply.error as Error).message}
+                      </span>
+                    )}
+                    {generateReply.isSuccess && !generateReply.isPending && (
+                      <span className="text-[11px] text-emerald-600">✓ Généré</span>
+                    )}
+                    <button
+                      onClick={handleGenerateReply}
+                      disabled={generateReply.isPending}
+                      className={cn(
+                        'text-xs font-semibold px-2.5 py-1 rounded-lg border transition shrink-0',
+                        generateReply.isPending
+                          ? 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed'
+                          : 'bg-white border-brand-200 text-brand-600 hover:bg-brand-50',
+                      )}
+                    >
+                      {generateReply.isPending
+                        ? <span className="flex items-center gap-1"><RefreshCw className="h-3 w-3 animate-spin" />Génération…</span>
+                        : 'Générer'
+                      }
+                    </button>
+                  </div>
+
+                  <div>
+                    <p className="text-xs text-gray-500 mb-1.5">
+                      À : <span className="font-medium text-gray-700">{selected.from_email}</span>
+                    </p>
+                    <Textarea
+                      value={replyText}
+                      onChange={e => setReplyText(e.target.value)}
+                      placeholder="Bonjour, merci pour votre message…"
+                      rows={5}
+                    />
+                  </div>
+
                   <div className="flex items-center justify-between gap-2">
                     <Button
                       variant="ghost" size="sm"
                       onClick={() => window.open(`mailto:${selected.from_email}?subject=Re: ${encodeURIComponent(selected.subject ?? '')}`)}
                       className="text-gray-500 text-xs"
                     >
-                      Ouvrir la messagerie ↗
+                      Ouvrir messagerie ↗
                     </Button>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm" onClick={() => { setShowReply(false); setReplyText('') }}>
+                      <Button variant="outline" size="sm" onClick={() => { setShowReply(false); setReplyText(''); generateReply.reset() }}>
                         Annuler
                       </Button>
                       <Button size="sm" onClick={handleSendReply} loading={replyMessage.isPending} disabled={!replyText.trim()}>
-                        <Send className="h-3.5 w-3.5" />Envoyer
+                        <Send className="h-3.5 w-3.5" /> Enregistrer réponse
                       </Button>
                     </div>
                   </div>

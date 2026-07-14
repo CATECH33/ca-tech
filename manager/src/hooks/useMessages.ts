@@ -1,6 +1,10 @@
+import { useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { Message } from '@/types'
+
+const SUPABASE_URL     = import.meta.env.VITE_SUPABASE_URL  as string
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string
 
 export type MessageRow = Message & { is_archived: boolean; reply_body?: string }
 
@@ -132,5 +136,74 @@ export function useDeleteMessage() {
       if (error) throw error
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: Q }),
+  })
+}
+
+// ── Realtime ──────────────────────────────────────────────────────────────────
+
+export function useMessagesRealtime() {
+  const qc = useQueryClient()
+  useEffect(() => {
+    const channel = supabase
+      .channel('messages_realtime_v1')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' },
+        () => {
+          qc.invalidateQueries({ queryKey: Q })
+          qc.invalidateQueries({ queryKey: ['messages-unread-count'] })
+        })
+      .subscribe()
+    return () => { supabase.removeChannel(channel) }
+  }, [qc])
+}
+
+// ── Unread count (for sidebar badge) ─────────────────────────────────────────
+
+export function useUnreadMessageCount() {
+  return useQuery({
+    queryKey: ['messages-unread-count'],
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from('messages')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_read', false)
+        .eq('is_archived', false)
+      if (error) throw error
+      return count ?? 0
+    },
+    refetchInterval: 60_000,
+  })
+}
+
+// ── AI reply generator ────────────────────────────────────────────────────────
+
+export interface GenerateReplyInput {
+  from_name:  string
+  from_email: string
+  subject?:   string | null
+  body:       string
+  source?:    string
+}
+
+export function useGenerateReply() {
+  return useMutation({
+    mutationFn: async (input: GenerateReplyInput): Promise<string> => {
+      let authToken = SUPABASE_ANON_KEY
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session?.access_token) authToken = session.access_token
+
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/generate-reply`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization:  `Bearer ${authToken}`,
+          apikey:         SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify(input),
+      })
+      const data = await res.json() as { reply?: string; error?: string }
+      if (!res.ok) throw new Error(data.error ?? `HTTP ${res.status}`)
+      if (!data.reply) throw new Error('Réponse IA vide')
+      return data.reply
+    },
   })
 }

@@ -8,6 +8,7 @@ import {
   SlidersHorizontal, ChevronDown, Layers, Plug, Workflow,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useUnreadMessageCount } from '@/hooks/useMessages'
 
 interface NavItem {
   label: string
@@ -15,26 +16,6 @@ interface NavItem {
   to: string
   badge?: number
 }
-
-const navItems: NavItem[] = [
-  { label: 'Dashboard',     icon: LayoutDashboard, to: '/' },
-  { label: 'Clients',       icon: Users,           to: '/clients' },
-  { label: 'Leads',         icon: UserPlus,        to: '/leads' },
-  { label: 'Devis',         icon: FileText,        to: '/devis' },
-  { label: 'Factures',      icon: Receipt,         to: '/factures' },
-  { label: 'Projets',       icon: FolderKanban,    to: '/projets' },
-  { label: 'Tâches',        icon: CheckSquare,     to: '/taches' },
-  { label: 'Services',      icon: Briefcase,       to: '/services' },
-  { label: 'Paiements',     icon: CreditCard,      to: '/paiements' },
-  { label: 'Portfolio',     icon: Image,           to: '/portfolio' },
-  { label: 'Agenda',        icon: Calendar,        to: '/agenda' },
-  { label: 'Documents',     icon: Paperclip,       to: '/documents' },
-  { label: 'Loïc IA',       icon: Bot,             to: '/loic' },
-  { label: 'Notifications', icon: Bell,            to: '/notifications' },
-  { label: 'Messages',      icon: MessageSquare,   to: '/messages' },
-  { label: 'Support',       icon: Headphones,      to: '/support' },
-  { label: 'Intégrations',  icon: Plug,            to: '/integrations' },
-]
 
 const prospectionItems: NavItem[] = [
   { label: 'Tableau de bord',   icon: LayoutDashboard,   to: '/prospection' },
@@ -60,6 +41,28 @@ export function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose }: Side
   const location = useLocation()
   const isProspectionActive = location.pathname.startsWith('/prospection')
   const [prospOpen, setProspOpen] = useState(isProspectionActive)
+
+  const { data: unreadMessages = 0 } = useUnreadMessageCount()
+
+  const navItems: NavItem[] = [
+    { label: 'Dashboard',     icon: LayoutDashboard, to: '/' },
+    { label: 'Clients',       icon: Users,           to: '/clients' },
+    { label: 'Leads',         icon: UserPlus,        to: '/leads' },
+    { label: 'Devis',         icon: FileText,        to: '/devis' },
+    { label: 'Factures',      icon: Receipt,         to: '/factures' },
+    { label: 'Projets',       icon: FolderKanban,    to: '/projets' },
+    { label: 'Tâches',        icon: CheckSquare,     to: '/taches' },
+    { label: 'Services',      icon: Briefcase,       to: '/services' },
+    { label: 'Paiements',     icon: CreditCard,      to: '/paiements' },
+    { label: 'Portfolio',     icon: Image,           to: '/portfolio' },
+    { label: 'Agenda',        icon: Calendar,        to: '/agenda' },
+    { label: 'Documents',     icon: Paperclip,       to: '/documents' },
+    { label: 'Loïc IA',       icon: Bot,             to: '/loic' },
+    { label: 'Notifications', icon: Bell,            to: '/notifications' },
+    { label: 'Messages',      icon: MessageSquare,   to: '/messages', badge: unreadMessages > 0 ? unreadMessages : undefined },
+    { label: 'Support',       icon: Headphones,      to: '/support' },
+    { label: 'Intégrations',  icon: Plug,            to: '/integrations' },
+  ]
 
   return (
     <>
