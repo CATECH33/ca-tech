@@ -108,6 +108,8 @@ export function useCreateProspect() {
         headers: { 'Content-Type': 'application/json', apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` },
         body: JSON.stringify({ prospect_id: data.id, prospect_name: data.company_name }),
       }).then(() => qc.invalidateQueries({ queryKey: Q })).catch(() => { /* silencieux si Google non connecté */ })
+
+      return data
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: Q }),
   })

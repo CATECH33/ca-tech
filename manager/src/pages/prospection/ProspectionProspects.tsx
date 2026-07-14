@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   Plus, Search, X, LayoutGrid, List, Download, ExternalLink,
@@ -29,10 +29,12 @@ import { Badge } from '@/components/ui/Badge'
 import { Modal } from '@/components/ui/Modal'
 import { Table, Thead, Tbody, Tr, Th, Td, EmptyRow } from '@/components/ui/Table'
 import { cn, formatDate, statusColor, statusLabel } from '@/lib/utils'
+import { useQueryClient } from '@tanstack/react-query'
 import {
   useProspects, useCreateProspect, useUpdateProspect, useDeleteProspect,
   type ProspectRow, type CreateProspectInput,
 } from '@/hooks/useProspects'
+import { supabase } from '@/lib/supabase'
 import type { ProspectStatus, ProspectSource } from '@/types'
 
 /* ─── CONSTANTES ──────────────────────────────────────────────────────────── */
@@ -1179,8 +1181,11 @@ export function ProspectionProspects() {
   const [fiche, setFiche]           = useState<ProspectRow | null>(null)
   const [showAdd, setShowAdd]       = useState(false)
   const [form, setForm]             = useState<CreateProspectInput>(FORM_INIT)
+  const [formPhone, setFormPhone]   = useState('')
+  const [formEmail, setFormEmail]   = useState('')
   const [showFilters, setShowFilters] = useState(false)
 
+  const queryClient    = useQueryClient()
   const { data: prospects = [], isLoading, refetch, isFetching } = useProspects()
   const createProspect = useCreateProspect()
   const updateProspect = useUpdateProspect()
@@ -1255,9 +1260,23 @@ export function ProspectionProspects() {
 
   const handleCreate = async () => {
     if (!form.company_name) return
-    await createProspect.mutateAsync(form)
+    const prospect = await createProspect.mutateAsync(form)
+    if (prospect && (formPhone.trim() || formEmail.trim())) {
+      await supabase.from('prospect_contacts').insert({
+        prospect_id: prospect.id,
+        first_name:  form.company_name,
+        last_name:   '',
+        phone:       formPhone.trim() || null,
+        email:       formEmail.trim() || null,
+        is_primary:  true,
+      })
+      // Re-invalider après l'insert du contact pour que la fiche affiche le contact
+      queryClient.invalidateQueries({ queryKey: ['prospects'] })
+    }
     setShowAdd(false)
     setForm(FORM_INIT)
+    setFormPhone('')
+    setFormEmail('')
   }
 
   const handleFicheSave = async (data: FicheForm) => {
@@ -1481,7 +1500,7 @@ export function ProspectionProspects() {
       {/* ── MODAL NOUVEAU PROSPECT ─────────────────────────────────────────── */}
       <Modal
         open={showAdd}
-        onClose={() => setShowAdd(false)}
+        onClose={() => { setShowAdd(false); setForm(FORM_INIT); setFormPhone(''); setFormEmail('') }}
         title="Nouveau prospect"
         size="lg"
         footer={
@@ -1515,6 +1534,15 @@ export function ProspectionProspects() {
             onChange={setF('website')} className="col-span-2" />
           <Input label="LinkedIn" placeholder="https://linkedin.com/company/…" value={form.linkedin_url ?? ''}
             onChange={setF('linkedin_url')} className="col-span-2" />
+          <div className="col-span-2 border-t border-gray-100 pt-3">
+            <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-2">Contact principal</p>
+            <div className="grid grid-cols-2 gap-3">
+              <Input label="Téléphone" placeholder="+33 1 23 45 67 89" value={formPhone}
+                onChange={e => setFormPhone(e.target.value)} />
+              <Input label="Email" placeholder="contact@entreprise.fr" value={formEmail}
+                onChange={e => setFormEmail(e.target.value)} />
+            </div>
+          </div>
           <div>
             <label className="text-xs font-medium text-gray-700 mb-1 block">Statut</label>
             <select value={form.status} onChange={setF('status')}
