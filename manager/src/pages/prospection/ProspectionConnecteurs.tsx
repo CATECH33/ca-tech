@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import { X, ExternalLink, CheckCircle2, XCircle, Loader2, Play, RefreshCw, Pencil, Trash2, Clock, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useConnectors, useConnectorRunning, useConnectorLogs, useTestConnector, useRunImport, useRunSync, useConfigureConnector } from '@/hooks/useConnectors'
@@ -78,19 +78,28 @@ function ConfigField({ field, value, onChange }: {
 
 function ConfigPanel({ meta, onClose }: { meta: ConnectorMeta; onClose: () => void }) {
   const [values, setValues] = useState<Record<string, string>>({})
+  // Ref updated synchronously in onChange — always current even before re-render
+  const valuesRef = useRef<Record<string, string>>({})
+
   const { configure, isConfigured } = useConfigureConnector(meta.id)
   const { result: testResult, test } = useTestConnector(meta.id)
   const running = useConnectorRunning(meta.id)
   const { run: runImport, result: importResult } = useRunImport(meta.id)
   const { run: runSync,   result: syncResult }   = useRunSync(meta.id)
 
+  const handleFieldChange = useCallback((key: string, v: string) => {
+    valuesRef.current = { ...valuesRef.current, [key]: v }
+    setValues(prev => ({ ...prev, [key]: v }))
+  }, [])
+
   const handleSave = useCallback(() => {
     const config: ConnectorConfig = {}
     meta.configFields.forEach(f => {
-      if (values[f.key]) config[f.key] = f.type === 'number' ? Number(values[f.key]) : values[f.key]
+      const v = valuesRef.current[f.key]
+      if (v) config[f.key] = f.type === 'number' ? Number(v) : v
     })
     configure(config)
-  }, [values, meta.configFields, configure])
+  }, [meta.configFields, configure])
 
   const handleTest = useCallback(async () => {
     handleSave()
@@ -100,7 +109,7 @@ function ConfigPanel({ meta, onClose }: { meta: ConnectorMeta; onClose: () => vo
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
       <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative w-full max-w-md bg-white h-full shadow-2xl flex flex-col animate-in slide-in-from-right duration-200">
+      <div className="relative z-10 w-full max-w-md bg-white h-full shadow-2xl flex flex-col animate-in slide-in-from-right duration-200">
         {/* Header */}
         <div className="flex items-center gap-3 px-6 py-4 border-b border-gray-100">
           <span className={cn('inline-flex items-center justify-center w-9 h-9 rounded-xl text-sm font-bold', meta.color)}>
@@ -125,7 +134,7 @@ function ConfigPanel({ meta, onClose }: { meta: ConnectorMeta; onClose: () => vo
                 key={field.key}
                 field={field}
                 value={values[field.key] ?? ''}
-                onChange={v => setValues(prev => ({ ...prev, [field.key]: v }))}
+                onChange={v => handleFieldChange(field.key, v)}
               />
             ))
           )}

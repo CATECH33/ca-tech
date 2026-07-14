@@ -152,9 +152,13 @@ export function useRunUpdate(id: ConnectorId) {
 export function useConfigureConnector(id: ConnectorId) {
   const [, tick] = useState(0)
 
+  // Subscribe to manager changes so isConfigured re-evaluates after any configure() call
+  useEffect(() => {
+    return connectorManager.subscribe(() => tick(n => n + 1))
+  }, [])
+
   const configure = useCallback((config: ConnectorConfig) => {
     connectorManager.configure(id, config)
-    tick(n => n + 1)
   }, [id])
 
   const isConfigured = connectorManager.isConfigured(id)
