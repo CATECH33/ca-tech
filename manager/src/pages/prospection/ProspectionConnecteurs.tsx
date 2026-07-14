@@ -1,9 +1,10 @@
 import { useState, useCallback, useRef } from 'react'
-import { X, ExternalLink, CheckCircle2, XCircle, Loader2, Play, RefreshCw, Pencil, Trash2, Clock, ChevronRight } from 'lucide-react'
+import { X, ExternalLink, CheckCircle2, XCircle, Loader2, Play, RefreshCw, Pencil, Clock, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useConnectors, useConnectorRunning, useConnectorLogs, useTestConnector, useRunImport, useRunSync, useConfigureConnector } from '@/hooks/useConnectors'
 import type { ConnectorId, ConnectorMeta, ConfigField, ConnectorConfig } from '../../connectors/types'
 import type { ConnectorLogEntry } from '../../connectors/types'
+import { ApifyPanel } from './ApifyPanel'
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -407,8 +408,13 @@ export function ProspectionConnecteurs() {
         <LogJournal />
       </section>
 
-      {/* Config slide-over */}
-      {selectedMeta && (
+      {/* Apify — dedicated panel */}
+      {selected === 'apify' && (
+        <ApifyPanel onClose={() => setSelected(null)} />
+      )}
+
+      {/* Generic config slide-over for all other connectors */}
+      {selectedMeta && selected !== 'apify' && (
         <ConfigPanel meta={selectedMeta} onClose={() => setSelected(null)} />
       )}
     </div>
