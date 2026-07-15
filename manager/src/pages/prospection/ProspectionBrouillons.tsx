@@ -75,68 +75,65 @@ function SendButton({
   onSend,
   sending,
   isGmailConnected,
+  manualEmail,
+  onManualEmailChange,
 }: {
   draft: DraftRow
   onSend: () => void
   sending: boolean
   isGmailConnected: boolean
+  manualEmail: string
+  onManualEmailChange: (v: string) => void
 }) {
-  const canSend = isGmailConnected && draft.status === 'ready' && !!draft.contact?.email
+  const toEmail = draft.contact?.email || manualEmail.trim()
+  const canSend = isGmailConnected && !!toEmail
 
   if (!isGmailConnected) {
     return (
       <div className="flex flex-col items-end gap-1">
         <button disabled className="inline-flex items-center gap-2 h-9 px-4 text-sm font-medium rounded-lg bg-gray-100 text-gray-400 cursor-not-allowed opacity-60">
-          <Send className="h-3.5 w-3.5" /> Envoyer
+          <Send className="h-3.5 w-3.5" /> Envoyer via Gmail
         </button>
         <span className="text-[10px] text-gray-400">Gmail non connecté — Paramètres &gt; Intégrations</span>
       </div>
     )
   }
 
-  if (draft.status !== 'ready') {
-    return (
-      <div className="flex flex-col items-end gap-1">
-        <button disabled className="inline-flex items-center gap-2 h-9 px-4 text-sm font-medium rounded-lg bg-gray-100 text-gray-400 cursor-not-allowed opacity-60">
-          <Send className="h-3.5 w-3.5" /> Envoyer
-        </button>
-        <span className="text-[10px] text-gray-400">Validez d'abord le brouillon pour activer l'envoi</span>
-      </div>
-    )
-  }
-
-  if (!draft.contact?.email) {
-    return (
-      <div className="flex flex-col items-end gap-1">
-        <button disabled className="inline-flex items-center gap-2 h-9 px-4 text-sm font-medium rounded-lg bg-gray-100 text-gray-400 cursor-not-allowed opacity-60">
-          <Send className="h-3.5 w-3.5" /> Envoyer
-        </button>
-        <span className="text-[10px] text-red-400">Aucun email pour ce contact</span>
-      </div>
-    )
-  }
-
   return (
-    <div className="flex flex-col items-end gap-1">
-      <button
-        onClick={onSend}
-        disabled={!canSend || sending}
-        className={cn(
-          'inline-flex items-center gap-2 h-9 px-4 text-sm font-medium rounded-lg transition',
-          canSend && !sending
-            ? 'bg-brand-600 text-white hover:bg-brand-700 shadow-sm'
-            : 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-60',
-        )}
-      >
-        {sending
-          ? <><RefreshCw className="h-3.5 w-3.5 animate-spin" /> Envoi…</>
-          : <><Send className="h-3.5 w-3.5" /> Envoyer via Gmail</>
-        }
-      </button>
-      <span className="text-[10px] text-emerald-600 flex items-center gap-1">
-        <CheckCircle2 className="h-2.5 w-2.5" />
-        Gmail connecté · {draft.contact.email}
-      </span>
+    <div className="flex flex-col gap-2">
+      {!draft.contact?.email && (
+        <div className="flex flex-col gap-1">
+          <label className="text-[11px] text-gray-500 font-medium">Email destinataire</label>
+          <input
+            type="email"
+            value={manualEmail}
+            onChange={e => onManualEmailChange(e.target.value)}
+            placeholder="exemple@email.com"
+            className="w-full text-sm border border-gray-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-400/30 focus:border-brand-400 transition"
+          />
+        </div>
+      )}
+      <div className="flex items-center justify-between">
+        <span className="text-[10px] text-emerald-600 flex items-center gap-1">
+          <CheckCircle2 className="h-2.5 w-2.5" />
+          {draft.contact?.email ? `Gmail · ${draft.contact.email}` : 'Gmail connecté'}
+        </span>
+        <button
+          onClick={onSend}
+          disabled={!canSend || sending}
+          className={cn(
+            'inline-flex items-center gap-2 h-9 px-4 text-sm font-medium rounded-lg transition',
+            canSend && !sending
+              ? 'bg-brand-600 text-white hover:bg-brand-700 shadow-sm'
+              : 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-60',
+          )}
+        >
+          {sending
+            ? <><RefreshCw className="h-3.5 w-3.5 animate-spin" /> Envoi…</>
+            : <><Send className="h-3.5 w-3.5" /> Envoyer via Gmail</>
+          }
+        </button>
+      </div>
     </div>
   )
 }
@@ -220,6 +217,7 @@ function DraftPanel({
   const [statusBusy, setStatusBusy]   = useState(false)
   const [sendError, setSendError]     = useState<string | null>(null)
   const [aiTemplate, setAiTemplate]   = useState<EmailTemplateType | null>(null)
+  const [manualEmail, setManualEmail] = useState('')
 
   const sendDraft    = useSendDraft()
   const generateEmail = useGenerateEmailDraft()
@@ -274,13 +272,14 @@ function DraftPanel({
   }
 
   const handleSend = async () => {
-    if (!draft.contact?.email) return
+    const toEmail = draft.contact?.email || manualEmail.trim()
+    if (!toEmail) return
     setSendError(null)
     try {
       await sendDraft.mutateAsync({
         draftId: draft.id,
-        to: draft.contact.email,
-        toName: `${draft.contact.first_name} ${draft.contact.last_name}`,
+        to: toEmail,
+        toName: draft.contact ? `${draft.contact.first_name} ${draft.contact.last_name}` : undefined,
         subject: draft.subject,
         body: draft.body,
       })
@@ -586,6 +585,8 @@ function DraftPanel({
                     onSend={handleSend}
                     sending={sendDraft.isPending}
                     isGmailConnected={isGmailConnected}
+                    manualEmail={manualEmail}
+                    onManualEmailChange={setManualEmail}
                   />
                 </div>
               )}

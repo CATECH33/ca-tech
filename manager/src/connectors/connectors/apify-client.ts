@@ -46,7 +46,8 @@ export interface ApifyActorMeta {
 const BASE_URL = 'https://api.apify.com/v2'
 
 export class ApifyClient {
-  constructor(private readonly apiKey: string) {}
+  private readonly apiKey: string
+  constructor(apiKey: string) { this.apiKey = apiKey }
 
   private async request<T>(path: string, options?: RequestInit): Promise<T> {
     const sep = path.includes('?') ? '&' : '?'

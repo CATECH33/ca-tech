@@ -4,7 +4,7 @@ import path from 'path'
 import { vercelToolbar } from '@vercel/toolbar/plugins/vite'
 
 export default defineConfig({
-  base: '/manager/',
+  base: '/',
   server: { port: 5173, strictPort: true },
   plugins: [react(), vercelToolbar()],
   resolve: {

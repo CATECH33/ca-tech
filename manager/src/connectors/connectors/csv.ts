@@ -61,7 +61,7 @@ export class CsvConnector implements IConnector<CsvConfig> {
 
   async import(opts?: ImportOptions): Promise<ImportResult> {
     if (!this._file) {
-      return { total: 0, imported: 0, skipped: 0, errors: [{ row: 0, message: 'Aucun fichier sélectionné.' }], prospects: [] }
+      return { total: 0, imported: 0, skipped: 0, errors: [{ code: 'NO_FILE', message: 'Aucun fichier sélectionné.', at: new Date().toISOString(), retryable: false, row: 0 }], prospects: [] }
     }
 
     // FUTURE implementation:

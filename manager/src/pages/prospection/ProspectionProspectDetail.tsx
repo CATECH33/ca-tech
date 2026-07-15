@@ -72,8 +72,10 @@ function LeftPanel({ prospect }: { prospect: ProspectRow }) {
   const STATUSES: ProspectStatus[] = ['new', 'researching', 'qualified', 'contacted', 'responded', 'meeting', 'converted', 'disqualified']
   const STATUS_LABELS: Record<ProspectStatus, string> = {
     new: 'Nouveau', researching: 'En recherche', qualified: 'Qualifié',
-    contacted: 'Contacté', responded: 'A répondu', meeting: 'RDV planifié',
-    converted: 'Converti', disqualified: 'Disqualifié',
+    email_ready: 'Email prêt', contacted: 'Contacté', responded: 'A répondu',
+    meeting: 'RDV planifié', proposal_sent: 'Proposition envoyée',
+    contract_signed: 'Contrat signé', converted: 'Converti',
+    project_started: 'Projet démarré', disqualified: 'Disqualifié',
   }
 
   return (
