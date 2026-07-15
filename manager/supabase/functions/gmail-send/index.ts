@@ -137,7 +137,7 @@ Deno.serve(async (req) => {
 
     // Construire le message RFC 2822 + encoder en base64url
     const raw = base64url(buildRFC2822(
-      integration.email as string,
+      'contact@ca-tech.fr',
       to,
       toName,
       subject,
