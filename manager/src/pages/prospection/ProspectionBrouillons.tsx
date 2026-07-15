@@ -150,48 +150,62 @@ function DraftListRow({
 }) {
   const st = STATUS_CONFIG[draft.status]
   const tn = TONE_CONFIG[draft.tone]
+  const initials = (draft.prospect?.company_name ?? '?').slice(0, 2).toUpperCase()
+
   return (
     <div
       onClick={onClick}
       className={cn(
-        'flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors group',
-        selected ? 'bg-brand-50 border-l-2 border-l-brand-500' : 'hover:bg-gray-50 border-l-2 border-l-transparent',
+        'flex items-center gap-3 px-4 py-3.5 cursor-pointer transition-all duration-150 group border-b border-gray-50 last:border-0',
+        selected
+          ? 'bg-brand-50/70 border-l-[3px] border-l-brand-500 pl-[13px]'
+          : 'hover:bg-gray-50/80 border-l-[3px] border-l-transparent',
       )}
     >
-      <div className={cn('h-2 w-2 rounded-full shrink-0', st.dot)} />
+      {/* Avatar entreprise */}
+      <div className={cn(
+        'h-9 w-9 rounded-xl flex items-center justify-center text-xs font-bold shrink-0 shadow-sm',
+        selected ? 'bg-brand-500 text-white' : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200',
+      )}>
+        {initials}
+      </div>
+
+      {/* Contenu */}
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-0.5">
-          <span className="text-xs font-semibold text-gray-700 truncate">
+        <div className="flex items-center gap-1.5 mb-0.5">
+          <span className={cn('text-sm font-semibold truncate', selected ? 'text-brand-700' : 'text-gray-800')}>
             {draft.prospect?.company_name ?? '—'}
           </span>
           {draft.contact && (
-            <>
-              <ChevronRight className="h-3 w-3 text-gray-300 shrink-0" />
-              <span className="text-xs text-gray-500 truncate">
-                {draft.contact.first_name} {draft.contact.last_name}
-              </span>
-            </>
+            <span className="text-[11px] text-gray-400 truncate shrink-0">
+              · {draft.contact.first_name} {draft.contact.last_name}
+            </span>
           )}
         </div>
-        <p className={cn('text-sm truncate', selected ? 'text-gray-900 font-medium' : 'text-gray-700')}>
+        <p className="text-sm text-gray-600 truncate font-medium leading-snug">
           {draft.subject}
         </p>
-        <p className="text-xs text-gray-400 truncate mt-0.5 line-clamp-1 leading-relaxed">
-          {draft.body.replace(/\n/g, ' ').slice(0, 120)}…
+        <p className="text-[11px] text-gray-400 truncate mt-0.5">
+          {draft.body.replace(/\n/g, ' ').slice(0, 100)}…
         </p>
       </div>
+
+      {/* Méta */}
       <div className="flex flex-col items-end gap-1.5 shrink-0">
-        <span className="text-[10px] text-gray-400">{formatDate(draft.updated_at)}</span>
+        <span className="text-[10px] text-gray-400 tabular-nums">{formatDate(draft.updated_at)}</span>
         <div className="flex items-center gap-1">
-          <span className={cn('text-[10px] font-medium px-1.5 py-0.5 rounded-full border', tn.color)}>
+          <span className={cn('text-[10px] font-semibold px-1.5 py-0.5 rounded-md border', st.color)}>
+            {st.label}
+          </span>
+          <span className={cn('text-[10px] font-medium px-1.5 py-0.5 rounded-md border', tn.color)}>
             {tn.label}
           </span>
-          <span className="text-[10px] text-gray-400">#{draft.sequence_step}</span>
         </div>
       </div>
+
       <button
         onClick={e => { e.stopPropagation(); onDelete() }}
-        className="p-1 rounded-md opacity-0 group-hover:opacity-100 hover:bg-red-50 hover:text-red-500 text-gray-400 transition shrink-0"
+        className="p-1.5 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-red-50 hover:text-red-500 text-gray-300 transition-all shrink-0"
       >
         <Trash2 className="h-3.5 w-3.5" />
       </button>
@@ -813,48 +827,56 @@ function NewDraftModal({ open, onClose, onCreate }: {
 /* ─── HISTORIQUE ──────────────────────────────────────────────────────────── */
 
 function HistoryRow({ draft, onClick }: { draft: DraftRow; onClick: () => void }) {
-  const isSent   = draft.status === 'sent'
-  const isFailed = draft.status === 'failed'
+  const isSent = draft.status === 'sent'
   const meta = draft.metadata as Record<string, string> | null
+  const initials = (draft.prospect?.company_name ?? '?').slice(0, 2).toUpperCase()
 
   return (
     <div
       onClick={onClick}
-      className="flex items-center gap-4 px-4 py-3 hover:bg-gray-50 cursor-pointer group border-b border-gray-50 last:border-0"
+      className="flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50/80 cursor-pointer group border-b border-gray-50 last:border-0 transition-all duration-150"
     >
+      {/* Avatar entreprise */}
       <div className={cn(
-        'h-8 w-8 rounded-lg flex items-center justify-center shrink-0',
-        isSent ? 'bg-blue-100' : 'bg-red-100',
+        'h-9 w-9 rounded-xl flex items-center justify-center text-xs font-bold shrink-0 shadow-sm',
+        isSent ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-600',
       )}>
-        {isSent
-          ? <Mail className="h-4 w-4 text-blue-600" />
-          : <AlertCircle className="h-4 w-4 text-red-500" />
-        }
+        {initials}
       </div>
+
+      {/* Contenu */}
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-gray-800 truncate">{draft.subject}</p>
-        <div className="flex items-center gap-2 mt-0.5">
-          <span className="text-xs text-gray-500 truncate">
-            {draft.prospect?.company_name}
-            {draft.contact && ` · ${draft.contact.first_name} ${draft.contact.last_name}`}
+        <div className="flex items-center gap-1.5 mb-0.5">
+          <span className="text-sm font-semibold text-gray-800 truncate">
+            {draft.prospect?.company_name ?? '—'}
           </span>
-          {draft.contact?.email && (
-            <span className="text-[11px] text-gray-400 truncate">&lt;{draft.contact.email}&gt;</span>
+          {draft.contact && (
+            <span className="text-[11px] text-gray-400 truncate shrink-0">
+              · {draft.contact.first_name} {draft.contact.last_name}
+            </span>
           )}
         </div>
-        {isFailed && meta?.error && (
+        <p className="text-sm text-gray-600 truncate font-medium leading-snug">{draft.subject}</p>
+        {!isSent && meta?.error && (
           <p className="text-[11px] text-red-500 mt-0.5 truncate">{meta.error}</p>
         )}
+        {draft.contact?.email && (
+          <p className="text-[11px] text-gray-400 truncate mt-0.5">{draft.contact.email}</p>
+        )}
       </div>
-      <div className="flex flex-col items-end gap-1 shrink-0">
+
+      {/* Méta */}
+      <div className="flex flex-col items-end gap-1.5 shrink-0">
+        <span className="text-[10px] text-gray-400 tabular-nums">
+          {formatDate(isSent ? (draft.sent_at ?? draft.updated_at) : draft.updated_at, 'dd/MM/yyyy HH:mm')}
+        </span>
         <span className={cn(
-          'text-[10px] font-semibold px-2 py-0.5 rounded-full',
-          isSent ? 'bg-blue-50 text-blue-600' : 'bg-red-50 text-red-500',
+          'text-[10px] font-semibold px-1.5 py-0.5 rounded-md border',
+          isSent
+            ? 'bg-blue-50 text-blue-600 border-blue-200'
+            : 'bg-red-50 text-red-500 border-red-200',
         )}>
           {isSent ? 'Envoyé' : 'Erreur'}
-        </span>
-        <span className="text-[11px] text-gray-400">
-          {formatDate(isSent ? (draft.sent_at ?? draft.updated_at) : draft.updated_at, 'dd/MM/yyyy HH:mm')}
         </span>
       </div>
     </div>
@@ -988,33 +1010,52 @@ export function ProspectionBrouillons() {
       {/* ── STATS ──────────────────────────────────────────────────────────── */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
         <Card>
-          <p className="text-xs text-gray-500 mb-1">Brouillons actifs</p>
-          <p className="text-2xl font-bold text-gray-900">{counts.all}</p>
-          <p className="text-xs text-gray-400 mt-1">en cours</p>
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-xs text-gray-500 mb-2">Actifs</p>
+              <p className="text-3xl font-bold text-gray-900 leading-none">{counts.all}</p>
+              <p className="text-xs text-gray-400 mt-1.5">brouillons en cours</p>
+            </div>
+            <div className="h-9 w-9 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
+              <FilePen className="h-[18px] w-[18px] text-gray-500" />
+            </div>
+          </div>
         </Card>
         <Card>
-          <div className="flex items-center gap-1.5 mb-1">
-            <span className="h-2 w-2 rounded-full bg-emerald-500" />
-            <p className="text-xs text-gray-500">Validés</p>
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-xs text-gray-500 mb-2">Validés</p>
+              <p className="text-3xl font-bold text-emerald-600 leading-none">{counts.ready}</p>
+              <p className="text-xs text-gray-400 mt-1.5">prêts à envoyer</p>
+            </div>
+            <div className="h-9 w-9 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
+              <CheckCircle2 className="h-[18px] w-[18px] text-emerald-500" />
+            </div>
           </div>
-          <p className="text-2xl font-bold text-emerald-600">{counts.ready}</p>
-          <p className="text-xs text-gray-400 mt-1">prêts à envoyer</p>
         </Card>
         <Card>
-          <div className="flex items-center gap-1.5 mb-1">
-            <span className="h-2 w-2 rounded-full bg-blue-500" />
-            <p className="text-xs text-gray-500">Envoyés</p>
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-xs text-gray-500 mb-2">Envoyés</p>
+              <p className="text-3xl font-bold text-blue-600 leading-none">{counts.sent}</p>
+              <p className="text-xs text-gray-400 mt-1.5">via Gmail</p>
+            </div>
+            <div className="h-9 w-9 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+              <Mail className="h-[18px] w-[18px] text-blue-500" />
+            </div>
           </div>
-          <p className="text-2xl font-bold text-blue-600">{counts.sent}</p>
-          <p className="text-xs text-gray-400 mt-1">via Gmail</p>
         </Card>
         <Card>
-          <div className="flex items-center gap-1.5 mb-1">
-            <span className="h-2 w-2 rounded-full bg-red-500" />
-            <p className="text-xs text-gray-500">Erreurs</p>
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-xs text-gray-500 mb-2">Erreurs</p>
+              <p className="text-3xl font-bold text-red-500 leading-none">{counts.failed}</p>
+              <p className="text-xs text-gray-400 mt-1.5">à corriger</p>
+            </div>
+            <div className="h-9 w-9 rounded-xl bg-red-50 flex items-center justify-center shrink-0">
+              <AlertCircle className="h-[18px] w-[18px] text-red-500" />
+            </div>
           </div>
-          <p className="text-2xl font-bold text-red-500">{counts.failed}</p>
-          <p className="text-xs text-gray-400 mt-1">à corriger</p>
         </Card>
       </div>
 
