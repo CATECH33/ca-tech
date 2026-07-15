@@ -327,43 +327,70 @@ export function Dashboard() {
       }
     >
 
-      {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
-        <div>
-          <p className="text-xs text-gray-400 capitalize mb-0.5">{dateStr}</p>
-          <h2 className="text-lg font-bold text-gray-900">
-            {greeting} &mdash;&nbsp;
-            <span className="text-brand-600">{formatCurrency(caThisMo)}</span>
-            <span className="text-sm font-normal text-gray-400 ml-1">encaissé ce mois</span>
-          </h2>
-          {caChange !== undefined && (
-            <p className={cn('text-xs font-semibold mt-0.5', caChange >= 0 ? 'text-emerald-600' : 'text-red-500')}>
-              {caChange >= 0 ? '↑' : '↓'} {Math.abs(caChange)}% vs mois précédent
-            </p>
-          )}
-        </div>
+      {/* ── HERO BANNER ──────────────────────────────────────────────────── */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0A2540] via-[#0A3060] to-brand-600 p-6 mb-4">
+        {/* Cercles décoratifs */}
+        <div className="absolute -top-12 -right-12 h-56 w-56 rounded-full bg-white/5 pointer-events-none" />
+        <div className="absolute -bottom-16 -left-8 h-48 w-48 rounded-full bg-white/5 pointer-events-none" />
+        <div className="absolute top-4 right-32 h-20 w-20 rounded-full bg-brand-400/10 pointer-events-none" />
 
-        {/* Ops mini-stats */}
-        <div className="flex flex-wrap gap-2">
-          <MiniStat to="/taches" icon={<Flame className="h-3.5 w-3.5" />} label="urgentes" count={tachesUrgentesAll.length}
-            color={tachesUrgentesAll.length > 0 ? 'bg-red-50 border-red-200 text-red-700' : 'bg-gray-50 border-gray-200 text-gray-500'} />
-          <MiniStat to="/taches" icon={<CalendarDays className="h-3.5 w-3.5" />} label="aujourd'hui" count={tachesAujourdhui.length}
-            color={tachesAujourdhui.length > 0 ? 'bg-brand-50 border-brand-200 text-brand-700' : 'bg-gray-50 border-gray-200 text-gray-500'} />
-          <MiniStat to="/messages" icon={<MessageCircle className="h-3.5 w-3.5" />} label="non lus" count={messagesNonLus.length}
-            color={messagesNonLus.length > 0 ? 'bg-indigo-50 border-indigo-200 text-indigo-700' : 'bg-gray-50 border-gray-200 text-gray-500'} />
-          <MiniStat to="/support" icon={<Headphones className="h-3.5 w-3.5" />} label="tickets" count={ticketsOuverts.length}
-            color={ticketsOuverts.length > 0 ? 'bg-amber-50 border-amber-200 text-amber-700' : 'bg-gray-50 border-gray-200 text-gray-500'} />
-          {nbAlertes > 0 && (
-            <Link to="/factures" className="flex items-center gap-2 px-3 py-2 rounded-xl border bg-red-50 border-red-200 text-red-700 transition hover:shadow-sm">
-              <AlertCircle className="h-3.5 w-3.5" />
-              <span className="text-xs font-bold">{nbAlertes}</span>
-              <span className="text-[11px] font-medium hidden sm:inline">alerte{nbAlertes > 1 ? 's' : ''}</span>
-            </Link>
-          )}
+        <div className="relative flex flex-col sm:flex-row sm:items-end justify-between gap-5">
+          {/* Gauche : salutation + CA */}
+          <div>
+            <p className="text-white/40 text-xs capitalize mb-2 tracking-wide">{dateStr}</p>
+            <p className="text-white/70 text-sm font-medium mb-1">{greeting}</p>
+            <div className="flex items-baseline gap-2.5">
+              <span className="text-4xl font-bold text-white tabular-nums tracking-tight">
+                {formatCurrency(caThisMo)}
+              </span>
+              <span className="text-white/40 text-sm">encaissé ce mois</span>
+            </div>
+            {caChange !== undefined && (
+              <div className={cn(
+                'flex items-center gap-1 text-xs font-semibold mt-2',
+                caChange >= 0 ? 'text-emerald-300' : 'text-red-300',
+              )}>
+                {caChange >= 0
+                  ? <ArrowUpRight className="h-3.5 w-3.5" />
+                  : <ArrowDownRight className="h-3.5 w-3.5" />}
+                {caChange >= 0 ? '+' : ''}{caChange}% vs mois précédent
+              </div>
+            )}
+          </div>
+
+          {/* Droite : mini-stats en mode sombre */}
+          <div className="flex flex-wrap gap-2">
+            {[
+              { to: '/taches',   icon: <Flame className="h-3.5 w-3.5" />,          label: 'urgentes',     count: tachesUrgentesAll.length,  active: tachesUrgentesAll.length > 0,  activeColor: 'bg-red-500/20 border-red-400/30 text-red-200' },
+              { to: '/taches',   icon: <CalendarDays className="h-3.5 w-3.5" />,   label: "aujourd'hui",  count: tachesAujourdhui.length,    active: tachesAujourdhui.length > 0,  activeColor: 'bg-brand-400/20 border-brand-300/30 text-blue-200' },
+              { to: '/messages', icon: <MessageCircle className="h-3.5 w-3.5" />,  label: 'non lus',      count: messagesNonLus.length,      active: messagesNonLus.length > 0,    activeColor: 'bg-indigo-400/20 border-indigo-300/30 text-indigo-200' },
+              { to: '/support',  icon: <Headphones className="h-3.5 w-3.5" />,     label: 'tickets',      count: ticketsOuverts.length,      active: ticketsOuverts.length > 0,    activeColor: 'bg-amber-400/20 border-amber-300/30 text-amber-200' },
+            ].map(({ to, icon, label, count, active, activeColor }) => (
+              <Link key={to + label} to={to} className={cn(
+                'flex items-center gap-2 px-3 py-2 rounded-xl border transition hover:brightness-110',
+                active ? activeColor : 'bg-white/5 border-white/10 text-white/50',
+              )}>
+                {icon}
+                <span className="text-xs font-bold">{count}</span>
+                <span className="text-[11px] font-medium hidden sm:inline">{label}</span>
+              </Link>
+            ))}
+            {nbAlertes > 0 && (
+              <Link to="/factures" className="flex items-center gap-2 px-3 py-2 rounded-xl border bg-red-500/20 border-red-400/30 text-red-200 transition hover:brightness-110">
+                <AlertCircle className="h-3.5 w-3.5" />
+                <span className="text-xs font-bold">{nbAlertes}</span>
+                <span className="text-[11px] font-medium hidden sm:inline">alerte{nbAlertes > 1 ? 's' : ''}</span>
+              </Link>
+            )}
+          </div>
         </div>
       </div>
 
       {/* ── KPI ROW 1 — Financier ─────────────────────────────────────────── */}
+      <div className="flex items-center gap-3 mb-3">
+        <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">Finances</span>
+        <div className="flex-1 h-px bg-gray-100" />
+      </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
         <KpiCard label="CA ce mois" value={formatCurrency(caThisMo)} sub={`Total : ${formatCurrency(caTotal)}`}
           change={caChange} changeLabel="vs mois préc."
@@ -377,6 +404,10 @@ export function Dashboard() {
       </div>
 
       {/* ── KPI ROW 2 — Activité ─────────────────────────────────────────── */}
+      <div className="flex items-center gap-3 mb-3">
+        <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">Activité commerciale</span>
+        <div className="flex-1 h-px bg-gray-100" />
+      </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
         <KpiCard label="Clients actifs" value={clients.filter(c => c.status === 'actif').length} sub={`${clients.length} au total`}
           icon={<Users className="h-5 w-5" />} iconBg="bg-blue-50" iconColor="text-blue-500" to="/clients" />
