@@ -228,13 +228,24 @@ export interface ProspectAnalyse {
   version: 1
   website_url: string
   // Présence web
-  has_website:         QualCriterion
-  has_https:           QualCriterion
-  is_responsive:       QualCriterion
-  has_form:            QualCriterion
-  has_email:           QualCriterion
-  has_phone:           QualCriterion
-  has_google_business: QualCriterion
+  has_website:          QualCriterion
+  has_https:            QualCriterion
+  is_responsive:        QualCriterion
+  has_form:             QualCriterion
+  has_email:            QualCriterion
+  has_phone:            QualCriterion
+  has_google_business:  QualCriterion
+  // SEO
+  has_meta_title?:        QualCriterion
+  has_meta_description?:  QualCriterion
+  has_sitemap?:           QualCriterion
+  has_robots?:            QualCriterion
+  // Contact digital
+  has_whatsapp?:          QualCriterion
+  has_google_maps_embed?: QualCriterion
+  // Info (lecture seule)
+  cms_detected?:  string | null
+  load_time_ms?:  number | null
   // Réseaux sociaux
   social_networks: Record<SocialNetwork, boolean | null>
   // Texte libre
@@ -255,29 +266,41 @@ export const SOCIAL_NETWORK_LABELS: Record<SocialNetwork, string> = {
 }
 
 const ANALYSE_WEIGHTS = {
-  has_website:         1.0,
-  has_https:           1.5,
-  is_responsive:       2.0,
-  has_form:            1.0,
-  has_email:           0.5,
-  has_phone:           0.5,
-  has_google_business: 1.5,
-  social:              0.5,
-  commercial_opportunity: 1.5,
+  has_website:            1.00,
+  has_https:              0.75,
+  is_responsive:          1.00,
+  has_meta_title:         0.50,
+  has_meta_description:   0.50,
+  has_sitemap:            0.50,
+  has_robots:             0.25,
+  has_form:               0.50,
+  has_email:              0.50,
+  has_phone:              0.50,
+  has_google_business:    1.00,
+  has_whatsapp:           0.50,
+  has_google_maps_embed:  0.50,
+  social:                 0.50,
+  commercial_opportunity: 1.50,
 } as const
 
 export function computeAnalyseScore(a: Partial<ProspectAnalyse>): number {
   let score = 0
-  if (a.has_website?.value === true)         score += ANALYSE_WEIGHTS.has_website
-  if (a.has_https?.value === true)           score += ANALYSE_WEIGHTS.has_https
-  if (a.is_responsive?.value === true)       score += ANALYSE_WEIGHTS.is_responsive
-  if (a.has_form?.value === true)            score += ANALYSE_WEIGHTS.has_form
-  if (a.has_email?.value === true)           score += ANALYSE_WEIGHTS.has_email
-  if (a.has_phone?.value === true)           score += ANALYSE_WEIGHTS.has_phone
-  if (a.has_google_business?.value === true) score += ANALYSE_WEIGHTS.has_google_business
+  if (a.has_website?.value === true)           score += ANALYSE_WEIGHTS.has_website
+  if (a.has_https?.value === true)             score += ANALYSE_WEIGHTS.has_https
+  if (a.is_responsive?.value === true)         score += ANALYSE_WEIGHTS.is_responsive
+  if (a.has_meta_title?.value === true)        score += ANALYSE_WEIGHTS.has_meta_title
+  if (a.has_meta_description?.value === true)  score += ANALYSE_WEIGHTS.has_meta_description
+  if (a.has_sitemap?.value === true)           score += ANALYSE_WEIGHTS.has_sitemap
+  if (a.has_robots?.value === true)            score += ANALYSE_WEIGHTS.has_robots
+  if (a.has_form?.value === true)              score += ANALYSE_WEIGHTS.has_form
+  if (a.has_email?.value === true)             score += ANALYSE_WEIGHTS.has_email
+  if (a.has_phone?.value === true)             score += ANALYSE_WEIGHTS.has_phone
+  if (a.has_google_business?.value === true)   score += ANALYSE_WEIGHTS.has_google_business
+  if (a.has_whatsapp?.value === true)          score += ANALYSE_WEIGHTS.has_whatsapp
+  if (a.has_google_maps_embed?.value === true) score += ANALYSE_WEIGHTS.has_google_maps_embed
   if (a.social_networks && Object.values(a.social_networks).some(v => v === true))
     score += ANALYSE_WEIGHTS.social
-  if (a.commercial_opportunity?.trim())      score += ANALYSE_WEIGHTS.commercial_opportunity
+  if (a.commercial_opportunity?.trim())        score += ANALYSE_WEIGHTS.commercial_opportunity
   return Math.round(score * 10) / 10
 }
 
@@ -289,13 +312,21 @@ export function getAnalyse(prospect: ProspectRow): ProspectAnalyse | null {
 // ── Résultat brut de la Edge Function ─────────────────────────────────────────
 
 export interface AutoAnalyseResult {
-  has_website:         boolean | null
-  has_https:           boolean | null
-  is_responsive:       boolean | null
-  has_form:            boolean | null
-  has_email:           boolean | null
-  has_phone:           boolean | null
-  has_google_business: boolean | null
+  has_website:           boolean | null
+  has_https:             boolean | null
+  is_responsive:         boolean | null
+  has_meta_title:        boolean | null
+  has_meta_description:  boolean | null
+  has_sitemap:           boolean | null
+  has_robots:            boolean | null
+  has_form:              boolean | null
+  has_email:             boolean | null
+  has_phone:             boolean | null
+  has_google_business:   boolean | null
+  has_whatsapp:          boolean | null
+  has_google_maps_embed: boolean | null
+  cms_detected:          string | null
+  load_time_ms:          number | null
   social_networks: Record<SocialNetwork, boolean> | null
   details: {
     final_url?:         string

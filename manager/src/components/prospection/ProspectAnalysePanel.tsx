@@ -4,7 +4,8 @@ import {
   FileText, FileX, MapPin, MapPinOff, Mail, MailX,
   Phone, PhoneOff, ExternalLink, Sparkles, Check, X,
   Share2, Wand2, AlertCircle, Save, RotateCcw, Loader2,
-  Zap, TriangleAlert,
+  Zap, TriangleAlert, Tag, AlignLeft, Network, Bot,
+  MessageCircle, Map, Clock, Layers,
 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
@@ -21,13 +22,21 @@ const NULL_CRIT: QualCriterion = { value: null, source: 'manual' }
 const EMPTY_ANALYSE: ProspectAnalyse = {
   version: 1,
   website_url: '',
-  has_website:         { ...NULL_CRIT },
-  has_https:           { ...NULL_CRIT },
-  is_responsive:       { ...NULL_CRIT },
-  has_form:            { ...NULL_CRIT },
-  has_email:           { ...NULL_CRIT },
-  has_phone:           { ...NULL_CRIT },
-  has_google_business: { ...NULL_CRIT },
+  has_website:           { ...NULL_CRIT },
+  has_https:             { ...NULL_CRIT },
+  is_responsive:         { ...NULL_CRIT },
+  has_meta_title:        { ...NULL_CRIT },
+  has_meta_description:  { ...NULL_CRIT },
+  has_sitemap:           { ...NULL_CRIT },
+  has_robots:            { ...NULL_CRIT },
+  has_form:              { ...NULL_CRIT },
+  has_email:             { ...NULL_CRIT },
+  has_phone:             { ...NULL_CRIT },
+  has_google_business:   { ...NULL_CRIT },
+  has_whatsapp:          { ...NULL_CRIT },
+  has_google_maps_embed: { ...NULL_CRIT },
+  cms_detected:          null,
+  load_time_ms:          null,
   social_networks: {
     facebook: null, instagram: null, linkedin: null,
     twitter: null, youtube: null, tiktok: null,
@@ -217,7 +226,9 @@ export function ProspectAnalysePanel({ prospect }: { prospect: ProspectRow }) {
 
   const setCrit = useCallback((key: keyof Pick<ProspectAnalyse,
     'has_website' | 'has_https' | 'is_responsive' | 'has_form' |
-    'has_email' | 'has_phone' | 'has_google_business'
+    'has_email' | 'has_phone' | 'has_google_business' |
+    'has_meta_title' | 'has_meta_description' | 'has_sitemap' | 'has_robots' |
+    'has_whatsapp' | 'has_google_maps_embed'
   >) => (value: boolean | null) =>
     setForm(f => ({ ...f, [key]: { value, source: 'manual' as const } }))
   , [])
@@ -260,14 +271,22 @@ export function ProspectAnalysePanel({ prospect }: { prospect: ProspectRow }) {
       })
       setForm(f => ({
         ...f,
-        has_website:         result.has_website         !== null ? { value: result.has_website,         source: 'auto' } : f.has_website,
-        has_https:           result.has_https           !== null ? { value: result.has_https,           source: 'auto' } : f.has_https,
-        is_responsive:       result.is_responsive       !== null ? { value: result.is_responsive,       source: 'auto' } : f.is_responsive,
-        has_form:            result.has_form            !== null ? { value: result.has_form,            source: 'auto' } : f.has_form,
-        has_email:           result.has_email           !== null ? { value: result.has_email,           source: 'auto' } : f.has_email,
-        has_phone:           result.has_phone           !== null ? { value: result.has_phone,           source: 'auto' } : f.has_phone,
-        has_google_business: result.has_google_business !== null ? { value: result.has_google_business, source: 'auto' } : f.has_google_business,
-        social_networks:     result.social_networks ? { ...f.social_networks, ...result.social_networks } : f.social_networks,
+        has_website:           result.has_website           !== null ? { value: result.has_website,           source: 'auto' } : f.has_website,
+        has_https:             result.has_https             !== null ? { value: result.has_https,             source: 'auto' } : f.has_https,
+        is_responsive:         result.is_responsive         !== null ? { value: result.is_responsive,         source: 'auto' } : f.is_responsive,
+        has_meta_title:        result.has_meta_title        !== null ? { value: result.has_meta_title,        source: 'auto' } : f.has_meta_title,
+        has_meta_description:  result.has_meta_description  !== null ? { value: result.has_meta_description,  source: 'auto' } : f.has_meta_description,
+        has_sitemap:           result.has_sitemap           !== null ? { value: result.has_sitemap,           source: 'auto' } : f.has_sitemap,
+        has_robots:            result.has_robots            !== null ? { value: result.has_robots,            source: 'auto' } : f.has_robots,
+        has_form:              result.has_form              !== null ? { value: result.has_form,              source: 'auto' } : f.has_form,
+        has_email:             result.has_email             !== null ? { value: result.has_email,             source: 'auto' } : f.has_email,
+        has_phone:             result.has_phone             !== null ? { value: result.has_phone,             source: 'auto' } : f.has_phone,
+        has_google_business:   result.has_google_business   !== null ? { value: result.has_google_business,   source: 'auto' } : f.has_google_business,
+        has_whatsapp:          result.has_whatsapp          !== null ? { value: result.has_whatsapp,          source: 'auto' } : f.has_whatsapp,
+        has_google_maps_embed: result.has_google_maps_embed !== null ? { value: result.has_google_maps_embed, source: 'auto' } : f.has_google_maps_embed,
+        cms_detected:          result.cms_detected ?? f.cms_detected ?? null,
+        load_time_ms:          result.load_time_ms  ?? f.load_time_ms  ?? null,
+        social_networks:       result.social_networks ? { ...f.social_networks, ...result.social_networks } : f.social_networks,
       }))
       if (result.details.warnings?.length) {
         setAutoMsg(`Analyse partielle — ${result.details.warnings.join('; ')}`)
@@ -396,6 +415,57 @@ export function ProspectAnalysePanel({ prospect }: { prospect: ProspectRow }) {
           />
         </Section>
 
+        {/* SEO */}
+        <Section title="SEO">
+          <TriToggle
+            label="Meta Title"
+            value={form.has_meta_title?.value ?? null}
+            iconTrue={Tag} iconFalse={Tag}
+            onChange={setCrit('has_meta_title')}
+          />
+          <TriToggle
+            label="Meta Description"
+            value={form.has_meta_description?.value ?? null}
+            iconTrue={AlignLeft} iconFalse={AlignLeft}
+            onChange={setCrit('has_meta_description')}
+          />
+          <TriToggle
+            label="Sitemap XML"
+            value={form.has_sitemap?.value ?? null}
+            iconTrue={Network} iconFalse={Network}
+            onChange={setCrit('has_sitemap')}
+          />
+          <TriToggle
+            label="Robots.txt"
+            value={form.has_robots?.value ?? null}
+            iconTrue={Bot} iconFalse={Bot}
+            onChange={setCrit('has_robots')}
+          />
+        </Section>
+
+        {/* CMS + vitesse (info) */}
+        {(form.cms_detected || form.load_time_ms != null) && (
+          <div className="flex gap-2 flex-wrap">
+            {form.cms_detected && (
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-violet-700 bg-violet-50 border border-violet-200 px-2.5 py-1 rounded-full">
+                <Layers className="h-3 w-3" />
+                {form.cms_detected}
+              </span>
+            )}
+            {form.load_time_ms != null && (
+              <span className={cn(
+                'inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded-full border',
+                form.load_time_ms < 1500 ? 'text-emerald-700 bg-emerald-50 border-emerald-200' :
+                form.load_time_ms < 3000 ? 'text-amber-700 bg-amber-50 border-amber-200' :
+                                            'text-red-700 bg-red-50 border-red-200',
+              )}>
+                <Clock className="h-3 w-3" />
+                {form.load_time_ms}ms
+              </span>
+            )}
+          </div>
+        )}
+
         {/* Contact */}
         <Section title="Contact">
           <TriToggle
@@ -415,6 +485,18 @@ export function ProspectAnalysePanel({ prospect }: { prospect: ProspectRow }) {
             value={form.has_phone.value}
             iconTrue={Phone} iconFalse={PhoneOff}
             onChange={setCrit('has_phone')}
+          />
+          <TriToggle
+            label="WhatsApp"
+            value={form.has_whatsapp?.value ?? null}
+            iconTrue={MessageCircle} iconFalse={MessageCircle}
+            onChange={setCrit('has_whatsapp')}
+          />
+          <TriToggle
+            label="Google Maps intégré"
+            value={form.has_google_maps_embed?.value ?? null}
+            iconTrue={Map} iconFalse={Map}
+            onChange={setCrit('has_google_maps_embed')}
           />
         </Section>
 
@@ -481,18 +563,24 @@ export function ProspectAnalysePanel({ prospect }: { prospect: ProspectRow }) {
 
         {/* Pondération */}
         <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
-          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Pondération</p>
+          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Pondération SEO /10</p>
           <div className="space-y-1">
             {[
-              { label: 'Site présent',    pts: 1.0, val: form.has_website.value },
-              { label: 'HTTPS',           pts: 1.5, val: form.has_https.value },
-              { label: 'Responsive',      pts: 2.0, val: form.is_responsive.value },
-              { label: 'Formulaire',      pts: 1.0, val: form.has_form.value },
-              { label: 'Email',           pts: 0.5, val: form.has_email.value },
-              { label: 'Téléphone',       pts: 0.5, val: form.has_phone.value },
-              { label: 'Google Business', pts: 1.5, val: form.has_google_business.value },
-              { label: 'Réseaux sociaux', pts: 0.5, val: socialDetected > 0 ? true : socialDetected === 0 ? null : false },
-              { label: 'Opportunité',     pts: 1.5, val: form.commercial_opportunity.trim() ? true : null },
+              { label: 'Site présent',      pts: 1.00, val: form.has_website.value },
+              { label: 'HTTPS',             pts: 0.75, val: form.has_https.value },
+              { label: 'Responsive',        pts: 1.00, val: form.is_responsive.value },
+              { label: 'Meta Title',        pts: 0.50, val: form.has_meta_title?.value ?? null },
+              { label: 'Meta Description',  pts: 0.50, val: form.has_meta_description?.value ?? null },
+              { label: 'Sitemap XML',       pts: 0.50, val: form.has_sitemap?.value ?? null },
+              { label: 'Robots.txt',        pts: 0.25, val: form.has_robots?.value ?? null },
+              { label: 'Formulaire',        pts: 0.50, val: form.has_form.value },
+              { label: 'Email',             pts: 0.50, val: form.has_email.value },
+              { label: 'Téléphone',         pts: 0.50, val: form.has_phone.value },
+              { label: 'WhatsApp',          pts: 0.50, val: form.has_whatsapp?.value ?? null },
+              { label: 'Google Maps',       pts: 0.50, val: form.has_google_maps_embed?.value ?? null },
+              { label: 'Google Business',   pts: 1.00, val: form.has_google_business.value },
+              { label: 'Réseaux sociaux',   pts: 0.50, val: socialDetected > 0 ? true : socialDetected === 0 ? null : false },
+              { label: 'Opportunité',       pts: 1.50, val: form.commercial_opportunity.trim() ? true : null },
             ].map(row => (
               <div key={row.label} className="flex items-center justify-between text-[11px]">
                 <div className="flex items-center gap-1.5 text-gray-500">
