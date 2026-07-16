@@ -103,4 +103,8 @@ export class ApifyClient {
     )
     return Array.isArray(items) ? items : []
   }
+
+  async getDatasetInfo(datasetId: string): Promise<{ itemCount: number }> {
+    return this.request<{ itemCount: number }>(`/datasets/${datasetId}`)
+  }
 }

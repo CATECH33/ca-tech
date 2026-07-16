@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   CheckCircle2, XCircle, AlertTriangle, RefreshCw, Zap, Wifi,
   WifiOff, Clock, Activity, BarChart2, ChevronDown, ChevronUp,
   ExternalLink, Wrench, Mail, Calendar, HardDrive, Sheet,
+  Cpu, MapPin, Search, Building2,
 } from 'lucide-react'
 import { Layout } from '@/components/layout/Layout'
 import { Card } from '@/components/ui/Card'
@@ -14,6 +15,8 @@ import {
 } from '@/hooks/useIntegrations'
 import { useGoogleIntegration } from '@/hooks/useGoogleIntegration'
 import { hasSheetsScope } from '@/lib/googleOAuth'
+import { useApifyConnection, useApifyRun } from '@/hooks/useApify'
+import { ApifyClient, TERMINAL_STATUSES, type ApifyRun } from '@/connectors/connectors/apify-client'
 
 // ── Service definitions ───────────────────────────────────────────────────────
 
@@ -471,6 +474,282 @@ function Journal({ logs }: { logs: UnifiedLog[] }) {
   )
 }
 
+// ── Apify Section ─────────────────────────────────────────────────────────────
+
+const MAPS_ACTOR_ID = 'compass/crawler-google-places'
+
+function ApifyRunStatus({ run, itemCount }: { run: ApifyRun; itemCount: number | null }) {
+  const isRunning = !TERMINAL_STATUSES.includes(run.status)
+  const isSuccess = run.status === 'SUCCEEDED'
+  const isFailed  = !isRunning && !isSuccess
+
+  const duration = run.finishedAt && run.startedAt
+    ? Math.round((new Date(run.finishedAt).getTime() - new Date(run.startedAt).getTime()) / 1000)
+    : null
+
+  return (
+    <div className={cn(
+      'rounded-xl border p-4 space-y-3',
+      isRunning ? 'bg-brand-50/50 border-brand-100'
+      : isSuccess ? 'bg-emerald-50/50 border-emerald-100'
+      : 'bg-red-50/50 border-red-100',
+    )}>
+      <div className="flex items-center gap-2">
+        {isRunning && <RefreshCw className="h-4 w-4 text-brand-500 animate-spin" />}
+        {isSuccess  && <CheckCircle2 className="h-4 w-4 text-emerald-500" />}
+        {isFailed   && <XCircle className="h-4 w-4 text-red-500" />}
+        <span className={cn(
+          'text-sm font-semibold',
+          isRunning ? 'text-brand-700' : isSuccess ? 'text-emerald-700' : 'text-red-700',
+        )}>
+          {isRunning ? 'Recherche en cours…'
+          : isSuccess ? 'Recherche terminée'
+          : `Erreur — ${run.status}`}
+        </span>
+        <span className="ml-auto text-[10px] text-gray-400 font-mono">{run.id.slice(0, 8)}…</span>
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        {itemCount !== null && (
+          <div className="flex items-center gap-1.5 bg-white rounded-lg px-3 py-1.5 border border-gray-100 shadow-sm">
+            <Building2 className="h-3.5 w-3.5 text-gray-400" />
+            <span className="text-sm font-bold text-gray-800">{itemCount}</span>
+            <span className="text-xs text-gray-500">entreprises trouvées</span>
+          </div>
+        )}
+        {duration !== null && (
+          <div className="flex items-center gap-1.5 bg-white rounded-lg px-3 py-1.5 border border-gray-100 shadow-sm">
+            <Clock className="h-3.5 w-3.5 text-gray-400" />
+            <span className="text-sm font-bold text-gray-800">{duration}s</span>
+            <span className="text-xs text-gray-500">durée</span>
+          </div>
+        )}
+        {isRunning && (
+          <div className="flex items-center gap-1.5 bg-white rounded-lg px-3 py-1.5 border border-gray-100 shadow-sm">
+            <Activity className="h-3.5 w-3.5 text-brand-400 animate-pulse" />
+            <span className="text-xs text-brand-600 font-medium">{run.status}</span>
+          </div>
+        )}
+      </div>
+
+      {isSuccess && (
+        <p className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2">
+          Résultats disponibles. Allez dans <strong>Prospection &gt; Connecteurs</strong> pour les importer dans le CRM.
+        </p>
+      )}
+    </div>
+  )
+}
+
+function ApifySection() {
+  const [apiKey, setApiKey]     = useState(() => localStorage.getItem('apify_api_key') ?? '')
+  const [savedKey, setSavedKey] = useState(() => localStorage.getItem('apify_api_key') ?? '')
+  const [ville, setVille]       = useState('')
+  const [secteur, setSecteur]   = useState('')
+  const [limite, setLimite]     = useState(50)
+  const [itemCount, setItemCount] = useState<number | null>(null)
+
+  const conn   = useApifyConnection()
+  const runner = useApifyRun(savedKey)
+
+  // Auto-test saved key on mount
+  useEffect(() => {
+    if (savedKey) conn.test(savedKey)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Fetch dataset item count when run succeeds
+  useEffect(() => {
+    if (runner.run?.status !== 'SUCCEEDED' || !savedKey) return
+    const datasetId = runner.run.defaultDatasetId
+    if (!datasetId) return
+    const client = new ApifyClient(savedKey)
+    client.getDatasetInfo(datasetId)
+      .then(info => setItemCount(info.itemCount))
+      .catch(() => {})
+  }, [runner.run?.status, runner.run?.defaultDatasetId, savedKey])
+
+  const handleSaveAndTest = () => {
+    localStorage.setItem('apify_api_key', apiKey)
+    setSavedKey(apiKey)
+    conn.test(apiKey)
+  }
+
+  const handleLaunch = () => {
+    if (!ville.trim() || !secteur.trim()) return
+    setItemCount(null)
+    runner.reset()
+    runner.launch(MAPS_ACTOR_ID, {
+      searchStringsArray:        [`${secteur} ${ville}`],
+      locationQuery:             `${ville}, France`,
+      maxCrawledPlacesPerSearch: limite,
+    })
+  }
+
+  const isConnected = conn.status === 'connected'
+  const canLaunch   = isConnected && !!ville.trim() && !!secteur.trim() && !runner.isRunning && !runner.isLaunching
+
+  return (
+    <div className="mt-8">
+      <div className="flex items-center gap-3 mb-4">
+        <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">Prospection Automatique</span>
+        <div className="flex-1 h-px bg-gray-100" />
+      </div>
+
+      <Card>
+        {/* Header */}
+        <div className="flex items-center gap-4 mb-5">
+          <div className="h-12 w-12 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center shrink-0">
+            <Cpu className="h-6 w-6 text-orange-500" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h3 className="text-sm font-semibold text-gray-900">Apify — Google Maps Scraper</h3>
+              {conn.status === 'connected' && (
+                <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700">
+                  <CheckCircle2 className="h-2.5 w-2.5" />Connecté
+                </span>
+              )}
+              {conn.status === 'testing' && (
+                <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-brand-50 text-brand-600">
+                  <RefreshCw className="h-2.5 w-2.5 animate-spin" />Test…
+                </span>
+              )}
+            </div>
+            <p className="text-xs text-gray-400 mt-0.5">
+              {conn.status === 'connected' && conn.user
+                ? `${conn.user.username} · ${conn.user.isPaidUser ? 'Compte payant' : 'Compte gratuit'} · ${conn.latency}ms`
+                : 'Entrez votre clé API Apify pour activer la recherche Google Maps'}
+            </p>
+          </div>
+        </div>
+
+        {/* API Key */}
+        <div className="mb-5">
+          <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5 block">Clé API Apify</label>
+          <div className="flex gap-2">
+            <input
+              type="password"
+              value={apiKey}
+              onChange={e => setApiKey(e.target.value)}
+              placeholder="apify_api_XXXXXXXXXXXXX"
+              className="flex-1 text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-400/30 focus:border-brand-400 transition font-mono"
+            />
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={handleSaveAndTest}
+              disabled={!apiKey.trim() || conn.status === 'testing'}
+            >
+              {conn.status === 'testing'
+                ? <><RefreshCw className="h-3.5 w-3.5 animate-spin" />Test…</>
+                : <><Wifi className="h-3.5 w-3.5" />Tester</>
+              }
+            </Button>
+          </div>
+          {conn.status === 'error' && (
+            <p className="mt-1.5 text-xs text-red-500 flex items-center gap-1">
+              <XCircle className="h-3.5 w-3.5 shrink-0" />{conn.error}
+            </p>
+          )}
+          <p className="mt-1 text-[11px] text-gray-400">
+            Trouvez votre clé sur <span className="font-medium text-gray-600">apify.com</span> → Settings → Integrations → API tokens
+          </p>
+        </div>
+
+        {/* Search form */}
+        {isConnected && (
+          <>
+            <div className="border-t border-gray-100 pt-5 mb-5">
+              <div className="flex items-center gap-2 mb-4">
+                <MapPin className="h-4 w-4 text-gray-400" />
+                <span className="text-sm font-semibold text-gray-700">Paramètres de recherche Google Maps</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+                <div>
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5 block">Ville</label>
+                  <input
+                    type="text"
+                    value={ville}
+                    onChange={e => setVille(e.target.value)}
+                    placeholder="Ex : Dijon"
+                    className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-400/30 focus:border-brand-400 transition"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5 block">Secteur d'activité</label>
+                  <input
+                    type="text"
+                    value={secteur}
+                    onChange={e => setSecteur(e.target.value)}
+                    placeholder="Ex : Restaurant"
+                    className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-400/30 focus:border-brand-400 transition"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5 block">Résultats max</label>
+                  <input
+                    type="number"
+                    min={1}
+                    max={200}
+                    value={limite}
+                    onChange={e => setLimite(Number(e.target.value))}
+                    className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-400/30 focus:border-brand-400 transition"
+                  />
+                </div>
+              </div>
+
+              {ville && secteur && (
+                <div className="text-xs text-gray-500 bg-gray-50 rounded-lg px-3 py-2">
+                  Requête : <span className="font-semibold text-gray-700">"{secteur} {ville}"</span> · zone : <span className="font-semibold text-gray-700">{ville}, France</span> · limite : <span className="font-semibold text-gray-700">{limite}</span>
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleLaunch}
+                disabled={!canLaunch}
+                className={cn(
+                  'flex items-center gap-2 px-4 h-9 text-sm font-semibold rounded-lg transition',
+                  canLaunch
+                    ? 'bg-brand-600 text-white hover:bg-brand-700 shadow-sm'
+                    : 'bg-gray-100 text-gray-400 cursor-not-allowed',
+                )}
+              >
+                {runner.isLaunching
+                  ? <><RefreshCw className="h-4 w-4 animate-spin" />Lancement…</>
+                  : <><Search className="h-4 w-4" />Lancer la recherche</>
+                }
+              </button>
+              {(runner.run !== null || runner.error) && (
+                <button
+                  onClick={() => { runner.reset(); setItemCount(null) }}
+                  className="text-xs text-gray-400 hover:text-gray-600 transition"
+                >
+                  Réinitialiser
+                </button>
+              )}
+            </div>
+
+            {runner.error && (
+              <div className="mt-3 bg-red-50 border border-red-100 rounded-xl p-3 text-xs text-red-600 flex items-center gap-2">
+                <XCircle className="h-4 w-4 shrink-0" />{runner.error}
+              </div>
+            )}
+
+            {runner.run && (
+              <div className="mt-4">
+                <ApifyRunStatus run={runner.run} itemCount={itemCount} />
+              </div>
+            )}
+          </>
+        )}
+      </Card>
+    </div>
+  )
+}
+
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export function Integrations() {
@@ -600,6 +879,9 @@ export function Integrations() {
             <Journal logs={unifiedLogs} />
           )}
         </Card>
+
+        {/* ── Apify ──────────────────────────────────────────────────────── */}
+        <ApifySection />
       </div>
     </Layout>
   )
