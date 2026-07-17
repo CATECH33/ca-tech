@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Collaborateurs IA | Automatisez votre entreprise 24h/24 | CA-TECH</title>
+  <meta name="description" content="Déployez des collaborateurs IA spécialisés — Commercial, Support, RH, Juridique, SEO. Automatisez vos ventes, votre support et votre administratif sans effort. CA-TECH."/>
+  <link rel="canonical" href="https://ca-tech.fr/collaborateurs-ia"/>
+  <meta property="og:title" content="Collaborateurs IA | Automatisez votre entreprise 24h/24 | CA-TECH"/>
+  <meta property="og:description" content="Des agents IA spécialisés qui travaillent 24h/24 pour vos ventes, support, RH, juridique et SEO."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://ca-tech.fr/collaborateurs-ia"/>
+  <meta property="og:image" content="https://ca-tech.fr/public/images/collaborateurs/collaborateur-ia-hero.webp"/>
+  <meta property="og:locale" content="fr_FR"/>
+  <meta property="og:site_name" content="CA-TECH"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="local-seo.css"/>
+  <link rel="icon" type="image/x-icon" href="/public/favicon.ico"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png"/>
+  <meta name="theme-color" content="#0066FF"/>
+
+  <style>
+    /* ── HERO IMAGE ──────────────────────────────────────────── */
+    .cai-hero {
+      padding: calc(var(--nav-h) + 72px) 5% 0;
+      background:
+        radial-gradient(ellipse 70% 55% at 50% 30%, rgba(0,102,255,.18) 0%, transparent 65%),
+        linear-gradient(160deg, var(--dark) 0%, var(--blue-dk) 55%, #0d3775 100%);
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+    .cai-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle 400px at 15% 80%, rgba(0,212,255,.06) 0%, transparent 70%),
+        radial-gradient(circle 350px at 85% 20%, rgba(0,102,255,.10) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Appear animations */
+    @keyframes cai-up {
+      from { opacity: 0; transform: translateY(36px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .cai-anim-0 { animation: cai-up .75s .05s cubic-bezier(.16,1,.3,1) both; }
+    .cai-anim-1 { animation: cai-up .75s .20s cubic-bezier(.16,1,.3,1) both; }
+    .cai-anim-2 { animation: cai-up .75s .35s cubic-bezier(.16,1,.3,1) both; }
+    .cai-anim-3 { animation: cai-up .75s .50s cubic-bezier(.16,1,.3,1) both; }
+    .cai-anim-4 { animation: cai-up .90s .65s cubic-bezier(.16,1,.3,1) both; }
+
+    .cai-hero-inner {
+      position: relative;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .cai-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 1.6rem;
+    }
+    .cai-kicker span {
+      display: block;
+      width: 28px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--blue), var(--cyan));
+      border-radius: 2px;
+    }
+    .cai-hero h1 {
+      font-size: clamp(2.1rem, 4.5vw, 3.6rem);
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.08;
+      letter-spacing: -.03em;
+      margin-bottom: 1.5rem;
+    }
+    .cai-hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, #fff 30%, var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .cai-hero-sub {
+      font-size: clamp(.9rem, 1.6vw, 1.05rem);
+      color: rgba(255,255,255,.72);
+      line-height: 1.78;
+      max-width: 640px;
+      margin: 0 auto 2.4rem;
+    }
+    .cai-hero-btns {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 3.5rem;
+    }
+
+    /* Hero image with float */
+    .cai-hero-img-wrap {
+      position: relative;
+      display: inline-block;
+      max-width: 860px;
+      width: 100%;
+    }
+    .cai-hero-img-wrap::before {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 72%;
+      height: 60px;
+      background: radial-gradient(ellipse, rgba(0,102,255,.45) 0%, transparent 70%);
+      filter: blur(18px);
+      pointer-events: none;
+      z-index: 0;
+      transition: opacity .6s;
+    }
+
+    @keyframes cai-float {
+      0%, 100% {
+        transform: translateY(0px);
+        filter: drop-shadow(0 24px 48px rgba(0,102,255,.30));
+      }
+      50% {
+        transform: translateY(-14px);
+        filter: drop-shadow(0 40px 64px rgba(0,102,255,.18));
+      }
+    }
+    .cai-hero-img {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: auto;
+      max-height: 520px;
+      object-fit: contain;
+      display: block;
+      animation: cai-float 5.5s ease-in-out infinite;
+      border-radius: 16px;
+    }
+
+    /* ── CARDS SECTION ───────────────────────────────────────── */
+    .cai-section {
+      padding: 100px 5%;
+      background: #f7f9fc;
+      position: relative;
+    }
+    .cai-section-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    .cai-section-label {
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--blue);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: .8rem;
+    }
+    .cai-section-label::before,
+    .cai-section-label::after {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--blue), var(--cyan));
+      border-radius: 2px;
+    }
+    .cai-section-title {
+      font-size: clamp(1.75rem, 3vw, 2.5rem);
+      font-weight: 900;
+      color: var(--blue-dk);
+      letter-spacing: -.02em;
+      line-height: 1.15;
+      margin-bottom: .9rem;
+    }
+    .cai-section-desc {
+      font-size: .95rem;
+      color: #64748b;
+      line-height: 1.8;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* Cards grid */
+    .cai-cards {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.5rem;
+      max-width: 1160px;
+      margin: 0 auto;
+    }
+
+    /* The card */
+    .cai-card {
+      background: #fff;
+      border: 1px solid rgba(10,37,64,.08);
+      border-radius: 20px;
+      padding: 2rem 1.5rem 1.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0;
+      cursor: pointer;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      /* GPU layer */
+      will-change: transform;
+      transform-style: preserve-3d;
+      transform: perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0px);
+      transition:
+        transform .25s cubic-bezier(.16,1,.3,1),
+        box-shadow .25s cubic-bezier(.16,1,.3,1),
+        border-color .25s;
+    }
+
+    /* Glow overlay */
+    .cai-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,102,255,.08) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity .3s;
+      pointer-events: none;
+    }
+
+    /* Bottom halo */
+    .cai-card::after {
+      content: '';
+      position: absolute;
+      bottom: -24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70%;
+      height: 40px;
+      background: radial-gradient(ellipse, rgba(0,102,255,.35) 0%, transparent 70%);
+      filter: blur(12px);
+      opacity: 0;
+      transition: opacity .3s, bottom .25s cubic-bezier(.16,1,.3,1);
+      pointer-events: none;
+    }
+
+    .cai-card:hover {
+      border-color: rgba(0,102,255,.22);
+      box-shadow:
+        0 0 0 1px rgba(0,102,255,.12),
+        0 20px 48px rgba(0,102,255,.14),
+        0 4px 16px rgba(0,0,0,.06);
+    }
+    .cai-card:hover::before { opacity: 1; }
+    .cai-card:hover::after  { opacity: 1; bottom: -16px; }
+
+    /* Logo */
+    .cai-card-logo {
+      width: 88px;
+      height: 88px;
+      object-fit: contain;
+      border-radius: 18px;
+      margin-bottom: 1.2rem;
+      flex-shrink: 0;
+      transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+    }
+    .cai-card:hover .cai-card-logo {
+      transform: translateY(-4px) scale(1.05);
+    }
+
+    /* Name */
+    .cai-card-name {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--blue-dk);
+      letter-spacing: -.01em;
+      margin-bottom: .55rem;
+      line-height: 1.2;
+    }
+
+    /* Description */
+    .cai-card-desc {
+      font-size: .8rem;
+      color: #64748b;
+      line-height: 1.7;
+      flex: 1;
+      margin-bottom: 1.4rem;
+    }
+
+    /* Button */
+    .cai-card-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: .75rem;
+      font-weight: 700;
+      color: var(--blue);
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: 1.5px solid rgba(0,102,255,.22);
+      background: rgba(0,102,255,.04);
+      text-decoration: none;
+      transition:
+        background .2s,
+        border-color .2s,
+        color .2s,
+        gap .2s;
+      white-space: nowrap;
+    }
+    .cai-card:hover .cai-card-btn {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+      gap: 10px;
+    }
+    .cai-card-btn svg {
+      width: 12px;
+      height: 12px;
+      flex-shrink: 0;
+      transition: transform .2s;
+    }
+    .cai-card:hover .cai-card-btn svg { transform: translateX(2px); }
+
+    /* Status badge */
+    .cai-card-badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      font-size: .58rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #10b981;
+      background: rgba(16,185,129,.1);
+      border: 1px solid rgba(16,185,129,.22);
+      border-radius: 99px;
+      padding: 3px 9px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .cai-card-badge::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #10b981;
+      animation: pulse-dot 1.8s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .5; transform: scale(.7); }
+    }
+
+    /* Scroll reveal */
+    .cai-reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1);
+    }
+    .cai-reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── CTA SECTION ─────────────────────────────────────────── */
+    .cai-cta {
+      padding: 100px 5%;
+      background: linear-gradient(135deg, var(--blue-dk) 0%, #0d3775 60%, #003d99 100%);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cai-cta::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(0,102,255,.2) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .cai-cta-inner { position: relative; }
+    .cai-cta h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -.02em;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+    .cai-cta p {
+      font-size: .95rem;
+      color: rgba(255,255,255,.7);
+      max-width: 520px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.75;
+    }
+    .cai-cta-btns {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────── */
+    @media (max-width: 1100px) {
+      .cai-cards { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .cai-cards { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+      .cai-hero h1 { letter-spacing: -.02em; }
+    }
+    @media (max-width: 480px) {
+      .cai-cards { grid-template-columns: 1fr; max-width: 360px; }
+      .cai-card  { padding: 1.75rem 1.25rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="logo">
+    <img src="assets/logos/logo-ca-tech.png" alt="CA-TECH" width="36" height="36"/>
+    <div><span class="logo-name">CA-TECH</span><span class="logo-sub">Agence Web &amp; Design</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Accueil</a></li>
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="index.html#realisations">Réalisations</a></li>
+    <li><a href="tarifs.html">Tarifs</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><button class="btn-nav" onclick="location.href='index.html#contact'">Devis gratuit</button></li>
+  </ul>
+  <button class="ham" id="ham"><span></span><span></span><span></span></button>
+</nav>
+<div class="mob-menu" id="mob">
+  <a href="index.html" onclick="closeMob()">Accueil</a>
+  <a href="index.html#services" onclick="closeMob()">Services</a>
+  <a href="tarifs.html" onclick="closeMob()">Tarifs</a>
+  <a href="index.html#contact" onclick="closeMob()">Contact</a>
+  <a class="btn-mob" href="index.html#contact" onclick="closeMob()">Devis gratuit</a>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- HERO                                                       -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<section class="cai-hero">
+  <div class="cai-hero-inner">
+
+    <p class="cai-kicker cai-anim-0">
+      <span></span>Intelligence Artificielle · Collaborateurs IA<span></span>
+    </p>
+
+    <h1 class="cai-anim-1">
+      Vos nouveaux collaborateurs<br/>
+      <em>travaillent 24h/24.</em>
+    </h1>
+
+    <p class="cai-hero-sub cai-anim-2">
+      Automatisez votre entreprise grâce à des collaborateurs IA spécialisés capables de gérer
+      vos ventes, votre support, votre administratif et bien plus.
+    </p>
+
+    <div class="cai-hero-btns cai-anim-3">
+      <a href="#collaborateurs" class="btn-primary">Découvrir nos collaborateurs →</a>
+      <a href="index.html#contact" class="btn-outline">Demander une démonstration</a>
+    </div>
+
+    <div class="cai-hero-img-wrap cai-anim-4">
+      <img
+        src="/public/images/collaborateurs/collaborateur-ia-hero.webp"
+        alt="Collaborateurs IA — CA-TECH"
+        class="cai-hero-img"
+        loading="lazy"
+        decoding="async"
+        width="860"
+        height="520"
+      />
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- NOS COLLABORATEURS IA — CARDS                             -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<section class="cai-section" id="collaborateurs">
+  <div class="cai-section-header cai-reveal">
+    <p class="cai-section-label">Nos Collaborateurs IA</p>
+    <h2 class="cai-section-title">Cinq experts IA,<br/>une équipe complète.</h2>
+    <p class="cai-section-desc">
+      Chaque collaborateur IA est entraîné sur son domaine. Déployez-les en quelques heures,
+      pas en quelques mois.
+    </p>
+  </div>
+
+  <div class="cai-cards">
+
+    <!-- Commercial IA -->
+    <article class="cai-card cai-reveal" data-href="index.html#contact" tabindex="0" role="button" aria-label="Découvrir le Collaborateur Commercial IA">
+      <span class="cai-card-badge">Actif</span>
+      <img
+        src="/public/images/collaborateurs/commercial-ia.webp"
+        alt="Commercial IA"
+        class="cai-card-logo"
+        loading="lazy"
+        decoding="async"
+        width="88"
+        height="88"
+      />
+      <h3 class="cai-card-name">Commercial IA</h3>
+      <p class="cai-card-desc">Prospecte, qualifie et relance vos leads 24h/24 sans jamais perdre le fil d'une opportunité.</p>
+      <a href="index.html#contact" class="cai-card-btn">
+        Découvrir
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 6h10M7 2l4 4-4 4"/>
+        </svg>
+      </a>
+    </article>
+
+    <!-- Support IA -->
+    <article class="cai-card cai-reveal" data-href="index.html#contact" tabindex="0" role="button" aria-label="Découvrir le Collaborateur Support IA">
+      <span class="cai-card-badge">Actif</span>
+      <img
+        src="/public/images/collaborateurs/support-ia.webp"
+        alt="Support IA"
+        class="cai-card-logo"
+        loading="lazy"
+        decoding="async"
+        width="88"
+        height="88"
+      />
+      <h3 class="cai-card-name">Support IA</h3>
+      <p class="cai-card-desc">Répond instantanément à vos clients à toute heure, sur tous vos canaux — sans file d'attente.</p>
+      <a href="index.html#contact" class="cai-card-btn">
+        Découvrir
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 6h10M7 2l4 4-4 4"/>
+        </svg>
+      </a>
+    </article>
+
+    <!-- RH IA -->
+    <article class="cai-card cai-reveal" data-href="index.html#contact" tabindex="0" role="button" aria-label="Découvrir le Collaborateur RH IA">
+      <span class="cai-card-badge">Actif</span>
+      <img
+        src="/public/images/collaborateurs/rh-ia.webp"
+        alt="RH IA"
+        class="cai-card-logo"
+        loading="lazy"
+        decoding="async"
+        width="88"
+        height="88"
+      />
+      <h3 class="cai-card-name">RH IA</h3>
+      <p class="cai-card-desc">Gère vos recrutements, onboardings et processus RH de A à Z, sans surcharge administrative.</p>
+      <a href="index.html#contact" class="cai-card-btn">
+        Découvrir
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 6h10M7 2l4 4-4 4"/>
+        </svg>
+      </a>
+    </article>
+
+    <!-- Juridique IA -->
+    <article class="cai-card cai-reveal" data-href="index.html#contact" tabindex="0" role="button" aria-label="Découvrir le Collaborateur Juridique IA">
+      <span class="cai-card-badge">Actif</span>
+      <img
+        src="/public/images/collaborateurs/juridique-ia.webp"
+        alt="Juridique IA"
+        class="cai-card-logo"
+        loading="lazy"
+        decoding="async"
+        width="88"
+        height="88"
+      />
+      <h3 class="cai-card-name">Juridique IA</h3>
+      <p class="cai-card-desc">Rédige vos contrats, analyse vos documents légaux et sécurise vos processus sans délai.</p>
+      <a href="index.html#contact" class="cai-card-btn">
+        Découvrir
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 6h10M7 2l4 4-4 4"/>
+        </svg>
+      </a>
+    </article>
+
+    <!-- SEO IA -->
+    <article class="cai-card cai-reveal" data-href="index.html#contact" tabindex="0" role="button" aria-label="Découvrir le Collaborateur SEO IA">
+      <span class="cai-card-badge">Actif</span>
+      <img
+        src="/public/images/collaborateurs/seo-ia.webp"
+        alt="SEO IA"
+        class="cai-card-logo"
+        loading="lazy"
+        decoding="async"
+        width="88"
+        height="88"
+      />
+      <h3 class="cai-card-name">SEO IA</h3>
+      <p class="cai-card-desc">Optimise votre visibilité en ligne, génère du contenu et propulse votre site en tête de Google.</p>
+      <a href="index.html#contact" class="cai-card-btn">
+        Découvrir
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 6h10M7 2l4 4-4 4"/>
+        </svg>
+      </a>
+    </article>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- CTA FINAL                                                  -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<section class="cai-cta">
+  <div class="cai-cta-inner cai-reveal">
+    <p class="lp-kicker" style="justify-content:center;margin-bottom:1.2rem;">Passez à l'action</p>
+    <h2>Votre équipe IA vous attend.</h2>
+    <p>Choisissez vos collaborateurs IA et automatisez votre entreprise dès cette semaine. Mise en place rapide, résultats immédiats.</p>
+    <div class="cai-cta-btns">
+      <a href="index.html#contact" class="btn-cta-white">Demander une démonstration →</a>
+      <a href="#collaborateurs" class="btn-cta-outline">Revoir les collaborateurs</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- FOOTER                                                     -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="f-top">
+    <div class="f-col">
+      <div class="f-brand">
+        <img src="assets/logos/logo-ca-tech.png" alt="CA-TECH" width="38" height="38"/>
+        <div><div class="f-brand-name">CA-TECH</div><div class="f-brand-tag">Agence Web &amp; Design</div></div>
+      </div>
+      <p class="f-col-desc">Agence Web &amp; Design spécialisée dans la création de sites vitrines, boutiques e-commerce, identités visuelles et solutions IA pour entreprises.</p>
+      <div class="f-zones">Zones d'intervention &nbsp;<span>Dijon · Lyon · Paris · Troyes</span></div>
+    </div>
+    <div class="f-col"><h5>Services</h5><ul>
+      <li><a href="creation-site-vitrine.html">Sites vitrines</a></li>
+      <li><a href="creation-site-ecommerce.html">Sites e-commerce</a></li>
+      <li><a href="creation-landing-page.html">Landing Pages</a></li>
+      <li><a href="collaborateurs-ia.html">Collaborateurs IA</a></li>
+      <li><a href="creation-logo.html">Logos</a></li>
+      <li><a href="identite-visuelle.html">Identité visuelle</a></li>
+      <li><a href="refonte-site-internet.html">Refonte de site</a></li>
+      <li><a href="maintenance-site-web.html">Maintenance</a></li>
+    </ul></div>
+    <div class="f-col"><h5>Entreprise</h5><ul>
+      <li><a href="index.html#a-propos">À propos</a></li>
+      <li><a href="tarifs.html">Tarifs</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="mentions-legales.html">Mentions légales</a></li>
+      <li><a href="politique-de-confidentialite.html">Confidentialité</a></li>
+    </ul></div>
+    <div class="f-col"><h5>Contact</h5>
+      <div class="f-contact-item">
+        <div class="f-contact-icon"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
+        <div class="f-contact-txt"><a href="mailto:contact@ca-tech.fr">contact@ca-tech.fr</a></div>
+      </div>
+      <div class="f-contact-item">
+        <div class="f-contact-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.06 1.22 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+        <div class="f-contact-txt"><a href="tel:+33775664975">+33 7 75 66 49 75</a></div>
+      </div>
+    </div>
+  </div>
+  <div class="f-sep"></div>
+  <div class="f-bottom">
+    <span>© 2026 CA-TECH - Agence Web &amp; Design · Tous droits réservés.</span>
+    <div class="f-bottom-logo">
+      <img src="assets/logos/logo-ca-tech.png" alt="CA-TECH" width="22" height="22"/>
+      <span>CA-TECH</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Nav scroll + progress bar ── */
+const nav  = document.getElementById('nav');
+const prog = document.getElementById('prog');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  prog.style.width = (h > 0 ? window.scrollY / h * 100 : 0) + '%';
+}, { passive: true });
+
+/* ── Mobile menu ── */
+const ham = document.getElementById('ham');
+const mob = document.getElementById('mob');
+function closeMob() { ham.classList.remove('open'); mob.classList.remove('open'); }
+ham.addEventListener('click', () => {
+  ham.classList.toggle('open');
+  mob.classList.toggle('open');
+});
+
+/* ── Scroll reveal (IntersectionObserver) ── */
+const revealEls = document.querySelectorAll('.cai-reveal');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      /* stagger cards inside the grid */
+      const delay = entry.target.closest('.cai-cards')
+        ? Array.from(revealEls).indexOf(entry.target) * 60
+        : 0;
+      setTimeout(() => entry.target.classList.add('visible'), delay);
+      revealObs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+revealEls.forEach(el => revealObs.observe(el));
+
+/* ── 3D tilt on cards ── */
+const cards = document.querySelectorAll('.cai-card');
+
+cards.forEach(card => {
+  let raf = null;
+
+  card.addEventListener('mousemove', e => {
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      const rect   = card.getBoundingClientRect();
+      const cx     = rect.left + rect.width  / 2;
+      const cy     = rect.top  + rect.height / 2;
+      const dx     = (e.clientX - cx) / (rect.width  / 2); /* -1 … 1 */
+      const dy     = (e.clientY - cy) / (rect.height / 2); /* -1 … 1 */
+      const rotX   = -dy * 8;   /* tilt up/down  ±8° */
+      const rotY   =  dx * 8;   /* tilt left/right ±8° */
+      const transY = -8;        /* elevation */
+      card.style.transform =
+        `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(${transY}px)`;
+    });
+  });
+
+  card.addEventListener('mouseleave', () => {
+    if (raf) cancelAnimationFrame(raf);
+    card.style.transform =
+      'perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+  });
+
+  /* Keyboard / click: navigate to contact */
+  card.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      window.location.href = card.getAttribute('data-href') || 'index.html#contact';
+    }
+  });
+});
+</script>
+
+<script src="/loic-widget.js"></script>
+</body>
+</html>
