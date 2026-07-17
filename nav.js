@@ -10,6 +10,9 @@
   var isHome = location.pathname === '/' || location.pathname === '' ||
                /\/index\.html$/i.test(location.pathname);
 
+  /* page courante — ex: "collaborateurs-ia" ou "" pour home */
+  var slug = location.pathname.replace(/^\//, '').replace(/\.html$/i, '').replace(/\/$/, '');
+
   /* lien vers une section de la homepage */
   function sec(anchor, label) {
     var href = isHome ? '#' + anchor : 'index.html#' + anchor;
@@ -55,6 +58,89 @@
   + ml(isHome ? '#a-propos'     : 'index.html#a-propos',         'À propos')
   + ml(isHome ? '#contact'      : 'index.html#contact',          'Contact')
   + '<a href="' + devisHref + '" class="btn-mob" onclick="closeMob()">Demander un devis</a>';
+
+  /* ── Lien actif ────────────────────────────────────────────── */
+  /* Correspondance slug → sélecteur dans la nav desktop */
+  var activeMap = {
+    '':                   null,              /* home : pas de lien de page */
+    'collaborateurs-ia':  'a[href="collaborateurs-ia.html"]',
+    'tarifs':             'a[href="tarifs.html"]',
+  };
+  /* pages dont le slug commence par un préfixe */
+  var prefixMap = [
+    ['creation-site', null],
+    ['creation-logo', null],
+    ['creation-flyer', null],
+    ['creation-landing', null],
+    ['identite-visuelle', null],
+    ['refonte', null],
+    ['maintenance', null],
+    ['agence-web', null],
+    ['site-internet', null],
+    ['site-ecommerce', null],
+    ['logo-', null],
+    ['realisation', null],
+    ['faq', null],
+    ['mentions', null],
+    ['politique', null],
+  ];
+
+  function markActive(selector) {
+    if (!selector) return;
+    var el = nav.querySelector(selector);
+    if (el) el.classList.add('nav-active');
+    /* mobile */
+    var mob2 = document.getElementById('mob');
+    if (mob2) {
+      var mEl = mob2.querySelector(selector);
+      if (mEl) mEl.classList.add('nav-active');
+    }
+  }
+
+  if (isHome) {
+    /* Accueil = premier lien de section */
+    var homeLink = nav.querySelector('a[data-s="hero"]');
+    if (homeLink) homeLink.classList.add('nav-active');
+    var mobHome = document.getElementById('mob');
+    if (mobHome) {
+      var mh = mobHome.querySelector('a[href="#hero"]');
+      if (mh) mh.classList.add('nav-active');
+    }
+  } else if (activeMap[slug] !== undefined) {
+    markActive(activeMap[slug]);
+  }
+
+  /* ── Styles état actif ─────────────────────────────────────── */
+  if (!document.getElementById('nav-active-style')) {
+    var style = document.createElement('style');
+    style.id = 'nav-active-style';
+    style.textContent = [
+      '.nav-links li a.nav-active {',
+      '  color: #2563EB;',
+      '  position: relative;',
+      '}',
+      '.nav-links li a.nav-active::after {',
+      '  content: "";',
+      '  position: absolute;',
+      '  bottom: -4px;',
+      '  left: 0;',
+      '  width: 100%;',
+      '  height: 2px;',
+      '  background: #2563EB;',
+      '  border-radius: 2px;',
+      '  transform-origin: left;',
+      '  animation: nav-bar-in .3s cubic-bezier(.4,0,.2,1) forwards;',
+      '}',
+      '@keyframes nav-bar-in {',
+      '  from { transform: scaleX(0); opacity: 0; }',
+      '  to   { transform: scaleX(1); opacity: 1; }',
+      '}',
+      '.mob-menu a.nav-active {',
+      '  color: #2563EB;',
+      '}',
+    ].join('\n');
+    document.head.appendChild(style);
+  }
 
   /* ── Hamburger — re-wire après remplacement du innerHTML ──── */
   var ham = document.getElementById('ham');
