@@ -3,8 +3,8 @@
 html{scroll-behavior:smooth;overflow-x:hidden}
 body{font-family:'Inter',-apple-system,sans-serif;background:#fff;color:#1a2540;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 #prog{position:fixed;top:0;left:0;z-index:9000;height:2px;width:0;background:linear-gradient(90deg,var(--blue),var(--cyan));transition:width .08s linear}
-nav{position:fixed;inset:0 0 auto 0;z-index:1000;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(5,13,26,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:background .4s,box-shadow .4s}
-nav.scrolled{background:rgba(5,13,26,.95);box-shadow:0 4px 30px rgba(0,0,0,.3)}
+nav{position:fixed;inset:0 0 auto 0;z-index:1000;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(5,13,26,.6);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:background .3s,box-shadow .3s,height .3s,backdrop-filter .3s}
+nav.scrolled{height:60px;background:rgba(5,13,26,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 1px 0 rgba(255,255,255,.06),0 8px 32px rgba(0,0,0,.4)}
 .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
 .logo img{height:36px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(0,102,255,.4))}
 .logo-name{font-family:'Rajdhani',sans-serif;font-size:1.25rem;font-weight:700;letter-spacing:2px;color:#fff;display:block;line-height:1.2}

@@ -142,6 +142,21 @@
     document.head.appendChild(style);
   }
 
+  /* ── Scroll — classe scrolled sur le header ───────────────── */
+  /* La homepage gère son propre listener ; nav.js couvre toutes les autres pages */
+  if (!isHome) {
+    var ticking = false;
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        requestAnimationFrame(function () {
+          nav.classList.toggle('scrolled', window.scrollY > 80);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  }
+
   /* ── Hamburger — re-wire après remplacement du innerHTML ──── */
   var ham = document.getElementById('ham');
 
