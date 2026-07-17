@@ -322,5 +322,6 @@ ham.addEventListener('click',()=>{ham.classList.toggle('open');mob.classList.tog
 document.querySelectorAll('.faq-q').forEach(btn=>{btn.addEventListener('click',()=>{const item=btn.closest('.faq-item'),isOpen=item.classList.contains('open');document.querySelectorAll('.faq-item.open').forEach(i=>{i.classList.remove('open');i.querySelector('.faq-a').style.maxHeight='0'});if(!isOpen){item.classList.add('open');const a=item.querySelector('.faq-a');a.style.maxHeight=a.scrollHeight+'px'}})});
 </script>
 <script src="/loic-widget.js"></script>
+<script src="/nav.js"></script>
 </body>
 </html>

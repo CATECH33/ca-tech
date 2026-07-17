@@ -207,5 +207,6 @@ function closeMob(){ham.classList.remove('open');mob.classList.remove('open');}
 document.querySelectorAll('.faq-q').forEach(btn=>{btn.addEventListener('click',()=>{const ans=btn.nextElementSibling,open=btn.getAttribute('aria-expanded')==='true';document.querySelectorAll('.faq-q').forEach(b=>{b.setAttribute('aria-expanded','false');b.nextElementSibling.style.maxHeight='0';});if(!open){btn.setAttribute('aria-expanded','true');ans.style.maxHeight=ans.scrollHeight+'px';}});});
 </script>
 <script src="/loic-widget.js"></script>
+<script src="/nav.js"></script>
 </body>
 </html>
