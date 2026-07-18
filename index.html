@@ -371,20 +371,6 @@
   .devis-success h3{font-size:1.3rem;font-weight:900;color:var(--white);margin-bottom:.6rem}
   .devis-success p{font-size:.88rem;color:var(--text3);line-height:1.7;margin-bottom:1.5rem}
 
-  /* NOTRE METHODE */
-  #notre-methode{background:var(--dark2);padding:110px 5%}
-  .methode-header{text-align:center;margin-bottom:72px}
-  .methode-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.07);border-radius:20px;overflow:hidden}
-  .methode-step{background:var(--dark2);padding:3rem 2.2rem;transition:background .35s}
-  .methode-step:hover{background:var(--dark3)}
-  .methode-num{font-family:'Rajdhani',sans-serif;font-size:3.8rem;font-weight:700;line-height:1;margin-bottom:1.4rem;background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:.2;transition:opacity .35s}
-  .methode-step:hover .methode-num{opacity:.55}
-  .methode-icon{width:42px;height:42px;border-radius:10px;background:rgba(0,102,255,.1);border:1px solid rgba(0,102,255,.2);display:flex;align-items:center;justify-content:center;margin-bottom:1.2rem}
-  .methode-icon svg{width:19px;height:19px;stroke:var(--blue);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-  .methode-tag{font-size:.62rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--blue);display:block;margin-bottom:.5rem}
-  .methode-step h3{font-size:1.05rem;font-weight:800;color:var(--white);margin-bottom:.7rem;line-height:1.3}
-  .methode-step p{font-size:.8rem;color:var(--text3);line-height:1.8}
-
   /* A PROPOS */
   #a-propos{background:var(--dark);padding:110px 5%;position:relative}
   #a-propos::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,102,255,.4),transparent)}
@@ -467,7 +453,7 @@
     #hero{grid-template-columns:1fr}.hero-left{padding:4rem 5%}.hero-right{display:none}
     .t-grid{grid-template-columns:1fr 1fr}.contact-inner{grid-template-columns:1fr;gap:3rem}
     .f-top{grid-template-columns:1.3fr 1fr 1fr 1fr}#stats-bar{grid-template-columns:repeat(2,1fr)}
-    .methode-grid{grid-template-columns:repeat(2,1fr)}.apropos-inner{grid-template-columns:1fr;gap:3.5rem}
+    .apropos-inner{grid-template-columns:1fr;gap:3.5rem}
   }
   @media(max-width:768px){
     .nav-links{display:none}.ham{display:flex}
@@ -475,7 +461,7 @@
     .choice-grid{grid-template-columns:1fr 1fr}.f-grid.cols2,.f-grid.cols3{grid-template-columns:1fr}
     .contact-form .f-row{grid-template-columns:1fr}
 
-    .f-top{grid-template-columns:1fr 1fr}.methode-grid{grid-template-columns:1fr}
+    .f-top{grid-template-columns:1fr 1fr}
   }
   @media(max-width:480px){
     section{padding:70px 4%!important}#stats-bar{padding:2.5rem 4%;grid-template-columns:1fr 1fr}
@@ -945,52 +931,6 @@
   </div>
 </section>
 
-<!-- NOTRE METHODE -->
-<section id="notre-methode">
-  <div class="methode-header">
-    <p class="section-label reveal">Notre méthode</p>
-    <h2 class="section-title reveal d1">Comment nous travaillons</h2>
-    <p class="section-desc reveal d2">Un processus rigoureux, de la première conversation à la mise en ligne.</p>
-  </div>
-  <div class="methode-grid">
-    <div class="methode-step reveal">
-      <div class="methode-num">01</div>
-      <div class="methode-icon">
-        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      </div>
-      <span class="methode-tag">Écoute</span>
-      <h3>Découverte & Stratégie</h3>
-      <p>On analyse votre contexte, vos objectifs et votre marché pour construire une stratégie réellement adaptée à votre situation.</p>
-    </div>
-    <div class="methode-step reveal d1">
-      <div class="methode-num">02</div>
-      <div class="methode-icon">
-        <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-      </div>
-      <span class="methode-tag">Conception</span>
-      <h3>Design & Maquettes</h3>
-      <p>Maquettes, identité visuelle, expérience utilisateur : chaque détail est conçu et validé avec vous avant de coder une seule ligne.</p>
-    </div>
-    <div class="methode-step reveal d2">
-      <div class="methode-num">03</div>
-      <div class="methode-icon">
-        <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-      </div>
-      <span class="methode-tag">Développement</span>
-      <h3>Build & Intégration</h3>
-      <p>On construit votre solution avec les technologies les plus adaptées à vos besoins, pour des performances et une maintenabilité optimales.</p>
-    </div>
-    <div class="methode-step reveal d3">
-      <div class="methode-num">04</div>
-      <div class="methode-icon">
-        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-      </div>
-      <span class="methode-tag">Livraison</span>
-      <h3>Déploiement & Suivi</h3>
-      <p>Mise en ligne, formation de vos équipes et accompagnement post-lancement : on reste disponibles pour faire évoluer votre projet.</p>
-    </div>
-  </div>
-</section>
 
 <!-- A PROPOS -->
 <section id="a-propos">
