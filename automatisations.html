@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Automatisations | Gagnez 15h par semaine | CA-TECH</title>
+  <meta name="description" content="40+ automatisations prêtes à l'emploi pour PME. Prospection, devis, relances, reporting — déployées en 48h par CA-TECH. Sans connaissances techniques."/>
+  <link rel="canonical" href="https://ca-tech.fr/automatisations"/>
+  <meta property="og:title" content="Automatisations | Gagnez 15h par semaine | CA-TECH"/>
+  <meta property="og:description" content="40+ automatisations prêtes à l'emploi pour PME. Déployées en 48h, sans code."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://ca-tech.fr/automatisations"/>
+  <meta property="og:locale" content="fr_FR"/>
+  <meta property="og:site_name" content="CA-TECH"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="local-seo.css"/>
+  <link rel="icon" type="image/x-icon" href="/public/favicon.ico"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png"/>
+  <meta name="theme-color" content="#0066FF"/>
+  <style>
+
+/* ── HERO ─────────────────────────────────────────────────── */
+.at-hero {
+  position: relative;
+  min-height: 88vh;
+  display: flex;
+  align-items: center;
+  padding: calc(var(--nav-h) + 70px) 5% 80px;
+  overflow: hidden;
+  background: linear-gradient(160deg,#020b18 0%,#050d1a 55%,#060f20 100%);
+}
+.at-canvas { position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0; }
+.at-grid-bg {
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(0,102,255,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,102,255,.035) 1px,transparent 1px);
+  background-size:64px 64px;
+  pointer-events:none;z-index:1;
+  -webkit-mask-image:radial-gradient(ellipse 85% 85% at 50% 40%,black 20%,transparent 100%);
+  mask-image:radial-gradient(ellipse 85% 85% at 50% 40%,black 20%,transparent 100%);
+}
+.at-halo {
+  position:absolute;border-radius:50%;pointer-events:none;z-index:1;
+  will-change:transform;
+}
+.at-halo-1 {
+  width:780px;height:780px;top:-250px;right:-120px;
+  background:radial-gradient(circle,rgba(0,102,255,.20) 0%,rgba(80,40,220,.06) 45%,transparent 70%);
+  filter:blur(55px);
+}
+.at-halo-2 {
+  width:580px;height:580px;bottom:-140px;left:-80px;
+  background:radial-gradient(circle,rgba(234,88,12,.10) 0%,transparent 65%);
+  filter:blur(70px);
+}
+.at-halo-3 {
+  width:460px;height:460px;top:40%;left:36%;
+  background:radial-gradient(circle,rgba(5,150,105,.09) 0%,transparent 65%);
+  filter:blur(90px);
+}
+.at-hero-inner {
+  position:relative;z-index:2;
+  max-width:860px;margin:0 auto;width:100%;text-align:center;
+}
+@keyframes at-up {
+  from{opacity:0;transform:translateY(32px)}
+  to  {opacity:1;transform:translateY(0)}
+}
+.at-a0{animation:at-up .75s .05s cubic-bezier(.16,1,.3,1) both}
+.at-a1{animation:at-up .75s .18s cubic-bezier(.16,1,.3,1) both}
+.at-a2{animation:at-up .75s .32s cubic-bezier(.16,1,.3,1) both}
+.at-a3{animation:at-up .75s .46s cubic-bezier(.16,1,.3,1) both}
+.at-a4{animation:at-up .75s .60s cubic-bezier(.16,1,.3,1) both}
+
+.at-kicker {
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:.68rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:1.5rem;
+}
+.at-kicker span {
+  display:block;width:26px;height:2px;
+  background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:2px;
+}
+.at-hero h1 {
+  font-size:clamp(2.4rem,5vw,4rem);font-weight:900;
+  color:#fff;line-height:1.06;letter-spacing:-.04em;margin-bottom:1.4rem;
+}
+.at-hero h1 em {
+  font-style:normal;
+  background:linear-gradient(135deg,#fff 20%,var(--cyan) 90%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.at-hero-sub {
+  font-size:clamp(.95rem,1.5vw,1.08rem);
+  color:rgba(255,255,255,.6);line-height:1.8;max-width:580px;
+  margin:0 auto 2.8rem;
+}
+
+/* ── SEARCH BAR ────────────────────────────────────────────── */
+.at-search-wrap {
+  position:relative;max-width:640px;margin:0 auto 1.4rem;
+}
+.at-search-icon {
+  position:absolute;left:20px;top:50%;transform:translateY(-50%);
+  pointer-events:none;
+}
+.at-search-icon svg {
+  width:20px;height:20px;stroke:rgba(255,255,255,.35);
+  fill:none;stroke-width:2;stroke-linecap:round;
+}
+.at-search {
+  width:100%;padding:18px 52px 18px 54px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:14px;
+  font-family:inherit;font-size:.95rem;font-weight:500;
+  color:#fff;outline:none;
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  transition:border-color .25s,background .25s,box-shadow .25s;
+}
+.at-search::placeholder{color:rgba(255,255,255,.32)}
+.at-search:focus {
+  border-color:rgba(0,102,255,.6);
+  background:rgba(255,255,255,.10);
+  box-shadow:0 0 0 3px rgba(0,102,255,.15);
+}
+.at-search-clear {
+  position:absolute;right:18px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;padding:4px;
+  color:rgba(255,255,255,.3);display:none;
+  font-size:1.1rem;line-height:1;
+}
+.at-search-clear.show{display:block}
+
+/* ── FILTER PILLS ──────────────────────────────────────────── */
+.at-filters {
+  display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-bottom:0;
+}
+.at-filter {
+  padding:7px 16px;border-radius:20px;
+  font-size:.73rem;font-weight:600;letter-spacing:.3px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.10);
+  color:rgba(255,255,255,.6);cursor:pointer;
+  transition:all .2s;white-space:nowrap;
+}
+.at-filter:hover{background:rgba(255,255,255,.12);color:#fff}
+.at-filter.active{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 0 18px rgba(0,102,255,.35)}
+
+/* ── HERO STATS ────────────────────────────────────────────── */
+.at-stats {
+  display:flex;gap:2.5rem;justify-content:center;flex-wrap:wrap;
+  padding-top:2.6rem;margin-top:2.6rem;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.at-stat-val {
+  font-family:'Rajdhani',sans-serif;
+  font-size:1.9rem;font-weight:700;color:#fff;line-height:1;margin-bottom:4px;
+}
+.at-stat-val em{font-style:normal;color:var(--cyan)}
+.at-stat-lbl{font-size:.7rem;color:rgba(255,255,255,.45);letter-spacing:.5px}
+
+/* ── SHARED SECTION WRAPPER ────────────────────────────────── */
+.at-section {
+  padding:100px 5%;
+  position:relative;
+}
+.at-section.dark {
+  background:#050d1a;
+}
+.at-section.darker {
+  background:#020810;
+}
+.at-section-inner {
+  max-width:1200px;margin:0 auto;
+}
+.at-sec-label {
+  font-size:.65rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--cyan);display:inline-flex;align-items:center;gap:10px;margin-bottom:1rem;
+}
+.at-sec-label::before,
+.at-sec-label::after {
+  content:'';display:block;width:22px;height:2px;
+  background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:2px;
+}
+.at-sec-label.left::after{display:none}
+.at-sec-h {
+  font-size:clamp(1.8rem,3vw,2.6rem);font-weight:900;
+  color:#fff;letter-spacing:-.025em;line-height:1.1;margin-bottom:.9rem;
+}
+.at-sec-h em {
+  font-style:normal;
+  background:linear-gradient(135deg,#fff 30%,var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.at-sec-desc {
+  font-size:.95rem;color:rgba(255,255,255,.5);line-height:1.8;max-width:560px;
+}
+.at-sec-head {
+  text-align:center;margin-bottom:4rem;
+}
+.at-sec-head .at-sec-desc{margin:0 auto}
+
+/* ── REVEAL ────────────────────────────────────────────────── */
+.at-reveal {
+  opacity:0;transform:translateY(24px);
+  transition:opacity .65s cubic-bezier(.16,1,.3,1),transform .65s cubic-bezier(.16,1,.3,1);
+}
+.at-reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ── APP ICONS ─────────────────────────────────────────────── */
+.at-app {
+  width:44px;height:44px;border-radius:11px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.at-app svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.at-app.sm{width:36px;height:36px;border-radius:9px}
+.at-app.sm svg{width:16px;height:16px}
+
+.c-form   {background:linear-gradient(135deg,#1d4ed8,#0066FF)}
+.c-crm    {background:linear-gradient(135deg,#047857,#059669)}
+.c-email  {background:linear-gradient(135deg,#b45309,#ea580c)}
+.c-slack  {background:linear-gradient(135deg,#4a154b,#611f69)}
+.c-li     {background:linear-gradient(135deg,#004182,#0a66c2)}
+.c-devis  {background:linear-gradient(135deg,#3730a3,#4f46e5)}
+.c-facture{background:linear-gradient(135deg,#92400e,#d97706)}
+.c-sms    {background:linear-gradient(135deg,#166534,#16a34a)}
+.c-cal    {background:linear-gradient(135deg,#0c4a6e,#0891b2)}
+.c-rpt    {background:linear-gradient(135deg,#134e4a,#0d9488)}
+.c-blog   {background:linear-gradient(135deg,#1f2937,#374151)}
+.c-wa     {background:linear-gradient(135deg,#14532d,#16a34a)}
+.c-goog   {background:linear-gradient(135deg,#991b1b,#dc2626)}
+.c-cand   {background:linear-gradient(135deg,#5b21b6,#7c3aed)}
+.c-cart   {background:linear-gradient(135deg,#9a3412,#f97316)}
+.c-notif  {background:linear-gradient(135deg,#1e3a8a,#2563eb)}
+.c-time   {background:linear-gradient(135deg,#1e1b4b,#3730a3)}
+.c-news   {background:linear-gradient(135deg,#78350f,#b45309)}
+
+/* ── FLOW ARROW ────────────────────────────────────────────── */
+.at-arrow-wrap {
+  flex:1;position:relative;height:2px;
+  background:linear-gradient(90deg,rgba(0,102,255,.3),rgba(0,212,255,.3));
+  overflow:hidden;border-radius:2px;
+}
+.at-arrow-wrap::after {
+  content:'';position:absolute;
+  top:-2px;left:-30%;
+  width:30%;height:6px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+  border-radius:3px;
+  animation:at-flow 2s ease-in-out infinite;
+}
+@keyframes at-flow{
+  0%  {left:-30%}
+  100%{left:110%}
+}
+.at-flow {
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:1.2rem;
+}
+.at-flow-plus {
+  font-size:.75rem;font-weight:700;color:rgba(255,255,255,.35);
+  flex-shrink:0;
+}
+
+/* ── CATEGORIES ────────────────────────────────────────────── */
+.at-cats-grid {
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:.9rem;
+}
+.at-cat-card {
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;
+  padding:1.4rem 1rem;
+  text-align:center;
+  cursor:pointer;
+  transition:background .25s,border-color .25s,transform .25s;
+  text-decoration:none;
+  display:block;
+}
+.at-cat-card:hover {
+  background:rgba(255,255,255,.08);
+  border-color:rgba(0,102,255,.3);
+  transform:translateY(-4px);
+}
+.at-cat-icon {
+  width:48px;height:48px;border-radius:13px;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 1rem;
+}
+.at-cat-icon svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.at-cat-name {
+  font-size:.8rem;font-weight:700;color:#fff;
+  line-height:1.3;margin-bottom:.35rem;
+}
+.at-cat-count {
+  font-size:.65rem;color:rgba(255,255,255,.38);letter-spacing:.5px;
+}
+
+/* ── POPULAR CARDS ─────────────────────────────────────────── */
+.at-pop-grid {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:1.25rem;
+}
+.at-pop-card {
+  position:relative;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:18px;
+  padding:1.8rem;
+  cursor:pointer;
+  transition:border-color .3s,background .3s,box-shadow .3s,transform .3s;
+  overflow:hidden;
+}
+.at-pop-card::before {
+  content:'';position:absolute;inset:-1px;border-radius:inherit;padding:1px;
+  background:linear-gradient(135deg,rgba(0,102,255,.5),rgba(0,212,255,.25),transparent 55%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  opacity:0;transition:opacity .3s;pointer-events:none;
+}
+.at-pop-card:hover {
+  background:rgba(255,255,255,.07);
+  border-color:rgba(0,102,255,.4);
+  box-shadow:0 0 0 1px rgba(0,102,255,.12),0 16px 50px rgba(0,102,255,.14);
+  transform:translateY(-4px);
+}
+.at-pop-card:hover::before{opacity:1}
+
+.at-pop-badge {
+  position:absolute;top:18px;right:18px;
+  font-size:.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:4px 10px;border-radius:20px;
+}
+.at-pop-badge.hot  {background:rgba(234,88,12,.18);color:#fb923c;border:1px solid rgba(234,88,12,.25)}
+.at-pop-badge.star {background:rgba(0,102,255,.15);color:var(--cyan);border:1px solid rgba(0,212,255,.2)}
+
+.at-pop-title {
+  font-size:1.05rem;font-weight:800;color:#fff;
+  margin-bottom:.55rem;line-height:1.25;padding-right:80px;
+}
+.at-pop-desc {
+  font-size:.83rem;color:rgba(255,255,255,.52);
+  line-height:1.7;margin-bottom:1.4rem;
+}
+.at-pop-footer {
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;
+}
+.at-tag {
+  font-size:.62rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:4px 10px;border-radius:20px;
+}
+.tag-com  {background:rgba(0,102,255,.14);color:#60a5fa}
+.tag-fin  {background:rgba(217,119,6,.14);color:#fbbf24}
+.tag-com2 {background:rgba(5,150,105,.14);color:#34d399}
+.tag-rh   {background:rgba(124,58,237,.14);color:#c4b5fd}
+.tag-rpt  {background:rgba(13,148,136,.14);color:#2dd4bf}
+.tag-eco  {background:rgba(249,115,22,.14);color:#fb923c}
+
+.at-pop-link {
+  font-size:.78rem;font-weight:700;color:var(--cyan);
+  display:inline-flex;align-items:center;gap:6px;
+  text-decoration:none;transition:gap .2s,color .2s;
+}
+.at-pop-link svg{width:13px;height:13px;transition:transform .2s}
+.at-pop-card:hover .at-pop-link{gap:10px;color:#fff}
+.at-pop-card:hover .at-pop-link svg{transform:translateX(2px)}
+
+/* ── ALL AUTOMATIONS GRID ──────────────────────────────────── */
+.at-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1rem;
+}
+.at-card {
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;
+  padding:1.4rem;
+  cursor:pointer;
+  transition:background .25s,border-color .25s,box-shadow .25s,transform .25s;
+  position:relative;
+  overflow:hidden;
+}
+.at-card:hover {
+  background:rgba(255,255,255,.06);
+  border-color:rgba(0,102,255,.3);
+  box-shadow:0 8px 30px rgba(0,102,255,.12);
+  transform:translateY(-3px);
+}
+.at-card-title {
+  font-size:.88rem;font-weight:700;color:#fff;
+  margin-bottom:.45rem;line-height:1.3;
+}
+.at-card-desc {
+  font-size:.78rem;color:rgba(255,255,255,.45);
+  line-height:1.65;margin-bottom:1.1rem;
+}
+.at-card-footer {
+  display:flex;align-items:center;justify-content:space-between;
+}
+.at-card-link {
+  font-size:.72rem;font-weight:700;color:var(--cyan);
+  text-decoration:none;display:inline-flex;align-items:center;gap:5px;
+  transition:gap .2s,color .2s;
+}
+.at-card-link svg{width:11px;height:11px;transition:transform .2s}
+.at-card:hover .at-card-link{gap:8px;color:#fff}
+.at-card:hover .at-card-link svg{transform:translateX(2px)}
+
+/* empty state */
+.at-empty {
+  grid-column:1/-1;
+  text-align:center;padding:4rem 1rem;
+  color:rgba(255,255,255,.3);font-size:.9rem;display:none;
+}
+.at-empty.show{display:block}
+
+/* ── NO RESULTS SEARCH ─────────────────────────────────────── */
+#atNoResults {
+  text-align:center;padding:3.5rem 1rem;
+  color:rgba(255,255,255,.35);font-size:.9rem;
+  display:none;
+  grid-column:1/-1;
+}
+
+/* ── WHY CA-TECH ───────────────────────────────────────────── */
+.at-why-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1rem;
+}
+.at-why-card {
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:16px;padding:1.8rem 1.5rem;
+  transition:background .25s,border-color .25s,transform .25s;
+}
+.at-why-card:hover {
+  background:rgba(255,255,255,.07);
+  border-color:rgba(0,102,255,.25);
+  transform:translateY(-4px);
+}
+.at-why-icon {
+  width:50px;height:50px;border-radius:14px;
+  background:rgba(0,102,255,.1);border:1px solid rgba(0,102,255,.18);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:1.3rem;
+}
+.at-why-icon svg{width:24px;height:24px;fill:none;stroke:var(--cyan);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.at-why-card h4{font-size:.98rem;font-weight:800;color:#fff;margin-bottom:.55rem}
+.at-why-card p{font-size:.82rem;color:rgba(255,255,255,.48);line-height:1.75}
+
+/* ── FAQ ───────────────────────────────────────────────────── */
+.at-faq-list {
+  max-width:780px;margin:0 auto;
+  display:flex;flex-direction:column;gap:.75rem;
+}
+.at-faq-item {
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;overflow:hidden;
+  transition:border-color .25s;
+}
+.at-faq-item.open{border-color:rgba(0,102,255,.3)}
+.at-faq-q {
+  width:100%;display:flex;justify-content:space-between;align-items:center;
+  padding:1.3rem 1.5rem;background:none;border:none;cursor:pointer;text-align:left;gap:1rem;
+}
+.at-faq-q-text{font-size:.9rem;font-weight:700;color:#fff;line-height:1.4}
+.at-faq-icon {
+  width:28px;height:28px;flex-shrink:0;
+  background:rgba(0,102,255,.1);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .3s,background .3s;
+}
+.at-faq-item.open .at-faq-icon{transform:rotate(45deg);background:var(--blue)}
+.at-faq-icon svg{width:14px;height:14px;stroke:var(--cyan);fill:none;stroke-width:2.5;stroke-linecap:round}
+.at-faq-item.open .at-faq-icon svg{stroke:#fff}
+.at-faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.at-faq-a-inner {
+  padding:0 1.5rem 1.3rem;
+  font-size:.87rem;color:rgba(255,255,255,.52);line-height:1.85;
+}
+
+/* ── CTA ───────────────────────────────────────────────────── */
+.at-cta {
+  padding:130px 5%;
+  background:linear-gradient(115deg,#0a0f1e 0%,#08224d 45%,#0043b8 78%,#0066FF 100%);
+  position:relative;overflow:hidden;
+}
+.at-cta::before {
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:70px 70px;
+  -webkit-mask-image:linear-gradient(115deg,black 0%,transparent 70%);
+  mask-image:linear-gradient(115deg,black 0%,transparent 70%);
+  pointer-events:none;
+}
+.at-cta::after {
+  content:'';position:absolute;
+  top:-20%;right:-10%;width:700px;height:700px;
+  background:radial-gradient(circle,rgba(0,212,255,.18) 0%,transparent 60%);
+  filter:blur(60px);pointer-events:none;
+}
+.at-cta-inner {
+  position:relative;z-index:2;
+  max-width:840px;margin:0 auto;text-align:left;
+}
+.at-cta-kicker {
+  font-size:.7rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--cyan);display:inline-flex;align-items:center;gap:10px;margin-bottom:1.4rem;
+}
+.at-cta-kicker::before {
+  content:'';display:block;width:30px;height:2px;
+  background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:2px;
+}
+.at-cta h2 {
+  font-size:clamp(2rem,4.5vw,3.4rem);font-weight:300;
+  color:#fff;letter-spacing:-.03em;line-height:1.08;margin-bottom:1.4rem;max-width:740px;
+}
+.at-cta h2 strong {
+  font-weight:900;
+  background:linear-gradient(135deg,#fff 30%,var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.at-cta p {
+  font-size:1rem;color:rgba(255,255,255,.65);
+  max-width:580px;margin:0 0 2.5rem;line-height:1.8;font-weight:300;
+}
+.at-cta-btns{display:flex;gap:1rem;flex-wrap:wrap}
+
+/* ── RESPONSIVE ────────────────────────────────────────────── */
+@media(max-width:1100px){
+  .at-cats-grid{grid-template-columns:repeat(3,1fr)}
+  .at-grid{grid-template-columns:repeat(3,1fr)}
+  .at-why-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:860px){
+  .at-pop-grid{grid-template-columns:1fr}
+  .at-cats-grid{grid-template-columns:repeat(3,1fr)}
+  .at-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:640px){
+  .at-cats-grid{grid-template-columns:repeat(2,1fr)}
+  .at-grid{grid-template-columns:1fr}
+  .at-why-grid{grid-template-columns:1fr}
+  .at-cta-btns .btn-cta-white,
+  .at-cta-btns .btn-cta-outline{width:100%;justify-content:center}
+  .at-stats{gap:1.5rem}
+}
+@media(max-width:480px){
+  .at-cats-grid{grid-template-columns:1fr 1fr}
+}
+  </style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="logo">
+    <img src="assets/logos/logo-ca-tech.png" alt="CA-TECH" width="36" height="36"/>
+    <div><span class="logo-name">CA-TECH</span><span class="logo-sub">Agence Web &amp; Design</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Accueil</a></li>
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="collaborateurs-ia.html">Collaborateurs IA</a></li>
+    <li><a href="automatisations.html" class="active">Automatisations</a></li>
+    <li><a href="index.html#realisations">Réalisations</a></li>
+    <li><a href="tarifs.html">Tarifs</a></li>
+    <li><a href="index.html#notre-methode">Notre méthode</a></li>
+    <li><a href="index.html#a-propos">À propos</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><button class="btn-nav" onclick="location.href='index.html#contact'">Demander un devis</button></li>
+  </ul>
+  <button class="ham" id="ham"><span></span><span></span><span></span></button>
+</nav>
+<div class="mob-menu" id="mob">
+  <a href="index.html" onclick="closeMob()">Accueil</a>
+  <a href="index.html#services" onclick="closeMob()">Services</a>
+  <a href="collaborateurs-ia.html" onclick="closeMob()">Collaborateurs IA</a>
+  <a href="automatisations.html" onclick="closeMob()">Automatisations</a>
+  <a href="index.html#realisations" onclick="closeMob()">Réalisations</a>
+  <a href="tarifs.html" onclick="closeMob()">Tarifs</a>
+  <a href="index.html#notre-methode" onclick="closeMob()">Notre méthode</a>
+  <a href="index.html#a-propos" onclick="closeMob()">À propos</a>
+  <a href="index.html#contact" onclick="closeMob()">Contact</a>
+  <a class="btn-mob" href="index.html#contact" onclick="closeMob()">Demander un devis</a>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     HERO
+     ════════════════════════════════════════════════════════════ -->
+<section class="at-hero">
+  <canvas class="at-canvas" id="atCanvas" aria-hidden="true"></canvas>
+  <div class="at-grid-bg" aria-hidden="true"></div>
+  <div class="at-halo at-halo-1" id="halo1" aria-hidden="true"></div>
+  <div class="at-halo at-halo-2" id="halo2" aria-hidden="true"></div>
+  <div class="at-halo at-halo-3" id="halo3" aria-hidden="true"></div>
+
+  <div class="at-hero-inner">
+    <p class="at-kicker at-a0"><span></span>Intelligence Artificielle · Automatisations<span></span></p>
+
+    <h1 class="at-a1">
+      Automatisez votre entreprise,<br/>
+      <em>libérez votre temps.</em>
+    </h1>
+
+    <p class="at-hero-sub at-a2">
+      40+ automatisations prêtes à l'emploi pour les dirigeants de PME.
+      Activez-les en 48h — sans code, sans formation, sans effort.
+    </p>
+
+    <!-- Search -->
+    <div class="at-search-wrap at-a3">
+      <div class="at-search-icon">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+      <input
+        type="text"
+        class="at-search"
+        id="atSearch"
+        placeholder='Rechercher… ex : "devis", "relance", "leads"'
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button class="at-search-clear" id="atClear" aria-label="Effacer">✕</button>
+    </div>
+
+    <!-- Category filters -->
+    <div class="at-filters at-a4">
+      <button class="at-filter active" data-cat="all">Tous</button>
+      <button class="at-filter" data-cat="commercial">Commercial &amp; Vente</button>
+      <button class="at-filter" data-cat="finance">Finance &amp; Devis</button>
+      <button class="at-filter" data-cat="communication">Communication</button>
+      <button class="at-filter" data-cat="rh">RH &amp; Recrutement</button>
+      <button class="at-filter" data-cat="reporting">Reporting</button>
+      <button class="at-filter" data-cat="ecommerce">Site &amp; E-commerce</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="at-stats at-a4">
+      <div>
+        <div class="at-stat-val">40<em>+</em></div>
+        <div class="at-stat-lbl">Automatisations disponibles</div>
+      </div>
+      <div>
+        <div class="at-stat-val">48<em>h</em></div>
+        <div class="at-stat-lbl">Délai de déploiement</div>
+      </div>
+      <div>
+        <div class="at-stat-val">15<em>h</em></div>
+        <div class="at-stat-lbl">Économisées par semaine</div>
+      </div>
+      <div>
+        <div class="at-stat-val">120<em>+</em></div>
+        <div class="at-stat-lbl">PME équipées</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     CATÉGORIES
+     ════════════════════════════════════════════════════════════ -->
+<section class="at-section dark">
+  <div class="at-section-inner">
+    <div class="at-sec-head at-reveal">
+      <p class="at-sec-label">Parcourir par catégorie</p>
+      <h2 class="at-sec-h">Trouvez votre <em>automatisation idéale.</em></h2>
+    </div>
+
+    <div class="at-cats-grid">
+
+      <button class="at-cat-card at-reveal" data-cat="commercial" onclick="filterByCat('commercial')">
+        <div class="at-cat-icon" style="background:linear-gradient(135deg,rgba(0,66,130,.6),rgba(0,102,255,.4))">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.06 1.22 2 2 0 012 0h3a2 2 0 012 1.72 12.13 12.13 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.13 12.13 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+        </div>
+        <div class="at-cat-name">Commercial &amp; Vente</div>
+        <div class="at-cat-count">8 automatisations</div>
+      </button>
+
+      <button class="at-cat-card at-reveal" data-cat="finance" onclick="filterByCat('finance')">
+        <div class="at-cat-icon" style="background:linear-gradient(135deg,rgba(92,40,2,.6),rgba(217,119,6,.4))">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <div class="at-cat-name">Finance &amp; Devis</div>
+        <div class="at-cat-count">7 automatisations</div>
+      </button>
+
+      <button class="at-cat-card at-reveal" data-cat="communication" onclick="filterByCat('communication')">
+        <div class="at-cat-icon" style="background:linear-gradient(135deg,rgba(4,78,57,.6),rgba(5,150,105,.4))">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </div>
+        <div class="at-cat-name">Communication</div>
+        <div class="at-cat-count">6 automatisations</div>
+      </button>
+
+      <button class="at-cat-card at-reveal" data-cat="rh" onclick="filterByCat('rh')">
+        <div class="at-cat-icon" style="background:linear-gradient(135deg,rgba(59,21,113,.6),rgba(124,58,237,.4))">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <div class="at-cat-name">RH &amp; Recrutement</div>
+        <div class="at-cat-count">5 automatisations</div>
+      </button>
+
+      <button class="at-cat-card at-reveal" data-cat="reporting" onclick="filterByCat('reporting')">
+        <div class="at-cat-icon" style="background:linear-gradient(135deg,rgba(13,68,64,.6),rgba(13,148,136,.4))">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+        </div>
+        <div class="at-cat-name">Reporting</div>
+        <div class="at-cat-count">6 automatisations</div>
+      </button>
+
+      <button class="at-cat-card at-reveal" data-cat="ecommerce" onclick="filterByCat('ecommerce')">
+        <div class="at-cat-icon" style="background:linear-gradient(135deg,rgba(90,33,8,.6),rgba(234,88,12,.4))">
+          <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 001.95-1.57l1.65-8.42H6"/></svg>
+        </div>
+        <div class="at-cat-name">Site &amp; E-commerce</div>
+        <div class="at-cat-count">4 automatisations</div>
+      </button>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     AUTOMATISATIONS POPULAIRES
+     ════════════════════════════════════════════════════════════ -->
+<section class="at-section darker" id="automatisations">
+  <div class="at-section-inner">
+    <div class="at-sec-head at-reveal">
+      <p class="at-sec-label">Les plus utilisées</p>
+      <h2 class="at-sec-h">Automatisations <em>populaires.</em></h2>
+      <p class="at-sec-desc">Les scénarios que nos clients activent en premier — parce qu'ils rapportent le plus vite.</p>
+    </div>
+
+    <div class="at-pop-grid">
+
+      <!-- 1 -->
+      <article class="at-pop-card at-reveal"
+        data-cat="commercial"
+        data-keywords="formulaire contact crm email bienvenue lead commercial prospection"
+        onclick="location.href='index.html#contact'">
+        <span class="at-pop-badge hot">🔥 Populaire</span>
+        <div class="at-flow">
+          <div class="at-app c-form">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <div class="at-arrow-wrap"></div>
+          <div class="at-app c-crm">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          </div>
+          <span class="at-flow-plus">+</span>
+          <div class="at-app c-email">
+            <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+          </div>
+        </div>
+        <h3 class="at-pop-title">Formulaire contact → CRM + Email de bienvenue</h3>
+        <p class="at-pop-desc">Chaque visiteur qui remplit votre formulaire est automatiquement ajouté à votre CRM et reçoit un email personnalisé en moins de 30 secondes.</p>
+        <div class="at-pop-footer">
+          <span class="at-tag tag-com">Commercial</span>
+          <a href="index.html#contact" class="at-pop-link">
+            Activer cette automatisation
+            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- 2 -->
+      <article class="at-pop-card at-reveal"
+        data-cat="finance"
+        data-keywords="devis accepté facture automatique signature finance comptabilité"
+        onclick="location.href='index.html#contact'">
+        <span class="at-pop-badge star">⭐ Top</span>
+        <div class="at-flow">
+          <div class="at-app c-devis">
+            <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          </div>
+          <div class="at-arrow-wrap"></div>
+          <div class="at-app c-facture">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <span class="at-flow-plus">+</span>
+          <div class="at-app c-email">
+            <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+          </div>
+        </div>
+        <h3 class="at-pop-title">Devis accepté → Facture générée + Envoi client</h3>
+        <p class="at-pop-desc">Votre client signe le devis — la facture est créée, numérotée et envoyée automatiquement. Zéro saisie manuelle, zéro délai.</p>
+        <div class="at-pop-footer">
+          <span class="at-tag tag-fin">Finance</span>
+          <a href="index.html#contact" class="at-pop-link">
+            Activer cette automatisation
+            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- 3 -->
+      <article class="at-pop-card at-reveal"
+        data-cat="commercial"
+        data-keywords="email entrant lead crm slack notification alerte commercial vente"
+        onclick="location.href='index.html#contact'">
+        <span class="at-pop-badge hot">🔥 Populaire</span>
+        <div class="at-flow">
+          <div class="at-app c-email">
+            <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+          </div>
+          <div class="at-arrow-wrap"></div>
+          <div class="at-app c-crm">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          </div>
+          <span class="at-flow-plus">+</span>
+          <div class="at-app c-slack">
+            <svg viewBox="0 0 24 24"><path d="M22.08 9c-.44-1.44-1.8-2.19-3.18-1.81L17 7.77V5.5c0-1.5-1.12-2.69-2.5-2.5-1.38.19-2.5 1.38-2.5 2.5V9H9V5.5c0-1.5-1.12-2.69-2.5-2.5C5.12 3.19 4 4.38 4 5.5V9H1.92A1.92 1.92 0 000 10.92v.16C0 12.44.56 13.5 1.92 14H4v2.5c0 1.5 1.12 2.69 2.5 2.5 1.38-.19 2.5-1.38 2.5-2.5V14h3v2.5c0 1.5 1.12 2.69 2.5 2.5 1.38-.19 2.5-1.38 2.5-2.5V14h2.08C22.44 13.5 23 12.44 23 11.08v-.16A1.92 1.92 0 0022.08 9z"/></svg>
+          </div>
+        </div>
+        <h3 class="at-pop-title">Email commercial → Lead CRM + Alerte Slack</h3>
+        <p class="at-pop-desc">Chaque email d'un prospect potentiel crée automatiquement un lead dans votre CRM et notifie votre équipe commerciale en temps réel.</p>
+        <div class="at-pop-footer">
+          <span class="at-tag tag-com">Commercial</span>
+          <a href="index.html#contact" class="at-pop-link">
+            Activer cette automatisation
+            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- 4 -->
+      <article class="at-pop-card at-reveal"
+        data-cat="reporting"
+        data-keywords="lundi rapport hebdomadaire performance ventes kpi reporting equipe"
+        onclick="location.href='index.html#contact'">
+        <span class="at-pop-badge star">⭐ Recommandé</span>
+        <div class="at-flow">
+          <div class="at-app c-time">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="at-arrow-wrap"></div>
+          <div class="at-app c-rpt">
+            <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+          </div>
+          <span class="at-flow-plus">+</span>
+          <div class="at-app c-email">
+            <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+          </div>
+        </div>
+        <h3 class="at-pop-title">Chaque lundi 8h → Rapport de performance équipe</h3>
+        <p class="at-pop-desc">Le bilan commercial de la semaine écoulée — leads, devis, conversions — arrive dans votre boîte mail chaque lundi matin avant votre café.</p>
+        <div class="at-pop-footer">
+          <span class="at-tag tag-rpt">Reporting</span>
+          <a href="index.html#contact" class="at-pop-link">
+            Activer cette automatisation
+            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg>
+          </a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     TOUTES LES AUTOMATISATIONS
+     ════════════════════════════════════════════════════════════ -->
+<section class="at-section dark" id="toutes">
+  <div class="at-section-inner">
+    <div class="at-sec-head at-reveal">
+      <p class="at-sec-label">Catalogue complet</p>
+      <h2 class="at-sec-h">Toutes les <em>automatisations.</em></h2>
+      <p class="at-sec-desc">Filtrez par catégorie ou utilisez la recherche en haut de page pour trouver exactement ce qu'il vous faut.</p>
+    </div>
+
+    <div class="at-grid" id="atGrid">
+
+      <!-- COMMERCIAL & VENTE -->
+      <article class="at-card at-reveal" data-cat="commercial" data-keywords="linkedin prospection sequence email commercial vente lead">
+        <div class="at-flow">
+          <div class="at-app sm c-li"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></div>
+          <div class="at-arrow-wrap"></div>
+          <div class="at-app sm c-email"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
+        </div>
+        <h4 class="at-card-title">LinkedIn prospect → Séquence emails</h4>
+        <p class="at-card-desc">Ajoutez un contact sur LinkedIn — une séquence d'emails personnalisés se déclenche automatiquement sur 7 jours.</p>
+        <div class="at-card-footer">
+          <span class="at-tag tag-com">Commercial</span>
+          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
+        </div>
+      </article>
+
+      <article class="at-card at-reveal" data-cat="commercial" data-keywords="appel manqué sms rappel agenda commercial relance">
+        <div class="at-flow">
+          <div class="at-app sm c-notif"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.06 1.22 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+          <div class="at-arrow-wrap"></div>
+          <div class="at-app sm c-sms"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+          <span class="at-flow-plus">+</span>
+          <div class="at-app sm c-cal"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        </div>
+        <h4 class="at-card-title">Appel manqué → SMS + Rappel agenda</h4>
+        <p class="at-card-desc">Chaque appel sans réponse envoie un SMS au client et crée un rappel dans votre agenda pour un suivi le lendemain.</p>
+        <div class="at-card-footer">
+          <span class="at-tag tag-com">Commercial</span>
+          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
+        </div>
+      </article>
+
+      <article class="at-card at-reveal" data-cat="commercial" data-keywords="nouveau lead attribution commercial notification slack crm">
+        <div class="at-flow">
+          <div class="at-app sm c-form"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="at-arrow-wrap"></div>
+          <div class="at-app sm c-crm"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+          <span class="at-flow-plus">+</span>
+          <div class="at-app sm c-slack"><svg viewBox="0 0 24 24"><path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"/><path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/><path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"/><path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"/><path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z"/><path d="M15.5 19H14v1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/><path d="M10 9.5C10 8.67 9.33 8 8.5 8h-5C2.67 8 2 8.67 2 9.5S2.67 11 3.5 11h5c.83 0 1.5-.67 1.5-1.5z"/><path d="M8.5 5H10V3.5C10 2.67 9.33 2 8.5 2S7 2.67 7 3.5 7.67 5 8.5 5z"/></svg></div>
+        </div>
+        <h4 class="at-card-title">Nouveau lead → Attribution + Notification équipe</h4>
+        <p class="at-card-desc">Chaque nouveau lead est assigné automatiquement au bon commercial selon les règles de routage et l'équipe est alertée instantanément.</p>
+        <div class="at-card-footer">
+          <span class="at-tag tag-com">Commercial</span>
+          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
+        </div>
+      </article>
+
+      <!-- FINANCE & DEVIS -->
+      <article class="at-card at-reveal" data-cat="finance" data-keywords="facture impayée relance automatique email finance comptabilité recouvrement">
+        <div class="at-flow">
+          <div class="at-app sm c-facture"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></div>
+          <div class="at-arrow-wrap"></div>
+          <div class="at-app sm c-email"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
+        </div>
+        <h4 class="at-card-title">Facture impayée → Relances J+15, J+30</h4>
+        <p class="at-card-desc">À J+15 puis J+30, vos clients reçoivent une relance courtoise et automatique par email. Sans que vous y pensiez.</p>
+        <div class="at-card-footer">
+          <span class="at-tag tag-fin">Finance</span>
+          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
+        </div>
+      </article>
+
+      <article class="at-card at-reveal" data-cat="finance" data-keywords="paiement reçu reçu crm confirmation finance stripe">
+        <div class="at-flow">
+          <div class="at-app sm c-notif"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+          <div class="at-arrow-wrap"></div>
+          <div class="at-app sm c-email"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
+          <span class="at-flow-plus">+</span>
+          <div class="at-app sm c-crm"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+        </div>
+        <h4 class="at-card-title">Paiement reçu → Reçu client + CRM mis à jour</h4>
+        <p class="at-card-desc">Chaque paiement confirmé envoie automatiquement un reçu au client et met à jour son dossier dans votre CRM.</p>
+        <div class="at-card-footer">
+          <span class="at-tag tag-fin">Finance</span>
+          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
+        </div>
+      </article>
+
+      <article class="at-card at-reveal" data-cat="finance" data-keywords="fin de mois exports comptables notification direction finance bilan">
+        <div class="at-flow">
+          <div class="at-app sm c-time"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div class="at-arrow-wrap"></div>
+          <div class="at-app sm c-rpt"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg></div>
+          <span class="at-flow-plus">+</span>
+          <div class="at-app sm c-email"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
+        </div>
+        <h4 class="at-card-title">Fin de mois → Bilan financier automatique</h4>
+        <p class="at-card-desc">Le premier de chaque mois, un bilan financier synthétique (CA, encaissements, en attente) est généré et envoyé à la direction.</p>
+        <div class="at-card-footer">
+          <span class="at-tag tag-fin">Finance</span>
+          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
+        </div>
+      </article>
+
+      <!-- COMMUNICATION -->
+      <article class="at-card at-reveal" data-cat="communication" data-keywords="article blog linkedin newsletter publication communication marketing">
+        <div class="at-flow">
+          <div class="at-app sm c-blog"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+          <div class="at-arrow-wrap"></div>
+          <div class="at-app sm c-li"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></div>
+          <span class="at-flow-plus">+</span>
+          <div class="at-app sm c-news"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
+        </div>
+        <h4 class="at-card-title">Nouvel article → LinkedIn + Newsletter</h4>
+        <p class="at-card-desc">Publiez sur votre site — l'article est automatiquement partagé sur LinkedIn et envoyé à vos abonnés newsletter.</p>
+        <div class="at-card-footer">
+          <span class="at-tag tag-com2">Communication</span>
+          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
+        </div>
+      </article>
+
+      <article class="at-card at-reveal" data-cat="communication" data-keywords="avis google notification réponse template communication réputation">
+        <div class="at-flow">
+          <div class="at-app sm c-goog"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+          <div class="at-arrow-wrap"></div>
+          <div class="at-app sm c-slack"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div>
+          <span class="at-flow-plus">+</span>
+          <div class="at-app sm c-email"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
+        </div>
+        <h4 class="at-card-title">Avis Google → Notif interne + Template réponse</h4>
+        <p class="at-card-desc">Chaque nouvel avis Google alerte votre équipe sur Slack et génère un template de réponse personnalisé prêt à publier.</p>
+        <div class="at-card-footer">
+          <span class="at-tag tag-com2">Communication</span>
+          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
+        </div>
+      </article>
+
+      <article class="at-card at-reveal" data-cat="communication" data-keywords="whatsapp message ticket support assignation communication client">
+        <div class="at-flow">
+          <div class="at-app sm c-wa"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></div>
+          <div class="at-arrow-wrap"></div>
+          <div class="at-app sm c-crm"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+          <span class="at-flow-plus">+</span>
+          <div class="at-app sm c-notif"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div>
+        </div>
+        <h4 class="at-card-title">Message WhatsApp → Ticket + Assignation</h4>
+        <p class="at-card-desc">Chaque message WhatsApp entrant crée un ticket de support, l'assigne au bon interlocuteur et déclenche un accusé de réception.</p>
+        <div class="at-card-footer">
+          <span class="at-tag tag-com2">Communication</span>
+          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
+        </div>
+      </article>
+
+      <!-- RH & RECRUTEMENT -->
+      <article class="at-card at-reveal" data-cat="rh" data-keywords="candidature reçue email accusé entretien calendrier rh recrutement">
+        <div class="at-flow">
+          <div class="at-app sm c-cand"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg></div>
+          <div class="at-arrow-wrap"></div>
+          <div class="at-app sm c-email"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
+          <span class="at-flow-plus">+</span>
+          <div class="at-app sm c-cal"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        </div>
+        <h4 class="at-card-title">Candidature → Email accusé + Créneau entretien</h4>
+        <p class="at-card-desc">Chaque candidature reçue génère un email professionnel d'accusé de réception et propose automatiquement des créneaux d'entretien.</p>
+        <div class="at-card-footer">
+          <span class="at-tag tag-rh">RH</span>
+          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
+        </div>
+      </article>
+
+      <article class="at-card at-reveal" data-cat="rh" data-keywords="onboarding nouveau collaborateur accès outils email bienvenue rh">
+        <div class="at-flow">
+          <div class="at-app sm c-crm"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+          <div class="at-arrow-wrap"></div>
+          <div class="at-app sm c-notif"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+          <span class="at-flow-plus">+</span>
+          <div class="at-app sm c-email"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
+        </div>
+        <h4 class="at-card-title">Nouveau collaborateur → Onboarding automatisé</h4>
+        <p class="at-card-desc">À l'arrivée d'un nouveau collaborateur : création des accès outils, envoi de l'email de bienvenue et checklist J1 au manager.</p>
+        <div class="at-card-footer">
+          <span class="at-tag tag-rh">RH</span>
+          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
+        </div>
+      </article>
+
+      <!-- REPORTING -->
+      <article class="at-card at-reveal" data-cat="reporting" data-keywords="soir résumé leads quotidien reporting journalier performance">
+        <div class="at-flow">
+          <div class="at-app sm c-time"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div class="at-arrow-wrap"></div>
+          <div class="at-app sm c-rpt"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg></div>
+          <span class="at-flow-plus">+</span>
+          <div class="at-app sm c-slack"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div>
+        </div>
+        <h4 class="at-card-title">Chaque soir 18h → Résumé leads du jour</h4>
+        <p class="at-card-desc">En fin de journée, recevez automatiquement le résumé des leads entrants, des devis envoyés et des relances à prévoir.</p>
+        <div class="at-card-footer">
+          <span class="at-tag tag-rpt">Reporting</span>
+          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
+        </div>
+      </article>
+
+      <article class="at-card at-reveal" data-cat="reporting" data-keywords="fin de mois kpis direction tableau bord rapport mensuel reporting">
+        <div class="at-flow">
+          <div class="at-app sm c-time"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div class="at-arrow-wrap"></div>
+          <div class="at-app sm c-rpt"><svg viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 118 2.83"/><path d="M22 12A10 10 0 0012 2v10z"/></svg></div>
+          <span class="at-flow-plus">+</span>
+          <div class="at-app sm c-email"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
+        </div>
+        <h4 class="at-card-title">Fin de mois → Rapport KPIs direction</h4>
+        <p class="at-card-desc">Vos indicateurs clés (CA, taux de conversion, coût d'acquisition) sont compilés et envoyés automatiquement à la direction.</p>
+        <div class="at-card-footer">
+          <span class="at-tag tag-rpt">Reporting</span>
+          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
+        </div>
+      </article>
+
+      <!-- SITE & E-COMMERCE -->
+      <article class="at-card at-reveal" data-cat="ecommerce" data-keywords="abandon panier email relance ecommerce site vente récupération">
+        <div class="at-flow">
+          <div class="at-app sm c-cart"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 001.95-1.57l1.65-8.42H6"/></svg></div>
+          <div class="at-arrow-wrap"></div>
+          <div class="at-app sm c-email"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
+        </div>
+        <h4 class="at-card-title">Abandon panier → Email relance J+1</h4>
+        <p class="at-card-desc">Un visiteur a failli acheter ? Il reçoit un email personnalisé 24h après avec un résumé de son panier et une offre de réassurance.</p>
+        <div class="at-card-footer">
+          <span class="at-tag tag-eco">E-commerce</span>
+          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
+        </div>
+      </article>
+
+      <article class="at-card at-reveal" data-cat="ecommerce" data-keywords="inscription newsletter séquence bienvenue email site abonné">
+        <div class="at-flow">
+          <div class="at-app sm c-form"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div class="at-arrow-wrap"></div>
+          <div class="at-app sm c-email"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
+        </div>
+        <h4 class="at-card-title">Inscription newsletter → Séquence bienvenue</h4>
+        <p class="at-card-desc">Chaque nouvel abonné reçoit automatiquement une séquence de 5 emails sur 10 jours qui présente vos services et crée la confiance.</p>
+        <div class="at-card-footer">
+          <span class="at-tag tag-eco">E-commerce</span>
+          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
+        </div>
+      </article>
+
+      <div id="atNoResults">Aucune automatisation ne correspond à votre recherche. <a href="index.html#contact" style="color:var(--cyan)">Demandez-nous une automatisation sur-mesure →</a></div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     POURQUOI CA-TECH
+     ════════════════════════════════════════════════════════════ -->
+<section class="at-section darker">
+  <div class="at-section-inner">
+    <div class="at-sec-head at-reveal">
+      <p class="at-sec-label">Notre différence</p>
+      <h2 class="at-sec-h">Pourquoi choisir <em>CA-TECH.</em></h2>
+      <p class="at-sec-desc">Pas un outil self-service. Une équipe qui configure, déploie et monitore vos automatisations pour vous.</p>
+    </div>
+
+    <div class="at-why-grid">
+      <div class="at-why-card at-reveal">
+        <div class="at-why-icon">
+          <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <h4>Déployé en 48h</h4>
+        <p>Vos automatisations sont opérationnelles en 2 jours ouvrés. Pas de mois de configuration ni de formation interminable.</p>
+      </div>
+      <div class="at-why-card at-reveal">
+        <div class="at-why-icon">
+          <svg viewBox="0 0 24 24"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+        </div>
+        <h4>100% sur-mesure</h4>
+        <p>Chaque automatisation est adaptée à vos outils, vos processus et votre secteur d'activité. Pas de solution générique.</p>
+      </div>
+      <div class="at-why-card at-reveal">
+        <div class="at-why-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg>
+        </div>
+        <h4>Accompagnement inclus</h4>
+        <p>Notre équipe configure et monitore vos automatisations en continu. En cas d'anomalie, on intervient sous 4h.</p>
+      </div>
+      <div class="at-why-card at-reveal">
+        <div class="at-why-icon">
+          <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        </div>
+        <h4>ROI dès le 1er mois</h4>
+        <p>Nos clients économisent en moyenne 15h par semaine. Le retour sur investissement est visible dans les 30 premiers jours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     FAQ
+     ════════════════════════════════════════════════════════════ -->
+<section class="at-section dark">
+  <div class="at-section-inner">
+    <div class="at-sec-head at-reveal">
+      <p class="at-sec-label">Questions fréquentes</p>
+      <h2 class="at-sec-h">Tout ce que vous <em>voulez savoir.</em></h2>
+    </div>
+
+    <div class="at-faq-list">
+
+      <div class="at-faq-item at-reveal">
+        <button class="at-faq-q" aria-expanded="false">
+          <span class="at-faq-q-text">Faut-il des connaissances techniques pour utiliser vos automatisations ?</span>
+          <div class="at-faq-icon"><svg viewBox="0 0 14 14"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+        </button>
+        <div class="at-faq-a">
+          <div class="at-faq-a-inner">Non, absolument aucune. Notre équipe s'occupe de tout — de l'analyse de vos besoins jusqu'au déploiement et au monitoring. Vous décrivez votre processus en français, nous le configurons. Aucune ligne de code n'est requise de votre côté.</div>
+        </div>
+      </div>
+
+      <div class="at-faq-item at-reveal">
+        <button class="at-faq-q" aria-expanded="false">
+          <span class="at-faq-q-text">Combien de temps faut-il pour déployer une automatisation ?</span>
+          <div class="at-faq-icon"><svg viewBox="0 0 14 14"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+        </button>
+        <div class="at-faq-a">
+          <div class="at-faq-a-inner">La plupart de nos automatisations sont opérationnelles en 24 à 48 heures. Pour les scénarios complexes impliquant plusieurs outils ou des règles métier avancées, comptez 3 à 5 jours. Nous validons toujours le fonctionnement avec vous avant la mise en production.</div>
+        </div>
+      </div>
+
+      <div class="at-faq-item at-reveal">
+        <button class="at-faq-q" aria-expanded="false">
+          <span class="at-faq-q-text">Quels outils et logiciels sont compatibles ?</span>
+          <div class="at-faq-icon"><svg viewBox="0 0 14 14"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+        </button>
+        <div class="at-faq-a">
+          <div class="at-faq-a-inner">Nous sommes compatibles avec plus de 200 outils : Gmail, Outlook, HubSpot, Salesforce, Notion, Slack, Stripe, Shopify, WooCommerce, WordPress, Airtable, LinkedIn, Google Sheets, Pipedrive, et bien d'autres. Si vous utilisez un outil spécifique, demandez-nous — nous l'avons probablement déjà intégré.</div>
+        </div>
+      </div>
+
+      <div class="at-faq-item at-reveal">
+        <button class="at-faq-q" aria-expanded="false">
+          <span class="at-faq-q-text">Que se passe-t-il si une automatisation échoue ou ne fonctionne pas ?</span>
+          <div class="at-faq-icon"><svg viewBox="0 0 14 14"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+        </button>
+        <div class="at-faq-a">
+          <div class="at-faq-a-inner">Nos automatisations sont monitorées en temps réel. En cas d'erreur, vous êtes alerté immédiatement par email ou Slack, et notre équipe technique intervient sous 4 heures en jours ouvrés. Toutes les actions sont aussi enregistrées dans un journal pour audit complet.</div>
+        </div>
+      </div>
+
+      <div class="at-faq-item at-reveal">
+        <button class="at-faq-q" aria-expanded="false">
+          <span class="at-faq-q-text">Peut-on faire évoluer une automatisation après le déploiement ?</span>
+          <div class="at-faq-icon"><svg viewBox="0 0 14 14"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+        </button>
+        <div class="at-faq-a">
+          <div class="at-faq-a-inner">Oui, vos automatisations évoluent avec votre activité. Ajout d'un nouvel outil, modification des critères de déclenchement, nouvelles règles de routage — tout est ajustable à tout moment sur simple demande. Nous recommandons d'ailleurs une révision trimestrielle pour optimiser les performances.</div>
+        </div>
+      </div>
+
+      <div class="at-faq-item at-reveal">
+        <button class="at-faq-q" aria-expanded="false">
+          <span class="at-faq-q-text">Quel est le modèle tarifaire ?</span>
+          <div class="at-faq-icon"><svg viewBox="0 0 14 14"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+        </button>
+        <div class="at-faq-a">
+          <div class="at-faq-a-inner">Chaque automatisation est proposée avec une mise en place unique (selon la complexité) et un abonnement mensuel de maintenance qui inclut le monitoring, les corrections et les ajustements. Nous établissons un devis personnalisé selon votre situation. Demandez une démonstration gratuite pour obtenir une estimation.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     CTA FINAL
+     ════════════════════════════════════════════════════════════ -->
+<section class="at-cta">
+  <div class="at-cta-inner at-reveal">
+    <p class="at-cta-kicker">Passez à l'action</p>
+    <h2>Automatisez votre entreprise <strong>dès cette semaine.</strong></h2>
+    <p>Choisissez vos automatisations, notre équipe déploie tout. Mise en place en 48h — ROI visible dès le premier mois.</p>
+    <div class="at-cta-btns">
+      <a href="index.html#contact" class="btn-cta-white">Demander une démonstration gratuite →</a>
+      <a href="#automatisations" class="btn-cta-outline" onclick="event.preventDefault();document.getElementById('automatisations').scrollIntoView({behavior:'smooth'})">Revoir les automatisations</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-top">
+    <div class="f-col">
+      <div class="f-brand">
+        <img src="assets/logos/logo-ca-tech.png" alt="CA-TECH" width="38" height="38"/>
+        <div><div class="f-brand-name">CA-TECH</div><div class="f-brand-tag">Agence Web &amp; Design</div></div>
+      </div>
+      <p class="f-col-desc">Agence Web &amp; Design spécialisée dans la création de sites vitrines, boutiques e-commerce, identités visuelles et solutions IA pour entreprises.</p>
+      <div class="f-zones">Zones d'intervention &nbsp;<span>Dijon · Lyon · Paris · Troyes</span></div>
+    </div>
+    <div class="f-col"><h5>Services</h5><ul>
+      <li><a href="creation-site-vitrine.html">Sites vitrines</a></li>
+      <li><a href="creation-site-ecommerce.html">Sites e-commerce</a></li>
+      <li><a href="creation-landing-page.html">Landing Pages</a></li>
+      <li><a href="collaborateurs-ia.html">Collaborateurs IA</a></li>
+      <li><a href="automatisations.html">Automatisations</a></li>
+      <li><a href="creation-logo.html">Logos</a></li>
+      <li><a href="identite-visuelle.html">Identité visuelle</a></li>
+      <li><a href="refonte-site-internet.html">Refonte de site</a></li>
+    </ul></div>
+    <div class="f-col"><h5>Entreprise</h5><ul>
+      <li><a href="index.html#a-propos">À propos</a></li>
+      <li><a href="tarifs.html">Tarifs</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="mentions-legales.html">Mentions légales</a></li>
+      <li><a href="politique-de-confidentialite.html">Confidentialité</a></li>
+    </ul></div>
+    <div class="f-col"><h5>Contact</h5>
+      <div class="f-contact-item">
+        <div class="f-contact-icon"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
+        <div class="f-contact-txt"><a href="mailto:contact@ca-tech.fr">contact@ca-tech.fr</a></div>
+      </div>
+      <div class="f-contact-item">
+        <div class="f-contact-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.06 1.22 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+        <div class="f-contact-txt"><a href="tel:+33775664975">+33 7 75 66 49 75</a></div>
+      </div>
+    </div>
+  </div>
+  <div class="f-sep"></div>
+  <div class="f-bottom">
+    <span>© 2026 CA-TECH - Agence Web &amp; Design · Tous droits réservés.</span>
+    <div class="f-bottom-logo">
+      <img src="assets/logos/logo-ca-tech.png" alt="CA-TECH" width="22" height="22"/>
+      <span>CA-TECH</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Canvas particles ── */
+(function(){
+  const cv = document.getElementById('atCanvas');
+  if (!cv) return;
+  const cx = cv.getContext('2d');
+  let W, H, pts = [];
+  const N = 55, LK = 115;
+  function resize(){ W = cv.width = cv.offsetWidth; H = cv.height = cv.offsetHeight; }
+  window.addEventListener('resize', resize, {passive:true}); resize();
+  function r(a,b){ return a + Math.random()*(b-a); }
+  for(let i=0;i<N;i++) pts.push({x:r(0,W),y:r(0,H),vx:r(-.22,.22),vy:r(-.22,.22),s:r(.9,1.8)});
+  function frame(){
+    cx.clearRect(0,0,W,H);
+    pts.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0)p.x=W; if(p.x>W)p.x=0;
+      if(p.y<0)p.y=H; if(p.y>H)p.y=0;
+      cx.beginPath(); cx.arc(p.x,p.y,p.s,0,Math.PI*2);
+      cx.fillStyle='rgba(0,102,255,.45)'; cx.fill();
+    });
+    for(let i=0;i<N;i++) for(let j=i+1;j<N;j++){
+      const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y;
+      const d=Math.sqrt(dx*dx+dy*dy);
+      if(d<LK){
+        cx.beginPath(); cx.moveTo(pts[i].x,pts[i].y); cx.lineTo(pts[j].x,pts[j].y);
+        cx.strokeStyle=`rgba(0,102,255,${.09*(1-d/LK)})`; cx.lineWidth=1; cx.stroke();
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+/* ── Mouse parallax halos ── */
+(function(){
+  const h1=document.getElementById('halo1'),h2=document.getElementById('halo2'),h3=document.getElementById('halo3');
+  if(!h1) return;
+  let t1x=0,t1y=0,t2x=0,t2y=0,t3x=0,t3y=0;
+  let c1x=0,c1y=0,c2x=0,c2y=0,c3x=0,c3y=0,raf;
+  window.addEventListener('mousemove',e=>{
+    const mx=(e.clientX/window.innerWidth-.5)*2, my=(e.clientY/window.innerHeight-.5)*2;
+    t1x=mx*-26;t1y=my*-16; t2x=mx*16;t2y=my*12; t3x=mx*-12;t3y=my*-20;
+    if(!raf) raf=requestAnimationFrame(tick);
+  },{passive:true});
+  function lerp(a,b,t){return a+(b-a)*t}
+  function tick(){
+    raf=null;
+    c1x=lerp(c1x,t1x,.06);c1y=lerp(c1y,t1y,.06);
+    c2x=lerp(c2x,t2x,.04);c2y=lerp(c2y,t2y,.04);
+    c3x=lerp(c3x,t3x,.05);c3y=lerp(c3y,t3y,.05);
+    h1.style.transform=`translate(${c1x}px,${c1y}px)`;
+    h2.style.transform=`translate(${c2x}px,${c2y}px)`;
+    h3.style.transform=`translate(${c3x}px,${c3y}px)`;
+    const done=Math.abs(c1x-t1x)<.4&&Math.abs(c1y-t1y)<.4;
+    if(!done) raf=requestAnimationFrame(tick);
+  }
+})();
+
+/* ── Search + filter ── */
+const searchEl  = document.getElementById('atSearch');
+const clearEl   = document.getElementById('atClear');
+const allCards  = document.querySelectorAll('#atGrid .at-card, #automatisations .at-pop-card');
+const noResults = document.getElementById('atNoResults');
+
+function getActiveCat(){
+  return document.querySelector('.at-filter.active')?.dataset.cat || 'all';
+}
+
+function runFilter(){
+  const q   = searchEl.value.toLowerCase().trim();
+  const cat = getActiveCat();
+  let visible = 0;
+
+  allCards.forEach(card=>{
+    const kw  = (card.dataset.keywords||'').toLowerCase();
+    const cc  = card.dataset.cat || '';
+    const okQ = !q || kw.includes(q);
+    const okC = cat==='all' || cc===cat;
+    const show = okQ && okC;
+    card.style.display = show ? '' : 'none';
+    if(show) visible++;
+  });
+
+  if(noResults) noResults.style.display = visible ? 'none' : 'block';
+  clearEl.classList.toggle('show', q.length > 0);
+
+  if(q.length > 1){
+    const grid = document.getElementById('toutes');
+    if(grid) grid.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+}
+
+searchEl.addEventListener('input', runFilter);
+clearEl.addEventListener('click',()=>{ searchEl.value=''; runFilter(); searchEl.focus(); });
+
+document.querySelectorAll('.at-filter').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.at-filter').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    runFilter();
+    const sec = document.getElementById('automatisations');
+    if(sec) sec.scrollIntoView({behavior:'smooth'});
+  });
+});
+
+function filterByCat(cat){
+  document.querySelectorAll('.at-filter').forEach(b=>{
+    b.classList.toggle('active', b.dataset.cat===cat);
+  });
+  runFilter();
+  const sec = document.getElementById('automatisations');
+  if(sec) setTimeout(()=>sec.scrollIntoView({behavior:'smooth'}),80);
+}
+
+/* ── Scroll reveal ── */
+const revEls = document.querySelectorAll('.at-reveal');
+const revObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const delay = e.target.closest('.at-grid')||e.target.closest('.at-pop-grid')
+        ? Array.from(revEls).indexOf(e.target)*55 : 0;
+      setTimeout(()=>e.target.classList.add('visible'), delay);
+      revObs.unobserve(e.target);
+    }
+  });
+},{threshold:0.10});
+revEls.forEach(el=>revObs.observe(el));
+
+/* ── FAQ accordion ── */
+document.querySelectorAll('.at-faq-q').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const item = btn.closest('.at-faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.at-faq-item.open').forEach(i=>{
+      i.classList.remove('open');
+      i.querySelector('.at-faq-a').style.maxHeight='0';
+      i.querySelector('.at-faq-q').setAttribute('aria-expanded','false');
+    });
+    if(!isOpen){
+      item.classList.add('open');
+      btn.setAttribute('aria-expanded','true');
+      item.querySelector('.at-faq-a').style.maxHeight = item.querySelector('.at-faq-a-inner').offsetHeight+'px';
+    }
+  });
+});
+
+/* ── Nav scroll + progress ── */
+window.addEventListener('scroll',()=>{
+  const st=document.documentElement.scrollTop;
+  const dh=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+  document.getElementById('prog').style.width=(st/dh*100)+'%';
+  document.getElementById('nav').classList.toggle('scrolled',st>80);
+},{passive:true});
+
+/* ── Mobile menu ── */
+function closeMob(){
+  document.getElementById('mob').classList.remove('open');
+  document.getElementById('ham').classList.remove('open');
+}
+document.getElementById('ham').addEventListener('click',function(){
+  this.classList.toggle('open');
+  document.getElementById('mob').classList.toggle('open');
+});
+</script>
+
+<script src="/loic-widget.js"></script>
+<script src="/nav.js"></script>
+</body>
+</html>
