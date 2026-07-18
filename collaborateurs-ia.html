@@ -333,8 +333,8 @@
     }
     /* 2 cartes larges */
     .cai-bento .b-lg { grid-column: span 3; }
-    /* 3 cartes compactes */
-    .cai-bento .b-sm { grid-column: span 2; }
+    /* 4 cartes compactes (2 par ligne) */
+    .cai-bento .b-sm { grid-column: span 3; }
 
     .cai-card {
       position: relative;
@@ -434,11 +434,12 @@
     }
 
     /* Subtle color tint per role (layered over photo) */
-    .grad-commercial::before { background: linear-gradient(135deg, rgba(0,102,255,.5) 0%, rgba(0,212,255,.25) 100%); }
-    .grad-support::before    { background: linear-gradient(135deg, rgba(6,182,212,.45) 0%, rgba(99,102,241,.3) 100%); }
-    .grad-rh::before         { background: linear-gradient(135deg, rgba(5,150,105,.45) 0%, rgba(52,211,153,.25) 100%); }
-    .grad-juridique::before  { background: linear-gradient(135deg, rgba(109,40,217,.45) 0%, rgba(167,139,250,.25) 100%); }
-    .grad-seo::before        { background: linear-gradient(135deg, rgba(234,88,12,.45) 0%, rgba(251,191,36,.25) 100%); }
+    .grad-commercial::before  { background: linear-gradient(135deg, rgba(0,102,255,.5) 0%, rgba(0,212,255,.25) 100%); }
+    .grad-support::before     { background: linear-gradient(135deg, rgba(6,182,212,.45) 0%, rgba(99,102,241,.3) 100%); }
+    .grad-rh::before          { background: linear-gradient(135deg, rgba(5,150,105,.45) 0%, rgba(52,211,153,.25) 100%); }
+    .grad-juridique::before   { background: linear-gradient(135deg, rgba(109,40,217,.45) 0%, rgba(167,139,250,.25) 100%); }
+    .grad-seo::before         { background: linear-gradient(135deg, rgba(234,88,12,.45) 0%, rgba(251,191,36,.25) 100%); }
+    .grad-comptable::before   { background: linear-gradient(135deg, rgba(16,185,129,.45) 0%, rgba(6,182,212,.25) 100%); }
 
     .cai-card:hover .cai-thumb img { transform: scale(1.08); }
 
@@ -935,6 +936,22 @@
       </div>
     </article>
 
+    <!-- Comptable IA — SMALL -->
+    <article class="cai-card b-sm cai-reveal" id="comptable" data-href="index.html#contact" tabindex="0" role="button" aria-label="Découvrir le Collaborateur Comptable IA">
+      <div class="cai-thumb grad-comptable">
+        <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=200&h=200&fit=crop&q=80&auto=format" alt="Comptable IA" loading="lazy" decoding="async" width="200" height="200"/>
+      </div>
+      <div class="cai-card-body">
+        <span class="cai-card-tag">Actif</span>
+        <h3 class="cai-card-name">Comptable IA</h3>
+        <p class="cai-card-desc">Gère vos factures, rapprochements bancaires et déclarations comptables en temps réel, sans erreur.</p>
+        <span class="cai-card-arrow">
+          Découvrir
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg>
+        </span>
+      </div>
+    </article>
+
   </div>
 </section>
 
@@ -956,55 +973,7 @@
 <!-- ══════════════════════════════════════════════════════════ -->
 <!-- FOOTER                                                     -->
 <!-- ══════════════════════════════════════════════════════════ -->
-<footer>
-  <div class="f-top">
-    <div class="f-col">
-      <div class="f-brand">
-        <img src="assets/logos/logo-ca-tech.png" alt="CA-TECH" width="38" height="38"/>
-        <div><div class="f-brand-name">CA-TECH</div><div class="f-brand-tag">Agence Web &amp; Design</div></div>
-      </div>
-      <p class="f-col-desc">Agence Web &amp; Design spécialisée dans la création de sites vitrines, boutiques e-commerce, identités visuelles et solutions IA pour entreprises.</p>
-      <div class="f-zones">Zones d'intervention &nbsp;<span>Dijon · Lyon · Paris · Troyes</span></div>
-    </div>
-    <div class="f-col"><h5>Services</h5><ul>
-      <li><a href="creation-site-vitrine.html">Sites vitrines</a></li>
-      <li><a href="creation-site-ecommerce.html">Sites e-commerce</a></li>
-      <li><a href="creation-landing-page.html">Landing Pages</a></li>
-      <li><a href="collaborateurs-ia.html">Collaborateurs IA</a></li>
-      <li><a href="automatisations.html">Automatisations</a></li>
-      <li><a href="creation-logo.html">Logos</a></li>
-      <li><a href="identite-visuelle.html">Identité visuelle</a></li>
-      <li><a href="refonte-site-internet.html">Refonte de site</a></li>
-      <li><a href="maintenance-site-web.html">Maintenance</a></li>
-    </ul></div>
-    <div class="f-col"><h5>Entreprise</h5><ul>
-      <li><a href="collaborateurs-ia.html">Collaborateurs IA</a></li><li><a href="automatisations.html">Automatisations</a></li><li><a href="index.html#a-propos">À propos</a></li>
-      <li><a href="tarifs.html">Tarifs</a></li>
-      <li><a href="faq.html">FAQ</a></li>
-      <li><a href="index.html#contact">Contact</a></li>
-      <li><a href="mentions-legales.html">Mentions légales</a></li>
-      <li><a href="politique-de-confidentialite.html">Confidentialité</a></li>
-    </ul></div>
-    <div class="f-col"><h5>Contact</h5>
-      <div class="f-contact-item">
-        <div class="f-contact-icon"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
-        <div class="f-contact-txt"><a href="mailto:contact@ca-tech.fr">contact@ca-tech.fr</a></div>
-      </div>
-      <div class="f-contact-item">
-        <div class="f-contact-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.06 1.22 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
-        <div class="f-contact-txt"><a href="tel:+33775664975">+33 7 75 66 49 75</a></div>
-      </div>
-    </div>
-  </div>
-  <div class="f-sep"></div>
-  <div class="f-bottom">
-    <span>© 2026 CA-TECH - Agence Web &amp; Design · Tous droits réservés.</span>
-    <div class="f-bottom-logo">
-      <img src="assets/logos/logo-ca-tech.png" alt="CA-TECH" width="22" height="22"/>
-      <span>CA-TECH</span>
-    </div>
-  </div>
-</footer>
+<footer></footer>
 
 <script>
 /* ── Canvas particle network ── */
@@ -1139,5 +1108,6 @@ document.querySelectorAll('.cai-card').forEach(card => {
 <script src="/loic-widget.js"></script>
 <script src="/nav.js"></script>
 <script src="/js/scroll-animations.js" defer></script>
+  <script src="/footer.js"></script>
 </body>
 </html>
