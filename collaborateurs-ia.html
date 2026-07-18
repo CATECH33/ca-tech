@@ -76,50 +76,6 @@
       will-change: transform;
     }
 
-    /* Robot animé fond */
-    .cai-robot-anim {
-      position: absolute;
-      right: 3%;
-      bottom: -5%;
-      width: 500px;
-      height: auto;
-      opacity: .14;
-      z-index: 1;
-      pointer-events: none;
-      color: #00d4ff;
-      filter: drop-shadow(0 0 60px rgba(0,102,255,.65)) drop-shadow(0 0 20px rgba(0,212,255,.3));
-      animation: rb-float 7s ease-in-out infinite;
-    }
-    @keyframes rb-float {
-      0%, 100% { transform: translateY(0); }
-      50%       { transform: translateY(-22px); }
-    }
-    .rb-eye  { animation: rb-eye 3s ease-in-out infinite; }
-    .rb-eye2 { animation: rb-eye 3s .7s ease-in-out infinite; }
-    @keyframes rb-eye {
-      0%, 100% { opacity: 1; }
-      48%, 52% { opacity: .1; }
-    }
-    .rb-scan { animation: rb-scan 4s linear infinite; }
-    @keyframes rb-scan {
-      0%   { transform: translateY(0);    opacity: 0; }
-      7%   { opacity: 1; }
-      93%  { opacity: 1; }
-      100% { transform: translateY(88px); opacity: 0; }
-    }
-    .rb-flow { stroke-dasharray: 5 9; animation: rb-flow 2s linear infinite; }
-    @keyframes rb-flow { to { stroke-dashoffset: -56; } }
-    .rb-ant  { animation: rb-blink 1.3s ease-in-out infinite; }
-    @keyframes rb-blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: .08; }
-    }
-    .rb-core { animation: rb-pulse 2.5s ease-in-out infinite; }
-    @keyframes rb-pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: .35; }
-    }
-    @media(max-width:960px){ .cai-robot-anim { display:none; } }
 
     /* Appear animations */
     @keyframes cai-up {
@@ -189,70 +145,34 @@
       flex-wrap: wrap;
     }
 
-    /* ── Right side: orb + rings + 3 offset metric tiles ── */
+    /* ── Right side: premium photo + 3 offset metric tiles ── */
     .cai-hero-right {
       position: relative;
       height: 540px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       overflow: visible;
     }
-    .cai-orb {
-      width: 118px; height: 118px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #6ab2ff 0%, #0066FF 50%, #002f90 100%);
+    .cai-hero-photo-wrap {
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.09);
       box-shadow:
-        0 0 0 1px rgba(0,102,255,.45),
-        0 0 40px rgba(0,102,255,.65),
-        0 0 90px rgba(0,102,255,.30),
-        0 0 160px rgba(0,102,255,.13);
-      position: relative; z-index: 5;
-      display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px;
-      animation: cai-orb-pulse 4s ease-in-out infinite;
-      flex-shrink: 0;
+        0 30px 80px rgba(0,0,0,.55),
+        0 0 0 1px rgba(0,102,255,.12),
+        0 0 60px rgba(0,102,255,.12);
     }
-    @keyframes cai-orb-pulse {
-      0%,100% { box-shadow: 0 0 0 1px rgba(0,102,255,.45), 0 0 40px rgba(0,102,255,.65), 0 0 90px rgba(0,102,255,.30), 0 0 160px rgba(0,102,255,.13); }
-      50%     { box-shadow: 0 0 0 1px rgba(0,102,255,.55), 0 0 60px rgba(0,102,255,.85), 0 0 120px rgba(0,102,255,.40), 0 0 200px rgba(0,102,255,.18); }
+    .cai-hero-photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+      display: block;
     }
-    .cai-orb-lbl {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 13px; font-weight: 700;
-      letter-spacing: 2.2px; color: #fff;
-      text-align: center; line-height: 1.2;
-    }
-    .cai-orb-sub {
-      font-size: 8px; font-weight: 600;
-      letter-spacing: 2.5px; color: rgba(180,220,255,.65);
-      font-family: Inter, sans-serif;
-    }
-    .cai-ring {
-      position: absolute; border-radius: 50%;
-      top: 50%; left: 50%;
-      pointer-events: none; box-sizing: border-box;
-    }
-    .cai-ring-1 {
-      width: 210px; height: 210px;
-      margin: -105px 0 0 -105px;
-      border: 1px dashed rgba(0,102,255,.25);
-      animation: cai-spin 25s linear infinite;
-    }
-    .cai-ring-2 {
-      width: 340px; height: 340px;
-      margin: -170px 0 0 -170px;
-      border: 1px solid rgba(0,102,255,.13);
-      animation: cai-spin 45s linear infinite reverse;
-    }
-    .cai-ring-3 {
-      width: 480px; height: 480px;
-      margin: -240px 0 0 -240px;
-      border: 1px dashed rgba(0,102,255,.07);
-      animation: cai-spin 70s linear infinite;
-    }
-    @keyframes cai-spin {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
+    .cai-hero-photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, rgba(2,11,24,.55) 0%, rgba(0,30,80,.25) 60%, rgba(0,102,255,.08) 100%);
     }
 
     /* 3 metric tiles — offset composition */
@@ -320,9 +240,7 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .cai-orb, .cai-ring-1, .cai-ring-2, .cai-ring-3, .cai-metric {
-        animation: none !important; opacity: 1;
-      }
+      .cai-metric { animation: none !important; opacity: 1; }
     }
 
     /* ══════════════════════════════════════════════════════════ */
@@ -485,47 +403,44 @@
       align-items: flex-start;
     }
 
-    /* Visual: square with per-role gradient */
+    /* Visual: photo thumbnail per role */
     .cai-thumb {
       position: relative;
       flex-shrink: 0;
       border-radius: 12px;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       transition: transform .35s cubic-bezier(.34,1.56,.64,1);
     }
-    .cai-card.b-lg .cai-thumb { width: 132px; height: 132px; }
-    .cai-card.b-sm .cai-thumb { width: 68px; height: 68px; margin-bottom: 1rem; }
+    .cai-card.b-lg .cai-thumb { width: 148px; height: 148px; }
+    .cai-card.b-sm .cai-thumb { width: 80px; height: 80px; margin-bottom: 1rem; }
 
     .cai-thumb img {
-      width: 78%; height: 78%;
-      object-fit: contain;
-      position: relative; z-index: 2;
-      filter: drop-shadow(0 6px 14px rgba(0,0,0,.35));
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center 15%;
+      position: absolute; inset: 0; z-index: 1;
+      filter: none;
+      transition: transform .5s cubic-bezier(.34,1.56,.64,1);
     }
     .cai-thumb::before {
       content: '';
-      position: absolute; inset: 0;
-      opacity: .95;
+      position: absolute; inset: 0; z-index: 2;
+      opacity: .28;
     }
     .cai-thumb::after {
       content: '';
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(circle at 30% 25%, rgba(255,255,255,.18) 0%, transparent 55%),
-        radial-gradient(circle at 75% 80%, rgba(0,0,0,.22) 0%, transparent 55%);
+      position: absolute; inset: 0; z-index: 3;
+      background: linear-gradient(180deg, transparent 35%, rgba(0,0,0,.5) 100%);
     }
 
-    /* Gradient per role */
-    .grad-commercial::before { background: linear-gradient(135deg, #0066FF 0%, #00D4FF 100%); }
-    .grad-support::before    { background: linear-gradient(135deg, #06b6d4 0%, #0ea5e9 60%, #6366f1 100%); }
-    .grad-rh::before         { background: linear-gradient(135deg, #059669 0%, #10b981 55%, #34d399 100%); }
-    .grad-juridique::before  { background: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 55%, #a78bfa 100%); }
-    .grad-seo::before        { background: linear-gradient(135deg, #ea580c 0%, #f97316 60%, #fbbf24 100%); }
+    /* Subtle color tint per role (layered over photo) */
+    .grad-commercial::before { background: linear-gradient(135deg, rgba(0,102,255,.5) 0%, rgba(0,212,255,.25) 100%); }
+    .grad-support::before    { background: linear-gradient(135deg, rgba(6,182,212,.45) 0%, rgba(99,102,241,.3) 100%); }
+    .grad-rh::before         { background: linear-gradient(135deg, rgba(5,150,105,.45) 0%, rgba(52,211,153,.25) 100%); }
+    .grad-juridique::before  { background: linear-gradient(135deg, rgba(109,40,217,.45) 0%, rgba(167,139,250,.25) 100%); }
+    .grad-seo::before        { background: linear-gradient(135deg, rgba(234,88,12,.45) 0%, rgba(251,191,36,.25) 100%); }
 
-    .cai-card:hover .cai-thumb { transform: scale(1.06) rotate(-2deg); }
+    .cai-card:hover .cai-thumb img { transform: scale(1.08); }
 
     .cai-card-body {
       display: flex;
@@ -760,8 +675,8 @@
   <div class="cai-halo cai-halo-2" id="halo2" aria-hidden="true"></div>
   <div class="cai-halo cai-halo-3" id="halo3" aria-hidden="true"></div>
 
-  <!-- Robot animé fond -->
-  <svg class="cai-robot-anim" aria-hidden="true" viewBox="0 0 240 450" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" overflow="visible">
+  <!-- Robot SVG removed — robots uniquement sur /automatisations -->
+  <svg style="display:none" aria-hidden="true">
 
     <!-- ANTENNE -->
     <line x1="120" y1="16" x2="120" y2="34"/>
@@ -898,15 +813,11 @@
       </div>
     </div>
 
-    <!-- Right: orb + rings + 3 offset metric tiles -->
+    <!-- Right: photo premium + 3 offset metric tiles -->
     <div class="cai-hero-right" aria-hidden="true">
-      <div class="cai-ring cai-ring-1"></div>
-      <div class="cai-ring cai-ring-2"></div>
-      <div class="cai-ring cai-ring-3"></div>
-
-      <div class="cai-orb">
-        <span class="cai-orb-lbl">CA-TECH</span>
-        <span class="cai-orb-sub">CORE · IA</span>
+      <div class="cai-hero-photo-wrap">
+        <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=620&h=560&fit=crop&q=85&auto=format" alt="Équipe CA-TECH en réunion stratégique" loading="eager" decoding="async" width="620" height="560"/>
+        <div class="cai-hero-photo-overlay"></div>
       </div>
 
       <div class="cai-metric m-1">
@@ -946,7 +857,7 @@
     <!-- Commercial IA — LARGE -->
     <article class="cai-card b-lg cai-reveal" data-href="index.html#contact" tabindex="0" role="button" aria-label="Découvrir le Collaborateur Commercial IA">
       <div class="cai-thumb grad-commercial">
-        <img src="/public/images/collaborateurs/commercial-ia.webp" alt="Commercial IA" loading="lazy" decoding="async" width="132" height="132"/>
+        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=300&h=300&fit=crop&q=80&auto=format" alt="Commercial IA" loading="lazy" decoding="async" width="300" height="300"/>
       </div>
       <div class="cai-card-body">
         <span class="cai-card-tag">Actif</span>
@@ -962,7 +873,7 @@
     <!-- Support IA — LARGE -->
     <article class="cai-card b-lg cai-reveal" data-href="index.html#contact" tabindex="0" role="button" aria-label="Découvrir le Collaborateur Support IA">
       <div class="cai-thumb grad-support">
-        <img src="/public/images/collaborateurs/support-ia.webp" alt="Support IA" loading="lazy" decoding="async" width="132" height="132"/>
+        <img src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=300&h=300&fit=crop&q=80&auto=format" alt="Support IA" loading="lazy" decoding="async" width="300" height="300"/>
       </div>
       <div class="cai-card-body">
         <span class="cai-card-tag">Actif</span>
@@ -978,7 +889,7 @@
     <!-- RH IA — SMALL -->
     <article class="cai-card b-sm cai-reveal" data-href="index.html#contact" tabindex="0" role="button" aria-label="Découvrir le Collaborateur RH IA">
       <div class="cai-thumb grad-rh">
-        <img src="/public/images/collaborateurs/rh-ia.webp" alt="RH IA" loading="lazy" decoding="async" width="68" height="68"/>
+        <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=200&h=200&fit=crop&q=80&auto=format" alt="RH IA" loading="lazy" decoding="async" width="200" height="200"/>
       </div>
       <div class="cai-card-body">
         <span class="cai-card-tag">Actif</span>
@@ -994,7 +905,7 @@
     <!-- Juridique IA — SMALL -->
     <article class="cai-card b-sm cai-reveal" data-href="index.html#contact" tabindex="0" role="button" aria-label="Découvrir le Collaborateur Juridique IA">
       <div class="cai-thumb grad-juridique">
-        <img src="/public/images/collaborateurs/juridique-ia.webp" alt="Juridique IA" loading="lazy" decoding="async" width="68" height="68"/>
+        <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=200&h=200&fit=crop&q=80&auto=format" alt="Juridique IA" loading="lazy" decoding="async" width="200" height="200"/>
       </div>
       <div class="cai-card-body">
         <span class="cai-card-tag">Actif</span>
@@ -1010,7 +921,7 @@
     <!-- SEO IA — SMALL -->
     <article class="cai-card b-sm cai-reveal" data-href="index.html#contact" tabindex="0" role="button" aria-label="Découvrir le Collaborateur SEO IA">
       <div class="cai-thumb grad-seo">
-        <img src="/public/images/collaborateurs/seo-ia.webp" alt="SEO IA" loading="lazy" decoding="async" width="68" height="68"/>
+        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=200&h=200&fit=crop&q=80&auto=format" alt="SEO IA" loading="lazy" decoding="async" width="200" height="200"/>
       </div>
       <div class="cai-card-body">
         <span class="cai-card-tag">Actif</span>
