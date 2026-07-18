@@ -563,6 +563,89 @@
 @media(max-width:480px){
   .at-cats-grid{grid-template-columns:1fr 1fr}
 }
+
+/* ── AUTOMATION LIBRARY CARDS (.alib-*) ──────────────────────── */
+.alib-card {
+  position:relative;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:18px;
+  padding:1.5rem;
+  cursor:pointer;
+  overflow:hidden;
+  transition:background .3s,border-color .3s,box-shadow .3s,transform .3s;
+  outline:none;
+  display:flex;flex-direction:column;
+  will-change:transform;
+}
+.alib-card::before {
+  content:'';position:absolute;inset:-1px;border-radius:inherit;padding:1px;
+  background:linear-gradient(135deg,rgba(0,102,255,.6),rgba(0,212,255,.3),transparent 55%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  opacity:0;transition:opacity .3s;pointer-events:none;
+}
+.alib-card:hover {
+  background:rgba(255,255,255,.075);
+  border-color:rgba(0,102,255,.38);
+  box-shadow:0 20px 60px rgba(0,102,255,.22),0 8px 24px rgba(0,102,255,.1);
+  transform:translateY(-8px);
+}
+.alib-card:hover::before{opacity:1}
+.alib-flow {
+  display:flex;align-items:center;gap:8px;margin-bottom:1.1rem;
+}
+.alib-app {
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.alib-app svg{fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.alib-connector {
+  flex:1;position:relative;height:2px;
+  background:linear-gradient(90deg,rgba(0,102,255,.3),rgba(0,212,255,.3));
+  overflow:hidden;border-radius:2px;min-width:20px;
+}
+.alib-dot {
+  position:absolute;top:-2px;left:-30%;
+  width:30%;height:6px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+  border-radius:3px;
+  animation:alib-flow 2s ease-in-out infinite;
+}
+@keyframes alib-flow{0%{left:-30%}100%{left:110%}}
+.alib-plus {
+  font-size:.7rem;font-weight:700;color:rgba(255,255,255,.35);flex-shrink:0;
+}
+.alib-body{flex:1;margin-bottom:.9rem}
+.alib-name{font-size:.88rem;font-weight:800;color:#fff;line-height:1.3;margin-bottom:.4rem}
+.alib-desc{font-size:.78rem;color:rgba(255,255,255,.45);line-height:1.65}
+.alib-sep{height:1px;background:rgba(255,255,255,.06);margin:0 0 .9rem}
+.alib-footer{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+.alib-time{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:.7rem;font-weight:600;color:rgba(255,255,255,.45);
+}
+.alib-time svg{width:12px;height:12px;stroke:var(--cyan);fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0}
+.alib-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:.72rem;font-weight:700;color:var(--cyan);
+  transition:gap .2s,color .2s;
+}
+.alib-btn svg{width:11px;height:11px;transition:transform .2s}
+.alib-card:hover .alib-btn{gap:8px;color:#fff}
+.alib-card:hover .alib-btn svg{transform:translateX(2px)}
+.alib-cat-badge{
+  position:absolute;top:14px;right:14px;
+  font-size:.57rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+  padding:3px 9px;border-radius:20px;
+}
+/* reveal */
+.alib-card.alib-reveal{opacity:0;transform:translateY(22px)}
+.alib-card.alib-reveal.alib-visible{
+  opacity:1;transform:translateY(0);
+  transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1);
+}
   </style>
 </head>
 <body>
@@ -749,129 +832,7 @@
       <p class="at-sec-desc">Les scénarios que nos clients activent en premier — parce qu'ils rapportent le plus vite.</p>
     </div>
 
-    <div class="at-pop-grid">
-
-      <!-- 1 -->
-      <article class="at-pop-card at-reveal"
-        data-cat="commercial"
-        data-keywords="formulaire contact crm email bienvenue lead commercial prospection"
-        onclick="location.href='index.html#contact'">
-        <span class="at-pop-badge hot">🔥 Populaire</span>
-        <div class="at-flow">
-          <div class="at-app c-form">
-            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-          </div>
-          <div class="at-arrow-wrap"></div>
-          <div class="at-app c-crm">
-            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-          </div>
-          <span class="at-flow-plus">+</span>
-          <div class="at-app c-email">
-            <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
-          </div>
-        </div>
-        <h3 class="at-pop-title">Formulaire contact → CRM + Email de bienvenue</h3>
-        <p class="at-pop-desc">Chaque visiteur qui remplit votre formulaire est automatiquement ajouté à votre CRM et reçoit un email personnalisé en moins de 30 secondes.</p>
-        <div class="at-pop-footer">
-          <span class="at-tag tag-com">Commercial</span>
-          <a href="index.html#contact" class="at-pop-link">
-            Activer cette automatisation
-            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg>
-          </a>
-        </div>
-      </article>
-
-      <!-- 2 -->
-      <article class="at-pop-card at-reveal"
-        data-cat="finance"
-        data-keywords="devis accepté facture automatique signature finance comptabilité"
-        onclick="location.href='index.html#contact'">
-        <span class="at-pop-badge star">⭐ Top</span>
-        <div class="at-flow">
-          <div class="at-app c-devis">
-            <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-          </div>
-          <div class="at-arrow-wrap"></div>
-          <div class="at-app c-facture">
-            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-          </div>
-          <span class="at-flow-plus">+</span>
-          <div class="at-app c-email">
-            <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
-          </div>
-        </div>
-        <h3 class="at-pop-title">Devis accepté → Facture générée + Envoi client</h3>
-        <p class="at-pop-desc">Votre client signe le devis — la facture est créée, numérotée et envoyée automatiquement. Zéro saisie manuelle, zéro délai.</p>
-        <div class="at-pop-footer">
-          <span class="at-tag tag-fin">Finance</span>
-          <a href="index.html#contact" class="at-pop-link">
-            Activer cette automatisation
-            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg>
-          </a>
-        </div>
-      </article>
-
-      <!-- 3 -->
-      <article class="at-pop-card at-reveal"
-        data-cat="commercial"
-        data-keywords="email entrant lead crm slack notification alerte commercial vente"
-        onclick="location.href='index.html#contact'">
-        <span class="at-pop-badge hot">🔥 Populaire</span>
-        <div class="at-flow">
-          <div class="at-app c-email">
-            <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
-          </div>
-          <div class="at-arrow-wrap"></div>
-          <div class="at-app c-crm">
-            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-          </div>
-          <span class="at-flow-plus">+</span>
-          <div class="at-app c-slack">
-            <svg viewBox="0 0 24 24"><path d="M22.08 9c-.44-1.44-1.8-2.19-3.18-1.81L17 7.77V5.5c0-1.5-1.12-2.69-2.5-2.5-1.38.19-2.5 1.38-2.5 2.5V9H9V5.5c0-1.5-1.12-2.69-2.5-2.5C5.12 3.19 4 4.38 4 5.5V9H1.92A1.92 1.92 0 000 10.92v.16C0 12.44.56 13.5 1.92 14H4v2.5c0 1.5 1.12 2.69 2.5 2.5 1.38-.19 2.5-1.38 2.5-2.5V14h3v2.5c0 1.5 1.12 2.69 2.5 2.5 1.38-.19 2.5-1.38 2.5-2.5V14h2.08C22.44 13.5 23 12.44 23 11.08v-.16A1.92 1.92 0 0022.08 9z"/></svg>
-          </div>
-        </div>
-        <h3 class="at-pop-title">Email commercial → Lead CRM + Alerte Slack</h3>
-        <p class="at-pop-desc">Chaque email d'un prospect potentiel crée automatiquement un lead dans votre CRM et notifie votre équipe commerciale en temps réel.</p>
-        <div class="at-pop-footer">
-          <span class="at-tag tag-com">Commercial</span>
-          <a href="index.html#contact" class="at-pop-link">
-            Activer cette automatisation
-            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg>
-          </a>
-        </div>
-      </article>
-
-      <!-- 4 -->
-      <article class="at-pop-card at-reveal"
-        data-cat="reporting"
-        data-keywords="lundi rapport hebdomadaire performance ventes kpi reporting equipe"
-        onclick="location.href='index.html#contact'">
-        <span class="at-pop-badge star">⭐ Recommandé</span>
-        <div class="at-flow">
-          <div class="at-app c-time">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          </div>
-          <div class="at-arrow-wrap"></div>
-          <div class="at-app c-rpt">
-            <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
-          </div>
-          <span class="at-flow-plus">+</span>
-          <div class="at-app c-email">
-            <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
-          </div>
-        </div>
-        <h3 class="at-pop-title">Chaque lundi 8h → Rapport de performance équipe</h3>
-        <p class="at-pop-desc">Le bilan commercial de la semaine écoulée — leads, devis, conversions — arrive dans votre boîte mail chaque lundi matin avant votre café.</p>
-        <div class="at-pop-footer">
-          <span class="at-tag tag-rpt">Reporting</span>
-          <a href="index.html#contact" class="at-pop-link">
-            Activer cette automatisation
-            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg>
-          </a>
-        </div>
-      </article>
-
-    </div>
+    <div id="pop-grid" class="at-pop-grid"></div>
   </div>
 </section>
 
@@ -886,249 +847,7 @@
       <p class="at-sec-desc">Filtrez par catégorie ou utilisez la recherche en haut de page pour trouver exactement ce qu'il vous faut.</p>
     </div>
 
-    <div class="at-grid" id="atGrid">
-
-      <!-- COMMERCIAL & VENTE -->
-      <article class="at-card at-reveal" data-cat="commercial" data-keywords="linkedin prospection sequence email commercial vente lead">
-        <div class="at-flow">
-          <div class="at-app sm c-li"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></div>
-          <div class="at-arrow-wrap"></div>
-          <div class="at-app sm c-email"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
-        </div>
-        <h4 class="at-card-title">LinkedIn prospect → Séquence emails</h4>
-        <p class="at-card-desc">Ajoutez un contact sur LinkedIn — une séquence d'emails personnalisés se déclenche automatiquement sur 7 jours.</p>
-        <div class="at-card-footer">
-          <span class="at-tag tag-com">Commercial</span>
-          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
-        </div>
-      </article>
-
-      <article class="at-card at-reveal" data-cat="commercial" data-keywords="appel manqué sms rappel agenda commercial relance">
-        <div class="at-flow">
-          <div class="at-app sm c-notif"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.06 1.22 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
-          <div class="at-arrow-wrap"></div>
-          <div class="at-app sm c-sms"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
-          <span class="at-flow-plus">+</span>
-          <div class="at-app sm c-cal"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-        </div>
-        <h4 class="at-card-title">Appel manqué → SMS + Rappel agenda</h4>
-        <p class="at-card-desc">Chaque appel sans réponse envoie un SMS au client et crée un rappel dans votre agenda pour un suivi le lendemain.</p>
-        <div class="at-card-footer">
-          <span class="at-tag tag-com">Commercial</span>
-          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
-        </div>
-      </article>
-
-      <article class="at-card at-reveal" data-cat="commercial" data-keywords="nouveau lead attribution commercial notification slack crm">
-        <div class="at-flow">
-          <div class="at-app sm c-form"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
-          <div class="at-arrow-wrap"></div>
-          <div class="at-app sm c-crm"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
-          <span class="at-flow-plus">+</span>
-          <div class="at-app sm c-slack"><svg viewBox="0 0 24 24"><path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"/><path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/><path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"/><path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"/><path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z"/><path d="M15.5 19H14v1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/><path d="M10 9.5C10 8.67 9.33 8 8.5 8h-5C2.67 8 2 8.67 2 9.5S2.67 11 3.5 11h5c.83 0 1.5-.67 1.5-1.5z"/><path d="M8.5 5H10V3.5C10 2.67 9.33 2 8.5 2S7 2.67 7 3.5 7.67 5 8.5 5z"/></svg></div>
-        </div>
-        <h4 class="at-card-title">Nouveau lead → Attribution + Notification équipe</h4>
-        <p class="at-card-desc">Chaque nouveau lead est assigné automatiquement au bon commercial selon les règles de routage et l'équipe est alertée instantanément.</p>
-        <div class="at-card-footer">
-          <span class="at-tag tag-com">Commercial</span>
-          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
-        </div>
-      </article>
-
-      <!-- FINANCE & DEVIS -->
-      <article class="at-card at-reveal" data-cat="finance" data-keywords="facture impayée relance automatique email finance comptabilité recouvrement">
-        <div class="at-flow">
-          <div class="at-app sm c-facture"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></div>
-          <div class="at-arrow-wrap"></div>
-          <div class="at-app sm c-email"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
-        </div>
-        <h4 class="at-card-title">Facture impayée → Relances J+15, J+30</h4>
-        <p class="at-card-desc">À J+15 puis J+30, vos clients reçoivent une relance courtoise et automatique par email. Sans que vous y pensiez.</p>
-        <div class="at-card-footer">
-          <span class="at-tag tag-fin">Finance</span>
-          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
-        </div>
-      </article>
-
-      <article class="at-card at-reveal" data-cat="finance" data-keywords="paiement reçu reçu crm confirmation finance stripe">
-        <div class="at-flow">
-          <div class="at-app sm c-notif"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
-          <div class="at-arrow-wrap"></div>
-          <div class="at-app sm c-email"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
-          <span class="at-flow-plus">+</span>
-          <div class="at-app sm c-crm"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
-        </div>
-        <h4 class="at-card-title">Paiement reçu → Reçu client + CRM mis à jour</h4>
-        <p class="at-card-desc">Chaque paiement confirmé envoie automatiquement un reçu au client et met à jour son dossier dans votre CRM.</p>
-        <div class="at-card-footer">
-          <span class="at-tag tag-fin">Finance</span>
-          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
-        </div>
-      </article>
-
-      <article class="at-card at-reveal" data-cat="finance" data-keywords="fin de mois exports comptables notification direction finance bilan">
-        <div class="at-flow">
-          <div class="at-app sm c-time"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-          <div class="at-arrow-wrap"></div>
-          <div class="at-app sm c-rpt"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg></div>
-          <span class="at-flow-plus">+</span>
-          <div class="at-app sm c-email"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
-        </div>
-        <h4 class="at-card-title">Fin de mois → Bilan financier automatique</h4>
-        <p class="at-card-desc">Le premier de chaque mois, un bilan financier synthétique (CA, encaissements, en attente) est généré et envoyé à la direction.</p>
-        <div class="at-card-footer">
-          <span class="at-tag tag-fin">Finance</span>
-          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
-        </div>
-      </article>
-
-      <!-- COMMUNICATION -->
-      <article class="at-card at-reveal" data-cat="communication" data-keywords="article blog linkedin newsletter publication communication marketing">
-        <div class="at-flow">
-          <div class="at-app sm c-blog"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
-          <div class="at-arrow-wrap"></div>
-          <div class="at-app sm c-li"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></div>
-          <span class="at-flow-plus">+</span>
-          <div class="at-app sm c-news"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
-        </div>
-        <h4 class="at-card-title">Nouvel article → LinkedIn + Newsletter</h4>
-        <p class="at-card-desc">Publiez sur votre site — l'article est automatiquement partagé sur LinkedIn et envoyé à vos abonnés newsletter.</p>
-        <div class="at-card-footer">
-          <span class="at-tag tag-com2">Communication</span>
-          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
-        </div>
-      </article>
-
-      <article class="at-card at-reveal" data-cat="communication" data-keywords="avis google notification réponse template communication réputation">
-        <div class="at-flow">
-          <div class="at-app sm c-goog"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-          <div class="at-arrow-wrap"></div>
-          <div class="at-app sm c-slack"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div>
-          <span class="at-flow-plus">+</span>
-          <div class="at-app sm c-email"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
-        </div>
-        <h4 class="at-card-title">Avis Google → Notif interne + Template réponse</h4>
-        <p class="at-card-desc">Chaque nouvel avis Google alerte votre équipe sur Slack et génère un template de réponse personnalisé prêt à publier.</p>
-        <div class="at-card-footer">
-          <span class="at-tag tag-com2">Communication</span>
-          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
-        </div>
-      </article>
-
-      <article class="at-card at-reveal" data-cat="communication" data-keywords="whatsapp message ticket support assignation communication client">
-        <div class="at-flow">
-          <div class="at-app sm c-wa"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></div>
-          <div class="at-arrow-wrap"></div>
-          <div class="at-app sm c-crm"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
-          <span class="at-flow-plus">+</span>
-          <div class="at-app sm c-notif"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div>
-        </div>
-        <h4 class="at-card-title">Message WhatsApp → Ticket + Assignation</h4>
-        <p class="at-card-desc">Chaque message WhatsApp entrant crée un ticket de support, l'assigne au bon interlocuteur et déclenche un accusé de réception.</p>
-        <div class="at-card-footer">
-          <span class="at-tag tag-com2">Communication</span>
-          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
-        </div>
-      </article>
-
-      <!-- RH & RECRUTEMENT -->
-      <article class="at-card at-reveal" data-cat="rh" data-keywords="candidature reçue email accusé entretien calendrier rh recrutement">
-        <div class="at-flow">
-          <div class="at-app sm c-cand"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg></div>
-          <div class="at-arrow-wrap"></div>
-          <div class="at-app sm c-email"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
-          <span class="at-flow-plus">+</span>
-          <div class="at-app sm c-cal"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-        </div>
-        <h4 class="at-card-title">Candidature → Email accusé + Créneau entretien</h4>
-        <p class="at-card-desc">Chaque candidature reçue génère un email professionnel d'accusé de réception et propose automatiquement des créneaux d'entretien.</p>
-        <div class="at-card-footer">
-          <span class="at-tag tag-rh">RH</span>
-          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
-        </div>
-      </article>
-
-      <article class="at-card at-reveal" data-cat="rh" data-keywords="onboarding nouveau collaborateur accès outils email bienvenue rh">
-        <div class="at-flow">
-          <div class="at-app sm c-crm"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
-          <div class="at-arrow-wrap"></div>
-          <div class="at-app sm c-notif"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
-          <span class="at-flow-plus">+</span>
-          <div class="at-app sm c-email"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
-        </div>
-        <h4 class="at-card-title">Nouveau collaborateur → Onboarding automatisé</h4>
-        <p class="at-card-desc">À l'arrivée d'un nouveau collaborateur : création des accès outils, envoi de l'email de bienvenue et checklist J1 au manager.</p>
-        <div class="at-card-footer">
-          <span class="at-tag tag-rh">RH</span>
-          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
-        </div>
-      </article>
-
-      <!-- REPORTING -->
-      <article class="at-card at-reveal" data-cat="reporting" data-keywords="soir résumé leads quotidien reporting journalier performance">
-        <div class="at-flow">
-          <div class="at-app sm c-time"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-          <div class="at-arrow-wrap"></div>
-          <div class="at-app sm c-rpt"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg></div>
-          <span class="at-flow-plus">+</span>
-          <div class="at-app sm c-slack"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div>
-        </div>
-        <h4 class="at-card-title">Chaque soir 18h → Résumé leads du jour</h4>
-        <p class="at-card-desc">En fin de journée, recevez automatiquement le résumé des leads entrants, des devis envoyés et des relances à prévoir.</p>
-        <div class="at-card-footer">
-          <span class="at-tag tag-rpt">Reporting</span>
-          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
-        </div>
-      </article>
-
-      <article class="at-card at-reveal" data-cat="reporting" data-keywords="fin de mois kpis direction tableau bord rapport mensuel reporting">
-        <div class="at-flow">
-          <div class="at-app sm c-time"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-          <div class="at-arrow-wrap"></div>
-          <div class="at-app sm c-rpt"><svg viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 118 2.83"/><path d="M22 12A10 10 0 0012 2v10z"/></svg></div>
-          <span class="at-flow-plus">+</span>
-          <div class="at-app sm c-email"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
-        </div>
-        <h4 class="at-card-title">Fin de mois → Rapport KPIs direction</h4>
-        <p class="at-card-desc">Vos indicateurs clés (CA, taux de conversion, coût d'acquisition) sont compilés et envoyés automatiquement à la direction.</p>
-        <div class="at-card-footer">
-          <span class="at-tag tag-rpt">Reporting</span>
-          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
-        </div>
-      </article>
-
-      <!-- SITE & E-COMMERCE -->
-      <article class="at-card at-reveal" data-cat="ecommerce" data-keywords="abandon panier email relance ecommerce site vente récupération">
-        <div class="at-flow">
-          <div class="at-app sm c-cart"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 001.95-1.57l1.65-8.42H6"/></svg></div>
-          <div class="at-arrow-wrap"></div>
-          <div class="at-app sm c-email"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
-        </div>
-        <h4 class="at-card-title">Abandon panier → Email relance J+1</h4>
-        <p class="at-card-desc">Un visiteur a failli acheter ? Il reçoit un email personnalisé 24h après avec un résumé de son panier et une offre de réassurance.</p>
-        <div class="at-card-footer">
-          <span class="at-tag tag-eco">E-commerce</span>
-          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
-        </div>
-      </article>
-
-      <article class="at-card at-reveal" data-cat="ecommerce" data-keywords="inscription newsletter séquence bienvenue email site abonné">
-        <div class="at-flow">
-          <div class="at-app sm c-form"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
-          <div class="at-arrow-wrap"></div>
-          <div class="at-app sm c-email"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
-        </div>
-        <h4 class="at-card-title">Inscription newsletter → Séquence bienvenue</h4>
-        <p class="at-card-desc">Chaque nouvel abonné reçoit automatiquement une séquence de 5 emails sur 10 jours qui présente vos services et crée la confiance.</p>
-        <div class="at-card-footer">
-          <span class="at-tag tag-eco">E-commerce</span>
-          <a href="index.html#contact" class="at-card-link">Activer <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></a>
-        </div>
-      </article>
-
-      <div id="atNoResults">Aucune automatisation ne correspond à votre recherche. <a href="index.html#contact" style="color:var(--cyan)">Demandez-nous une automatisation sur-mesure →</a></div>
-
-    </div>
+    <div id="all-grid" class="at-grid"></div>
   </div>
 </section>
 
@@ -1317,6 +1036,7 @@
   </div>
 </footer>
 
+<script src="js/automations.js"></script>
 <script>
 /* ── Canvas particles ── */
 (function(){
@@ -1375,62 +1095,6 @@
     if(!done) raf=requestAnimationFrame(tick);
   }
 })();
-
-/* ── Search + filter ── */
-const searchEl  = document.getElementById('atSearch');
-const clearEl   = document.getElementById('atClear');
-const allCards  = document.querySelectorAll('#atGrid .at-card, #automatisations .at-pop-card');
-const noResults = document.getElementById('atNoResults');
-
-function getActiveCat(){
-  return document.querySelector('.at-filter.active')?.dataset.cat || 'all';
-}
-
-function runFilter(){
-  const q   = searchEl.value.toLowerCase().trim();
-  const cat = getActiveCat();
-  let visible = 0;
-
-  allCards.forEach(card=>{
-    const kw  = (card.dataset.keywords||'').toLowerCase();
-    const cc  = card.dataset.cat || '';
-    const okQ = !q || kw.includes(q);
-    const okC = cat==='all' || cc===cat;
-    const show = okQ && okC;
-    card.style.display = show ? '' : 'none';
-    if(show) visible++;
-  });
-
-  if(noResults) noResults.style.display = visible ? 'none' : 'block';
-  clearEl.classList.toggle('show', q.length > 0);
-
-  if(q.length > 1){
-    const grid = document.getElementById('toutes');
-    if(grid) grid.scrollIntoView({behavior:'smooth', block:'start'});
-  }
-}
-
-searchEl.addEventListener('input', runFilter);
-clearEl.addEventListener('click',()=>{ searchEl.value=''; runFilter(); searchEl.focus(); });
-
-document.querySelectorAll('.at-filter').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    document.querySelectorAll('.at-filter').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    runFilter();
-    const sec = document.getElementById('automatisations');
-    if(sec) sec.scrollIntoView({behavior:'smooth'});
-  });
-});
-
-function filterByCat(cat){
-  document.querySelectorAll('.at-filter').forEach(b=>{
-    b.classList.toggle('active', b.dataset.cat===cat);
-  });
-  runFilter();
-  const sec = document.getElementById('automatisations');
-  if(sec) setTimeout(()=>sec.scrollIntoView({behavior:'smooth'}),80);
-}
 
 /* ── Scroll reveal ── */
 const revEls = document.querySelectorAll('.at-reveal');
