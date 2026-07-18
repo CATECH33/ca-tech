@@ -490,7 +490,7 @@ function renderCard(auto) {
   const colors = CATEGORY_COLORS[auto.category] || { bg: 'rgba(255,255,255,.1)', color: '#fff' };
 
   return `
-<article class="alib-card"
+<article class="alib-card alib-reveal"
   data-id="${auto.id}"
   data-cat="${auto.category}"
   data-keywords="${(auto.tags || []).join(' ')}"
@@ -647,7 +647,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const revObs = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) {
-        e.target.classList.add('visible');
+        e.target.classList.add('alib-visible');
         revObs.unobserve(e.target);
       }
     });
