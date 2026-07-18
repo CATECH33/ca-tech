@@ -32,9 +32,9 @@
   +   sec('hero',          'Accueil')
   +   sec('services',      'Services')
   +   '<li><a href="collaborateurs-ia.html">Collaborateurs IA</a></li>'
+  +   '<li><a href="automatisations.html">Automatisations</a></li>'
   +   sec('realisations',  'Réalisations')
   +   '<li><a href="tarifs.html">Tarifs</a></li>'
-  +   sec('notre-methode', 'Notre méthode')
   +   sec('a-propos',      'À propos')
   +   sec('contact',       'Contact')
   +   '<li><button class="btn-nav" onclick="location.href=\'' + devisHref + '\'">Demander un devis</button></li>'
@@ -52,9 +52,9 @@
     ml(isHome ? '#hero'         : 'index.html',                  'Accueil')
   + ml(isHome ? '#services'     : 'index.html#services',         'Services')
   + ml('collaborateurs-ia.html',                                  'Collaborateurs IA')
+  + ml('automatisations.html',                                    'Automatisations')
   + ml(isHome ? '#realisations' : 'index.html#realisations',     'Réalisations')
   + ml('tarifs.html',                                             'Tarifs')
-  + ml(isHome ? '#notre-methode': 'index.html#notre-methode',    'Notre méthode')
   + ml(isHome ? '#a-propos'     : 'index.html#a-propos',         'À propos')
   + ml(isHome ? '#contact'      : 'index.html#contact',          'Contact')
   + '<a href="' + devisHref + '" class="btn-mob" onclick="closeMob()">Demander un devis</a>';
@@ -64,6 +64,7 @@
   var activeMap = {
     '':                   null,              /* home : pas de lien de page */
     'collaborateurs-ia':  'a[href="collaborateurs-ia.html"]',
+    'automatisations':    'a[href="automatisations.html"]',
     'tarifs':             'a[href="tarifs.html"]',
   };
   /* pages dont le slug commence par un préfixe */
