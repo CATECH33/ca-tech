@@ -146,6 +146,66 @@ const APPS = {
     icon: `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h10M7 12h6M7 17h4"/></svg>`,
   },
 
+  gmail: {
+    label: 'Gmail',
+    color: '#EA4335',
+    icon: `<svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>`,
+  },
+
+  gcal: {
+    label: 'Google Calendar',
+    color: '#4285F4',
+    icon: `<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+  },
+
+  gforms: {
+    label: 'Google Forms',
+    color: '#7248B9',
+    icon: `<svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="14" y2="16"/></svg>`,
+  },
+
+  gsheets: {
+    label: 'Google Sheets',
+    color: '#0F9D58',
+    icon: `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="12" y1="3" x2="12" y2="21"/></svg>`,
+  },
+
+  gdrive: {
+    label: 'Google Drive',
+    color: '#4285F4',
+    icon: `<svg viewBox="0 0 24 24"><path d="M22 17H2a3 3 0 014-4l6-10 6 10a3 3 0 014 4z"/><line x1="6" y1="17" x2="18" y2="17"/></svg>`,
+  },
+
+  ai: {
+    label: 'Intelligence IA',
+    color: '#0066FF',
+    icon: `<svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
+  },
+
+  apify: {
+    label: 'Apify',
+    color: '#00C2B2',
+    icon: `<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/><circle cx="9" cy="16" r="1" fill="currentColor"/><circle cx="15" cy="16" r="1" fill="currentColor"/></svg>`,
+  },
+
+  outlook: {
+    label: 'Outlook',
+    color: '#0078D4',
+    icon: `<svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>`,
+  },
+
+  teams: {
+    label: 'Microsoft Teams',
+    color: '#5C2D91',
+    icon: `<svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>`,
+  },
+
+  hubspot: {
+    label: 'HubSpot',
+    color: '#FF7A59',
+    icon: `<svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>`,
+  },
+
 };
 
 /* ══════════════════════════════════════════════════════════════
@@ -432,6 +492,96 @@ const AUTOMATIONS = [
     tags: ['client', 'notion', 'projet', 'espace', 'slack', 'brief', 'onboarding client'],
   },
 
+  /* ── AUTOMATISATIONS DÉMO ─────────────────────────────────── */
+  {
+    id: 'gmail-calendar-slack',
+    name: 'Gmail → Calendar → Slack',
+    description: 'Chaque email contenant une date ou une invitation est automatiquement transformé en événement Google Calendar et notifié dans Slack.',
+    timeSaved: '3h / semaine',
+    category: 'communication',
+    apps: ['gmail', 'gcal', 'slack'],
+    popular: true,
+    href: 'auto-gmail-calendar-slack.html',
+    tags: ['gmail', 'calendar', 'slack', 'email', 'agenda', 'réunion', 'notification', 'communication', 'google'],
+  },
+  {
+    id: 'whatsapp-crm-email',
+    name: 'WhatsApp → CRM → Email',
+    description: 'Un prospect vous écrit sur WhatsApp ? En quelques secondes, il est ajouté au CRM et reçoit un email de bienvenue personnalisé.',
+    timeSaved: '2h / semaine',
+    category: 'commercial',
+    apps: ['wa', 'crm', 'email'],
+    popular: true,
+    href: 'auto-whatsapp-crm-email.html',
+    tags: ['whatsapp', 'crm', 'email', 'prospect', 'lead', 'commercial', 'bienvenue', 'message'],
+  },
+  {
+    id: 'forms-sheets-devis',
+    name: 'Google Forms → Sheets → Devis PDF',
+    description: 'Votre prospect remplit le formulaire. En moins de 5 minutes, un devis PDF professionnel est généré et envoyé automatiquement.',
+    timeSaved: '4h / semaine',
+    category: 'finance',
+    apps: ['gforms', 'gsheets', 'devis'],
+    popular: true,
+    href: 'auto-forms-sheets-devis.html',
+    tags: ['formulaire', 'google forms', 'sheets', 'devis', 'pdf', 'finance', 'automatique', 'calcul'],
+  },
+  {
+    id: 'linkedin-apify-crm',
+    name: 'LinkedIn → Apify → CRM + Email',
+    description: 'Définissez votre cible sur LinkedIn. Apify extrait les profils. Votre CRM est alimenté et un email de prospection part automatiquement.',
+    timeSaved: '5h / semaine',
+    category: 'commercial',
+    apps: ['li', 'apify', 'crm'],
+    popular: true,
+    href: 'auto-linkedin-apify-crm.html',
+    tags: ['linkedin', 'apify', 'crm', 'prospection', 'b2b', 'leads', 'scraping', 'email', 'commercial'],
+  },
+  {
+    id: 'stripe-facture-email',
+    name: 'Stripe → Facture PDF → Email',
+    description: 'Dès qu\'un paiement Stripe est confirmé, une facture conforme est générée et envoyée au client en quelques secondes — sans intervention.',
+    timeSaved: 'Instantané',
+    category: 'finance',
+    apps: ['stripe', 'facture', 'email'],
+    popular: true,
+    href: 'auto-stripe-facture-email.html',
+    tags: ['stripe', 'facture', 'pdf', 'paiement', 'email', 'finance', 'automatique', 'conformité'],
+  },
+  {
+    id: 'drive-ia-classement',
+    name: 'Google Drive → IA → Classement',
+    description: 'Chaque fichier déposé dans Drive est analysé par l\'IA, renommé selon vos conventions et classé dans le bon dossier automatiquement.',
+    timeSaved: '3h / semaine',
+    category: 'reporting',
+    apps: ['gdrive', 'ai', 'gsheets'],
+    popular: false,
+    href: 'auto-drive-ia-classement.html',
+    tags: ['google drive', 'ia', 'classement', 'documents', 'organisation', 'fichiers', 'archivage', 'reporting'],
+  },
+  {
+    id: 'outlook-teams-crm',
+    name: 'Outlook → Teams → CRM',
+    description: 'Les emails clients dans Outlook sont automatiquement détectés, notifiés dans Teams et enregistrés dans votre CRM — sans manipulation manuelle.',
+    timeSaved: '3h / semaine',
+    category: 'communication',
+    apps: ['outlook', 'teams', 'crm'],
+    popular: false,
+    href: 'auto-outlook-teams-crm.html',
+    tags: ['outlook', 'teams', 'crm', 'microsoft', 'email', 'notification', 'communication', 'suivi', '365'],
+  },
+  {
+    id: 'hubspot-slack-calendar',
+    name: 'HubSpot → Slack → Calendar',
+    description: 'Quand un deal change d\'étape dans HubSpot, votre équipe est alertée sur Slack et un suivi est automatiquement créé dans Google Calendar.',
+    timeSaved: '2h / semaine',
+    category: 'commercial',
+    apps: ['hubspot', 'slack', 'gcal'],
+    popular: false,
+    href: 'auto-hubspot-slack-calendar.html',
+    tags: ['hubspot', 'slack', 'calendar', 'crm', 'pipeline', 'deal', 'commercial', 'notification', 'vente'],
+  },
+
 ];
 
 /* ══════════════════════════════════════════════════════════════
@@ -488,6 +638,7 @@ function _flowRow(apps, size = 'md') {
 function renderCard(auto) {
   const cat    = CATEGORY_LABELS[auto.category] || auto.category;
   const colors = CATEGORY_COLORS[auto.category] || { bg: 'rgba(255,255,255,.1)', color: '#fff' };
+  const dest   = auto.href ? auto.href : 'index.html#contact';
 
   return `
 <article class="alib-card alib-reveal"
@@ -495,7 +646,7 @@ function renderCard(auto) {
   data-cat="${auto.category}"
   data-keywords="${(auto.tags || []).join(' ')}"
   data-popular="${auto.popular ? '1' : '0'}"
-  onclick="location.href='index.html#contact'"
+  onclick="location.href='${dest}'"
   tabindex="0"
   role="button"
   aria-label="${auto.name}">
@@ -515,7 +666,7 @@ function renderCard(auto) {
       ${auto.timeSaved}
     </div>
     <span class="alib-btn">
-      Découvrir
+      ${auto.href ? 'Voir la fiche' : 'Découvrir'}
       <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg>
     </span>
   </div>
@@ -555,7 +706,7 @@ function _initCardInteractions(root) {
     card.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        location.href = 'index.html#contact';
+        card.click();
       }
     });
   });
