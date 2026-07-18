@@ -128,3 +128,6 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,.06);padding
 @media(max-width:1024px){.lp-grid-3{grid-template-columns:1fr 1fr}}
 @media(max-width:768px){.lp-grid-2{grid-template-columns:1fr}.lp-hero-stats{gap:1.5rem}.f-top{grid-template-columns:1fr 1fr;gap:2rem}}
 @media(max-width:640px){.nav-links{display:none}.ham{display:flex}.f-top{grid-template-columns:1fr}.lp-grid-3{grid-template-columns:1fr}.lp-cta-btns{flex-direction:column;align-items:center}.lp-hero-ctas{flex-direction:column}}
+
+/* Section background images */
+.sec-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:blur(6px);transform:scale(1.12);z-index:0;pointer-events:none}

@@ -234,7 +234,8 @@
   .stat-lbl{font-size:.72rem;color:rgba(255,255,255,.55);font-weight:500;margin-top:.2rem}
 
   /* SERVICES */
-  #services{background:#fff;padding:110px 6%}
+  .sec-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:blur(6px);transform:scale(1.12);z-index:0;pointer-events:none}
+  #services{background:#fff;padding:110px 6%;position:relative;overflow:hidden}
   #services .section-label{color:var(--blue)}
   #services .section-label::before{background:linear-gradient(90deg,var(--blue),var(--cyan))}
   #services .section-title{color:var(--blue-dk)}
@@ -258,7 +259,7 @@
   @media(max-width:580px){.svc2-grid{grid-template-columns:1fr}#services{padding:80px 4%}}
 
   /* TESTIMONIALS */
-  #testimonials{background:var(--dark);padding:100px 5%}
+  #testimonials{background:var(--dark);padding:100px 5%;position:relative;overflow:hidden}
   .t-header{text-align:center;margin-bottom:3.5rem}
   .t-header .section-label{justify-content:center}
   .t-header .section-desc{margin:0 auto}
@@ -278,7 +279,7 @@
   .brand-dot{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:800;color:white}
 
   /* CONTACT */
-  #contact{background:var(--dark2);padding:100px 5%;position:relative}
+  #contact{background:var(--dark2);padding:100px 5%;position:relative;overflow:hidden}
   #contact::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent)}
   .contact-inner{display:grid;grid-template-columns:1fr 1fr;gap:4rem}
   .contact-form{display:flex;flex-direction:column;gap:1.2rem}
@@ -372,7 +373,7 @@
   .devis-success p{font-size:.88rem;color:var(--text3);line-height:1.7;margin-bottom:1.5rem}
 
   /* A PROPOS */
-  #a-propos{background:var(--dark);padding:110px 5%;position:relative}
+  #a-propos{background:var(--dark);padding:110px 5%;position:relative;overflow:hidden}
   #a-propos::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,102,255,.4),transparent)}
   .apropos-inner{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center}
   .apropos-since{display:inline-block;font-size:.68rem;color:rgba(255,255,255,.28);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:1.4rem}
@@ -406,7 +407,7 @@
   .f-zones-text{font-size:.68rem;color:rgba(255,255,255,.22);line-height:1.5;margin-top:.5rem;text-transform:none;letter-spacing:0}
 
   /* ZONES D'INTERVENTION */
-  #zones{background:var(--dark2);padding:100px 5%;position:relative}
+  #zones{background:var(--dark2);padding:100px 5%;position:relative;overflow:hidden}
   #zones::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent)}
   .zones-inner{max-width:1200px;margin:0 auto}
   .zones-header{text-align:center;margin-bottom:3.5rem}
@@ -471,7 +472,7 @@
   }
 
   /* ── TARIFS ──────────────────────────────────────────────────────── */
-  #tarifs{background:#f8fafc;padding:110px 6%}
+  #tarifs{background:#f8fafc;padding:110px 6%;position:relative;overflow:hidden}
   .tarifs-hd{text-align:center;margin-bottom:4rem}
   .tarifs-hd-label{display:inline-flex;align-items:center;gap:8px;font-size:.68rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--blue);margin-bottom:.8rem}
   .tarifs-hd-label::before{content:'';width:24px;height:2px;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:2px}
@@ -502,7 +503,7 @@
   @media(max-width:768px){.tarifs-grid-home{grid-template-columns:1fr}}
 
   /* ── NOS RÉALISATIONS ─────────────────────────────────────────── */
-  #realisations{background:#fff;padding:120px 6%;position:relative}
+  #realisations{background:#fff;padding:120px 6%;position:relative;overflow:hidden}
   #realisations .section-label{color:var(--blue)}
   #realisations .section-label::before{background:linear-gradient(90deg,var(--blue),var(--cyan))}
   #realisations .section-title{color:var(--blue-dk)}
@@ -646,6 +647,7 @@
 
 <!-- SERVICES -->
 <section id="services">
+  <div class="sec-bg" style="background-image:url('https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1600&h=900&fit=crop&q=60&auto=format');opacity:.07" aria-hidden="true"></div>
   <div class="svc2-header">
     <p class="section-label reveal">Nos Services</p>
     <h2 class="section-title reveal d1">Ce que nous créons<br>pour vous</h2>
@@ -736,6 +738,7 @@
 
 <!-- TESTIMONIALS -->
 <section id="testimonials">
+  <div class="sec-bg" style="background-image:url('https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1600&h=900&fit=crop&q=60&auto=format');opacity:.10" aria-hidden="true"></div>
   <div class="t-header"><p class="section-label reveal">Témoignages</p><h2 class="section-title reveal d1">Ce que disent nos clients</h2><p class="section-desc reveal d2">Des partenariats qui durent, des résultats qui parlent.</p></div>
   <div class="t-grid">
     <div class="t-card reveal d1"><div class="t-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p class="t-text">"CA-TECH a transformé notre présence en ligne. Notre site génère 3× plus de demandes de devis. Équipe ultra-réactive."</p><div class="t-author"><img class="t-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&q=80&fit=crop&crop=face" alt="Sophie M."/><div><div class="t-name">Sophie M.</div><div class="t-role">Directrice, PME Services — Paris</div></div></div></div>
@@ -753,6 +756,7 @@
 
 <!-- NOS RÉALISATIONS -->
 <section id="realisations">
+  <div class="sec-bg" style="background-image:url('https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=1600&h=900&fit=crop&q=60&auto=format');opacity:.06" aria-hidden="true"></div>
   <div class="real-header reveal">
     <p class="section-label">Réalisations</p>
     <h2 class="section-title">Nos réalisations</h2>
@@ -837,6 +841,7 @@
 
 <!-- TARIFS -->
 <section id="tarifs">
+  <div class="sec-bg" style="background-image:url('https://images.unsplash.com/photo-1553484771-047a44eee27b?w=1600&h=900&fit=crop&q=60&auto=format');opacity:.07" aria-hidden="true"></div>
   <div class="tarifs-hd">
     <p class="tarifs-hd-label reveal">Nos Offres & Tarifs</p>
     <h2 class="tarifs-hd-title reveal d1">Nos Offres & Tarifs</h2>
@@ -934,6 +939,7 @@
 
 <!-- A PROPOS -->
 <section id="a-propos">
+  <div class="sec-bg" style="background-image:url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&h=900&fit=crop&q=60&auto=format');opacity:.14" aria-hidden="true"></div>
   <div class="apropos-inner">
     <div class="reveal-l">
       <span class="apropos-since">Fondée en <strong>2013</strong> · Agence Web & Design</span>
@@ -975,6 +981,7 @@
 
 <!-- ZONES D'INTERVENTION -->
 <section id="zones">
+  <div class="sec-bg" style="background-image:url('https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1600&h=900&fit=crop&q=60&auto=format');opacity:.12" aria-hidden="true"></div>
   <div class="zones-inner">
     <div class="zones-header">
       <p class="section-label reveal" style="justify-content:center">SEO Local</p>
@@ -1024,6 +1031,7 @@
 
 <!-- CONTACT -->
 <section id="contact">
+  <div class="sec-bg" style="background-image:url('https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=1600&h=900&fit=crop&q=60&auto=format');opacity:.10" aria-hidden="true"></div>
   <div class="contact-inner">
     <div class="reveal-l">
       <p class="section-label">Contact</p>
