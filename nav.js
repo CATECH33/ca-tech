@@ -31,6 +31,7 @@
   + '<ul class="nav-links">'
   +   sec('hero',          'Accueil')
   +   sec('services',      'Services')
+  +   '<li><a href="solutions.html">Solutions</a></li>'
   +   '<li><a href="collaborateurs-ia.html">Collaborateurs IA</a></li>'
   +   '<li><a href="automatisations.html">Automatisations</a></li>'
   +   sec('realisations',  'Réalisations')
@@ -51,6 +52,7 @@
   mob.innerHTML =
     ml(isHome ? '#hero'         : 'index.html',                  'Accueil')
   + ml(isHome ? '#services'     : 'index.html#services',         'Services')
+  + ml('solutions.html',                                           'Solutions')
   + ml('collaborateurs-ia.html',                                  'Collaborateurs IA')
   + ml('automatisations.html',                                    'Automatisations')
   + ml(isHome ? '#realisations' : 'index.html#realisations',     'Réalisations')
@@ -63,6 +65,7 @@
   /* Correspondance slug → sélecteur dans la nav desktop */
   var activeMap = {
     '':                   null,              /* home : pas de lien de page */
+    'solutions':          'a[href="solutions.html"]',
     'collaborateurs-ia':  'a[href="collaborateurs-ia.html"]',
     'automatisations':    'a[href="automatisations.html"]',
     'tarifs':             'a[href="tarifs.html"]',
