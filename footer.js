@@ -134,6 +134,7 @@
     +   ci(iconLi,    '<a href="#">LinkedIn CA-TECH</a>')
     +   ci(iconWa,    '<a href="#" onclick="if(window.trackWhatsApp)trackWhatsApp()">WhatsApp</a>')
     +   '<ul style="margin-top:1.2rem">'
+    +     '<li><a href="/solutions.html">Solutions</a></li>'
     +     '<li><a href="/tarifs.html">Tarifs</a></li>'
     +     '<li><a href="/faq.html">FAQ</a></li>'
     +     '<li><a href="/mentions-legales.html">Mentions légales</a></li>'
