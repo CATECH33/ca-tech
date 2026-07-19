@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Catalogue Solutions — CA-TECH | IA, Automatisations, Web</title>
+  <meta name="description" content="Explorez notre catalogue de 27 solutions : collaborateurs IA, automatisations, création web, développement sur mesure. Filtrez par ROI, budget, délai de mise en place."/>
+  <link rel="canonical" href="https://ca-tech.fr/catalogue"/>
+  <meta property="og:title" content="Catalogue Solutions — CA-TECH"/>
+  <meta property="og:description" content="27 solutions prêtes à déployer pour accélérer votre entreprise. Filtrez, comparez, choisissez."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://ca-tech.fr/catalogue"/>
+  <meta property="og:locale" content="fr_FR"/>
+  <meta property="og:site_name" content="CA-TECH"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="local-seo.css"/>
+  <link rel="icon" type="image/x-icon" href="/public/favicon.ico"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png"/>
+  <meta name="theme-color" content="#0066FF"/>
+  <style>
+
+/* ── RESET & BASE ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--dark:#020b18;--blue:#0066FF;--blue-dk:#0A2540;--cyan:#38bdf8}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:#F8FAFC;color:#0A2540;overflow-x:hidden}
+img{display:block;max-width:100%}
+
+/* ── HERO ── */
+.cat-hero{
+  background:linear-gradient(160deg,#010a16 0%,#020d1f 55%,#050f1e 100%);
+  padding:160px 6% 90px;
+  position:relative;overflow:hidden;
+}
+.cat-hero::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 65% 55% at 70% 40%,rgba(0,102,255,.13) 0%,transparent 65%),
+    radial-gradient(ellipse 40% 40% at 20% 80%,rgba(56,189,248,.07) 0%,transparent 60%);
+  pointer-events:none;
+}
+/* subtle grid */
+.cat-hero::after{
+  content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(0,102,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,102,255,.03) 1px,transparent 1px);
+  background-size:48px 48px;
+  pointer-events:none;mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.6) 40%,transparent 100%);
+}
+.cat-hero-inner{max-width:680px;position:relative;z-index:1}
+.cat-hero-label{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:.68rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--blue);margin-bottom:1.3rem;
+}
+.cat-hero-label::before{
+  content:'';display:block;width:22px;height:2px;
+  background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:2px;
+}
+.cat-hero-h1{
+  font-size:clamp(2.4rem,5vw,3.9rem);font-weight:900;color:#fff;
+  letter-spacing:-.04em;line-height:1.07;margin-bottom:1.25rem;
+}
+.cat-hero-h1 em{
+  font-style:normal;
+  background:linear-gradient(135deg,var(--blue) 0%,var(--cyan) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.cat-hero-p{
+  font-size:1rem;color:rgba(255,255,255,.48);max-width:500px;line-height:1.78;margin-bottom:2.8rem;
+}
+.cat-hero-stats{display:flex;gap:2.5rem;flex-wrap:wrap;padding-top:.5rem}
+.cat-hero-stat{border-left:1px solid rgba(255,255,255,.08);padding-left:1.5rem}
+.cat-hero-stat:first-child{border-left:none;padding-left:0}
+.cat-hero-stat-n{
+  font-size:2rem;font-weight:800;font-family:'Rajdhani',sans-serif;
+  color:#fff;line-height:1;letter-spacing:-.02em;
+}
+.cat-hero-stat-l{font-size:.7rem;color:rgba(255,255,255,.32);letter-spacing:.5px;margin-top:5px}
+
+/* ── FILTER BAR ── */
+.cat-filter{
+  position:sticky;top:72px;z-index:90;
+  background:#fff;
+  border-bottom:1px solid rgba(15,23,42,.08);
+  box-shadow:0 2px 16px rgba(0,0,0,.05);
+  padding:14px 6%;
+}
+.cat-filter-row{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap}
+
+.cat-search-wrap{position:relative;flex:1;min-width:200px;max-width:300px}
+.cat-search-icon{
+  position:absolute;left:12px;top:50%;transform:translateY(-50%);
+  width:14px;height:14px;stroke:rgba(15,23,42,.35);fill:none;stroke-width:2;stroke-linecap:round;
+  pointer-events:none;
+}
+.cat-search{
+  width:100%;padding:9px 14px 9px 35px;
+  border:1px solid rgba(15,23,42,.1);border-radius:10px;
+  font-size:.82rem;font-family:'Inter',sans-serif;
+  background:#F8FAFC;color:#0A2540;outline:none;
+  transition:border-color .2s,box-shadow .2s,background .2s;
+}
+.cat-search:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,102,255,.1);background:#fff}
+.cat-search::placeholder{color:rgba(15,23,42,.32)}
+
+.cat-pills{display:flex;gap:.4rem;flex-wrap:wrap}
+.cat-pill{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:7px 13px;
+  border:1px solid rgba(15,23,42,.1);border-radius:20px;
+  font-size:.74rem;font-weight:600;color:rgba(15,23,42,.5);
+  background:transparent;cursor:pointer;
+  transition:all .2s;font-family:'Inter',sans-serif;white-space:nowrap;
+}
+.cat-pill:hover{border-color:rgba(0,102,255,.3);color:var(--blue)}
+.cat-pill.active{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 2px 12px rgba(0,102,255,.25)}
+.cat-pill .pc{
+  background:rgba(0,0,0,.1);border-radius:8px;padding:1px 7px;font-size:.67rem;line-height:1.6;
+}
+.cat-pill.active .pc{background:rgba(255,255,255,.22)}
+
+.cat-sort{
+  margin-left:auto;padding:8px 12px;
+  border:1px solid rgba(15,23,42,.1);border-radius:10px;
+  font-size:.78rem;font-family:'Inter',sans-serif;color:#0A2540;
+  background:#fff;cursor:pointer;outline:none;
+  transition:border-color .2s;
+}
+.cat-sort:focus{border-color:var(--blue)}
+
+.cat-results-bar{
+  font-size:.73rem;color:rgba(15,23,42,.38);font-weight:500;
+  padding:8px 0 0;letter-spacing:.2px;
+}
+
+/* ── MAIN ── */
+.cat-main{padding:0 6% 100px}
+
+/* ── GRID ── */
+.cat-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.4rem;
+  padding-top:28px;
+}
+
+/* ── CARD ── */
+.cat-card{
+  background:#fff;
+  border:1px solid rgba(15,23,42,.07);
+  border-radius:18px;
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:transform .38s cubic-bezier(.16,1,.3,1),box-shadow .38s cubic-bezier(.16,1,.3,1),border-color .25s;
+  position:relative;
+}
+.cat-card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 20px 56px rgba(0,0,0,.09),0 0 0 1px color-mix(in srgb,var(--cc,#0066FF) 20%,transparent);
+  border-color:color-mix(in srgb,var(--cc,#0066FF) 25%,transparent);
+}
+
+.cat-card-img{position:relative;overflow:hidden;aspect-ratio:16/9;flex-shrink:0}
+.cat-card-img img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.16,1,.3,1)}
+.cat-card:hover .cat-card-img img{transform:scale(1.07)}
+.cat-img-ov{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.04) 25%,rgba(0,0,0,.55) 100%);
+  z-index:1;pointer-events:none;
+}
+
+/* Badge */
+.cat-badge{
+  position:absolute;top:11px;left:11px;z-index:2;
+  font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:4px 10px;border-radius:20px;color:#fff;
+}
+.cat-badge.populaire{background:linear-gradient(135deg,#0066FF,#38bdf8)}
+.cat-badge.nouveau{background:linear-gradient(135deg,#22C55E,#16A34A)}
+
+/* Logo icon */
+.cat-logo{
+  position:absolute;bottom:11px;right:11px;z-index:2;
+  width:36px;height:36px;border-radius:9px;
+  background:var(--cc,#0066FF);
+  box-shadow:0 3px 10px rgba(0,0,0,.32);
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .35s cubic-bezier(.16,1,.3,1);
+}
+.cat-card:hover .cat-logo{transform:scale(1.12) rotate(-5deg)}
+.cat-logo svg{width:17px;height:17px;stroke:#fff;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+
+/* Body */
+.cat-body{padding:1.15rem 1.2rem 1.3rem;display:flex;flex-direction:column;flex:1}
+.cat-meta{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.6rem}
+.cat-cat-lbl{font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--cc,#0066FF)}
+.cat-diff{font-size:.63rem;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.diff-starter{color:#166534;background:#DCFCE7;border:1px solid #86EFAC}
+.diff-pro{color:#92400E;background:#FEF3C7;border:1px solid #FCD34D}
+.diff-expert{color:#991B1B;background:#FEE2E2;border:1px solid #FCA5A5}
+
+.cat-title{font-size:.98rem;font-weight:800;color:#0A2540;letter-spacing:-.2px;margin-bottom:.35rem;line-height:1.3}
+.cat-desc{
+  font-size:.78rem;color:#64748b;line-height:1.65;margin-bottom:1rem;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;flex-shrink:0;
+}
+
+/* Metrics */
+.cat-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem;margin-bottom:1.15rem}
+.cat-metric{
+  background:#F8FAFC;border:1px solid rgba(15,23,42,.055);
+  border-radius:9px;padding:8px 4px;text-align:center;
+}
+.cat-metric-v{
+  font-size:.9rem;font-weight:800;color:#0A2540;
+  font-family:'Rajdhani',sans-serif;line-height:1;
+}
+.cat-metric-l{font-size:.57rem;color:#94A3B8;font-weight:500;margin-top:3px;letter-spacing:.3px;text-transform:uppercase}
+
+/* Card footer */
+.cat-foot{
+  display:flex;align-items:center;justify-content:space-between;gap:.5rem;
+  margin-top:auto;padding-top:.9rem;
+  border-top:1px solid rgba(15,23,42,.06);
+}
+.cat-price-wrap{}
+.cat-price{font-size:.85rem;font-weight:800;color:#0A2540;white-space:nowrap;line-height:1.2}
+.cat-price-sub{font-size:.68rem;font-weight:400;color:#94A3B8}
+.cat-cta-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:.76rem;font-weight:700;
+  color:var(--cc,#0066FF);
+  background:color-mix(in srgb,var(--cc,#0066FF) 7%,transparent);
+  border:1px solid color-mix(in srgb,var(--cc,#0066FF) 15%,transparent);
+  border-radius:8px;padding:8px 14px;
+  text-decoration:none;
+  transition:background .2s,gap .2s,border-color .2s;
+  font-family:'Inter',sans-serif;white-space:nowrap;cursor:pointer;
+}
+.cat-cta-btn:hover,.cat-card:hover .cat-cta-btn{
+  background:color-mix(in srgb,var(--cc,#0066FF) 14%,transparent);
+  border-color:color-mix(in srgb,var(--cc,#0066FF) 28%,transparent);
+  gap:8px;
+}
+
+/* Empty state */
+.cat-empty{
+  grid-column:1/-1;text-align:center;padding:80px 20px;display:none;
+}
+.cat-empty.show{display:block}
+.cat-empty svg{width:48px;height:48px;stroke:#CBD5E1;fill:none;margin:0 auto 16px}
+.cat-empty-t{font-size:1rem;font-weight:600;color:#94A3B8;margin-bottom:.4rem}
+.cat-empty-p{font-size:.82rem;color:#CBD5E1}
+
+/* ── CTA SECTION ── */
+.cat-cta-sec{
+  background:linear-gradient(160deg,#010a16 0%,#020d1f 100%);
+  padding:110px 6%;text-align:center;position:relative;overflow:hidden;
+}
+.cat-cta-sec::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 55% 65% at 50% 110%,rgba(0,102,255,.16) 0%,transparent 65%);
+}
+.cat-cta-sec>*{position:relative;z-index:1}
+.cat-cta-lbl{
+  font-size:.68rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--blue);margin-bottom:1.2rem;display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.cat-cta-lbl::before,.cat-cta-lbl::after{
+  content:'';display:block;width:22px;height:2px;
+  background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:2px;
+}
+.cat-cta-h2{
+  font-size:clamp(1.9rem,4vw,3.1rem);font-weight:900;color:#fff;
+  letter-spacing:-.03em;margin-bottom:1rem;line-height:1.1;
+}
+.cat-cta-p{
+  font-size:.95rem;color:rgba(255,255,255,.42);max-width:460px;
+  margin:0 auto 2.6rem;line-height:1.75;
+}
+.cat-cta-btns{display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap}
+.btn-prim{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:15px 32px;border-radius:12px;
+  background:var(--blue);color:#fff;border:none;
+  font-size:.92rem;font-weight:700;text-decoration:none;font-family:'Inter',sans-serif;
+  transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s;cursor:pointer;
+}
+.btn-prim:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(0,102,255,.38)}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:15px 32px;border-radius:12px;
+  border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.65);
+  font-size:.92rem;font-weight:600;text-decoration:none;
+  transition:border-color .2s,color .2s;
+}
+.btn-ghost:hover{border-color:rgba(255,255,255,.4);color:#fff}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){.cat-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:720px){
+  .cat-grid{grid-template-columns:1fr}
+  .cat-filter{top:62px;padding:12px 4%}
+  .cat-search-wrap{max-width:none;min-width:0;flex:1}
+  .cat-sort{display:none}
+  .cat-main{padding:0 4% 80px}
+  .cat-hero{padding:140px 4% 75px}
+  .cat-hero-stats{gap:1.5rem}
+  .cat-cta-sec{padding:80px 4%}
+}
+@media(max-width:480px){
+  .cat-pills .cat-pill:not(.active):not([data-cat="tous"]){display:none}
+}
+
+  </style>
+</head>
+<body>
+
+<nav id="nav"></nav>
+<div class="mob-menu" id="mob"></div>
+
+<!-- ══ HERO ══════════════════════════════════════════════════════ -->
+<section class="cat-hero">
+  <div class="cat-hero-inner">
+    <p class="cat-hero-label">Bibliothèque de solutions</p>
+    <h1 class="cat-hero-h1">Le catalogue<br><em>CA-TECH.</em></h1>
+    <p class="cat-hero-p">27 solutions prêtes à déployer. Collaborateurs IA, automatisations, web et développement sur mesure — filtrez, comparez, choisissez.</p>
+    <div class="cat-hero-stats">
+      <div class="cat-hero-stat">
+        <div class="cat-hero-stat-n">27</div>
+        <div class="cat-hero-stat-l">Solutions disponibles</div>
+      </div>
+      <div class="cat-hero-stat">
+        <div class="cat-hero-stat-n">48h</div>
+        <div class="cat-hero-stat-l">Mise en place min.</div>
+      </div>
+      <div class="cat-hero-stat">
+        <div class="cat-hero-stat-n">5×</div>
+        <div class="cat-hero-stat-l">ROI médian</div>
+      </div>
+      <div class="cat-hero-stat">
+        <div class="cat-hero-stat-n">290€</div>
+        <div class="cat-hero-stat-l">À partir de /mois</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FILTER BAR ══════════════════════════════════════════════════ -->
+<div class="cat-filter" id="catFilter">
+  <div class="cat-filter-row">
+    <div class="cat-search-wrap">
+      <svg class="cat-search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="cat-search" id="catSearch" type="text" placeholder="Rechercher une solution…" autocomplete="off" spellcheck="false"/>
+    </div>
+    <div class="cat-pills" id="catPills">
+      <button class="cat-pill active" data-cat="tous">Tous <span class="pc">27</span></button>
+      <button class="cat-pill" data-cat="ia">Collaborateurs IA <span class="pc">6</span></button>
+      <button class="cat-pill" data-cat="automatisation">Automatisations <span class="pc">19</span></button>
+      <button class="cat-pill" data-cat="web">Création Web <span class="pc">1</span></button>
+      <button class="cat-pill" data-cat="dev">Développement <span class="pc">1</span></button>
+    </div>
+    <select class="cat-sort" id="catSort">
+      <option value="populaire">⭐ Populaire</option>
+      <option value="roi">📈 Meilleur ROI</option>
+      <option value="setup">⚡ Mise en place rapide</option>
+      <option value="prix-asc">💰 Prix croissant</option>
+    </select>
+  </div>
+  <div class="cat-results-bar" id="catResults">27 solutions disponibles</div>
+</div>
+
+<!-- ══ MAIN ══════════════════════════════════════════════════════ -->
+<main class="cat-main">
+  <div class="cat-grid" id="catGrid">
+    <div class="cat-empty" id="catEmpty">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <p class="cat-empty-t">Aucune solution trouvée</p>
+      <p class="cat-empty-p">Essayez d'autres mots-clés ou réinitialisez les filtres.</p>
+    </div>
+  </div>
+</main>
+
+<!-- ══ CTA ══════════════════════════════════════════════════════ -->
+<section class="cat-cta-sec">
+  <p class="cat-cta-lbl">Vous ne trouvez pas ?</p>
+  <h2 class="cat-cta-h2">On développe sur mesure.</h2>
+  <p class="cat-cta-p">Votre besoin est unique ? Décrivez-le en 2 minutes. On vous propose une solution adaptée sous 24h, sans engagement.</p>
+  <div class="cat-cta-btns">
+    <a href="index.html#contact" class="btn-prim">Obtenir un audit gratuit →</a>
+    <a href="solutions.html" class="btn-ghost">Voir nos solutions</a>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══════════════════════════════════════════════════════ -->
+<footer></footer>
+
+<!-- ══ SCRIPTS ══════════════════════════════════════════════════════ -->
+<script src="nav.js"></script>
+<script src="footer.js"></script>
+<script>
+(function(){
+'use strict';
+
+/* ────────────────────────────────────────────
+   SVG icons per category slug
+──────────────────────────────────────────── */
+var ICONS = {
+  ia:             '<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/>',
+  automatisation: '<polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+  web:            '<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>',
+  dev:            '<polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/>',
+};
+
+/* ────────────────────────────────────────────
+   Solutions data
+──────────────────────────────────────────── */
+var DATA = [
+
+  /* ── Collaborateurs IA ── */
+  {titre:'Assistant Commercial IA', cat:'Collaborateurs IA', slug:'ia', cc:'#6366F1',
+   diff:'Starter', setup:'48h', roi:'3×', eco:'25h/sem', prix:'dès 290€', sub:'/mois',
+   desc:'Qualifie, relance et convertit vos prospects 24h/24, sans congés ni oublis.',
+   img:'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/collaborateurs-ia.html#commercial', badge:'populaire', ordre:1, roiN:3, prixN:290},
+
+  {titre:'Support Client IA', cat:'Collaborateurs IA', slug:'ia', cc:'#6366F1',
+   diff:'Starter', setup:'48h', roi:'4×', eco:'30h/sem', prix:'dès 290€', sub:'/mois',
+   desc:'Répond instantanément sur tous les canaux. Taux de satisfaction client +40%.',
+   img:'https://images.unsplash.com/photo-1596524430615-b46475ddff6e?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/collaborateurs-ia.html#support', badge:'populaire', ordre:2, roiN:4, prixN:290},
+
+  {titre:'Assistant RH', cat:'Collaborateurs IA', slug:'ia', cc:'#8B5CF6',
+   diff:'Starter', setup:'72h', roi:'2.5×', eco:'20h/sem', prix:'dès 290€', sub:'/mois',
+   desc:'Gère les candidatures, planifie les entretiens et automatise l\'onboarding.',
+   img:'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/collaborateurs-ia.html#rh', badge:null, ordre:3, roiN:2.5, prixN:290},
+
+  {titre:'Assistant Juridique', cat:'Collaborateurs IA', slug:'ia', cc:'#7C3AED',
+   diff:'Pro', setup:'5j', roi:'5×', eco:'15h/sem', prix:'dès 390€', sub:'/mois',
+   desc:'Rédige, analyse et surveille vos contrats. Alertes RGPD, conformité, veille réglementaire.',
+   img:'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/collaborateurs-ia.html#juridique', badge:null, ordre:4, roiN:5, prixN:390},
+
+  {titre:'SEO IA', cat:'Collaborateurs IA', slug:'ia', cc:'#6366F1',
+   diff:'Starter', setup:'72h', roi:'3×', eco:'20h/sem', prix:'dès 290€', sub:'/mois',
+   desc:'Produit du contenu optimisé, analyse vos positions et soumet des corrections techniques en continu.',
+   img:'https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/collaborateurs-ia.html#seo', badge:null, ordre:5, roiN:3, prixN:290},
+
+  {titre:'Comptable IA', cat:'Collaborateurs IA', slug:'ia', cc:'#6366F1',
+   diff:'Pro', setup:'5j', roi:'3×', eco:'18h/sem', prix:'dès 290€', sub:'/mois',
+   desc:'Saisit les pièces comptables, génère les rapports et déclenche les alertes de trésorerie.',
+   img:'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/collaborateurs-ia.html#comptable', badge:null, ordre:6, roiN:3, prixN:290},
+
+  /* ── Automatisations — Prospection ── */
+  {titre:'Qualification des leads', cat:'Automatisations', slug:'automatisation', cc:'#0EA5E9',
+   diff:'Pro', setup:'2j', roi:'5×', eco:'10h/sem', prix:'dès 590€', sub:'',
+   desc:'Score chaque lead entrant et déclenche la bonne séquence en temps réel.',
+   img:'https://images.unsplash.com/photo-1552664730-d307ca884978?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/automatisations.html?cat=commercial', badge:null, ordre:7, roiN:5, prixN:590},
+
+  {titre:'Réponse automatique emails', cat:'Automatisations', slug:'automatisation', cc:'#0EA5E9',
+   diff:'Starter', setup:'1j', roi:'4×', eco:'8h/sem', prix:'dès 390€', sub:'',
+   desc:'Trie, catégorise et répond à vos emails entrants. Réponse en moins de 5 minutes.',
+   img:'https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/automatisations.html', badge:null, ordre:8, roiN:4, prixN:390},
+
+  {titre:'Lead Generation LinkedIn', cat:'Automatisations', slug:'automatisation', cc:'#0266B4',
+   diff:'Pro', setup:'3j', roi:'6×', eco:'10h/sem', prix:'dès 590€', sub:'',
+   desc:'Identifie, contacte et nourrit automatiquement vos prospects LinkedIn avec des messages personnalisés.',
+   img:'https://images.unsplash.com/photo-1611944212129-29977ae1398c?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/automatisations.html?cat=commercial', badge:'populaire', ordre:9, roiN:6, prixN:590},
+
+  {titre:'Relance prospects', cat:'Automatisations', slug:'automatisation', cc:'#0EA5E9',
+   diff:'Starter', setup:'2j', roi:'5×', eco:'6h/sem', prix:'dès 390€', sub:'',
+   desc:'Séquences de relance multi-canal (email + WhatsApp) déclenchées selon le comportement prospect.',
+   img:'https://images.unsplash.com/photo-1560472355-109703aa3edc?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/automatisations.html?cat=commercial', badge:null, ordre:10, roiN:5, prixN:390},
+
+  /* ── Automatisations — Finance ── */
+  {titre:'Facturation automatique', cat:'Automatisations', slug:'automatisation', cc:'#10B981',
+   diff:'Pro', setup:'3j', roi:'6×', eco:'8h/sem', prix:'dès 590€', sub:'',
+   desc:'Génère et envoie vos factures dès qu\'un contrat est signé ou un jalon atteint.',
+   img:'https://images.unsplash.com/photo-1554224154-26032ffc0d07?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/automatisations.html', badge:'populaire', ordre:11, roiN:6, prixN:590},
+
+  {titre:'Signature électronique', cat:'Automatisations', slug:'automatisation', cc:'#10B981',
+   diff:'Starter', setup:'1j', roi:'4×', eco:'3h/sem', prix:'dès 290€', sub:'',
+   desc:'Envoi, signature et archivage de vos contrats en 3 clics. Compatible DocuSign, YouSign.',
+   img:'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/automatisations.html', badge:null, ordre:12, roiN:4, prixN:290},
+
+  {titre:'Relance factures impayées', cat:'Automatisations', slug:'automatisation', cc:'#10B981',
+   diff:'Starter', setup:'1j', roi:'8×', eco:'5h/sem', prix:'dès 390€', sub:'',
+   desc:'Séquences de relance J+3, J+7, J+15, J+30 par email et SMS. Recouvrement +65%.',
+   img:'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/automatisations.html', badge:null, ordre:13, roiN:8, prixN:390},
+
+  {titre:'Rapport financier automatique', cat:'Automatisations', slug:'automatisation', cc:'#10B981',
+   diff:'Pro', setup:'3j', roi:'4×', eco:'7h/sem', prix:'dès 490€', sub:'',
+   desc:'Consolide vos données bancaires, comptables et commerciales en un rapport PDF hebdomadaire.',
+   img:'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/automatisations.html?cat=reporting', badge:null, ordre:14, roiN:4, prixN:490},
+
+  /* ── Automatisations — Opérations ── */
+  {titre:'Synchro Google Workspace', cat:'Automatisations', slug:'automatisation', cc:'#0066FF',
+   diff:'Starter', setup:'2j', roi:'3×', eco:'5h/sem', prix:'dès 490€', sub:'',
+   desc:'Gmail, Calendar, Drive, Sheets — connectés à votre CRM. Zéro copier-coller.',
+   img:'https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/automatisations.html', badge:null, ordre:15, roiN:3, prixN:490},
+
+  {titre:'Synchro Microsoft 365', cat:'Automatisations', slug:'automatisation', cc:'#0066FF',
+   diff:'Starter', setup:'2j', roi:'3×', eco:'5h/sem', prix:'dès 490€', sub:'',
+   desc:'Outlook, Teams, SharePoint, OneDrive — intégrés nativement à vos outils métier.',
+   img:'https://images.unsplash.com/photo-1633419461186-7d40a38105ec?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/automatisations.html', badge:null, ordre:16, roiN:3, prixN:490},
+
+  {titre:'Onboarding client automatisé', cat:'Automatisations', slug:'automatisation', cc:'#0EA5E9',
+   diff:'Pro', setup:'3j', roi:'4×', eco:'8h/sem', prix:'dès 490€', sub:'',
+   desc:'Accueil, signature, création de compte, envoi de ressources — déclenché automatiquement à la signature.',
+   img:'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/automatisations.html', badge:null, ordre:17, roiN:4, prixN:490},
+
+  {titre:'Suivi SAV', cat:'Automatisations', slug:'automatisation', cc:'#0EA5E9',
+   diff:'Pro', setup:'3j', roi:'4×', eco:'12h/sem', prix:'dès 490€', sub:'',
+   desc:'Ticketing, escalade, relances et clôture automatiques. CSAT envoyé à chaque résolution.',
+   img:'https://images.unsplash.com/photo-1534536281715-e28d76689b4d?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/automatisations.html', badge:null, ordre:18, roiN:4, prixN:490},
+
+  {titre:'Gestion des contrats', cat:'Automatisations', slug:'automatisation', cc:'#0EA5E9',
+   diff:'Expert', setup:'4j', roi:'5×', eco:'10h/sem', prix:'dès 590€', sub:'',
+   desc:'Création, envoi, suivi, alertes d\'échéance et archivage automatique de tous vos contrats.',
+   img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/automatisations.html', badge:null, ordre:19, roiN:5, prixN:590},
+
+  /* ── Automatisations — Marketing ── */
+  {titre:'Publication réseaux sociaux', cat:'Automatisations', slug:'automatisation', cc:'#EC4899',
+   diff:'Starter', setup:'2j', roi:'3×', eco:'8h/sem', prix:'dès 490€', sub:'',
+   desc:'Planification, visuels et publication automatique sur LinkedIn, Instagram, Facebook, X.',
+   img:'https://images.unsplash.com/photo-1562577309-4932fdd64cd1?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/automatisations.html', badge:'populaire', ordre:20, roiN:3, prixN:490},
+
+  {titre:'Gestion avis Google', cat:'Automatisations', slug:'automatisation', cc:'#EC4899',
+   diff:'Starter', setup:'1j', roi:'4×', eco:'4h/sem', prix:'dès 390€', sub:'',
+   desc:'Sollicite, modère et répond automatiquement à vos avis Google. Note moyenne +0.8 en 60 jours.',
+   img:'https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/automatisations.html', badge:null, ordre:21, roiN:4, prixN:390},
+
+  {titre:'Newsletter automatique', cat:'Automatisations', slug:'automatisation', cc:'#EC4899',
+   diff:'Starter', setup:'2j', roi:'3×', eco:'6h/sem', prix:'dès 390€', sub:'',
+   desc:'Votre newsletter rédigée par IA, segmentée et envoyée au bon moment selon le profil abonné.',
+   img:'https://images.unsplash.com/photo-1526628953301-3cd9bc2dcc7c?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/automatisations.html', badge:null, ordre:22, roiN:3, prixN:390},
+
+  /* ── Automatisations — Reporting ── */
+  {titre:'Tableau de bord KPI', cat:'Automatisations', slug:'automatisation', cc:'#F59E0B',
+   diff:'Expert', setup:'5j', roi:'5×', eco:'10h/sem', prix:'dès 690€', sub:'',
+   desc:'Toutes vos métriques business en temps réel dans un seul dashboard — commercial, finance, ops, marketing.',
+   img:'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/automatisations.html?cat=reporting', badge:'nouveau', ordre:23, roiN:5, prixN:690},
+
+  {titre:'Synchro CRM HubSpot', cat:'Automatisations', slug:'automatisation', cc:'#F59E0B',
+   diff:'Pro', setup:'3j', roi:'5×', eco:'8h/sem', prix:'dès 590€', sub:'',
+   desc:'HubSpot connecté à tous vos outils : formulaires, emails, site, agenda — sans ressaisie manuelle.',
+   img:'https://images.unsplash.com/photo-1551434678-e076c223a692?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/automatisations.html', badge:null, ordre:24, roiN:5, prixN:590},
+
+  {titre:'Rapport commercial auto', cat:'Automatisations', slug:'automatisation', cc:'#F59E0B',
+   diff:'Pro', setup:'3j', roi:'3×', eco:'7h/sem', prix:'dès 490€', sub:'',
+   desc:'CA, pipeline, taux de conversion — rapport PDF envoyé chaque semaine à votre direction.',
+   img:'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/automatisations.html?cat=reporting', badge:null, ordre:25, roiN:3, prixN:490},
+
+  /* ── Création Web ── */
+  {titre:'Site vitrine premium', cat:'Création Web', slug:'web', cc:'#0066FF',
+   diff:'Starter', setup:'5j', roi:'2×', eco:'—', prix:'dès 1 490€', sub:'',
+   desc:'Site professionnel 5 pages, mobile-first, SEO-ready. Livré en 5 jours avec formation incluse.',
+   img:'https://images.unsplash.com/photo-1547658719-da2b51169166?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/creation-site-vitrine.html', badge:null, ordre:26, roiN:2, prixN:1490},
+
+  /* ── Développement ── */
+  {titre:'Dashboard sur mesure', cat:'Développement', slug:'dev', cc:'#F59E0B',
+   diff:'Expert', setup:'10j', roi:'6×', eco:'15h/sem', prix:'dès 2 900€', sub:'',
+   desc:'Application web connectée à vos données internes. Visualisation temps réel, accès multi-utilisateurs.',
+   img:'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=640&h=360&fit=crop&q=80&auto=format',
+   lien:'/solutions.html', badge:'nouveau', ordre:27, roiN:6, prixN:2900},
+];
+
+/* ────────────────────────────────────────────
+   State
+──────────────────────────────────────────── */
+var state = { cat:'tous', q:'', sort:'populaire' };
+
+/* ────────────────────────────────────────────
+   Helpers
+──────────────────────────────────────────── */
+function icon(slug){
+  return '<svg viewBox="0 0 24 24">' + (ICONS[slug]||ICONS.ia) + '</svg>';
+}
+function diffCls(d){
+  return d==='Starter'?'diff-starter':d==='Pro'?'diff-pro':'diff-expert';
+}
+function badge(b){
+  if (!b) return '';
+  return '<span class="cat-badge ' + b + '">' + (b==='populaire'?'⭐ Populaire':'✨ Nouveau') + '</span>';
+}
+
+/* ────────────────────────────────────────────
+   Setup sort helper
+──────────────────────────────────────────── */
+var SETUP_ORDER = {'48h':0.2,'72h':0.3,'1j':1,'2j':2,'3j':3,'4j':4,'5j':5,'10j':10};
+
+/* ────────────────────────────────────────────
+   Card template
+──────────────────────────────────────────── */
+function card(s){
+  return [
+    '<div class="cat-card" style="--cc:' + s.cc + '" data-slug="' + s.slug + '">',
+      '<div class="cat-card-img">',
+        '<img src="' + s.img + '" alt="' + s.titre + '" loading="lazy"/>',
+        '<div class="cat-img-ov"></div>',
+        badge(s.badge),
+        '<div class="cat-logo">' + icon(s.slug) + '</div>',
+      '</div>',
+      '<div class="cat-body">',
+        '<div class="cat-meta">',
+          '<span class="cat-cat-lbl">' + s.cat + '</span>',
+          '<span class="cat-diff ' + diffCls(s.diff) + '">' + s.diff + '</span>',
+        '</div>',
+        '<h3 class="cat-title">' + s.titre + '</h3>',
+        '<p class="cat-desc">' + s.desc + '</p>',
+        '<div class="cat-metrics">',
+          '<div class="cat-metric"><div class="cat-metric-v">' + s.setup + '</div><div class="cat-metric-l">Mise en place</div></div>',
+          '<div class="cat-metric"><div class="cat-metric-v">' + s.roi + '</div><div class="cat-metric-l">ROI estimé</div></div>',
+          '<div class="cat-metric"><div class="cat-metric-v">' + s.eco + '</div><div class="cat-metric-l">Économies</div></div>',
+        '</div>',
+        '<div class="cat-foot">',
+          '<div class="cat-price-wrap">',
+            '<div class="cat-price">' + s.prix + '</div>',
+            (s.sub ? '<div class="cat-price-sub">' + s.sub + '</div>' : ''),
+          '</div>',
+          '<a href="' + s.lien + '" class="cat-cta-btn">Voir la solution →</a>',
+        '</div>',
+      '</div>',
+    '</div>',
+  ].join('');
+}
+
+/* ────────────────────────────────────────────
+   Render
+──────────────────────────────────────────── */
+function render(){
+  var grid  = document.getElementById('catGrid');
+  var empty = document.getElementById('catEmpty');
+  var res   = document.getElementById('catResults');
+
+  /* filter */
+  var q = state.q.toLowerCase().trim();
+  var filtered = DATA.filter(function(s){
+    var catOk    = state.cat === 'tous' || s.slug === state.cat;
+    var searchOk = !q || s.titre.toLowerCase().indexOf(q) > -1
+                     || s.cat.toLowerCase().indexOf(q) > -1
+                     || s.desc.toLowerCase().indexOf(q) > -1;
+    return catOk && searchOk;
+  });
+
+  /* sort */
+  filtered = filtered.slice().sort(function(a,b){
+    if (state.sort === 'roi')      return b.roiN - a.roiN;
+    if (state.sort === 'prix-asc') return a.prixN - b.prixN;
+    if (state.sort === 'setup')    return (SETUP_ORDER[a.setup]||99) - (SETUP_ORDER[b.setup]||99);
+    /* populaire: badge first then ordre */
+    var ab = a.badge ? 0 : 1, bb = b.badge ? 0 : 1;
+    if (ab !== bb) return ab - bb;
+    return a.ordre - b.ordre;
+  });
+
+  /* count */
+  var n = filtered.length;
+  if (res) res.textContent = n + ' solution' + (n > 1 ? 's' : '') + ' disponible' + (n > 1 ? 's' : '');
+
+  /* remove old cards */
+  var old = grid.querySelectorAll('.cat-card');
+  old.forEach(function(c){ c.remove(); });
+
+  if (n === 0){
+    empty.classList.add('show');
+    return;
+  }
+  empty.classList.remove('show');
+
+  /* render & stagger reveal */
+  var frag = document.createElement('div');
+  frag.innerHTML = filtered.map(card).join('');
+  var cards = Array.from(frag.children);
+  cards.forEach(function(c, i){
+    c.style.opacity = '0';
+    c.style.transform = 'translateY(18px)';
+    c.style.transition = 'opacity .4s cubic-bezier(.16,1,.3,1) ' + Math.min(i*0.055, 0.38) + 's,'
+                       + 'transform .4s cubic-bezier(.16,1,.3,1) ' + Math.min(i*0.055, 0.38) + 's';
+    grid.appendChild(c);
+    /* trigger */
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        c.style.opacity = '1';
+        c.style.transform = 'translateY(0)';
+      });
+    });
+  });
+}
+
+/* ────────────────────────────────────────────
+   Events
+──────────────────────────────────────────── */
+/* Category pills */
+var pills = document.querySelectorAll('#catPills .cat-pill');
+pills.forEach(function(pill){
+  pill.addEventListener('click', function(){
+    pills.forEach(function(p){ p.classList.remove('active'); });
+    pill.classList.add('active');
+    state.cat = pill.dataset.cat;
+    render();
+  });
+});
+
+/* Search */
+var searchEl = document.getElementById('catSearch');
+if (searchEl){
+  var searchTimer;
+  searchEl.addEventListener('input', function(){
+    clearTimeout(searchTimer);
+    var val = this.value;
+    searchTimer = setTimeout(function(){
+      state.q = val;
+      render();
+    }, 180);
+  });
+}
+
+/* Sort */
+var sortEl = document.getElementById('catSort');
+if (sortEl){
+  sortEl.addEventListener('change', function(){
+    state.sort = this.value;
+    render();
+  });
+}
+
+/* Initial render */
+render();
+
+})();
+</script>
+
+</body>
+</html>
