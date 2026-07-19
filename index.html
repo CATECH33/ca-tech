@@ -241,23 +241,30 @@
   #services .section-title{color:var(--blue-dk)}
   #services .section-desc{color:#64748b}
   .svc2-header{margin-bottom:4.5rem}
-  .svc2-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem}
-  .svc2-card{background:#fff;border:1px solid rgba(10,37,64,.07);border-radius:20px;overflow:hidden;position:relative;box-shadow:0 1px 3px rgba(0,0,0,.04),0 6px 20px rgba(0,0,0,.05),0 1px 0 #fff inset;transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s cubic-bezier(.16,1,.3,1),border-color .3s}
-  .svc2-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.95) 50%,transparent);pointer-events:none;z-index:2}
-  .svc2-card:hover{transform:translateY(-8px);border-color:rgba(0,102,255,.18);box-shadow:0 2px 8px rgba(0,0,0,.05),0 16px 48px rgba(0,102,255,.10),0 1px 0 #fff inset}
-  .svc2-img{position:relative;overflow:hidden;aspect-ratio:3/2}
-  .svc2-img img{width:100%;height:100%;object-fit:cover;transition:transform .65s cubic-bezier(.16,1,.3,1)}
-  .svc2-card:hover .svc2-img img{transform:scale(1.06)}
-  .svc2-body{padding:1.6rem 1.8rem 2rem}
-  .svc2-cat{font-size:.62rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--blue);margin-bottom:.65rem}
-  .svc2-title{font-size:1.1rem;font-weight:800;color:var(--blue-dk);margin-bottom:.6rem;letter-spacing:-.2px}
-  .svc2-desc{font-size:.82rem;color:#64748b;line-height:1.7;margin-bottom:1.2rem}
-  .svc2-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.4rem}
-  .svc2-tag{font-size:.64rem;font-weight:600;color:var(--blue);background:rgba(0,102,255,.06);border:1px solid rgba(0,102,255,.12);border-radius:20px;padding:4px 11px;letter-spacing:.3px}
-  .svc2-cta{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:700;color:var(--blue-dk);background:none;border:none;cursor:pointer;padding:0;font-family:inherit;transition:color .25s,gap .25s}
-  .svc2-cta:hover{color:var(--blue);gap:10px}
-  @media(max-width:960px){.svc2-grid{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:580px){.svc2-grid{grid-template-columns:1fr}#services{padding:80px 4%}}
+  /* ── 4 Univers ── */
+  .univ-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2rem;max-width:1200px;margin:0 auto}
+  .univ-card{background:#fff;border:1px solid rgba(10,37,64,.07);border-radius:24px;overflow:hidden;position:relative;box-shadow:0 1px 3px rgba(0,0,0,.04),0 8px 28px rgba(0,0,0,.07);transition:transform .45s cubic-bezier(.16,1,.3,1),box-shadow .45s cubic-bezier(.16,1,.3,1);cursor:pointer}
+  .univ-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--uc,#0066FF);z-index:3;transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(.16,1,.3,1)}
+  .univ-card:hover{transform:translateY(-12px);box-shadow:0 2px 8px rgba(0,0,0,.04),0 28px 72px color-mix(in srgb,var(--uc,#0066FF) 16%,transparent)}
+  .univ-card:hover::before{transform:scaleX(1)}
+  .univ-img{position:relative;overflow:hidden;aspect-ratio:16/10}
+  .univ-img img{width:100%;height:100%;object-fit:cover;transition:transform .65s cubic-bezier(.16,1,.3,1)}
+  .univ-card:hover .univ-img img{transform:scale(1.06)}
+  .univ-img-ov{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(0,0,0,.52) 100%);z-index:1;pointer-events:none}
+  .univ-num{position:absolute;top:14px;right:16px;z-index:2;font-family:'Rajdhani',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,.75);background:rgba(0,0,0,.28);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.15);padding:4px 13px;border-radius:20px}
+  .univ-icon-wrap{position:absolute;bottom:-22px;left:26px;z-index:4;width:50px;height:50px;border-radius:15px;background:var(--uc,#0066FF);box-shadow:0 6px 20px color-mix(in srgb,var(--uc,#0066FF) 38%,transparent);display:flex;align-items:center;justify-content:center;transition:transform .4s cubic-bezier(.16,1,.3,1)}
+  .univ-card:hover .univ-icon-wrap{transform:scale(1.1) rotate(-5deg)}
+  .univ-icon-wrap svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .univ-body{padding:2.2rem 1.8rem 2rem}
+  .univ-title{font-size:1.3rem;font-weight:800;color:var(--blue-dk);letter-spacing:-.3px;margin-bottom:.55rem}
+  .univ-desc{font-size:.83rem;color:#64748b;line-height:1.72;margin-bottom:1.25rem}
+  .univ-subs{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1.6rem;max-height:80px;overflow:hidden;position:relative}
+  .univ-subs::after{content:'';position:absolute;bottom:0;left:0;right:0;height:28px;background:linear-gradient(transparent,#fff);pointer-events:none}
+  .univ-sub{font-size:.64rem;font-weight:600;color:var(--uc,#0066FF);background:color-mix(in srgb,var(--uc,#0066FF) 7%,transparent);border:1px solid color-mix(in srgb,var(--uc,#0066FF) 14%,transparent);border-radius:20px;padding:4px 11px;letter-spacing:.2px;white-space:nowrap}
+  .univ-cta{display:inline-flex;align-items:center;gap:7px;font-size:.82rem;font-weight:700;color:var(--uc,#0066FF);background:color-mix(in srgb,var(--uc,#0066FF) 6%,transparent);border:1px solid color-mix(in srgb,var(--uc,#0066FF) 16%,transparent);border-radius:10px;padding:11px 22px;text-decoration:none;transition:background .25s,gap .25s;font-family:inherit;cursor:pointer}
+  .univ-cta:hover,.univ-card:hover .univ-cta{background:color-mix(in srgb,var(--uc,#0066FF) 12%,transparent);gap:11px}
+  @media(max-width:960px){.univ-grid{grid-template-columns:1fr;gap:1.4rem}}
+  @media(max-width:580px){#services{padding:80px 4%}.univ-body{padding:2rem 1.4rem 1.6rem}}
 
   /* TESTIMONIALS */
   #testimonials{background:var(--dark);padding:100px 5%;position:relative;overflow:hidden}
@@ -652,120 +659,131 @@
 
 <!-- SERVICES -->
 <section id="services">
-  <div class="sec-bg" style="background-image:url('https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1600&h=900&fit=crop&q=60&auto=format');opacity:.07" aria-hidden="true"></div>
+  <div class="sec-bg" style="background-image:url('https://images.unsplash.com/photo-1618477247222-acbdb0e159b3?w=1600&h=900&fit=crop&q=60&auto=format');opacity:.05" aria-hidden="true"></div>
   <div class="svc2-header">
-    <p class="section-label reveal">Ce que vous gagnez</p>
-    <h2 class="section-title reveal d1">Votre entreprise,<br><em style="font-style:normal;background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">accélérée.</em></h2>
-    <p class="section-desc reveal d2">Chaque prestation a un seul objectif : que vous gagniez plus de clients, perdiez moins de temps, et grandissiez sans friction.</p>
+    <p class="section-label reveal">Notre expertise</p>
+    <h2 class="section-title reveal d1">4 univers.<br><em style="font-style:normal;background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Un seul partenaire.</em></h2>
+    <p class="section-desc reveal d2">Du site web aux collaborateurs IA, des automatisations au développement sur mesure — tout ce dont votre entreprise a besoin pour accélérer, au même endroit.</p>
   </div>
-  <div class="svc2-grid">
 
-    <div class="svc2-card reveal d1">
-      <div class="svc2-img">
-        <img src="public/services/site-vitrine.jpg.png" alt="Site vitrine" loading="lazy"/>
+  <div class="univ-grid">
+
+    <!-- ── 01 Création Web ── -->
+    <div class="univ-card reveal d1" style="--uc:#0066FF">
+      <div class="univ-img">
+        <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&h=500&fit=crop&q=80&auto=format" alt="Création Web" loading="lazy"/>
+        <div class="univ-img-ov"></div>
+        <span class="univ-num">01</span>
       </div>
-      <div class="svc2-body">
-        <p class="svc2-cat">Web · 01</p>
-        <h3 class="svc2-title">Site Vitrine</h3>
-        <p class="svc2-desc">Vos prospects arrivent sur votre site. Ils repartent clients. Un site conçu pour convertir, pas seulement pour exister en ligne.</p>
-        <div class="svc2-tags"><span class="svc2-tag">Design sur mesure</span><span class="svc2-tag">SEO optimisé</span><span class="svc2-tag">Mobile first</span></div>
-        <button class="svc2-cta" onclick="openDevis()">Démarrer mon projet →</button>
+      <div class="univ-icon-wrap">
+        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </div>
+      <div class="univ-body">
+        <h3 class="univ-title">Création Web</h3>
+        <p class="univ-desc">Des sites qui convertissent, pas seulement qui existent. De la vitrine au e-commerce, chaque pixel travaille pour votre chiffre d'affaires.</p>
+        <div class="univ-subs">
+          <span class="univ-sub">Site vitrine</span>
+          <span class="univ-sub">Site e-commerce</span>
+          <span class="univ-sub">Landing Page</span>
+          <span class="univ-sub">Refonte</span>
+          <span class="univ-sub">Maintenance</span>
+        </div>
+        <a href="/creation-site-vitrine.html" class="univ-cta">Voir nos créations →</a>
       </div>
     </div>
 
-    <div class="svc2-card reveal d2">
-      <div class="svc2-img">
-        <img src="public/services/ecommerce.jpg.png" alt="Site e-commerce" loading="lazy"/>
+    <!-- ── 02 Collaborateurs IA ── -->
+    <div class="univ-card reveal d2" style="--uc:#6366F1">
+      <div class="univ-img">
+        <img src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&h=500&fit=crop&q=80&auto=format" alt="Collaborateurs IA" loading="lazy"/>
+        <div class="univ-img-ov"></div>
+        <span class="univ-num">02</span>
       </div>
-      <div class="svc2-body">
-        <p class="svc2-cat">Web · 02</p>
-        <h3 class="svc2-title">Site E-commerce</h3>
-        <p class="svc2-desc">Votre boutique vend pendant que vous dormez. Chaque étape du tunnel optimisée pour maximiser vos revenus dès l'ouverture.</p>
-        <div class="svc2-tags"><span class="svc2-tag">Tunnel optimisé</span><span class="svc2-tag">Paiement sécurisé</span><span class="svc2-tag">Gestion stocks</span></div>
-        <button class="svc2-cta" onclick="openDevis()">Démarrer mon projet →</button>
+      <div class="univ-icon-wrap">
+        <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
       </div>
-    </div>
-
-    <div class="svc2-card reveal d3">
-      <div class="svc2-img">
-        <img src="public/services/landing-page.jpg.png" alt="Landing page" loading="lazy"/>
-      </div>
-      <div class="svc2-body">
-        <p class="svc2-cat">Web · 03</p>
-        <h3 class="svc2-title">Landing Page</h3>
-        <p class="svc2-desc">Un seul objectif : transformer le clic en signature. Taux de conversion optimisé, message calibré, résultat mesurable.</p>
-        <div class="svc2-tags"><span class="svc2-tag">Copywriting</span><span class="svc2-tag">Haute conversion</span><span class="svc2-tag">Google Ads</span></div>
-        <button class="svc2-cta" onclick="openDevis()">Démarrer mon projet →</button>
-      </div>
-    </div>
-
-    <div class="svc2-card reveal d4">
-      <div class="svc2-img">
-        <img src="public/services/logo-design.jpg.png" alt="Création de logo" loading="lazy"/>
-      </div>
-      <div class="svc2-body">
-        <p class="svc2-cat">Design · 04</p>
-        <h3 class="svc2-title">Création de Logo</h3>
-        <p class="svc2-desc">Vos clients vous reconnaissent avant même que vous parliez. Une signature visuelle forte qui traverse les années.</p>
-        <div class="svc2-tags"><span class="svc2-tag">100% sur mesure</span><span class="svc2-tag">Fichiers vectoriels</span><span class="svc2-tag">Plusieurs concepts</span></div>
-        <button class="svc2-cta" onclick="openDevis()">Démarrer mon projet →</button>
+      <div class="univ-body">
+        <h3 class="univ-title">Collaborateurs IA</h3>
+        <p class="univ-desc">Des agents IA dédiés à votre entreprise. Ils gèrent, relancent, répondent et analysent — pendant que vous vous concentrez sur l'essentiel.</p>
+        <div class="univ-subs">
+          <span class="univ-sub">Commercial IA</span>
+          <span class="univ-sub">Support IA</span>
+          <span class="univ-sub">RH IA</span>
+          <span class="univ-sub">Juridique IA</span>
+          <span class="univ-sub">SEO IA</span>
+          <span class="univ-sub">Comptable IA</span>
+        </div>
+        <a href="/collaborateurs-ia.html" class="univ-cta">Rencontrer l'équipe →</a>
       </div>
     </div>
 
-    <div class="svc2-card reveal d5">
-      <div class="svc2-img">
-        <img src="public/services/branding.jpg.png" alt="Identité visuelle" loading="lazy"/>
+    <!-- ── 03 Automatisations ── -->
+    <div class="univ-card reveal d3" style="--uc:#0EA5E9">
+      <div class="univ-img">
+        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=500&fit=crop&q=80&auto=format" alt="Automatisations" loading="lazy"/>
+        <div class="univ-img-ov"></div>
+        <span class="univ-num">03</span>
       </div>
-      <div class="svc2-body">
-        <p class="svc2-cat">Design · 05</p>
-        <h3 class="svc2-title">Identité Visuelle</h3>
-        <p class="svc2-desc">Votre marque inspire confiance du premier regard. Une cohérence visuelle qui rassure vos prospects et fidélise vos clients.</p>
-        <div class="svc2-tags"><span class="svc2-tag">Logo & couleurs</span><span class="svc2-tag">Guide de marque</span><span class="svc2-tag">Print & digital</span></div>
-        <button class="svc2-cta" onclick="openDevis()">Démarrer mon projet →</button>
+      <div class="univ-icon-wrap">
+        <svg viewBox="0 0 24 24"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      </div>
+      <div class="univ-body">
+        <h3 class="univ-title">Automatisations</h3>
+        <p class="univ-desc">15 heures récupérées chaque semaine. Vos outils connectés, vos processus automatisés. Vous faites ce que l'IA ne peut pas faire.</p>
+        <div class="univ-subs">
+          <span class="univ-sub">Google Workspace</span>
+          <span class="univ-sub">Gmail</span>
+          <span class="univ-sub">WhatsApp</span>
+          <span class="univ-sub">Slack</span>
+          <span class="univ-sub">Microsoft 365</span>
+          <span class="univ-sub">HubSpot</span>
+          <span class="univ-sub">CRM</span>
+          <span class="univ-sub">ERP</span>
+          <span class="univ-sub">Shopify</span>
+          <span class="univ-sub">WooCommerce</span>
+          <span class="univ-sub">Stripe</span>
+          <span class="univ-sub">Notion</span>
+          <span class="univ-sub">Airtable</span>
+          <span class="univ-sub">Calendly</span>
+          <span class="univ-sub">Facebook</span>
+          <span class="univ-sub">Instagram</span>
+          <span class="univ-sub">LinkedIn</span>
+          <span class="univ-sub">Telegram</span>
+          <span class="univ-sub">Discord</span>
+          <span class="univ-sub">Zapier</span>
+          <span class="univ-sub">n8n</span>
+        </div>
+        <a href="/automatisations.html" class="univ-cta">Explorer les automatisations →</a>
       </div>
     </div>
 
-    <div class="svc2-card reveal d6">
-      <div class="svc2-img">
-        <img src="public/services/flyer-design.jpg.png" alt="Flyers et supports marketing" loading="lazy"/>
+    <!-- ── 04 Développement sur mesure ── -->
+    <div class="univ-card reveal d4" style="--uc:#F59E0B">
+      <div class="univ-img">
+        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=500&fit=crop&q=80&auto=format" alt="Développement sur mesure" loading="lazy"/>
+        <div class="univ-img-ov"></div>
+        <span class="univ-num">04</span>
       </div>
-      <div class="svc2-body">
-        <p class="svc2-cat">Print · 06</p>
-        <h3 class="svc2-title">Flyers & Supports Marketing</h3>
-        <p class="svc2-desc">Vos supports déclenchent l'action. Design qui accroche, message qui convainc, impression qui donne envie de vous appeler.</p>
-        <div class="svc2-tags"><span class="svc2-tag">Recto-verso</span><span class="svc2-tag">Haute résolution</span><span class="svc2-tag">Livraison 48h</span></div>
-        <button class="svc2-cta" onclick="openDevis()">Démarrer mon projet →</button>
+      <div class="univ-icon-wrap">
+        <svg viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
       </div>
-    </div>
-
-    <div class="svc2-card reveal d7">
-      <div class="svc2-img">
-        <img src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=600&h=400&fit=crop&q=80&auto=format" alt="Collaborateurs IA" loading="lazy"/>
-      </div>
-      <div class="svc2-body">
-        <p class="svc2-cat">IA · 07</p>
-        <h3 class="svc2-title">Collaborateurs IA</h3>
-        <p class="svc2-desc">Vos tâches répétitives disparaissent. Vos résultats, eux, progressent. Des agents dédiés qui travaillent à votre place, 24h/24.</p>
-        <div class="svc2-tags"><span class="svc2-tag">Commercial IA</span><span class="svc2-tag">Support IA</span><span class="svc2-tag">RH · Juridique · SEO</span></div>
-        <a href="/collaborateurs-ia.html" class="svc2-cta">Découvrir →</a>
-      </div>
-    </div>
-
-    <div class="svc2-card reveal d8">
-      <div class="svc2-img">
-        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=400&fit=crop&q=80&auto=format" alt="Automatisations" loading="lazy"/>
-      </div>
-      <div class="svc2-body">
-        <p class="svc2-cat">IA · 08</p>
-        <h3 class="svc2-title">Automatisations</h3>
-        <p class="svc2-desc">15 heures récupérées chaque semaine. Réinvesties dans ce qui fait vraiment avancer votre entreprise. Pas dans les tâches répétitives.</p>
-        <div class="svc2-tags"><span class="svc2-tag">n8n · Zapier</span><span class="svc2-tag">HubSpot · CRM</span><span class="svc2-tag">Lead Generation</span></div>
-        <a href="/automatisations.html" class="svc2-cta">Découvrir →</a>
+      <div class="univ-body">
+        <h3 class="univ-title">Développement sur mesure</h3>
+        <p class="univ-desc">Votre vision, notre architecture. Des applications métier taillées exactement à vos processus, pas l'inverse.</p>
+        <div class="univ-subs">
+          <span class="univ-sub">SaaS</span>
+          <span class="univ-sub">CRM sur mesure</span>
+          <span class="univ-sub">ERP</span>
+          <span class="univ-sub">Dashboard</span>
+          <span class="univ-sub">API</span>
+          <span class="univ-sub">Applications internes</span>
+        </div>
+        <a href="/solutions.html" class="univ-cta">Discutons de votre projet →</a>
       </div>
     </div>
 
   </div>
-  <div class="reveal d2" style="text-align:center;margin-top:3rem;">
+  <div class="reveal d2" style="text-align:center;margin-top:3.5rem;">
     <a href="solutions.html" style="display:inline-flex;align-items:center;gap:8px;font-size:.95rem;font-weight:600;color:#0066FF;text-decoration:none;border:1px solid rgba(0,102,255,.25);padding:13px 28px;border-radius:10px;transition:background .25s,border-color .25s,transform .3s cubic-bezier(.16,1,.3,1);" onmouseover="this.style.background='rgba(0,102,255,.06)';this.style.borderColor='rgba(0,102,255,.5)';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='';this.style.borderColor='rgba(0,102,255,.25)';this.style.transform=''">
       Voir toutes nos solutions →
     </a>
