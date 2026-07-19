@@ -603,6 +603,107 @@
   .eco-hconn,.eco-vconn{display:none}
 }
 
+/* ── RESULTS ─────────────────────────────────────────────── */
+.sol-results {
+  position:relative;
+  padding:100px 5% 80px;
+  background:linear-gradient(180deg,#050d1a 0%,#060f20 100%);
+  overflow:hidden;
+}
+.sol-results::before {
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle 900px at 50% 50%,rgba(0,102,255,.04) 0%,transparent 100%);
+  pointer-events:none;
+}
+.res-grid {
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:22px;max-width:1080px;margin:0 auto;
+}
+.res-card {
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.07);
+  background:linear-gradient(145deg,rgba(255,255,255,.06) 0%,rgba(255,255,255,.02) 100%);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  overflow:hidden;display:flex;flex-direction:column;
+  opacity:0;transform:translateY(22px);
+  transition:
+    opacity .6s cubic-bezier(.16,1,.3,1) var(--rd,0s),
+    transform .6s cubic-bezier(.16,1,.3,1) var(--rd,0s),
+    border-color .25s,box-shadow .25s;
+}
+.res-card.vis{opacity:1;transform:translateY(0)}
+.res-card:hover{border-color:rgba(0,102,255,.22);box-shadow:0 0 40px rgba(0,102,255,.08)}
+.res-card-top{padding:20px 22px 14px}
+.res-ctx{
+  font-size:.58rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  color:rgba(255,255,255,.26);display:block;margin-bottom:10px;
+}
+.res-ibox{
+  width:38px;height:38px;border-radius:10px;
+  background:rgba(0,102,255,.1);border:1px solid rgba(0,102,255,.2);
+  display:flex;align-items:center;justify-content:center;
+}
+.res-ibox svg{width:17px;height:17px;stroke:#6ab4ff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.res-panels{padding:0 22px;flex:1;display:flex;flex-direction:column}
+/* AVANT */
+.res-bfr{
+  padding:14px 16px;
+  border-radius:12px 12px 0 0;
+  background:rgba(239,68,68,.04);
+  border:1px solid rgba(239,68,68,.1);border-bottom:none;
+}
+.res-tag{display:block;font-size:.52rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:5px}
+.res-bfr .res-tag{color:rgba(239,68,68,.45)}
+.res-bfr .res-big{
+  font-size:2.1rem;font-weight:800;line-height:1;font-family:'Rajdhani',sans-serif;
+  color:rgba(255,255,255,.26);text-decoration:line-through;
+  text-decoration-color:rgba(239,68,68,.35);margin:0 0 3px;display:block;
+}
+.res-bfr .res-unit{font-size:.76rem;color:rgba(255,255,255,.2)}
+/* arrow */
+.res-div{
+  display:flex;align-items:center;justify-content:center;height:28px;
+  background:linear-gradient(180deg,rgba(239,68,68,.04),rgba(0,102,255,.06));
+  border-left:1px solid rgba(255,255,255,.06);border-right:1px solid rgba(255,255,255,.06);
+}
+.res-arr{
+  width:22px;height:22px;border-radius:50%;
+  background:rgba(0,102,255,.12);border:1px solid rgba(0,102,255,.25);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.75rem;color:#6ab4ff;
+}
+/* APRÈS */
+.res-aft{
+  padding:16px 16px 18px;
+  border-radius:0 0 12px 12px;
+  background:rgba(0,102,255,.07);
+  border:1px solid rgba(0,102,255,.2);border-top:none;
+  position:relative;
+}
+.res-aft::before{
+  content:'';position:absolute;inset:0;border-radius:0 0 12px 12px;
+  background:radial-gradient(circle at 50% 0%,rgba(0,102,255,.1),transparent 70%);
+  pointer-events:none;
+}
+.res-aft .res-tag{color:rgba(0,102,255,.6);position:relative;z-index:1}
+.res-aft .res-big{
+  font-size:2.5rem;font-weight:800;line-height:1;font-family:'Rajdhani',sans-serif;
+  color:#6ab4ff;text-shadow:0 0 28px rgba(0,102,255,.5);
+  margin:0 0 3px;display:block;position:relative;z-index:1;
+}
+.res-aft .res-big.res-txt{font-size:1.4rem;font-family:'Inter',sans-serif;letter-spacing:-.01em}
+.res-aft .res-unit{font-size:.76rem;color:rgba(106,180,255,.45);position:relative;z-index:1}
+/* footer */
+.res-foot{padding:14px 22px 20px;display:flex;align-items:center;gap:8px;margin-top:auto;border-top:1px solid rgba(255,255,255,.04)}
+.res-badge{
+  font-size:.63rem;font-weight:700;letter-spacing:1px;
+  color:#22c55e;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);
+  padding:3px 10px;border-radius:20px;white-space:nowrap;
+}
+.res-fdesc{font-size:.72rem;color:rgba(255,255,255,.26)}
+@media(max-width:900px){.res-grid{grid-template-columns:1fr;max-width:460px;margin:0 auto}}
+@media(max-width:640px){.res-grid{gap:16px}}
+
   </style>
 </head>
 <body>
@@ -1003,6 +1104,102 @@
 </section>
 
 <!-- ════════════════════════════════════════════════════════════
+     RESULTS — EXEMPLES DE RÉSULTATS
+     ════════════════════════════════════════════════════════════ -->
+<section class="sol-results" id="resultats">
+  <div class="sol-section-header" style="position:relative;z-index:1;">
+    <p class="sol-section-label">Preuves concrètes</p>
+    <h2 class="sol-section-title">Exemples de résultats</h2>
+    <p class="sol-section-sub">Des transformations mesurables, vécues par nos clients.</p>
+  </div>
+
+  <div class="res-grid">
+
+    <!-- Card 1 : Devis -->
+    <div class="res-card" style="--rd:.0s">
+      <div class="res-card-top">
+        <span class="res-ctx">Création de devis</span>
+        <div class="res-ibox">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+      </div>
+      <div class="res-panels">
+        <div class="res-bfr">
+          <span class="res-tag">Avant</span>
+          <span class="res-big">5</span>
+          <span class="res-unit">heures de devis</span>
+        </div>
+        <div class="res-div"><span class="res-arr">↓</span></div>
+        <div class="res-aft">
+          <span class="res-tag">Après</span>
+          <span class="res-big" data-count="15">0</span>
+          <span class="res-unit">minutes</span>
+        </div>
+      </div>
+      <div class="res-foot">
+        <span class="res-badge">−95%</span>
+        <span class="res-fdesc">de temps économisé</span>
+      </div>
+    </div>
+
+    <!-- Card 2 : Suivi -->
+    <div class="res-card" style="--rd:.15s">
+      <div class="res-card-top">
+        <span class="res-ctx">Suivi commercial</span>
+        <div class="res-ibox">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.06 1.22 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        </div>
+      </div>
+      <div class="res-panels">
+        <div class="res-bfr">
+          <span class="res-tag">Avant</span>
+          <span class="res-big">0</span>
+          <span class="res-unit">aucun suivi</span>
+        </div>
+        <div class="res-div"><span class="res-arr">↓</span></div>
+        <div class="res-aft">
+          <span class="res-tag">Après</span>
+          <span class="res-big res-txt">Auto</span>
+          <span class="res-unit">relances automatiques</span>
+        </div>
+      </div>
+      <div class="res-foot">
+        <span class="res-badge">24/7</span>
+        <span class="res-fdesc">actif sans intervention</span>
+      </div>
+    </div>
+
+    <!-- Card 3 : Emails -->
+    <div class="res-card" style="--rd:.3s">
+      <div class="res-card-top">
+        <span class="res-ctx">Gestion des emails</span>
+        <div class="res-ibox">
+          <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+        </div>
+      </div>
+      <div class="res-panels">
+        <div class="res-bfr">
+          <span class="res-tag">Avant</span>
+          <span class="res-big">2h</span>
+          <span class="res-unit">emails manuels</span>
+        </div>
+        <div class="res-div"><span class="res-arr">↓</span></div>
+        <div class="res-aft">
+          <span class="res-tag">Après</span>
+          <span class="res-big res-txt">0h</span>
+          <span class="res-unit">automatisation complète</span>
+        </div>
+      </div>
+      <div class="res-foot">
+        <span class="res-badge">+3×</span>
+        <span class="res-fdesc">de réactivité client</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
      WHY CA-TECH
      ════════════════════════════════════════════════════════════ -->
 <section class="sol-why">
@@ -1192,6 +1389,39 @@ document.querySelectorAll('.sol-reveal').forEach(el => {
 const styleTag = document.createElement('style');
 styleTag.textContent = '.sol-reveal.vis{opacity:1!important;transform:none!important;}';
 document.head.appendChild(styleTag);
+
+/* ── Results counter ── */
+(function(){
+  var section = document.getElementById('resultats');
+  if (!section) return;
+  var cards = section.querySelectorAll('.res-card');
+  var counters = section.querySelectorAll('[data-count]');
+
+  function animCount(el, target) {
+    var elapsed = 0, dur = 1600, interval = 16;
+    var t = setInterval(function(){
+      elapsed += interval;
+      var pct = Math.min(elapsed / dur, 1);
+      var ease = 1 - Math.pow(1 - pct, 4); /* ease-out quart */
+      el.textContent = Math.round(ease * target);
+      if (pct >= 1) clearInterval(t);
+    }, interval);
+  }
+
+  var obsRes = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) {
+        cards.forEach(function(c){ c.classList.add('vis'); });
+        counters.forEach(function(el){
+          var target = parseInt(el.getAttribute('data-count'), 10);
+          animCount(el, target);
+        });
+        obsRes.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  obsRes.observe(section);
+})();
 
 /* ── Ecosystem diagram ── */
 (function(){
