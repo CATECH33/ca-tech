@@ -285,12 +285,78 @@
 }
 .sol-cta-btns { display:flex;gap:14px;justify-content:center;flex-wrap:wrap; }
 
+/* ── WHY SECTION ──────────────────────────────────────────── */
+.sol-why {
+  position:relative;
+  padding:100px 5%;
+  background:linear-gradient(180deg,#060f20 0%,#071120 100%);
+}
+.sol-why::before {
+  content:'';
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(0,102,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,102,255,.025) 1px,transparent 1px);
+  background-size:48px 48px;
+  pointer-events:none;
+  -webkit-mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%);
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%);
+}
+.sol-why-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+  max-width:1100px;
+  margin:0 auto;
+  position:relative;z-index:1;
+}
+.sol-why-card {
+  padding:28px 26px;
+  background:linear-gradient(145deg,rgba(255,255,255,.10) 0%,rgba(255,255,255,.04) 100%);
+  border:1px solid rgba(255,255,255,.11);
+  border-radius:18px;
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  box-shadow:0 4px 20px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.10);
+  transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s cubic-bezier(.16,1,.3,1),border-color .3s;
+  opacity:0;transform:translateY(20px);
+}
+.sol-why-card.visible {
+  opacity:1;transform:translateY(0);
+}
+.sol-why-card:hover {
+  transform:translateY(-6px);
+  border-color:rgba(0,102,255,.35);
+  box-shadow:0 8px 32px rgba(0,0,0,.28),0 0 40px rgba(0,102,255,.12),inset 0 1px 0 rgba(255,255,255,.16);
+}
+.sol-why-icon {
+  width:46px;height:46px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:18px;
+  background:var(--why-color,rgba(0,102,255,.18));
+  box-shadow:0 0 20px var(--why-glow,rgba(0,102,255,.2));
+}
+.sol-why-icon svg {
+  width:22px;height:22px;stroke:var(--why-stroke,#6ab4ff);
+  fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;
+}
+.sol-why-title {
+  font-size:1rem;font-weight:700;color:#fff;
+  margin:0 0 8px;letter-spacing:-.01em;
+}
+.sol-why-desc {
+  font-size:.86rem;color:rgba(255,255,255,.5);
+  line-height:1.6;margin:0;
+}
+
 /* ── RESPONSIVE ───────────────────────────────────────────── */
 @media(max-width:1024px) {
   .sol-grid { grid-template-columns:repeat(2,1fr); }
+  .sol-why-grid { grid-template-columns:repeat(2,1fr); }
 }
 @media(max-width:640px) {
   .sol-grid { grid-template-columns:1fr; }
+  .sol-why-grid { grid-template-columns:1fr; }
   .sol-hero-btns { flex-direction:column;align-items:center; }
   .sol-cta-btns { flex-direction:column;align-items:center; }
 }
@@ -481,6 +547,75 @@
 </section>
 
 <!-- ════════════════════════════════════════════════════════════
+     WHY CA-TECH
+     ════════════════════════════════════════════════════════════ -->
+<section class="sol-why">
+  <div class="sol-section-header" style="position:relative;z-index:1;">
+    <p class="sol-section-label">Nos engagements</p>
+    <h2 class="sol-section-title">Pourquoi choisir CA-TECH ?</h2>
+    <p class="sol-section-sub">Des résultats concrets, une équipe disponible, des solutions qui s'adaptent à vous.</p>
+  </div>
+
+  <div class="sol-why-grid">
+
+    <!-- 1 · Gain de temps -->
+    <div class="sol-why-card" style="--why-color:rgba(0,102,255,.18);--why-glow:rgba(0,102,255,.2);--why-stroke:#6ab4ff;">
+      <div class="sol-why-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <h3 class="sol-why-title">Gain de temps</h3>
+      <p class="sol-why-desc">Vos tâches répétitives disparaissent. Vous récupérez en moyenne 15 heures par semaine pour vous concentrer sur ce qui compte.</p>
+    </div>
+
+    <!-- 2 · Réduction des coûts -->
+    <div class="sol-why-card" style="--why-color:rgba(16,185,129,.18);--why-glow:rgba(16,185,129,.2);--why-stroke:#6ee7b7;">
+      <div class="sol-why-icon">
+        <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      </div>
+      <h3 class="sol-why-title">Réduction des coûts</h3>
+      <p class="sol-why-desc">Un collaborateur IA coûte moins qu'un salarié à temps partiel. Le ROI est visible dès le premier mois d'utilisation.</p>
+    </div>
+
+    <!-- 3 · Disponible 24h/24 -->
+    <div class="sol-why-card" style="--why-color:rgba(124,58,237,.18);--why-glow:rgba(124,58,237,.2);--why-stroke:#c4b5fd;">
+      <div class="sol-why-icon">
+        <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </div>
+      <h3 class="sol-why-title">Disponible 24h/24</h3>
+      <p class="sol-why-desc">Vos agents IA répondent à vos clients, traitent vos demandes et génèrent des rapports même quand vous dormez.</p>
+    </div>
+
+    <!-- 4 · Installation rapide -->
+    <div class="sol-why-card" style="--why-color:rgba(245,158,11,.18);--why-glow:rgba(245,158,11,.2);--why-stroke:#fde68a;">
+      <div class="sol-why-icon">
+        <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      </div>
+      <h3 class="sol-why-title">Installation rapide</h3>
+      <p class="sol-why-desc">Opérationnel en 48h. Pas de formation, pas de code, pas de mois d'intégration. On configure tout — vous validez et c'est parti.</p>
+    </div>
+
+    <!-- 5 · Support français -->
+    <div class="sol-why-card" style="--why-color:rgba(239,68,68,.18);--why-glow:rgba(239,68,68,.2);--why-stroke:#fca5a5;">
+      <div class="sol-why-icon">
+        <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </div>
+      <h3 class="sol-why-title">Support français</h3>
+      <p class="sol-why-desc">Une équipe basée en France, joignable par téléphone et email. En cas de problème, on intervient sous 4h — pas un chatbot.</p>
+    </div>
+
+    <!-- 6 · Solutions personnalisées -->
+    <div class="sol-why-card" style="--why-color:rgba(6,182,212,.18);--why-glow:rgba(6,182,212,.2);--why-stroke:#67e8f9;">
+      <div class="sol-why-icon">
+        <svg viewBox="0 0 24 24"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+      </div>
+      <h3 class="sol-why-title">Solutions personnalisées</h3>
+      <p class="sol-why-desc">Chaque solution est adaptée à votre secteur, vos outils et vos habitudes. Rien de générique — tout est pensé pour vous.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
      CTA
      ════════════════════════════════════════════════════════════ -->
 <section class="sol-cta">
@@ -531,6 +666,22 @@
   }
   frame();
 })();
+
+/* ── Scroll reveal why-cards ── */
+const obsWhy = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      const cards = Array.from(document.querySelectorAll('.sol-why-card'));
+      const idx = cards.indexOf(entry.target);
+      setTimeout(() => {
+        entry.target.style.transition = 'opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1), box-shadow .4s, border-color .3s';
+        entry.target.classList.add('visible');
+      }, (idx % 3) * 90);
+      obsWhy.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.sol-why-card').forEach(el => obsWhy.observe(el));
 
 /* ── Scroll reveal cards ── */
 const obs = new IntersectionObserver((entries) => {
