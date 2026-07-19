@@ -498,6 +498,111 @@
   .tl-step:not(:last-child)::after { left:28px;top:56px; }
 }
 
+/* ── ECOSYSTEM ─────────────────────────────────────────────── */
+.sol-eco {
+  position:relative;padding:100px 5% 80px;
+  background:linear-gradient(180deg,#050d1a 0%,#060f20 100%);overflow:hidden;
+}
+.sol-eco::before {
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(circle 700px at 18% 55%,rgba(0,102,255,.05) 0%,transparent 100%),
+    radial-gradient(circle 500px at 82% 25%,rgba(124,58,237,.05) 0%,transparent 100%);
+  pointer-events:none;
+}
+.eco-diagram {
+  display:grid;
+  grid-template-columns:1fr 80px 1fr;
+  grid-template-rows:auto 64px auto 64px auto;
+  align-items:center;
+  max-width:920px;margin:0 auto;
+}
+.eco-n1{grid-area:1/1}.eco-hc1{grid-area:1/2}.eco-n2{grid-area:1/3}
+.eco-vc1{grid-area:2/3;justify-self:center}
+.eco-n3{grid-area:3/3}.eco-hc2{grid-area:3/2}.eco-n4{grid-area:3/1}
+.eco-vc2{grid-area:4/1;justify-self:center}
+.eco-n5{grid-area:5/1}.eco-hc3{grid-area:5/2}.eco-n6{grid-area:5/3}
+.eco-node {
+  display:flex;align-items:center;gap:14px;padding:18px 20px;
+  border-radius:14px;border:1px solid rgba(255,255,255,.07);
+  background:linear-gradient(145deg,rgba(255,255,255,.07) 0%,rgba(255,255,255,.02) 100%);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  opacity:0;transform:translateY(14px);
+  transition:
+    opacity .55s cubic-bezier(.16,1,.3,1) var(--enter-delay,0s),
+    transform .55s cubic-bezier(.16,1,.3,1) var(--enter-delay,0s),
+    border-color .25s,box-shadow .25s;
+}
+.eco-node.vis{opacity:1;transform:translateY(0)}
+.eco-node:hover{border-color:rgba(var(--eco-rgb),.32);box-shadow:0 0 32px rgba(var(--eco-rgb),.12)}
+.eco-ibox {
+  width:44px;height:44px;border-radius:11px;flex-shrink:0;
+  background:rgba(var(--eco-rgb),.1);border:1px solid rgba(var(--eco-rgb),.22);
+  display:flex;align-items:center;justify-content:center;
+}
+.eco-ibox svg{width:19px;height:19px;stroke:rgb(var(--eco-rgb));fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.eco-ntxt{flex:1;min-width:0}
+.eco-badge{display:block;font-size:.58rem;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:rgb(var(--eco-rgb));opacity:.6;margin-bottom:3px}
+.eco-name{font-size:.94rem;font-weight:700;color:#fff;margin:0 0 2px}
+.eco-sub{font-size:.74rem;color:rgba(255,255,255,.34);margin:0;line-height:1.4}
+/* horizontal connector */
+.eco-hconn{position:relative;display:flex;align-items:center;height:20px;padding:0 4px}
+.eco-hconn .eco-ctrack{
+  flex:1;height:2px;
+  background:linear-gradient(90deg,rgba(0,102,255,.8) 0%,rgba(56,189,248,.55) 100%);
+  transform-origin:left;transform:scaleX(0);
+  transition:transform .65s cubic-bezier(.4,0,.2,1) var(--td,0s);
+}
+.eco-hconn.rev .eco-ctrack{transform-origin:right;background:linear-gradient(270deg,rgba(0,102,255,.8) 0%,rgba(56,189,248,.55) 100%)}
+.eco-diagram.go .eco-hconn .eco-ctrack{transform:scaleX(1)}
+.eco-hconn .eco-cdot{
+  position:absolute;width:8px;height:8px;border-radius:50%;
+  background:#6ab4ff;box-shadow:0 0 10px rgba(0,102,255,1),0 0 4px rgba(0,102,255,.5);
+  top:50%;margin-top:-4px;left:4px;pointer-events:none;opacity:0;
+}
+.eco-diagram.go .eco-hconn .eco-cdot{animation:ecoDotH 2.5s ease-in-out var(--dd,0s) infinite}
+.eco-diagram.go .eco-hconn.rev .eco-cdot{animation-name:ecoDotHr}
+@keyframes ecoDotH{
+  0%{left:4px;opacity:0}8%{opacity:1}90%{opacity:1}100%{left:calc(100% - 12px);opacity:0}
+}
+@keyframes ecoDotHr{
+  0%{left:calc(100% - 12px);opacity:0}8%{opacity:1}90%{opacity:1}100%{left:4px;opacity:0}
+}
+.eco-harrow{position:absolute;font-size:.7rem;color:rgba(0,102,255,.5);line-height:1;pointer-events:none}
+.eco-hconn:not(.rev) .eco-harrow{right:1px}
+.eco-hconn.rev .eco-harrow{left:1px}
+/* vertical connector */
+.eco-vconn{width:2px;height:64px;position:relative}
+.eco-vconn .eco-ctrack{
+  width:100%;height:100%;
+  background:linear-gradient(180deg,rgba(0,102,255,.8) 0%,rgba(56,189,248,.55) 100%);
+  transform-origin:top;transform:scaleY(0);
+  transition:transform .65s cubic-bezier(.4,0,.2,1) var(--td,0s);
+}
+.eco-diagram.go .eco-vconn .eco-ctrack{transform:scaleY(1)}
+.eco-vconn .eco-cdot{
+  position:absolute;width:8px;height:8px;border-radius:50%;
+  background:#6ab4ff;box-shadow:0 0 10px rgba(0,102,255,1),0 0 4px rgba(0,102,255,.5);
+  top:0;left:50%;transform:translateX(-50%);pointer-events:none;opacity:0;
+}
+.eco-diagram.go .eco-vconn .eco-cdot{animation:ecoDotV 2.5s ease-in-out var(--dd,0s) infinite}
+@keyframes ecoDotV{
+  0%{top:0;opacity:0}8%{opacity:1}90%{opacity:1}100%{top:56px;opacity:0}
+}
+@media(max-width:768px){
+  .eco-diagram{
+    display:flex;flex-direction:column;align-items:stretch;
+    max-width:420px;margin:0 auto;position:relative;
+  }
+  .eco-diagram::before{
+    content:'';position:absolute;left:50%;top:0;bottom:0;
+    width:1.5px;background:linear-gradient(180deg,rgba(0,102,255,.6) 0%,rgba(0,102,255,.15) 100%);
+    transform:translateX(-50%);z-index:0;
+  }
+  .eco-node{margin:10px 0;position:relative;z-index:1}
+  .eco-hconn,.eco-vconn{display:none}
+}
+
   </style>
 </head>
 <body>
@@ -778,6 +883,126 @@
 </section>
 
 <!-- ════════════════════════════════════════════════════════════
+     ECOSYSTEM — ILS PEUVENT TRAVAILLER ENSEMBLE
+     ════════════════════════════════════════════════════════════ -->
+<section class="sol-eco" id="ecosystem">
+  <div class="sol-section-header" style="position:relative;z-index:1;">
+    <p class="sol-section-label">Notre écosystème</p>
+    <h2 class="sol-section-title">Ils peuvent travailler ensemble</h2>
+    <p class="sol-section-sub">Chaque outil parle au suivant — un écosystème fluide, sans friction, sans rupture.</p>
+  </div>
+
+  <div class="eco-diagram" id="ecoDiagram">
+
+    <!-- n1 : Commercial IA -->
+    <div class="eco-node eco-n1" style="--eco-rgb:0,102,255;--enter-delay:.0s">
+      <div class="eco-ibox">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      </div>
+      <div class="eco-ntxt">
+        <span class="eco-badge">CA-TECH</span>
+        <h3 class="eco-name">Commercial IA</h3>
+        <p class="eco-sub">Prospecte et qualifie automatiquement</p>
+      </div>
+    </div>
+
+    <!-- h-conn 1 : Commercial IA → CRM -->
+    <div class="eco-hconn eco-hc1" style="--td:.25s;--dd:1.1s" aria-hidden="true">
+      <div class="eco-ctrack"></div>
+      <div class="eco-cdot"></div>
+      <span class="eco-harrow">›</span>
+    </div>
+
+    <!-- n2 : CRM -->
+    <div class="eco-node eco-n2" style="--eco-rgb:99,102,241;--enter-delay:.5s">
+      <div class="eco-ibox">
+        <svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+      </div>
+      <div class="eco-ntxt">
+        <span class="eco-badge">Intégration</span>
+        <h3 class="eco-name">CRM</h3>
+        <p class="eco-sub">Centralise contacts et pipeline</p>
+      </div>
+    </div>
+
+    <!-- v-conn 1 (col droite : CRM ↓ Support IA) -->
+    <div class="eco-vconn eco-vc1" style="--td:.75s;--dd:1.6s" aria-hidden="true">
+      <div class="eco-ctrack"></div>
+      <div class="eco-cdot"></div>
+    </div>
+
+    <!-- n3 : Support IA -->
+    <div class="eco-node eco-n3" style="--eco-rgb:6,182,212;--enter-delay:1.0s">
+      <div class="eco-ibox">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      </div>
+      <div class="eco-ntxt">
+        <span class="eco-badge">CA-TECH</span>
+        <h3 class="eco-name">Support IA</h3>
+        <p class="eco-sub">Répond aux clients 24h/24</p>
+      </div>
+    </div>
+
+    <!-- h-conn 2 (inversé : Support IA → Automatisation) -->
+    <div class="eco-hconn eco-hc2 rev" style="--td:1.2s;--dd:2.0s" aria-hidden="true">
+      <div class="eco-ctrack"></div>
+      <div class="eco-cdot"></div>
+      <span class="eco-harrow">‹</span>
+    </div>
+
+    <!-- n4 : Automatisation -->
+    <div class="eco-node eco-n4" style="--eco-rgb:139,92,246;--enter-delay:1.45s">
+      <div class="eco-ibox">
+        <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      </div>
+      <div class="eco-ntxt">
+        <span class="eco-badge">N8N / Zapier</span>
+        <h3 class="eco-name">Automatisation</h3>
+        <p class="eco-sub">Orchestre les flux entre outils</p>
+      </div>
+    </div>
+
+    <!-- v-conn 2 (col gauche : Automatisation ↓ Google Workspace) -->
+    <div class="eco-vconn eco-vc2" style="--td:1.65s;--dd:2.45s" aria-hidden="true">
+      <div class="eco-ctrack"></div>
+      <div class="eco-cdot"></div>
+    </div>
+
+    <!-- n5 : Google Workspace -->
+    <div class="eco-node eco-n5" style="--eco-rgb:16,185,129;--enter-delay:1.9s">
+      <div class="eco-ibox">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+      </div>
+      <div class="eco-ntxt">
+        <span class="eco-badge">Google</span>
+        <h3 class="eco-name">Google Workspace</h3>
+        <p class="eco-sub">Emails, Drive, Calendar synchro</p>
+      </div>
+    </div>
+
+    <!-- h-conn 3 : Google Workspace → Client -->
+    <div class="eco-hconn eco-hc3" style="--td:2.1s;--dd:2.9s" aria-hidden="true">
+      <div class="eco-ctrack"></div>
+      <div class="eco-cdot"></div>
+      <span class="eco-harrow">›</span>
+    </div>
+
+    <!-- n6 : Client -->
+    <div class="eco-node eco-n6" style="--eco-rgb:251,191,36;--enter-delay:2.35s">
+      <div class="eco-ibox">
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <div class="eco-ntxt">
+        <span class="eco-badge">Résultat</span>
+        <h3 class="eco-name">Client</h3>
+        <p class="eco-sub">Expérience fluide, satisfaction maximale</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
      WHY CA-TECH
      ════════════════════════════════════════════════════════════ -->
 <section class="sol-why">
@@ -967,6 +1192,23 @@ document.querySelectorAll('.sol-reveal').forEach(el => {
 const styleTag = document.createElement('style');
 styleTag.textContent = '.sol-reveal.vis{opacity:1!important;transform:none!important;}';
 document.head.appendChild(styleTag);
+
+/* ── Ecosystem diagram ── */
+(function(){
+  var diagram = document.getElementById('ecoDiagram');
+  if (!diagram) return;
+  var nodes = diagram.querySelectorAll('.eco-node');
+  var obsEco = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting) {
+        diagram.classList.add('go');
+        nodes.forEach(function(n){ n.classList.add('vis'); });
+        obsEco.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  obsEco.observe(diagram);
+})();
 
 /* ── Nav scroll + progress ── */
 window.addEventListener('scroll', () => {
