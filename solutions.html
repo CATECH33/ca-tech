@@ -349,16 +349,153 @@
   line-height:1.6;margin:0;
 }
 
+/* ── TIMELINE ─────────────────────────────────────────── */
+.sol-tl {
+  position:relative;
+  padding:100px 5%;
+  background:linear-gradient(180deg,#050d1a 0%,#060f20 100%);
+  overflow:hidden;
+}
+.sol-tl-bg-grid {
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(0,102,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,102,255,.025) 1px,transparent 1px);
+  background-size:48px 48px;
+  pointer-events:none;
+  -webkit-mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%);
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%);
+}
+.tl-outer {
+  position:relative;
+  max-width:1200px;
+  margin:0 auto;
+}
+.tl-track {
+  position:absolute;
+  top:27px;
+  left:calc(100% / 12);
+  right:calc(100% / 12);
+  height:1px;
+  background:rgba(0,102,255,.15);
+  z-index:0;
+}
+.tl-track-fill {
+  position:absolute;
+  top:26px;
+  left:calc(100% / 12);
+  right:calc(100% / 12);
+  height:2px;
+  background:linear-gradient(90deg,#0066FF,#38bdf8);
+  transform-origin:left;
+  transform:scaleX(0);
+  z-index:0;
+  transition:transform 1.6s cubic-bezier(.16,1,.3,1) .4s;
+}
+.tl-track-fill.active { transform:scaleX(1); }
+.tl-wrap {
+  display:flex;
+  gap:0;
+  position:relative;
+  z-index:1;
+}
+.tl-step {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  padding:0 6px;
+  opacity:0;
+  transform:translateY(28px);
+}
+.tl-step.visible {
+  opacity:1;
+  transform:translateY(0);
+  transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1);
+}
+.tl-num {
+  width:56px;height:56px;
+  border-radius:50%;
+  background:linear-gradient(145deg,rgba(0,102,255,.12) 0%,rgba(0,102,255,.04) 100%);
+  border:1.5px solid rgba(0,102,255,.40);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.05rem;font-weight:700;
+  color:#6ab4ff;
+  font-family:'Rajdhani',sans-serif;
+  letter-spacing:.05em;
+  margin-bottom:18px;
+  box-shadow:0 0 22px rgba(0,102,255,.15),inset 0 1px 0 rgba(255,255,255,.12);
+  flex-shrink:0;
+  transition:box-shadow .4s,background .4s,border-color .4s,color .25s;
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+}
+.tl-step:hover .tl-num {
+  background:linear-gradient(145deg,rgba(0,102,255,.28) 0%,rgba(0,102,255,.10) 100%);
+  border-color:rgba(0,102,255,.80);
+  box-shadow:0 0 40px rgba(0,102,255,.4),inset 0 1px 0 rgba(255,255,255,.20);
+  color:#fff;
+}
+.tl-step-body {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.tl-icon {
+  width:40px;height:40px;
+  border-radius:10px;
+  background:rgba(0,102,255,.10);
+  border:1px solid rgba(0,102,255,.20);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 12px;
+  transition:background .3s,border-color .3s,box-shadow .3s;
+}
+.tl-step:hover .tl-icon {
+  background:rgba(0,102,255,.22);
+  border-color:rgba(0,102,255,.50);
+  box-shadow:0 0 18px rgba(0,102,255,.22);
+}
+.tl-icon svg {
+  width:18px;height:18px;
+  stroke:#6ab4ff;
+  fill:none;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+.tl-title {
+  font-size:.92rem;font-weight:700;color:#fff;
+  margin:0 0 8px;
+  letter-spacing:-.01em;
+  transition:color .25s;
+}
+.tl-step:hover .tl-title { color:#6ab4ff; }
+.tl-desc {
+  font-size:.76rem;color:rgba(255,255,255,.38);
+  line-height:1.55;margin:0;
+}
+
 /* ── RESPONSIVE ───────────────────────────────────────────── */
 @media(max-width:1024px) {
   .sol-grid { grid-template-columns:repeat(2,1fr); }
   .sol-why-grid { grid-template-columns:repeat(2,1fr); }
+}
+@media(max-width:900px) {
+  .tl-wrap { flex-direction:column;gap:0; }
+  .tl-step { flex-direction:row;align-items:flex-start;text-align:left;padding:0 0 32px;gap:18px;position:relative; }
+  .tl-step:last-child { padding-bottom:0; }
+  .tl-num { margin-bottom:0; }
+  .tl-step-body { align-items:flex-start;flex:1; }
+  .tl-icon { margin-left:0; }
+  .tl-track,.tl-track-fill { display:none; }
+  .tl-step:not(:last-child)::after { content:'';position:absolute;top:56px;left:27px;bottom:0;width:1px;background:rgba(0,102,255,.2);z-index:0; }
 }
 @media(max-width:640px) {
   .sol-grid { grid-template-columns:1fr; }
   .sol-why-grid { grid-template-columns:1fr; }
   .sol-hero-btns { flex-direction:column;align-items:center; }
   .sol-cta-btns { flex-direction:column;align-items:center; }
+  .tl-num { width:44px;height:44px;font-size:.9rem; }
+  .tl-step:not(:last-child)::after { left:21px;top:44px; }
 }
 
   </style>
@@ -547,6 +684,100 @@
 </section>
 
 <!-- ════════════════════════════════════════════════════════════
+     COMMENT ÇA FONCTIONNE
+     ════════════════════════════════════════════════════════════ -->
+<section class="sol-tl" id="comment-ca-fonctionne">
+  <div class="sol-tl-bg-grid" aria-hidden="true"></div>
+
+  <div class="sol-section-header" style="position:relative;z-index:1;">
+    <p class="sol-section-label">Notre méthode</p>
+    <h2 class="sol-section-title">Comment ça fonctionne ?</h2>
+    <p class="sol-section-sub">Six étapes pour passer de zéro à une solution opérationnelle — sans friction, sans surprise.</p>
+  </div>
+
+  <div class="tl-outer">
+    <div class="tl-track" aria-hidden="true"></div>
+    <div class="tl-track-fill" id="tlFill" aria-hidden="true"></div>
+
+    <div class="tl-wrap">
+
+      <!-- 1 · Audit -->
+      <div class="tl-step">
+        <div class="tl-num">1</div>
+        <div class="tl-step-body">
+          <div class="tl-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <h3 class="tl-title">Audit</h3>
+          <p class="tl-desc">On analyse votre activité, vos outils et vos points de friction. Gratuit, en 30 minutes.</p>
+        </div>
+      </div>
+
+      <!-- 2 · Configuration -->
+      <div class="tl-step">
+        <div class="tl-num">2</div>
+        <div class="tl-step-body">
+          <div class="tl-icon">
+            <svg viewBox="0 0 24 24"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+          </div>
+          <h3 class="tl-title">Configuration</h3>
+          <p class="tl-desc">On paramètre votre solution sur mesure. Zéro code de votre côté, 100 % adapté à votre usage.</p>
+        </div>
+      </div>
+
+      <!-- 3 · Installation -->
+      <div class="tl-step">
+        <div class="tl-num">3</div>
+        <div class="tl-step-body">
+          <div class="tl-icon">
+            <svg viewBox="0 0 24 24"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>
+          </div>
+          <h3 class="tl-title">Installation</h3>
+          <p class="tl-desc">Déploiement sur vos outils existants. Aucune migration, aucune interruption de service.</p>
+        </div>
+      </div>
+
+      <!-- 4 · Formation -->
+      <div class="tl-step">
+        <div class="tl-num">4</div>
+        <div class="tl-step-body">
+          <div class="tl-icon">
+            <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          </div>
+          <h3 class="tl-title">Formation</h3>
+          <p class="tl-desc">Une session suffit. Vos équipes maîtrisent la solution en moins d'une heure.</p>
+        </div>
+      </div>
+
+      <!-- 5 · Mise en production -->
+      <div class="tl-step">
+        <div class="tl-num">5</div>
+        <div class="tl-step-body">
+          <div class="tl-icon">
+            <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <h3 class="tl-title">Mise en production</h3>
+          <p class="tl-desc">La solution est live en 48h. Résultats visibles dès la première semaine d'utilisation.</p>
+        </div>
+      </div>
+
+      <!-- 6 · Support continu -->
+      <div class="tl-step">
+        <div class="tl-num">6</div>
+        <div class="tl-step-body">
+          <div class="tl-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3 class="tl-title">Support continu</h3>
+          <p class="tl-desc">On monitore, on ajuste, on intervient. Si quelque chose déraille, on est là sous 4h.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
      WHY CA-TECH
      ════════════════════════════════════════════════════════════ -->
 <section class="sol-why">
@@ -696,6 +927,26 @@ const obs = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.12 });
 document.querySelectorAll('.sol-card').forEach(el => obs.observe(el));
+
+/* ── Timeline animation ── */
+(function(){
+  const fill  = document.getElementById('tlFill');
+  const steps = document.querySelectorAll('.tl-step');
+  const section = document.querySelector('.sol-tl');
+  if (!section) return;
+  const obsTl = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        if (fill) fill.classList.add('active');
+        steps.forEach(function(step, i) {
+          setTimeout(function(){ step.classList.add('visible'); }, i * 130);
+        });
+        obsTl.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  obsTl.observe(section);
+})();
 
 /* ── Section header reveal ── */
 const obs2 = new IntersectionObserver((entries) => {
