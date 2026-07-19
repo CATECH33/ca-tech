@@ -704,6 +704,79 @@
 @media(max-width:900px){.res-grid{grid-template-columns:1fr;max-width:460px;margin:0 auto}}
 @media(max-width:640px){.res-grid{gap:16px}}
 
+/* ── FAQ ─────────────────────────────────────────────────── */
+.sol-faq {
+  position:relative;
+  padding:100px 5% 80px;
+  background:linear-gradient(180deg,#050d1a 0%,#060f20 100%);
+  overflow:hidden;
+}
+.sol-faq::before {
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle 700px at 50% 40%,rgba(0,102,255,.04) 0%,transparent 100%);
+  pointer-events:none;
+}
+.faq-list {
+  max-width:720px;margin:0 auto;
+  display:flex;flex-direction:column;gap:8px;
+  position:relative;z-index:1;
+}
+.faq-item {
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.07);
+  background:linear-gradient(145deg,rgba(255,255,255,.05) 0%,rgba(255,255,255,.02) 100%);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  overflow:hidden;
+  opacity:0;transform:translateY(12px);
+  transition:
+    opacity .5s cubic-bezier(.16,1,.3,1) var(--fi,0s),
+    transform .5s cubic-bezier(.16,1,.3,1) var(--fi,0s),
+    border-color .3s,box-shadow .3s;
+}
+.faq-item.vis{opacity:1;transform:translateY(0)}
+.faq-item.open{
+  border-color:rgba(0,102,255,.25);
+  box-shadow:0 0 30px rgba(0,102,255,.07);
+}
+.faq-q {
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:20px 22px;cursor:pointer;user-select:none;-webkit-user-select:none;
+  list-style:none;
+}
+.faq-qtxt {
+  font-size:.95rem;font-weight:600;
+  color:rgba(255,255,255,.7);
+  transition:color .25s;flex:1;line-height:1.4;
+}
+.faq-item.open .faq-qtxt{color:#fff}
+.faq-ico {
+  width:30px;height:30px;border-radius:8px;flex-shrink:0;
+  background:rgba(0,102,255,.08);border:1px solid rgba(0,102,255,.18);
+  display:flex;align-items:center;justify-content:center;
+  transition:background .25s,border-color .25s,transform .42s cubic-bezier(.16,1,.3,1);
+}
+.faq-item.open .faq-ico{
+  background:rgba(0,102,255,.18);
+  border-color:rgba(0,102,255,.35);
+  transform:rotate(180deg);
+}
+.faq-ico svg{width:14px;height:14px;stroke:#6ab4ff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.faq-body{
+  height:0;overflow:hidden;
+  transition:height .42s cubic-bezier(.16,1,.3,1);
+}
+.faq-inner{
+  padding:0 22px 20px;
+  border-top:1px solid rgba(255,255,255,.05);
+}
+.faq-a{
+  margin:15px 0 0;
+  padding:0;
+  font-size:.875rem;line-height:1.75;
+  color:rgba(255,255,255,.45);
+}
+.faq-a strong{color:rgba(255,255,255,.7);font-weight:600}
+
   </style>
 </head>
 <body>
@@ -1269,6 +1342,93 @@
 </section>
 
 <!-- ════════════════════════════════════════════════════════════
+     FAQ
+     ════════════════════════════════════════════════════════════ -->
+<section class="sol-faq" id="faq">
+  <div class="sol-section-header" style="position:relative;z-index:1;">
+    <p class="sol-section-label">Questions fréquentes</p>
+    <h2 class="sol-section-title">Vous avez des questions ?</h2>
+    <p class="sol-section-sub">Tout ce qu'il faut savoir avant de démarrer.</p>
+  </div>
+
+  <ul class="faq-list" role="list">
+
+    <li class="faq-item">
+      <div class="faq-q" role="button" aria-expanded="false" tabindex="0">
+        <span class="faq-qtxt">Combien coûte un collaborateur IA ?</span>
+        <span class="faq-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+      <div class="faq-body" role="region">
+        <div class="faq-inner">
+          <p class="faq-a">À partir de <strong>290 €/mois</strong> selon le rôle et le niveau d'intégration. Un audit gratuit vous permet de savoir exactement ce dont vous avez besoin avant tout engagement.</p>
+        </div>
+      </div>
+    </li>
+
+    <li class="faq-item">
+      <div class="faq-q" role="button" aria-expanded="false" tabindex="0">
+        <span class="faq-qtxt">Combien de temps pour l'installation ?</span>
+        <span class="faq-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+      <div class="faq-body" role="region">
+        <div class="faq-inner">
+          <p class="faq-a">Entre <strong>48h et 5 jours</strong> selon la complexité de votre environnement. Dans la majorité des cas, votre collaborateur IA est opérationnel en <strong>72h</strong>.</p>
+        </div>
+      </div>
+    </li>
+
+    <li class="faq-item">
+      <div class="faq-q" role="button" aria-expanded="false" tabindex="0">
+        <span class="faq-qtxt">Puis-je garder mes outils actuels ?</span>
+        <span class="faq-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+      <div class="faq-body" role="region">
+        <div class="faq-inner">
+          <p class="faq-a">Oui, <strong>aucune migration requise</strong>. On se connecte directement à vos outils existants — CRM, messagerie, agenda, comptabilité. Votre équipe ne change rien à ses habitudes.</p>
+        </div>
+      </div>
+    </li>
+
+    <li class="faq-item">
+      <div class="faq-q" role="button" aria-expanded="false" tabindex="0">
+        <span class="faq-qtxt">Travaillez-vous avec Microsoft 365 ?</span>
+        <span class="faq-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+      <div class="faq-body" role="region">
+        <div class="faq-inner">
+          <p class="faq-a">Oui. <strong>Outlook, Teams, SharePoint, OneDrive</strong> — tout l'écosystème Microsoft 365 est intégrable. Nos collaborateurs IA fonctionnent nativement avec vos licences existantes.</p>
+        </div>
+      </div>
+    </li>
+
+    <li class="faq-item">
+      <div class="faq-q" role="button" aria-expanded="false" tabindex="0">
+        <span class="faq-qtxt">Travaillez-vous avec Google Workspace ?</span>
+        <span class="faq-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+      <div class="faq-body" role="region">
+        <div class="faq-inner">
+          <p class="faq-a">Oui. <strong>Gmail, Drive, Calendar, Sheets, Meet</strong> — tous synchronisés avec votre collaborateur IA. La configuration prend moins d'une heure.</p>
+        </div>
+      </div>
+    </li>
+
+    <li class="faq-item">
+      <div class="faq-q" role="button" aria-expanded="false" tabindex="0">
+        <span class="faq-qtxt">Puis-je connecter WhatsApp ?</span>
+        <span class="faq-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+      <div class="faq-body" role="region">
+        <div class="faq-inner">
+          <p class="faq-a">Oui, via l'<strong>API WhatsApp Business</strong>. Relances, confirmations de rendez-vous, support client automatisé — votre collaborateur IA répond directement sur WhatsApp, 24h/24.</p>
+        </div>
+      </div>
+    </li>
+
+  </ul>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
      CTA
      ════════════════════════════════════════════════════════════ -->
 <section class="sol-cta">
@@ -1389,6 +1549,66 @@ document.querySelectorAll('.sol-reveal').forEach(el => {
 const styleTag = document.createElement('style');
 styleTag.textContent = '.sol-reveal.vis{opacity:1!important;transform:none!important;}';
 document.head.appendChild(styleTag);
+
+/* ── FAQ accordion ── */
+(function(){
+  var items = document.querySelectorAll('.faq-item');
+  if (!items.length) return;
+
+  /* scroll reveal */
+  var obsFaq = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){ e.target.classList.add('vis'); obsFaq.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  items.forEach(function(item, i){
+    item.style.setProperty('--fi', (i * 0.07) + 's');
+    obsFaq.observe(item);
+  });
+
+  /* accordion */
+  items.forEach(function(item){
+    var btn = item.querySelector('.faq-q');
+    var body = item.querySelector('.faq-body');
+
+    btn.addEventListener('click', function(){
+      var isOpen = item.classList.contains('open');
+
+      /* close all others */
+      items.forEach(function(it){
+        if (it !== item && it.classList.contains('open')){
+          var b = it.querySelector('.faq-body');
+          b.style.height = b.scrollHeight + 'px';
+          b.offsetHeight; /* force reflow */
+          b.style.height = '0';
+          it.classList.remove('open');
+          it.querySelector('.faq-q').setAttribute('aria-expanded','false');
+        }
+      });
+
+      if (isOpen){
+        body.style.height = body.scrollHeight + 'px';
+        body.offsetHeight;
+        body.style.height = '0';
+        item.classList.remove('open');
+        btn.setAttribute('aria-expanded','false');
+      } else {
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded','true');
+        body.style.height = '0';
+        body.offsetHeight;
+        body.style.height = body.scrollHeight + 'px';
+        body.addEventListener('transitionend', function(){
+          if (item.classList.contains('open')) body.style.height = 'auto';
+        }, { once: true });
+      }
+    });
+
+    btn.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); btn.click(); }
+    });
+  });
+})();
 
 /* ── Results counter ── */
 (function(){
