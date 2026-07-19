@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Solutions | IA, Automatisations, Sites Web | CA-TECH</title>
+  <meta name="description" content="Toutes les solutions CA-TECH pour les PME : Collaborateurs IA, Automatisations, Création de sites, SEO, Applications métier, Support informatique."/>
+  <link rel="canonical" href="https://ca-tech.fr/solutions"/>
+  <meta property="og:title" content="Solutions | IA, Automatisations, Sites Web | CA-TECH"/>
+  <meta property="og:description" content="Le catalogue complet des solutions CA-TECH pour accélérer votre entreprise."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://ca-tech.fr/solutions"/>
+  <meta property="og:locale" content="fr_FR"/>
+  <meta property="og:site_name" content="CA-TECH"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="local-seo.css"/>
+  <link rel="icon" type="image/x-icon" href="/public/favicon.ico"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png"/>
+  <meta name="theme-color" content="#0066FF"/>
+  <style>
+
+/* ── HERO ─────────────────────────────────────────────────── */
+.sol-hero {
+  position: relative;
+  min-height: 72vh;
+  display: flex;
+  align-items: center;
+  padding: calc(var(--nav-h) + 60px) 5% 80px;
+  overflow: hidden;
+  background: linear-gradient(160deg,#020b18 0%,#050d1a 55%,#060f20 100%);
+}
+.sol-canvas { position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0; }
+.sol-grid-bg {
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(0,102,255,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,102,255,.03) 1px,transparent 1px);
+  background-size:64px 64px;
+  pointer-events:none;z-index:1;
+  -webkit-mask-image:radial-gradient(ellipse 85% 85% at 50% 40%,black 20%,transparent 100%);
+  mask-image:radial-gradient(ellipse 85% 85% at 50% 40%,black 20%,transparent 100%);
+}
+.sol-halo {
+  position:absolute;border-radius:50%;pointer-events:none;z-index:1;
+  will-change:transform;
+}
+.sol-halo-1 {
+  width:600px;height:600px;
+  background:radial-gradient(circle,rgba(0,102,255,.13) 0%,transparent 70%);
+  top:-120px;left:-100px;
+  animation:haloPulse 8s ease-in-out infinite;
+}
+.sol-halo-2 {
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(124,58,237,.10) 0%,transparent 70%);
+  bottom:-80px;right:-60px;
+  animation:haloPulse 10s ease-in-out infinite reverse;
+}
+@keyframes haloPulse { 0%,100%{transform:scale(1);opacity:.8;} 50%{transform:scale(1.12);opacity:1;} }
+
+.sol-hero-inner {
+  position:relative;z-index:2;
+  max-width:860px;
+  margin:0 auto;
+  text-align:center;
+}
+.sol-kicker {
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(255,255,255,.5);margin-bottom:28px;
+}
+.sol-kicker span { display:inline-block;width:28px;height:1px;background:rgba(0,102,255,.6); }
+.sol-h1 {
+  font-size:clamp(2.2rem,5vw,3.6rem);
+  font-weight:800;line-height:1.08;
+  color:#fff;
+  margin:0 0 24px;
+  letter-spacing:-.02em;
+}
+.sol-h1 em {
+  font-style:normal;
+  background:linear-gradient(90deg,#0066FF,#38bdf8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.sol-sub {
+  font-size:clamp(1rem,2vw,1.18rem);
+  color:rgba(255,255,255,.6);
+  line-height:1.65;
+  max-width:640px;
+  margin:0 auto 40px;
+}
+.sol-hero-btns {
+  display:flex;gap:14px;justify-content:center;flex-wrap:wrap;
+}
+.sol-btn-main {
+  display:inline-flex;align-items:center;gap:8px;
+  padding:14px 28px;
+  background:#0066FF;
+  color:#fff;font-weight:600;font-size:.95rem;
+  border-radius:10px;text-decoration:none;
+  transition:background .25s,transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s;
+  box-shadow:0 0 28px rgba(0,102,255,.35);
+}
+.sol-btn-main:hover { background:#0052cc;transform:translateY(-3px);box-shadow:0 6px 32px rgba(0,102,255,.5); }
+.sol-btn-ghost {
+  display:inline-flex;align-items:center;gap:8px;
+  padding:14px 28px;
+  border:1px solid rgba(255,255,255,.18);
+  color:rgba(255,255,255,.8);font-weight:500;font-size:.95rem;
+  border-radius:10px;text-decoration:none;
+  transition:border-color .25s,color .25s,transform .3s cubic-bezier(.16,1,.3,1);
+}
+.sol-btn-ghost:hover { border-color:rgba(0,102,255,.55);color:#fff;transform:translateY(-3px); }
+
+/* ── CARDS SECTION ────────────────────────────────────────── */
+.sol-section {
+  position:relative;
+  padding:100px 5%;
+  background:linear-gradient(180deg,#050d1a 0%,#060f20 100%);
+}
+.sol-section-header {
+  text-align:center;
+  margin-bottom:64px;
+}
+.sol-section-label {
+  font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:#0066FF;margin-bottom:14px;
+}
+.sol-section-title {
+  font-size:clamp(1.7rem,3.5vw,2.5rem);
+  font-weight:800;color:#fff;
+  letter-spacing:-.02em;
+  margin:0 0 12px;
+}
+.sol-section-sub {
+  font-size:1rem;color:rgba(255,255,255,.45);
+  max-width:520px;margin:0 auto;
+  line-height:1.6;
+}
+
+.sol-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:24px;
+  max-width:1200px;
+  margin:0 auto;
+}
+
+/* ── CARD ─────────────────────────────────────────────────── */
+.sol-card {
+  position:relative;
+  background:linear-gradient(145deg,rgba(255,255,255,.13) 0%,rgba(255,255,255,.05) 100%);
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:20px;
+  overflow:hidden;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  box-shadow:0 4px 24px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.12);
+  transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s cubic-bezier(.16,1,.3,1),border-color .3s;
+  opacity:0;transform:translateY(22px);
+}
+.sol-card.visible {
+  opacity:1;transform:translateY(0);
+  transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1),box-shadow .4s,border-color .3s;
+}
+.sol-card:hover {
+  transform:translateY(-8px);
+  border-color:rgba(0,102,255,.40);
+  box-shadow:0 8px 44px rgba(0,0,0,.34),0 0 56px rgba(0,102,255,.16),inset 0 1px 0 rgba(255,255,255,.20);
+}
+
+/* top accent line */
+.sol-card::before {
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--card-accent);
+  z-index:2;
+  opacity:.85;
+}
+
+/* image */
+.sol-card-img {
+  position:relative;
+  width:100%;height:200px;
+  overflow:hidden;
+}
+.sol-card-img img {
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
+  transition:transform .6s cubic-bezier(.16,1,.3,1);
+  filter:brightness(.75) saturate(.9);
+}
+.sol-card:hover .sol-card-img img { transform:scale(1.06); }
+.sol-card-img-overlay {
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 40%,rgba(2,11,24,.85) 100%);
+  z-index:1;
+}
+
+/* icon badge */
+.sol-card-badge {
+  position:absolute;bottom:14px;left:16px;z-index:2;
+  width:42px;height:42px;border-radius:10px;
+  background:var(--card-accent);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;
+  box-shadow:0 4px 14px rgba(0,0,0,.4);
+}
+
+/* content */
+.sol-card-body {
+  padding:20px 22px 24px;
+}
+.sol-card-title {
+  font-size:1.12rem;font-weight:700;color:#fff;
+  margin:0 0 10px;letter-spacing:-.01em;
+}
+.sol-card-desc {
+  font-size:.88rem;color:rgba(255,255,255,.55);
+  line-height:1.6;margin:0 0 20px;
+}
+.sol-card-btn {
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.83rem;font-weight:600;
+  color:var(--card-accent-text,#fff);
+  text-decoration:none;
+  padding:8px 16px;
+  border-radius:8px;
+  border:1px solid var(--card-accent-border);
+  transition:background .25s,transform .3s cubic-bezier(.16,1,.3,1);
+}
+.sol-card-btn:hover {
+  background:rgba(0,102,255,.15);
+  transform:translateX(3px);
+}
+.sol-card-btn svg {
+  width:14px;height:14px;stroke:currentColor;fill:none;
+  transition:transform .25s cubic-bezier(.16,1,.3,1);
+}
+.sol-card:hover .sol-card-btn svg { transform:translateX(3px); }
+
+/* accent vars per card */
+.sol-card-1 { --card-accent:linear-gradient(90deg,#0066FF,#38bdf8); --card-accent-border:rgba(0,102,255,.40); --card-accent-text:#6ab4ff; }
+.sol-card-2 { --card-accent:linear-gradient(90deg,#7C3AED,#a78bfa); --card-accent-border:rgba(124,58,237,.40); --card-accent-text:#c4b5fd; }
+.sol-card-3 { --card-accent:linear-gradient(90deg,#06B6D4,#22d3ee); --card-accent-border:rgba(6,182,212,.40); --card-accent-text:#67e8f9; }
+.sol-card-4 { --card-accent:linear-gradient(90deg,#10B981,#34d399); --card-accent-border:rgba(16,185,129,.40); --card-accent-text:#6ee7b7; }
+.sol-card-5 { --card-accent:linear-gradient(90deg,#F59E0B,#fbbf24); --card-accent-border:rgba(245,158,11,.40); --card-accent-text:#fde68a; }
+.sol-card-6 { --card-accent:linear-gradient(90deg,#EF4444,#f87171); --card-accent-border:rgba(239,68,68,.40); --card-accent-text:#fca5a5; }
+
+/* ── CTA ─────────────────────────────────────────────────── */
+.sol-cta {
+  position:relative;
+  padding:90px 5%;
+  background:linear-gradient(160deg,#020b18 0%,#0a1428 100%);
+  text-align:center;
+  overflow:hidden;
+}
+.sol-cta::before {
+  content:'';
+  position:absolute;
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,102,255,.12) 0%,transparent 70%);
+  left:50%;top:50%;transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+.sol-cta-inner { position:relative;z-index:1; }
+.sol-cta-label {
+  font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:#0066FF;margin-bottom:16px;
+}
+.sol-cta-title {
+  font-size:clamp(1.7rem,3.5vw,2.6rem);
+  font-weight:800;color:#fff;letter-spacing:-.02em;
+  margin:0 0 14px;
+}
+.sol-cta-title strong { color:#0066FF; }
+.sol-cta-sub {
+  font-size:1rem;color:rgba(255,255,255,.5);
+  line-height:1.65;max-width:520px;margin:0 auto 36px;
+}
+.sol-cta-btns { display:flex;gap:14px;justify-content:center;flex-wrap:wrap; }
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+@media(max-width:1024px) {
+  .sol-grid { grid-template-columns:repeat(2,1fr); }
+}
+@media(max-width:640px) {
+  .sol-grid { grid-template-columns:1fr; }
+  .sol-hero-btns { flex-direction:column;align-items:center; }
+  .sol-cta-btns { flex-direction:column;align-items:center; }
+}
+
+  </style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="logo">
+    <img src="assets/logos/logo-ca-tech.png" alt="CA-TECH" width="36" height="36"/>
+    <div><span class="logo-name">CA-TECH</span><span class="logo-sub">Agence Web &amp; Design</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Accueil</a></li>
+    <li><a href="solutions.html" class="active">Solutions</a></li>
+    <li><a href="collaborateurs-ia.html">Collaborateurs IA</a></li>
+    <li><a href="automatisations.html">Automatisations</a></li>
+    <li><a href="index.html#realisations">Réalisations</a></li>
+    <li><a href="tarifs.html">Tarifs</a></li>
+    <li><a href="index.html#a-propos">À propos</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><button class="btn-nav" onclick="location.href='index.html#contact'">Demander un devis</button></li>
+  </ul>
+  <button class="ham" id="ham"><span></span><span></span><span></span></button>
+</nav>
+<div class="mob-menu" id="mob">
+  <a href="index.html" onclick="closeMob()">Accueil</a>
+  <a href="solutions.html" onclick="closeMob()">Solutions</a>
+  <a href="collaborateurs-ia.html" onclick="closeMob()">Collaborateurs IA</a>
+  <a href="automatisations.html" onclick="closeMob()">Automatisations</a>
+  <a href="index.html#realisations" onclick="closeMob()">Réalisations</a>
+  <a href="tarifs.html" onclick="closeMob()">Tarifs</a>
+  <a href="index.html#a-propos" onclick="closeMob()">À propos</a>
+  <a href="index.html#contact" onclick="closeMob()">Contact</a>
+  <a class="btn-mob" href="index.html#contact" onclick="closeMob()">Demander un devis</a>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     HERO
+     ════════════════════════════════════════════════════════════ -->
+<section class="sol-hero">
+  <canvas class="sol-canvas" id="solCanvas" aria-hidden="true"></canvas>
+  <div class="sol-grid-bg" aria-hidden="true"></div>
+  <div class="sol-halo sol-halo-1" aria-hidden="true"></div>
+  <div class="sol-halo sol-halo-2" aria-hidden="true"></div>
+
+  <div class="sol-hero-inner">
+    <p class="sol-kicker"><span></span>Catalogue · Toutes nos offres<span></span></p>
+
+    <h1 class="sol-h1">
+      Des solutions IA qui travaillent<br/>
+      <em>pour votre entreprise.</em>
+    </h1>
+
+    <p class="sol-sub">
+      Des collaborateurs IA, des automatisations et des applications sur mesure pour développer votre activité.
+    </p>
+
+    <div class="sol-hero-btns">
+      <a href="#solutions" class="sol-btn-main" onclick="event.preventDefault();document.getElementById('solutions').scrollIntoView({behavior:'smooth'})">
+        Découvrir les solutions
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </a>
+      <a href="index.html#contact" class="sol-btn-ghost">Prendre contact →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     CARDS
+     ════════════════════════════════════════════════════════════ -->
+<section class="sol-section" id="solutions">
+  <div class="sol-section-header">
+    <p class="sol-section-label">Nos offres</p>
+    <h2 class="sol-section-title">Choisissez ce dont vous avez besoin.</h2>
+    <p class="sol-section-sub">Six pôles d'expertise pour couvrir tous les leviers de croissance de votre entreprise.</p>
+  </div>
+
+  <div class="sol-grid">
+
+    <!-- 1 · Collaborateurs IA -->
+    <article class="sol-card sol-card-1">
+      <div class="sol-card-img">
+        <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600&h=400&fit=crop&q=80&auto=format" alt="Collaborateurs IA" loading="lazy" decoding="async" width="600" height="400"/>
+        <div class="sol-card-img-overlay"></div>
+        <div class="sol-card-badge">🤖</div>
+      </div>
+      <div class="sol-card-body">
+        <h3 class="sol-card-title">Collaborateurs IA</h3>
+        <p class="sol-card-desc">Des agents spécialisés qui travaillent pour vous 24h/24. Ventes, support, RH, juridique — sans embaucher, sans former.</p>
+        <a href="collaborateurs-ia.html" class="sol-card-btn">
+          Découvrir
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </article>
+
+    <!-- 2 · Automatisations -->
+    <article class="sol-card sol-card-2">
+      <div class="sol-card-img">
+        <img src="https://images.unsplash.com/photo-1518186285589-2f7649de83e0?w=600&h=400&fit=crop&q=80&auto=format" alt="Automatisations" loading="lazy" decoding="async" width="600" height="400"/>
+        <div class="sol-card-img-overlay"></div>
+        <div class="sol-card-badge">⚡</div>
+      </div>
+      <div class="sol-card-body">
+        <h3 class="sol-card-title">Automatisations</h3>
+        <p class="sol-card-desc">Récupérez 15 heures par semaine. Relances, devis, reporting, transferts de données — automatisés en 48h, sans code.</p>
+        <a href="automatisations.html" class="sol-card-btn">
+          Découvrir
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </article>
+
+    <!-- 3 · Création de sites Web -->
+    <article class="sol-card sol-card-3">
+      <div class="sol-card-img">
+        <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=600&h=400&fit=crop&q=80&auto=format" alt="Création de sites Web" loading="lazy" decoding="async" width="600" height="400"/>
+        <div class="sol-card-img-overlay"></div>
+        <div class="sol-card-badge">🌐</div>
+      </div>
+      <div class="sol-card-body">
+        <h3 class="sol-card-title">Création de sites Web</h3>
+        <p class="sol-card-desc">Sites vitrines, e-commerce et landing pages qui convertissent. Design premium, mobile-first, livraison rapide.</p>
+        <a href="creation-site-vitrine.html" class="sol-card-btn">
+          Découvrir
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </article>
+
+    <!-- 4 · SEO IA -->
+    <article class="sol-card sol-card-4">
+      <div class="sol-card-img">
+        <img src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=600&h=400&fit=crop&q=80&auto=format" alt="SEO IA" loading="lazy" decoding="async" width="600" height="400"/>
+        <div class="sol-card-img-overlay"></div>
+        <div class="sol-card-badge">📈</div>
+      </div>
+      <div class="sol-card-body">
+        <h3 class="sol-card-title">SEO IA</h3>
+        <p class="sol-card-desc">Votre site remonte sur Google. Contenu optimisé par IA, stratégie locale, mots-clés ciblés — résultats mesurables chaque mois.</p>
+        <a href="index.html#services" class="sol-card-btn">
+          Découvrir
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </article>
+
+    <!-- 5 · Applications métier -->
+    <article class="sol-card sol-card-5">
+      <div class="sol-card-img">
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop&q=80&auto=format" alt="Applications métier" loading="lazy" decoding="async" width="600" height="400"/>
+        <div class="sol-card-img-overlay"></div>
+        <div class="sol-card-badge">🖥</div>
+      </div>
+      <div class="sol-card-body">
+        <h3 class="sol-card-title">Applications métier</h3>
+        <p class="sol-card-desc">Des outils sur mesure pour vos équipes. CRM, tableaux de bord, portails clients — adaptés à votre secteur et vos habitudes.</p>
+        <a href="refonte-site-internet.html" class="sol-card-btn">
+          Découvrir
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </article>
+
+    <!-- 6 · Support informatique -->
+    <article class="sol-card sol-card-6">
+      <div class="sol-card-img">
+        <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=600&h=400&fit=crop&q=80&auto=format" alt="Support informatique" loading="lazy" decoding="async" width="600" height="400"/>
+        <div class="sol-card-img-overlay"></div>
+        <div class="sol-card-badge">🛠</div>
+      </div>
+      <div class="sol-card-body">
+        <h3 class="sol-card-title">Support informatique</h3>
+        <p class="sol-card-desc">Assistance technique réactive. Infogérance, maintenance, cybersécurité — on s'occupe de votre parc informatique à votre place.</p>
+        <a href="maintenance-site-web.html" class="sol-card-btn">
+          Découvrir
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     CTA
+     ════════════════════════════════════════════════════════════ -->
+<section class="sol-cta">
+  <div class="sol-cta-inner">
+    <p class="sol-cta-label">Passez à l'action</p>
+    <h2 class="sol-cta-title">Vous ne savez pas par <strong>où commencer ?</strong></h2>
+    <p class="sol-cta-sub">On analyse votre situation gratuitement et on vous recommande la solution la plus rentable pour vous — en 30 minutes.</p>
+    <div class="sol-cta-btns">
+      <a href="index.html#contact" class="sol-btn-main">Demander un audit gratuit →</a>
+      <a href="tarifs.html" class="sol-btn-ghost">Voir les tarifs</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer></footer>
+
+<script>
+/* ── Canvas particles ── */
+(function(){
+  const cv = document.getElementById('solCanvas');
+  if(!cv) return;
+  const cx = cv.getContext('2d');
+  let W, H, pts = [];
+  const N = 45, LK = 110;
+  function resize(){ W = cv.width = cv.offsetWidth; H = cv.height = cv.offsetHeight; }
+  window.addEventListener('resize', resize, {passive:true}); resize();
+  function r(a,b){ return a + Math.random()*(b-a); }
+  for(let i=0;i<N;i++) pts.push({x:r(0,W),y:r(0,H),vx:r(-.2,.2),vy:r(-.2,.2),s:r(.8,1.6)});
+  function frame(){
+    cx.clearRect(0,0,W,H);
+    pts.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0)p.x=W; if(p.x>W)p.x=0;
+      if(p.y<0)p.y=H; if(p.y>H)p.y=0;
+      cx.beginPath(); cx.arc(p.x,p.y,p.s,0,Math.PI*2);
+      cx.fillStyle='rgba(0,102,255,.4)'; cx.fill();
+    });
+    for(let i=0;i<N;i++) for(let j=i+1;j<N;j++){
+      const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y;
+      const d=Math.sqrt(dx*dx+dy*dy);
+      if(d<LK){
+        cx.beginPath(); cx.moveTo(pts[i].x,pts[i].y); cx.lineTo(pts[j].x,pts[j].y);
+        cx.strokeStyle=`rgba(0,102,255,${.08*(1-d/LK)})`; cx.lineWidth=1; cx.stroke();
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+/* ── Scroll reveal cards ── */
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if(entry.isIntersecting){
+      const idx = Array.from(document.querySelectorAll('.sol-card')).indexOf(entry.target);
+      setTimeout(() => {
+        entry.target.classList.add('visible');
+      }, (idx % 3) * 100);
+      obs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.sol-card').forEach(el => obs.observe(el));
+
+/* ── Section header reveal ── */
+const obs2 = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting){ e.target.classList.add('vis'); obs2.unobserve(e.target); }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.sol-section-header,.sol-cta-inner').forEach(el => {
+  el.style.opacity='0'; el.style.transform='translateY(18px)';
+  el.style.transition='opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)';
+  el.classList.add('sol-reveal');
+  obs2.observe(el);
+});
+document.addEventListener('animationend', () => {});
+document.querySelectorAll('.sol-reveal').forEach(el => {
+  el.addEventListener('transitionend', () => {});
+});
+const styleTag = document.createElement('style');
+styleTag.textContent = '.sol-reveal.vis{opacity:1!important;transform:none!important;}';
+document.head.appendChild(styleTag);
+
+/* ── Nav scroll + progress ── */
+window.addEventListener('scroll', () => {
+  const st = document.documentElement.scrollTop;
+  const dh = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  document.getElementById('prog').style.width = (st/dh*100) + '%';
+  document.getElementById('nav').classList.toggle('scrolled', st > 80);
+}, {passive:true});
+
+/* ── Mobile menu ── */
+function closeMob(){
+  document.getElementById('mob').classList.remove('open');
+  document.getElementById('ham').classList.remove('open');
+}
+document.getElementById('ham').addEventListener('click', function(){
+  this.classList.toggle('open');
+  document.getElementById('mob').classList.toggle('open');
+});
+</script>
+
+<script src="/loic-widget.js"></script>
+<script src="/nav.js"></script>
+<script src="/js/scroll-animations.js" defer></script>
+<script src="/footer.js"></script>
+</body>
+</html>
