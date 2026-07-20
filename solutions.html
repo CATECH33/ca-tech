@@ -450,11 +450,15 @@
   box-shadow:0 0 36px rgba(0,102,255,.1),0 16px 40px rgba(0,0,0,.18);
 }
 
-/* pointer arrows card → node */
-.ptl-row:nth-child(odd) .ptl-card {
+/* pointer arrows card → node
+   .ptl-axis est le 1er enfant de .ptl-body, donc :
+   - nth-child(even) = Découverte, Proposition, Formation, Support → carte à GAUCHE
+   - nth-child(odd)  = Audit, Développement, Déploiement          → carte à DROITE
+   Le DOM order gère déjà la colonne — pas de grid-column explicite */
+.ptl-row:nth-child(even) .ptl-card {
   transform:translateX(-20px);
 }
-.ptl-row:nth-child(odd) .ptl-card::after {
+.ptl-row:nth-child(even) .ptl-card::after {
   content:'';position:absolute;
   right:-7px;top:50%;transform:translateY(-50%);
   width:0;height:0;
@@ -462,13 +466,10 @@
   border-bottom:7px solid transparent;
   border-left:7px solid rgba(255,255,255,.055);
 }
-.ptl-row:nth-child(even) .ptl-card {
-  grid-column:3;
+.ptl-row:nth-child(odd) .ptl-card {
   transform:translateX(20px);
 }
-.ptl-row:nth-child(even) .ptl-node { grid-column:2; }
-.ptl-row:nth-child(even) .ptl-spc  { grid-column:1; }
-.ptl-row:nth-child(even) .ptl-card::before {
+.ptl-row:nth-child(odd) .ptl-card::before {
   content:'';position:absolute;
   left:-7px;top:50%;transform:translateY(-50%);
   width:0;height:0;
@@ -570,8 +571,8 @@
     opacity:0;
   }
   .ptl-card.ptl-vis { transform:translateY(0) !important; }
-  .ptl-row:nth-child(odd) .ptl-card::after,
-  .ptl-row:nth-child(even) .ptl-card::before { display:none; }
+  .ptl-row:nth-child(even) .ptl-card::after,
+  .ptl-row:nth-child(odd) .ptl-card::before { display:none; }
   .ptl-row:not(:last-child)::after {
     content:'';position:absolute;
     top:38px;left:18px;bottom:0;width:1px;
