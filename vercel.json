@@ -31,20 +31,23 @@
     }
   ],
   "redirects": [
-    {
-      "source": "/index",
-      "destination": "/",
-      "permanent": true
-    }
+    { "source": "/index",            "destination": "/",                "permanent": true },
+    { "source": "/diagnostic-ia",    "destination": "/contact",         "permanent": true },
+    { "source": "/nos-realisations", "destination": "/realisations",    "permanent": true },
+    { "source": "/loic-ia",          "destination": "/loic",            "permanent": true }
   ],
   "rewrites": [
-    { "source": "/manager/assets/(.*)", "destination": "/manager/dist/assets/$1" },
-    { "source": "/manager/favicon.ico", "destination": "/manager/dist/favicon.ico" },
-    { "source": "/manager/favicon-32x32.png", "destination": "/manager/dist/favicon-32x32.png" },
-    { "source": "/manager/apple-touch-icon.png", "destination": "/manager/dist/apple-touch-icon.png" },
-    { "source": "/manager/site.webmanifest", "destination": "/manager/dist/site.webmanifest" },
-    { "source": "/manager/icons.svg", "destination": "/manager/dist/icons.svg" },
-    { "source": "/manager", "destination": "/manager/dist/" },
-    { "source": "/manager/(.*)", "destination": "/manager/dist/" }
+    { "source": "/loic",         "destination": "/collaborateurs-ia" },
+    { "source": "/services",     "destination": "/solutions" },
+    { "source": "/realisations", "destination": "/cas-clients" },
+    { "source": "/contact",      "destination": "/devis" },
+    { "source": "/manager/assets/(.*)",         "destination": "/manager/dist/assets/$1" },
+    { "source": "/manager/favicon.ico",         "destination": "/manager/dist/favicon.ico" },
+    { "source": "/manager/favicon-32x32.png",   "destination": "/manager/dist/favicon-32x32.png" },
+    { "source": "/manager/apple-touch-icon.png","destination": "/manager/dist/apple-touch-icon.png" },
+    { "source": "/manager/site.webmanifest",    "destination": "/manager/dist/site.webmanifest" },
+    { "source": "/manager/icons.svg",           "destination": "/manager/dist/icons.svg" },
+    { "source": "/manager",                     "destination": "/manager/dist/" },
+    { "source": "/manager/(.*)",                "destination": "/manager/dist/" }
   ]
 }
