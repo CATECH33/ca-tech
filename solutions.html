@@ -543,6 +543,52 @@
   stroke-width:2;stroke-linecap:round;
 }
 
+/* ── STATS COMPTEUR ── */
+.ptl-stats {
+  display:flex;
+  max-width:720px;
+  margin:48px auto 0;
+  position:relative;z-index:1;
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:16px;
+  overflow:hidden;
+  opacity:0;
+  transform:translateY(14px);
+  transition:opacity .7s cubic-bezier(.16,1,.3,1) .15s,transform .7s cubic-bezier(.16,1,.3,1) .15s;
+}
+.ptl-stats.ptl-vis{opacity:1;transform:translateY(0)}
+.ptl-stat{
+  flex:1;text-align:center;
+  padding:1.25rem 1rem 1.1rem;
+  border-right:1px solid rgba(255,255,255,.07);
+}
+.ptl-stat:last-child{border-right:none}
+.ptl-stat-n{
+  display:flex;align-items:baseline;justify-content:center;gap:2px;
+  line-height:1;margin-bottom:.3rem;
+}
+.ptl-count{
+  font-size:2.5rem;font-weight:900;
+  font-family:'Rajdhani',sans-serif;
+  color:#fff;letter-spacing:-.03em;
+}
+.ptl-stat-suf{
+  font-size:1.3rem;font-weight:700;
+  font-family:'Rajdhani',sans-serif;
+  color:#6ab4ff;letter-spacing:0;
+}
+.ptl-stat-pre{
+  font-size:1.3rem;font-weight:700;
+  font-family:'Rajdhani',sans-serif;
+  color:#6ab4ff;
+}
+.ptl-stat-l{
+  font-size:.63rem;font-weight:600;
+  color:rgba(255,255,255,.3);
+  text-transform:uppercase;letter-spacing:1.2px;
+}
+
 /* ── RESPONSIVE ───────────────────────────────────────────── */
 @media(max-width:1024px) {
   .sol-grid { grid-template-columns:repeat(2,1fr); }
@@ -1060,6 +1106,34 @@
     <p class="sol-section-label">Notre méthode</p>
     <h2 class="sol-section-title">De la découverte au support.</h2>
     <p class="sol-section-sub">Sept étapes pour passer de zéro à une solution opérationnelle — sans friction, sans surprise.</p>
+  </div>
+
+  <!-- Compteurs animés -->
+  <div class="ptl-stats" id="ptlStats">
+    <div class="ptl-stat">
+      <div class="ptl-stat-n">
+        <span class="ptl-count" data-target="7">0</span>
+      </div>
+      <div class="ptl-stat-l">Étapes structurées</div>
+    </div>
+    <div class="ptl-stat">
+      <div class="ptl-stat-n">
+        <span class="ptl-count" data-target="24">0</span><span class="ptl-stat-suf">h</span>
+      </div>
+      <div class="ptl-stat-l">Premier rapport</div>
+    </div>
+    <div class="ptl-stat">
+      <div class="ptl-stat-n">
+        <span class="ptl-count" data-target="100">0</span><span class="ptl-stat-suf">%</span>
+      </div>
+      <div class="ptl-stat-l">Accompagnement inclus</div>
+    </div>
+    <div class="ptl-stat">
+      <div class="ptl-stat-n">
+        <span class="ptl-count" data-target="4">0</span><span class="ptl-stat-suf">h</span>
+      </div>
+      <div class="ptl-stat-l">SLA support garanti</div>
+    </div>
   </div>
 
   <div class="ptl-body">
@@ -1651,6 +1725,40 @@ document.querySelectorAll('.sol-card').forEach(el => obs.observe(el));
     card.style.transitionDelay = (i * 0.04) + 's,' + (i * 0.04) + 's,0s,0s';
     obsCard.observe(card);
   });
+})();
+
+/* ── Stat counters ── */
+(function(){
+  var statsEl = document.getElementById('ptlStats');
+  if (!statsEl) return;
+  var done = false;
+
+  function ease(t){ return 1 - Math.pow(1 - t, 3); }
+
+  function countUp(el, target, duration, delay){
+    setTimeout(function(){
+      var start = performance.now();
+      function frame(now){
+        var t = Math.min((now - start) / duration, 1);
+        el.textContent = Math.round(target * ease(t));
+        if (t < 1) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }, delay);
+  }
+
+  var obs = new IntersectionObserver(function(entries){
+    if (done) return;
+    if (!entries[0].isIntersecting) return;
+    done = true;
+    statsEl.classList.add('ptl-vis');
+    statsEl.querySelectorAll('.ptl-count').forEach(function(el, i){
+      countUp(el, parseInt(el.dataset.target, 10), 1100, i * 110);
+    });
+    obs.disconnect();
+  }, { threshold: 0.4 });
+
+  obs.observe(statsEl);
 })();
 
 /* ── Section header reveal ── */
