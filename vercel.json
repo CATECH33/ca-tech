@@ -37,10 +37,14 @@
     { "source": "/loic-ia",          "destination": "/loic",            "permanent": true }
   ],
   "rewrites": [
-    { "source": "/loic",         "destination": "/collaborateurs-ia" },
-    { "source": "/services",     "destination": "/solutions" },
-    { "source": "/realisations", "destination": "/cas-clients" },
-    { "source": "/contact",      "destination": "/devis" },
+    { "source": "/",                  "destination": "/dist/index.html" },
+    { "source": "/services",          "destination": "/dist/index.html" },
+    { "source": "/loic",              "destination": "/dist/index.html" },
+    { "source": "/collaborateurs-ia", "destination": "/dist/index.html" },
+    { "source": "/automatisations",   "destination": "/dist/index.html" },
+    { "source": "/realisations",      "destination": "/dist/index.html" },
+    { "source": "/blog",              "destination": "/dist/index.html" },
+    { "source": "/contact",           "destination": "/dist/index.html" },
     { "source": "/manager/assets/(.*)",         "destination": "/manager/dist/assets/$1" },
     { "source": "/manager/favicon.ico",         "destination": "/manager/dist/favicon.ico" },
     { "source": "/manager/favicon-32x32.png",   "destination": "/manager/dist/favicon-32x32.png" },
