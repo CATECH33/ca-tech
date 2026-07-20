@@ -3,24 +3,19 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "build": "node -e \"require('fs').statSync('index.html'); console.log('Build OK — site statique prêt.')\"",
     "test": "node test-run-all.js",
-    "test:payment": "node test-payment.js",
-    "typecheck": "tsc --noEmit"
+    "test:payment": "node test-payment.js"
   },
   "engines": {
     "node": ">=20"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
     "resend": "^4.5.1",
     "stripe": "^17.4.0"
   },
   "devDependencies": {
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
-    "playwright": "^1.61.1",
-    "typescript": "^5.6.3"
+    "playwright": "^1.61.1"
   }
 }
