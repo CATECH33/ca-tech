@@ -1,1421 +1,1185 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Agence Web &amp; IA | Création de Sites, Automatisations, Collaborateurs IA | CA-TECH</title>
-  <meta name="description" content="CA-TECH, agence web &amp; IA à Paris, Lyon, Dijon et Troyes. Création de sites web, collaborateurs IA, automatisation des processus. Devis gratuit sous 24h."/>
-  <meta name="keywords" content="agence web Paris, agence web Lyon, agence web Dijon, agence web Troyes, création site internet Paris, création site internet Lyon, création site e-commerce Paris, création site e-commerce Dijon, création logo Paris, création logo Lyon, création logo Troyes, identité visuelle, refonte site internet, maintenance site web, landing page, agence digitale France"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>CA-TECH — Cabinet de Conseil IA · Automatisation · SEO · Dev Web</title>
+  <meta name="description" content="CA-TECH est le cabinet de conseil IA-first qui déploie l'Intelligence Artificielle, l'Automatisation et le SEO pour faire croître votre entreprise. Diagnostic gratuit en 10 minutes."/>
   <link rel="canonical" href="https://ca-tech.fr/"/>
   <!-- Open Graph -->
-  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="CA-TECH — L'IA au service de votre croissance"/>
+  <meta property="og:description" content="Cabinet de conseil spécialisé en IA, Automatisation, SEO et Dev Web. Diagnostic gratuit."/>
+  <meta property="og:image" content="https://ca-tech.fr/og-homepage.jpg"/>
   <meta property="og:url" content="https://ca-tech.fr/"/>
-  <meta property="og:title" content="Agence Web &amp; Design | Paris · Lyon · Dijon · Troyes | CA-TECH"/>
-  <meta property="og:description" content="Création de sites vitrines, e-commerce, logos et identités visuelles. Présents à Paris, Lyon, Dijon et Troyes. Devis gratuit sous 24h."/>
-  <meta property="og:image" content="https://ca-tech.fr/assets/logos/logo-ca-tech.png"/>
+  <meta property="og:type" content="website"/>
   <meta property="og:locale" content="fr_FR"/>
   <meta property="og:site_name" content="CA-TECH"/>
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="Agence Web &amp; Design | Paris · Lyon · Dijon · Troyes | CA-TECH"/>
-  <meta name="twitter:description" content="Création de sites vitrines, e-commerce, logos et identités visuelles. Présents à Paris, Lyon, Dijon et Troyes."/>
-  <meta name="twitter:image" content="https://ca-tech.fr/assets/logos/logo-ca-tech.png"/>
+  <meta name="twitter:title" content="CA-TECH — L'IA au service de votre croissance"/>
+  <meta name="twitter:description" content="Cabinet de conseil spécialisé en IA, Automatisation, SEO et Dev Web. Diagnostic gratuit."/>
+  <meta name="twitter:image" content="https://ca-tech.fr/og-homepage.jpg"/>
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="/public/favicon.ico"/>
-  <link rel="icon" type="image/png" sizes="16x16" href="/public/favicon-16x16.png"/>
   <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png"/>
   <link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png"/>
   <link rel="manifest" href="/public/site.webmanifest"/>
   <meta name="theme-color" content="#0066FF"/>
-  <!-- Performances -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <!-- Données structurées JSON-LD -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <!-- Design system -->
+  <link rel="stylesheet" href="css/main.css"/>
+  <!-- Schema.org -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": ["LocalBusiness", "ProfessionalService"],
-        "@id": "https://ca-tech.fr/#business",
-        "name": "CA-TECH",
-        "description": "Agence Web & Design spécialisée dans la création de sites vitrines, e-commerce, logos et identités visuelles. Présente à Paris, Lyon, Dijon et Troyes.",
-        "url": "https://ca-tech.fr",
-        "telephone": "+33775664975",
-        "email": "contact@ca-tech.fr",
-        "foundingDate": "2013",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "1 Avenue du Mail",
-          "addressLocality": "Talant",
-          "postalCode": "21240",
-          "addressCountry": "FR"
-        },
-        "areaServed": [
-          {"@type": "City", "name": "Paris"},
-          {"@type": "City", "name": "Lyon"},
-          {"@type": "City", "name": "Dijon"},
-          {"@type": "City", "name": "Troyes"}
-        ],
-        "knowsAbout": ["Création de site web", "SEO", "E-commerce", "Identité visuelle", "Logo", "Intelligence artificielle", "Automatisation"],
-        "hasOfferCatalog": {
-          "@type": "OfferCatalog",
-          "name": "Services CA-TECH",
-          "itemListElement": [
-            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Création de site vitrine"}},
-            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Création de site e-commerce"}},
-            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Création de landing page"}},
-            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Création de logo"}},
-            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Identité visuelle"}},
-            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Création de flyers"}},
-            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Refonte de site internet"}},
-            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Maintenance de site web"}}
-          ]
-        },
-        "priceRange": "€€",
-        "image": "https://ca-tech.fr/assets/logos/logo-ca-tech.png",
-        "logo": "https://ca-tech.fr/assets/logos/logo-ca-tech.png"
-      },
-      {
-        "@type": "Organization",
-        "@id": "https://ca-tech.fr/#organization",
-        "name": "CA-TECH",
-        "url": "https://ca-tech.fr",
-        "logo": "https://ca-tech.fr/assets/logos/logo-ca-tech.png",
-        "telephone": "+33775664975",
-        "email": "contact@ca-tech.fr",
-        "foundingDate": "2013",
-        "description": "CA-TECH accompagne les entreprises partout en France avec une expertise particulière sur Paris, Lyon, Dijon et Troyes.",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "1 Avenue du Mail",
-          "addressLocality": "Talant",
-          "postalCode": "21240",
-          "addressCountry": "FR"
-        },
-        "areaServed": [
-          {"@type": "City", "name": "Paris"},
-          {"@type": "City", "name": "Lyon"},
-          {"@type": "City", "name": "Dijon"},
-          {"@type": "City", "name": "Troyes"}
-        ],
-        "sameAs": []
-      },
-      {
-        "@type": "WebSite",
-        "@id": "https://ca-tech.fr/#website",
-        "url": "https://ca-tech.fr",
-        "name": "CA-TECH — Agence Web & Design",
-        "inLanguage": "fr-FR",
-        "publisher": {"@id": "https://ca-tech.fr/#business"}
-      },
-      {
-        "@type": "WebPage",
-        "@id": "https://ca-tech.fr/#webpage",
-        "url": "https://ca-tech.fr",
-        "name": "Agence Web & Design Paris Lyon Dijon Troyes | CA-TECH",
-        "isPartOf": {"@id": "https://ca-tech.fr/#website"},
-        "about": {"@id": "https://ca-tech.fr/#business"},
-        "inLanguage": "fr-FR"
-      }
-    ]
-  }
+  {"@context":"https://schema.org","@type":"Organization","name":"CA-TECH","url":"https://ca-tech.fr","description":"Cabinet de conseil IA-first spécialisé en Intelligence Artificielle, Automatisation, SEO et Développement Web.","slogan":"L'Intelligence Artificielle au service de votre croissance.","foundingDate":"2023","areaServed":"FR","contactPoint":{"@type":"ContactPoint","contactType":"customer support","email":"contact@ca-tech.fr","telephone":"+33775664975","availableLanguage":"French"},"sameAs":["https://www.linkedin.com/company/ca-tech"]}
   </script>
-  <style>
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  :root{
-    --blue:#0066FF;--blue-dk:#0A2540;--blue-md:#003366;--cyan:#00D4FF;
-    --white:#ffffff;--dark:#050d1a;--dark2:#0a1628;--dark3:#0f1d32;
-    --text:#ffffff;--text2:rgba(255,255,255,.7);--text3:rgba(255,255,255,.45);
-    --border:rgba(255,255,255,.08);--glow:rgba(0,102,255,.4);--nav-h:72px;
-  }
-  html{scroll-behavior:smooth;overflow-x:hidden}
-  body{font-family:'Inter',-apple-system,sans-serif;color:var(--text);background:var(--dark);overflow-x:hidden;-webkit-font-smoothing:antialiased}
-
-  /* LOADER */
-  #loader{position:fixed;inset:0;z-index:9999;background:var(--dark);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;transition:opacity .6s,visibility .6s}
-  #loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
-  .ld-logo{height:60px;animation:ld-pulse 1.2s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(0,102,255,.5))}
-  .ld-bar-wrap{width:220px;height:3px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden}
-  .ld-bar{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));animation:ld-fill 2s ease-out forwards}
-  .ld-txt{font-size:.68rem;letter-spacing:4px;text-transform:uppercase;color:var(--cyan);font-weight:600}
-  @keyframes ld-fill{from{width:0}to{width:100%}}
-  @keyframes ld-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.94)}}
-
-  /* PROGRESS */
-  #prog{position:fixed;top:0;left:0;z-index:9000;height:2px;width:0%;background:linear-gradient(90deg,var(--blue),var(--cyan));transition:width .08s linear}
-
-  /* NAV */
-  nav{position:fixed;inset:0 0 auto 0;z-index:1000;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(5,13,26,.3);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:background .3s,box-shadow .3s,height .3s,backdrop-filter .3s}
-  nav.scrolled{height:60px;background:rgba(5,13,26,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 1px 0 rgba(255,255,255,.06),0 8px 32px rgba(0,0,0,.4)}
-  .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
-  .logo img{height:36px;width:auto;object-fit:contain;filter:drop-shadow(0 0 8px rgba(0,102,255,.4))}
-  .logo-text{line-height:1.1}
-  .logo-name{font-family:'Rajdhani',sans-serif;font-size:1.25rem;font-weight:700;letter-spacing:2px;color:var(--white);display:block}
-  .logo-sub{font-size:.48rem;color:var(--cyan);letter-spacing:2.5px;text-transform:uppercase;display:block}
-  .nav-links{display:flex;align-items:center;list-style:none;gap:.1rem}
-  .nav-links a{color:var(--text2);text-decoration:none;padding:6px 12px;font-size:.78rem;font-weight:500;border-radius:6px;transition:color .25s,background .25s}
-  .nav-links a:hover,.nav-links a.active{color:var(--cyan);background:rgba(0,212,255,.08)}
-  .btn-nav{background:var(--blue)!important;color:var(--white)!important;border-radius:8px!important;padding:10px 22px!important;font-weight:700!important;font-size:.78rem!important;letter-spacing:.5px;transition:all .3s!important;border:none!important;cursor:pointer;box-shadow:0 0 20px rgba(0,102,255,.3),inset 0 1px 0 rgba(255,255,255,.1)}
-  .btn-nav:hover{background:#1a7aff!important;transform:translateY(-2px)!important;box-shadow:0 0 35px rgba(0,102,255,.5),inset 0 1px 0 rgba(255,255,255,.15)!important}
-  .ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
-  .ham span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px;transition:transform .3s,opacity .3s}
-  .ham.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
-  .ham.open span:nth-child(2){opacity:0}
-  .ham.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-  .mob-menu{display:none;position:fixed;top:var(--nav-h);left:0;right:0;z-index:999;background:rgba(5,13,26,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:1.5rem 5%;flex-direction:column;gap:.7rem;opacity:0;transform:translateY(-12px);transition:opacity .3s,transform .3s}
-  .mob-menu.open{display:flex;opacity:1;transform:translateY(0)}
-  .mob-menu a{color:var(--text2);text-decoration:none;font-size:.88rem;padding:.7rem 0;border-bottom:1px solid var(--border)}
-  .mob-menu a:hover{color:var(--cyan)}
-  .mob-menu .btn-mob{display:block;background:var(--blue);color:#fff;text-align:center;padding:12px;border-radius:8px;font-weight:700;margin-top:.5rem;box-shadow:0 0 20px rgba(0,102,255,.3)}
-
-  /* REVEALS */
-  .reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease}
-  .reveal-l{opacity:0;transform:translateX(-32px);transition:opacity .7s ease,transform .7s ease}
-  .reveal-r{opacity:0;transform:translateX(32px);transition:opacity .7s ease,transform .7s ease}
-  .reveal.vis,.reveal-l.vis,.reveal-r.vis{opacity:1;transform:none}
-  .d1{transition-delay:.08s!important}.d2{transition-delay:.16s!important}
-  .d3{transition-delay:.24s!important}.d4{transition-delay:.32s!important}
-  .d5{transition-delay:.4s!important}.d6{transition-delay:.48s!important}
-  .d7{transition-delay:.56s!important}.d8{transition-delay:.64s!important}
-
-  /* SECTION COMMON */
-  .section-label{font-size:.72rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);margin-bottom:.6rem;display:flex;align-items:center;gap:10px}
-  .section-label::before{content:'';width:30px;height:2px;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:2px}
-  .section-title{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:900;line-height:1.1;color:var(--white);margin-bottom:1rem;letter-spacing:-.5px}
-  .section-desc{font-size:.95rem;color:var(--text3);line-height:1.7;max-width:550px}
-
-  /* BUTTONS */
-  .btn-blue{display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:var(--white);padding:14px 32px;border-radius:10px;font-size:.85rem;font-weight:700;letter-spacing:.5px;text-decoration:none;border:none;cursor:pointer;position:relative;overflow:hidden;transition:all .3s;box-shadow:0 0 25px rgba(0,102,255,.3),inset 0 1px 0 rgba(255,255,255,.1)}
-  .btn-blue::after{content:'';position:absolute;top:-50%;left:-60%;width:40%;height:200%;background:rgba(255,255,255,.12);transform:skewX(-20deg);transition:left .5s}
-  .btn-blue:hover{background:#1a7aff;box-shadow:0 0 40px rgba(0,102,255,.5);transform:translateY(-2px)}
-  .btn-blue:hover::after{left:160%}
-  .btn-outline{display:inline-flex;align-items:center;gap:8px;color:var(--white);padding:14px 32px;border-radius:10px;font-size:.85rem;font-weight:700;text-decoration:none;cursor:pointer;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.03);transition:all .3s}
-  .btn-outline:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(0,212,255,.05);transform:translateY(-2px);box-shadow:0 0 25px rgba(0,212,255,.15)}
-
-  /* HERO */
-  #hero{min-height:100vh;padding-top:var(--nav-h);display:grid;grid-template-columns:1fr 1fr;align-items:center;overflow:hidden;position:relative}
-  .hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1440&q=85&auto=format&fit=crop') center/cover no-repeat;z-index:0}
-  .hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,rgba(5,13,26,.92) 0%,rgba(5,13,26,.82) 50%,rgba(5,13,26,.55) 100%)}
-  .hero-left{padding:5rem 3rem 5rem 5%;position:relative;z-index:1}
-  .hero-kicker{font-size:.72rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);margin-bottom:1.4rem;display:flex;align-items:center;gap:8px}
-  .hero-kicker::before{content:'';width:24px;height:2px;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:2px}
-  .hero-phrase-wrap{display:grid;margin-bottom:1.4rem}
-  .hero-phrase{grid-area:1/1;font-size:clamp(2rem,3.4vw,3rem);font-weight:900;line-height:1.12;color:var(--white);letter-spacing:-.5px;opacity:0;transform:translateY(14px);transition:opacity .7s cubic-bezier(.25,.46,.45,.94),transform .7s cubic-bezier(.25,.46,.45,.94);pointer-events:none;user-select:none}
-  .hero-phrase.active{opacity:1;transform:translateY(0);pointer-events:auto}
-  .hero-phrase .hl{background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-  .hero-left p.hero-desc{font-size:.95rem;color:rgba(255,255,255,.65);line-height:1.78;margin-bottom:2.2rem;max-width:460px}
-  .hero-ctas{display:flex;gap:1rem;flex-wrap:wrap}
-  .hero-right{position:relative;height:100%;display:flex;align-items:center;justify-content:center;padding:3rem 5% 3rem 0;z-index:1}
-  /* HERO COLLAGE */
-  .hero-collage{position:relative;width:100%;max-width:580px;height:500px}
-  .hc-card{position:absolute;border-radius:12px;overflow:hidden;box-shadow:0 22px 56px rgba(0,0,0,.55),0 4px 12px rgba(0,0,0,.3),0 0 0 1px rgba(255,255,255,.06);transition:transform .5s cubic-bezier(.25,.46,.45,.94),box-shadow .5s}
-  .hc-card:hover{box-shadow:0 32px 72px rgba(0,0,0,.6),0 0 0 1.5px rgba(0,102,255,.4),0 0 32px rgba(0,102,255,.12);z-index:10!important}
-  .hc-card img{width:100%;height:100%;object-fit:cover;object-position:top left;display:block;transition:transform .6s cubic-bezier(.25,.46,.45,.94)}
-  .hc-card:hover img{transform:scale(1.04)}
-  .hc-1{width:64%;height:210px;top:0;left:0;transform:rotate(-4deg);z-index:4}
-  .hc-2{width:58%;height:188px;top:52px;right:0;transform:rotate(3deg);z-index:3}
-  .hc-3{width:55%;height:176px;bottom:82px;left:8%;transform:rotate(2deg);z-index:2}
-  .hc-4{width:52%;height:168px;bottom:28px;right:6%;transform:rotate(-3deg);z-index:1}
-  .hc-1:hover{transform:rotate(-1deg) translateY(-7px) scale(1.02)}
-  .hc-2:hover{transform:rotate(0deg) translateY(-7px) scale(1.02)}
-  .hc-3:hover{transform:rotate(0deg) translateY(-7px) scale(1.02)}
-  .hc-4:hover{transform:rotate(-1deg) translateY(-7px) scale(1.02)}
-
-  /* STATS BAR */
-  #stats-bar{background:linear-gradient(135deg,var(--blue-dk),var(--blue-md));padding:3.5rem 5%;display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;position:relative;overflow:hidden}
-  #stats-bar::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(0,212,255,.05),transparent);pointer-events:none}
-  .stat-item{text-align:center;padding:1.2rem;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);transition:all .3s}
-  .stat-item:hover{background:rgba(255,255,255,.1);transform:translateY(-4px);box-shadow:0 8px 30px rgba(0,0,0,.2)}
-  .stat-num{font-size:2.2rem;font-weight:900;color:white;display:block;letter-spacing:-1px}
-  .stat-lbl{font-size:.72rem;color:rgba(255,255,255,.55);font-weight:500;margin-top:.2rem}
-
-  /* SERVICES */
-  .sec-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:blur(6px);transform:scale(1.12);z-index:0;pointer-events:none}
-  #services{background:#fff;padding:110px 6%;position:relative;overflow:hidden}
-  #services .section-label{color:var(--blue)}
-  #services .section-label::before{background:linear-gradient(90deg,var(--blue),var(--cyan))}
-  #services .section-title{color:var(--blue-dk)}
-  #services .section-desc{color:#64748b}
-  .svc2-header{margin-bottom:4.5rem}
-  /* ── 4 Univers ── */
-  .univ-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2rem;max-width:1200px;margin:0 auto}
-  .univ-card{background:#fff;border:1px solid rgba(10,37,64,.07);border-radius:24px;overflow:hidden;position:relative;box-shadow:0 1px 3px rgba(0,0,0,.04),0 8px 28px rgba(0,0,0,.07);transition:transform .45s cubic-bezier(.16,1,.3,1),box-shadow .45s cubic-bezier(.16,1,.3,1);cursor:pointer}
-  .univ-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--uc,#0066FF);z-index:3;transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(.16,1,.3,1)}
-  .univ-card:hover{transform:translateY(-12px);box-shadow:0 2px 8px rgba(0,0,0,.04),0 28px 72px color-mix(in srgb,var(--uc,#0066FF) 16%,transparent)}
-  .univ-card:hover::before{transform:scaleX(1)}
-  .univ-img{position:relative;overflow:hidden;aspect-ratio:16/10}
-  .univ-img img{width:100%;height:100%;object-fit:cover;transition:transform .65s cubic-bezier(.16,1,.3,1)}
-  .univ-card:hover .univ-img img{transform:scale(1.06)}
-  .univ-img-ov{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(0,0,0,.52) 100%);z-index:1;pointer-events:none}
-  .univ-num{position:absolute;top:14px;right:16px;z-index:2;font-family:'Rajdhani',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,.75);background:rgba(0,0,0,.28);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.15);padding:4px 13px;border-radius:20px}
-  .univ-icon-wrap{position:absolute;bottom:-22px;left:26px;z-index:4;width:50px;height:50px;border-radius:15px;background:var(--uc,#0066FF);box-shadow:0 6px 20px color-mix(in srgb,var(--uc,#0066FF) 38%,transparent);display:flex;align-items:center;justify-content:center;transition:transform .4s cubic-bezier(.16,1,.3,1)}
-  .univ-card:hover .univ-icon-wrap{transform:scale(1.1) rotate(-5deg)}
-  .univ-icon-wrap svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-  .univ-body{padding:2.2rem 1.8rem 2rem}
-  .univ-title{font-size:1.3rem;font-weight:800;color:var(--blue-dk);letter-spacing:-.3px;margin-bottom:.55rem}
-  .univ-desc{font-size:.83rem;color:#64748b;line-height:1.72;margin-bottom:1.25rem}
-  .univ-subs{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1.6rem;max-height:80px;overflow:hidden;position:relative}
-  .univ-subs::after{content:'';position:absolute;bottom:0;left:0;right:0;height:28px;background:linear-gradient(transparent,#fff);pointer-events:none}
-  .univ-sub{font-size:.64rem;font-weight:600;color:var(--uc,#0066FF);background:color-mix(in srgb,var(--uc,#0066FF) 7%,transparent);border:1px solid color-mix(in srgb,var(--uc,#0066FF) 14%,transparent);border-radius:20px;padding:4px 11px;letter-spacing:.2px;white-space:nowrap}
-  .univ-cta{display:inline-flex;align-items:center;gap:7px;font-size:.82rem;font-weight:700;color:var(--uc,#0066FF);background:color-mix(in srgb,var(--uc,#0066FF) 6%,transparent);border:1px solid color-mix(in srgb,var(--uc,#0066FF) 16%,transparent);border-radius:10px;padding:11px 22px;text-decoration:none;transition:background .25s,gap .25s;font-family:inherit;cursor:pointer}
-  .univ-cta:hover,.univ-card:hover .univ-cta{background:color-mix(in srgb,var(--uc,#0066FF) 12%,transparent);gap:11px}
-  @media(max-width:960px){.univ-grid{grid-template-columns:1fr;gap:1.4rem}}
-  @media(max-width:580px){#services{padding:80px 4%}.univ-body{padding:2rem 1.4rem 1.6rem}}
-
-  /* TESTIMONIALS */
-  #testimonials{background:var(--dark);padding:100px 5%;position:relative;overflow:hidden}
-  .t-header{text-align:center;margin-bottom:3.5rem}
-  .t-header .section-label{justify-content:center}
-  .t-header .section-desc{margin:0 auto}
-  .t-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
-  .t-card{background:linear-gradient(145deg,rgba(255,255,255,.06) 0%,rgba(255,255,255,.02) 100%);border:1px solid rgba(255,255,255,.09);border-radius:20px;padding:2rem;position:relative;backdrop-filter:blur(6px);box-shadow:0 4px 20px rgba(0,0,0,.26),0 1px 0 rgba(255,255,255,.07) inset;transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s cubic-bezier(.16,1,.3,1),border-color .3s,background .3s}
-  .t-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12) 50%,transparent);pointer-events:none}
-  .t-card:hover{transform:translateY(-6px);background:linear-gradient(145deg,rgba(255,255,255,.09) 0%,rgba(255,255,255,.04) 100%);border-color:rgba(0,102,255,.35);box-shadow:0 8px 40px rgba(0,0,0,.35),0 0 40px rgba(0,102,255,.12),0 1px 0 rgba(255,255,255,.10) inset}
-  .t-stars{display:flex;gap:2px;margin-bottom:1rem}
-  .t-stars span{color:var(--cyan);font-size:.82rem}
-  .t-text{font-size:.87rem;color:var(--text2);line-height:1.7;margin-bottom:1.4rem;font-style:italic}
-  .t-author{display:flex;align-items:center;gap:.9rem}
-  .t-avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid rgba(0,102,255,.3)}
-  .t-name{font-size:.82rem;font-weight:700;color:var(--white)}
-  .t-role{font-size:.72rem;color:var(--text3)}
-  .brands-row{display:flex;align-items:center;justify-content:center;gap:3rem;margin-top:3.5rem;padding-top:3rem;border-top:1px solid var(--border);flex-wrap:wrap}
-  .brand-chip{display:flex;align-items:center;gap:8px;opacity:.4;transition:all .3s;cursor:pointer;font-size:.85rem;font-weight:700;color:var(--white)}
-  .brand-chip:hover{opacity:.8;transform:translateY(-2px)}
-  .brand-dot{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:800;color:white}
-
-  /* CONTACT */
-  #contact{background:var(--dark2);padding:100px 5%;position:relative;overflow:hidden}
-  #contact::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent)}
-  .contact-inner{display:grid;grid-template-columns:1fr 1fr;gap:4rem}
-  .contact-form{display:flex;flex-direction:column;gap:1.2rem}
-  .contact-form .f-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-  .contact-form input,.contact-form textarea{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:13px 16px;color:var(--white);font-family:'Inter',sans-serif;font-size:.85rem;outline:none;width:100%;transition:all .3s}
-  .contact-form input::placeholder,.contact-form textarea::placeholder{color:var(--text3)}
-  .contact-form input:focus,.contact-form textarea:focus{border-color:var(--blue);background:rgba(0,102,255,.05);box-shadow:0 0 0 3px rgba(0,102,255,.1)}
-  .contact-form textarea{min-height:120px;resize:vertical}
-  .contact-info{display:flex;flex-direction:column;gap:2rem}
-  .contact-block{display:flex;gap:1rem;align-items:flex-start}
-  .contact-block-icon{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,rgba(0,102,255,.15),rgba(0,212,255,.1));border:1px solid rgba(0,102,255,.2);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
-  .contact-block h4{font-size:.88rem;font-weight:700;color:var(--white);margin-bottom:.2rem}
-  .contact-block p{font-size:.8rem;color:var(--text3);line-height:1.5}
-  .contact-map{margin-top:1rem;border-radius:14px;overflow:hidden;border:1px solid var(--border);height:200px}
-  .contact-map iframe{width:100%;height:100%;border:none;filter:grayscale(.8) brightness(.7) contrast(1.2)}
-  .contact-socials{display:flex;gap:.6rem;margin-top:.5rem}
-  .contact-soc{width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;color:var(--text3);text-decoration:none;font-size:.75rem;font-weight:700;transition:all .3s}
-  .contact-soc:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(0,212,255,.08);transform:translateY(-3px);box-shadow:0 0 15px rgba(0,212,255,.15)}
-
-  /* DEVIS MODAL */
-  #devis-overlay{position:fixed;inset:0;z-index:5000;background:rgba(5,13,26,.9);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:1.5rem;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
-  #devis-overlay.open{opacity:1;visibility:visible}
-  .devis-modal{background:var(--dark2);border:1px solid var(--border);border-radius:20px;width:100%;max-width:720px;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 40px 100px rgba(0,0,0,.5);transform:translateY(30px) scale(.97);transition:transform .4s}
-  #devis-overlay.open .devis-modal{transform:translateY(0) scale(1)}
-  .devis-header{background:linear-gradient(135deg,var(--blue-dk),var(--blue-md));color:white;padding:1.8rem 2rem;border-radius:20px 20px 0 0;position:sticky;top:0;z-index:10;border-bottom:1px solid rgba(0,102,255,.2)}
-  .devis-header h2{font-size:1.1rem;font-weight:800;margin-bottom:.25rem}
-  .devis-header p{font-size:.78rem;color:rgba(255,255,255,.55)}
-  .devis-close{position:absolute;top:1.2rem;right:1.5rem;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:white;width:32px;height:32px;border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .3s}
-  .devis-close:hover{background:rgba(255,255,255,.2)}
-  .devis-progress{display:flex;align-items:center;gap:0;padding:1.4rem 2rem;border-bottom:1px solid var(--border);overflow-x:auto;background:rgba(255,255,255,.02)}
-  .step-indicator{display:flex;align-items:center;gap:0;flex-shrink:0}
-  .step-dot{width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,.15);background:transparent;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:var(--text3);transition:all .35s;flex-shrink:0}
-  .step-dot.active{border-color:var(--blue);background:var(--blue);color:white;box-shadow:0 0 15px rgba(0,102,255,.3)}
-  .step-dot.done{border-color:#10b981;background:#10b981;color:white}
-  .step-line{width:40px;height:2px;background:rgba(255,255,255,.1);transition:background .35s}
-  .step-line.done{background:#10b981}
-  .step-lbl{font-size:.62rem;color:var(--text3);text-align:center;margin-top:.25rem;white-space:nowrap}
-  .step-wrap{display:flex;flex-direction:column;align-items:center}
-  .devis-body{padding:2rem}
-  .devis-step{display:none;animation:step-in .35s ease}
-  .devis-step.active{display:block}
-  @keyframes step-in{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
-  .step-title{font-size:1rem;font-weight:800;color:var(--white);margin-bottom:.3rem}
-  .step-sub{font-size:.82rem;color:var(--text3);margin-bottom:1.6rem}
-  .f-grid{display:grid;gap:1rem}
-  .f-grid.cols2{grid-template-columns:1fr 1fr}
-  .f-grid.cols3{grid-template-columns:1fr 1fr 1fr}
-  .f-group{display:flex;flex-direction:column;gap:.4rem}
-  .f-group label{font-size:.75rem;font-weight:700;color:var(--text2);letter-spacing:.3px}
-  .f-group label .req{color:var(--cyan)}
-  .f-group input,.f-group select,.f-group textarea{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:11px 14px;color:var(--white);font-family:'Inter',sans-serif;font-size:.85rem;outline:none;width:100%;transition:border-color .3s,box-shadow .3s,background .3s}
-  .f-group input::placeholder,.f-group textarea::placeholder{color:var(--text3)}
-  .f-group input:focus,.f-group select:focus,.f-group textarea:focus{border-color:var(--blue);background:rgba(0,102,255,.05);box-shadow:0 0 0 3px rgba(0,102,255,.1)}
-  .f-group input.err{border-color:#ef4444;background:rgba(239,68,68,.1)}
-  .f-group select option{background:var(--dark2);color:var(--white)}
-  .f-group textarea{min-height:90px;resize:vertical}
-  .choice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}
-  .choice-grid.cols2{grid-template-columns:1fr 1fr}
-  .choice-card{border:1px solid var(--border);border-radius:10px;padding:1rem;cursor:pointer;transition:all .25s;text-align:center;position:relative;background:rgba(255,255,255,.02)}
-  .choice-card:hover{border-color:rgba(0,102,255,.3);background:rgba(0,102,255,.05);transform:translateY(-2px)}
-  .choice-card.selected{border-color:var(--blue);background:rgba(0,102,255,.1);box-shadow:0 0 15px rgba(0,102,255,.15)}
-  .choice-card.selected::after{content:'✓';position:absolute;top:6px;right:8px;font-size:.7rem;font-weight:800;color:var(--cyan)}
-  .choice-icon{font-size:1.5rem;margin-bottom:.4rem}
-  .choice-name{font-size:.8rem;font-weight:700;color:var(--white);margin-bottom:.15rem}
-  .choice-desc{font-size:.68rem;color:var(--text3);line-height:1.4}
-  .budget-slider{width:100%;accent-color:var(--blue);height:6px;cursor:pointer;margin:.5rem 0}
-  .budget-display{font-size:1.6rem;font-weight:900;background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin-bottom:.3rem}
-  .budget-labels{display:flex;justify-content:space-between;font-size:.7rem;color:var(--text3)}
-  .check-group{display:flex;flex-direction:column;gap:.6rem}
-  .check-item{display:flex;align-items:center;gap:10px;cursor:pointer;padding:.6rem .8rem;border-radius:8px;border:1px solid var(--border);transition:all .2s;background:rgba(255,255,255,.02)}
-  .check-item:hover{background:rgba(0,102,255,.05);border-color:rgba(0,102,255,.2)}
-  .check-item input{accent-color:var(--blue);width:16px;height:16px;cursor:pointer}
-  .check-item label{font-size:.83rem;color:var(--text2);cursor:pointer}
-  .recap-section{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:1.2rem 1.4rem;margin-bottom:1rem}
-  .recap-title{font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);margin-bottom:.8rem}
-  .recap-row{display:flex;justify-content:space-between;padding:.35rem 0;border-bottom:1px solid var(--border);font-size:.82rem}
-  .recap-row:last-child{border:none}
-  .recap-row span:first-child{color:var(--text3)}
-  .recap-row span:last-child{color:var(--white);font-weight:600}
-  .devis-footer{display:flex;justify-content:space-between;align-items:center;padding:1.4rem 2rem;border-top:1px solid var(--border);position:sticky;bottom:0;background:var(--dark2);border-radius:0 0 20px 20px}
-  .btn-step-next{background:var(--blue);color:white;border:none;border-radius:8px;padding:11px 28px;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .3s;box-shadow:0 0 15px rgba(0,102,255,.3)}
-  .btn-step-next:hover{background:#1a7aff;box-shadow:0 0 25px rgba(0,102,255,.5);transform:translateY(-2px)}
-  .btn-step-next.success-btn{background:#10b981;box-shadow:0 0 15px rgba(16,185,129,.3)}
-  .btn-step-back{background:none;border:1px solid var(--border);color:var(--text2);border-radius:8px;padding:11px 22px;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .3s}
-  .btn-step-back:hover{border-color:var(--blue);color:var(--cyan)}
-  .devis-success{display:none;text-align:center;padding:3rem 2rem}
-  .devis-success.show{display:block}
-  .success-icon{font-size:3rem;margin-bottom:1rem;animation:pop-in .5s cubic-bezier(.34,1.56,.64,1)}
-  @keyframes pop-in{from{transform:scale(0)}to{transform:scale(1)}}
-  .devis-success h3{font-size:1.3rem;font-weight:900;color:var(--white);margin-bottom:.6rem}
-  .devis-success p{font-size:.88rem;color:var(--text3);line-height:1.7;margin-bottom:1.5rem}
-
-  /* A PROPOS */
-  #a-propos{background:var(--dark);padding:110px 5%;position:relative;overflow:hidden}
-  #a-propos::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,102,255,.4),transparent)}
-  .apropos-inner{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center}
-  .apropos-since{display:inline-block;font-size:.68rem;color:rgba(255,255,255,.28);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:1.4rem}
-  .apropos-since strong{color:var(--blue)}
-  .apropos-title{font-size:clamp(2rem,3.5vw,3rem);font-weight:900;color:var(--white);line-height:1.15;margin-bottom:1.6rem}
-  .apropos-title em{font-style:normal;background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  .apropos-desc{font-size:.9rem;color:var(--text2);line-height:1.9;margin-bottom:2rem}
-  .apropos-cta{display:inline-flex;align-items:center;gap:.5rem;font-size:.82rem;font-weight:700;color:var(--blue);text-decoration:none;border-bottom:1px solid rgba(0,102,255,.3);padding-bottom:2px;transition:color .25s,border-color .25s}
-  .apropos-cta:hover{color:var(--cyan);border-color:var(--cyan)}
-  .apropos-values{display:flex;flex-direction:column;gap:1rem}
-  .apropos-val{display:flex;gap:1.1rem;align-items:flex-start;padding:1.4rem 1.5rem;border:1px solid rgba(255,255,255,.06);border-radius:14px;background:rgba(255,255,255,.02);transition:border-color .3s,background .3s}
-  .apropos-val:hover{border-color:rgba(0,102,255,.25);background:rgba(0,102,255,.04)}
-  .apropos-val-icon{width:38px;height:38px;border-radius:9px;background:rgba(0,102,255,.1);border:1px solid rgba(0,102,255,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-  .apropos-val-icon svg{width:17px;height:17px;stroke:var(--blue);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-  .apropos-val-txt h4{font-size:.88rem;font-weight:800;color:var(--white);margin-bottom:.25rem}
-  .apropos-val-txt p{font-size:.78rem;color:var(--text3);line-height:1.65}
-
-  /* FOOTER */
-  footer{background:var(--dark);border-top:1px solid rgba(255,255,255,.06);padding:80px 5% 0}
-  .f-top{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:2.5rem 3rem;padding-bottom:60px}
-  .f-brand{margin-bottom:1.4rem;display:flex;align-items:center;gap:10px}
-  .f-brand img{height:30px;width:auto;object-fit:contain;filter:drop-shadow(0 0 10px rgba(0,102,255,.35))}
-  .f-brand-name{font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:700;letter-spacing:2px;color:var(--white)}
-  .f-brand-tag{font-size:.48rem;color:var(--blue);letter-spacing:2.5px;text-transform:uppercase;margin-top:2px}
-  .f-col-desc{font-size:.8rem;color:var(--text3);line-height:1.85;margin-bottom:1.2rem;max-width:280px}
-  .f-zones{font-size:.68rem;color:rgba(255,255,255,.28);letter-spacing:1.5px;text-transform:uppercase;margin-top:1rem}
-  .f-zones span{color:var(--text3)}
-  .f-zones-cities{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.5rem}
-  .f-zones-cities a{font-size:.7rem;color:var(--text3);text-decoration:none;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:3px 8px;transition:all .2s;letter-spacing:.5px;text-transform:none}
-  .f-zones-cities a:hover{color:var(--cyan);border-color:rgba(0,212,255,.3);background:rgba(0,212,255,.05)}
-  .f-zones-text{font-size:.68rem;color:rgba(255,255,255,.22);line-height:1.5;margin-top:.5rem;text-transform:none;letter-spacing:0}
-
-  /* ZONES D'INTERVENTION */
-  #zones{background:var(--dark2);padding:100px 5%;position:relative;overflow:hidden}
-  #zones::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent)}
-  .zones-inner{max-width:1200px;margin:0 auto}
-  .zones-header{text-align:center;margin-bottom:3.5rem}
-  .zones-header .section-desc{margin:1rem auto 0;max-width:600px;font-size:1rem;color:var(--text3)}
-  .zones-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-bottom:3rem}
-  .zone-card{background:linear-gradient(145deg,rgba(255,255,255,.055) 0%,rgba(255,255,255,.015) 100%);border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:2rem 1.5rem;text-align:center;text-decoration:none;color:var(--text);position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:.75rem;backdrop-filter:blur(6px);box-shadow:0 4px 16px rgba(0,0,0,.22),0 1px 0 rgba(255,255,255,.07) inset;transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s cubic-bezier(.16,1,.3,1),border-color .3s,background .3s}
-  .zone-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,102,255,.08),rgba(0,212,255,.04));opacity:0;transition:opacity .3s}
-  .zone-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12) 50%,transparent);pointer-events:none}
-  .zone-card:hover{transform:translateY(-6px);background:linear-gradient(145deg,rgba(255,255,255,.09) 0%,rgba(255,255,255,.035) 100%);border-color:rgba(0,102,255,.4);box-shadow:0 8px 32px rgba(0,0,0,.35),0 0 48px rgba(0,102,255,.14),0 1px 0 rgba(255,255,255,.10) inset}
-  .zone-card:hover::before{opacity:1}
-  .zone-card-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,rgba(0,102,255,.15),rgba(0,212,255,.08));border:1px solid rgba(0,102,255,.2);display:flex;align-items:center;justify-content:center}
-  .zone-card-icon svg{width:24px;height:24px;stroke:var(--cyan);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-  .zone-card-city{font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;letter-spacing:1px;color:var(--white)}
-  .zone-card-desc{font-size:.78rem;color:var(--text3);line-height:1.5}
-  .zone-card-link{font-size:.72rem;color:var(--cyan);font-weight:600;letter-spacing:.5px;margin-top:.25rem;opacity:0;transition:opacity .3s}
-  .zone-card:hover .zone-card-link{opacity:1}
-  .zones-tagline{text-align:center;background:rgba(0,102,255,.06);border:1px solid rgba(0,102,255,.15);border-radius:12px;padding:1.25rem 2rem;font-size:.9rem;color:var(--text2);line-height:1.6;max-width:700px;margin:0 auto}
-  .zones-tagline strong{color:var(--cyan)}
-  @media(max-width:768px){.zones-grid{grid-template-columns:1fr 1fr;gap:1rem}}
-  @media(max-width:480px){.zones-grid{grid-template-columns:1fr 1fr}}
-  .f-col h5{font-size:.65rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--blue);margin-bottom:1.4rem;padding-bottom:.7rem;border-bottom:1px solid rgba(0,102,255,.18)}
-  .f-col ul{list-style:none;display:flex;flex-direction:column;gap:.65rem}
-  .f-col ul a{color:var(--text3);text-decoration:none;font-size:.82rem;transition:color .25s,padding-left .25s;display:block}
-  .f-col ul a:hover{color:var(--white);padding-left:6px}
-  .f-contact-item{display:flex;align-items:center;gap:.7rem;margin-bottom:.75rem}
-  .f-contact-icon{width:32px;height:32px;border-radius:8px;background:rgba(0,102,255,.1);border:1px solid rgba(0,102,255,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .25s,border-color .25s}
-  .f-contact-icon svg{width:14px;height:14px;stroke:var(--blue);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-  .f-contact-item:hover .f-contact-icon{background:rgba(0,102,255,.2);border-color:rgba(0,102,255,.4)}
-  .f-contact-txt{font-size:.8rem;color:var(--text3);line-height:1.4;transition:color .25s}
-  .f-contact-txt a{color:inherit;text-decoration:none}
-  .f-contact-item:hover .f-contact-txt{color:var(--white)}
-  .f-sep{height:1px;background:linear-gradient(90deg,transparent,rgba(0,102,255,.35) 30%,rgba(0,212,255,.2) 50%,rgba(0,102,255,.35) 70%,transparent);margin:0 -5%}
-  .f-bottom{display:flex;align-items:center;justify-content:space-between;padding:22px 0;font-size:.72rem;color:rgba(255,255,255,.22);flex-wrap:wrap;gap:.8rem}
-  .f-bottom-logo{display:flex;align-items:center;gap:6px}
-  .f-bottom-logo img{height:18px;width:auto;opacity:.3}
-  .f-bottom-logo span{font-family:'Rajdhani',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.22)}
-
-  /* BACK TO TOP */
-  #btt{position:fixed;bottom:2rem;right:2rem;z-index:500;width:42px;height:42px;border-radius:50%;background:var(--blue);border:none;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.9rem;opacity:0;transform:translateY(14px);transition:all .3s;box-shadow:0 0 20px rgba(0,102,255,.4)}
-  #btt.show{opacity:1;transform:translateY(0)}
-  #btt:hover{box-shadow:0 0 35px rgba(0,102,255,.7)}
-
-  /* RESPONSIVE */
-  @media(max-width:1024px){
-    #hero{grid-template-columns:1fr}.hero-left{padding:4rem 5%}.hero-right{display:none}
-    .t-grid{grid-template-columns:1fr 1fr}.contact-inner{grid-template-columns:1fr;gap:3rem}
-    .f-top{grid-template-columns:1.3fr 1fr 1fr 1fr}#stats-bar{grid-template-columns:repeat(2,1fr)}
-    .apropos-inner{grid-template-columns:1fr;gap:3.5rem}
-  }
-  @media(max-width:768px){
-    .nav-links{display:none}.ham{display:flex}
-    .t-grid{grid-template-columns:1fr}
-    .choice-grid{grid-template-columns:1fr 1fr}.f-grid.cols2,.f-grid.cols3{grid-template-columns:1fr}
-    .contact-form .f-row{grid-template-columns:1fr}
-
-    .f-top{grid-template-columns:1fr 1fr}
-  }
-  @media(max-width:480px){
-    section{padding:70px 4%!important}#stats-bar{padding:2.5rem 4%;grid-template-columns:1fr 1fr}
-    .hero-left{padding:3rem 4%}.hero-ctas{flex-direction:column}
-    .f-top{grid-template-columns:1fr}.choice-grid{grid-template-columns:1fr}
-    .f-grid.cols2{grid-template-columns:1fr}.devis-modal{border-radius:14px}.devis-header{border-radius:14px 14px 0 0}
-  }
-
-  /* ── TARIFS ──────────────────────────────────────────────────────── */
-  #tarifs{background:#f8fafc;padding:110px 6%;position:relative;overflow:hidden}
-  .tarifs-hd{text-align:center;margin-bottom:4rem}
-  .tarifs-hd-label{display:inline-flex;align-items:center;gap:8px;font-size:.68rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--blue);margin-bottom:.8rem}
-  .tarifs-hd-label::before{content:'';width:24px;height:2px;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:2px}
-  .tarifs-hd-title{font-size:clamp(1.8rem,3vw,2.5rem);font-weight:900;color:var(--blue-dk);letter-spacing:-.5px;margin-bottom:.8rem}
-  .tarifs-hd-desc{font-size:.92rem;color:#64748b;line-height:1.7;max-width:560px;margin:0 auto}
-  .tarifs-grid-home{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
-  .p-card{background:#fff;border:1px solid rgba(10,37,64,.07);border-radius:22px;padding:2.2rem 2rem 2rem;position:relative;display:flex;flex-direction:column;box-shadow:0 2px 8px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.05),0 1px 0 #fff inset;transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s cubic-bezier(.16,1,.3,1),border-color .3s}
-  .p-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.95) 50%,transparent);pointer-events:none;z-index:1}
-  .p-card:hover{transform:translateY(-8px);border-color:rgba(0,102,255,.2);box-shadow:0 4px 16px rgba(0,0,0,.06),0 24px 64px rgba(0,102,255,.13),0 1px 0 #fff inset}
-  .p-card.p-featured{border:1.5px solid rgba(0,102,255,.38);background:linear-gradient(150deg,rgba(0,102,255,.04) 0%,#fff 55%);box-shadow:0 8px 40px rgba(0,102,255,.15),0 1px 0 rgba(255,255,255,.9) inset;grid-column:1/-1;max-width:720px;width:100%;margin-left:auto;margin-right:auto;padding:2.8rem 2.5rem 2.5rem}
-  .p-card.p-featured:hover{transform:translateY(-10px);border-color:rgba(0,102,255,.55);box-shadow:0 12px 60px rgba(0,102,255,.24),0 1px 0 #fff inset}
-  .p-badge-home{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--blue);color:#fff;font-size:.62rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:5px 16px;border-radius:20px;white-space:nowrap;box-shadow:0 4px 16px rgba(0,102,255,.3)}
-  .p-name{font-size:1.2rem;font-weight:900;color:var(--blue-dk);margin-bottom:.6rem;letter-spacing:-.2px}
-  .p-price{margin-bottom:1.6rem}
-  .p-amount{font-size:2.6rem;font-weight:900;color:var(--blue-dk);letter-spacing:-1.5px;line-height:1}
-  .p-divider{height:1px;background:#f1f5f9;margin-bottom:1.5rem}
-  .p-feats{list-style:none;display:flex;flex-direction:column;gap:.7rem;margin-bottom:2rem;flex:1}
-  .p-feats li{display:flex;align-items:center;gap:.75rem;font-size:.84rem;color:#475569;line-height:1.4}
-  .p-feats li::before{content:'';width:16px;height:16px;border-radius:50%;background:rgba(0,102,255,.08);border:1.5px solid rgba(0,102,255,.2);flex-shrink:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 8l2.5 2.5L12 5' stroke='%230066FF' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center}
-  .p-cta-btn{display:block;width:100%;text-align:center;padding:13px 20px;border-radius:10px;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .3s;letter-spacing:.3px;font-family:inherit;text-decoration:none;border:1.5px solid #dde5f0;background:#fff;color:var(--blue-dk)}
-  .p-cta-btn:hover{border-color:var(--blue);color:var(--blue);background:rgba(0,102,255,.04)}
-  .p-card.p-featured .p-cta-btn{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 4px 16px rgba(0,102,255,.25)}
-  .p-card.p-featured .p-cta-btn:hover{background:#1a7aff;box-shadow:0 8px 28px rgba(0,102,255,.4);transform:translateY(-1px)}
-  .tarifs-home-cta{text-align:center;margin-top:3rem;padding:2.5rem 2rem;background:rgba(0,102,255,.04);border:1px solid rgba(0,102,255,.1);border-radius:20px}
-  .tarifs-home-cta p{font-size:.95rem;color:#475569;line-height:1.7;margin-bottom:1.5rem}
-  .tarifs-home-cta .btn-voir{display:inline-flex;align-items:center;gap:8px;color:var(--blue);font-size:.82rem;font-weight:700;text-decoration:none;border:1.5px solid rgba(0,102,255,.3);padding:10px 22px;border-radius:8px;transition:all .3s;margin-left:1rem}
-  .tarifs-home-cta .btn-voir:hover{border-color:var(--blue);background:rgba(0,102,255,.06)}
-  @media(max-width:1024px){.tarifs-grid-home{grid-template-columns:1fr 1fr}.p-card.p-featured{max-width:100%}}
-  @media(max-width:768px){.tarifs-grid-home{grid-template-columns:1fr}}
-
-  /* ── NOS RÉALISATIONS ─────────────────────────────────────────── */
-  #realisations{background:#fff;padding:120px 6%;position:relative;overflow:hidden}
-  #realisations .section-label{color:var(--blue)}
-  #realisations .section-label::before{background:linear-gradient(90deg,var(--blue),var(--cyan))}
-  #realisations .section-title{color:var(--blue-dk)}
-  #realisations .section-desc{color:#64748b;max-width:560px}
-  .real-header{margin-bottom:4rem}
-  .real-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.8rem}
-  .real-card{border-radius:18px;overflow:hidden;background:#fff;border:1px solid rgba(0,0,0,.06);position:relative;box-shadow:0 2px 8px rgba(0,0,0,.05),0 8px 24px rgba(0,0,0,.05),0 1px 0 #fff inset;transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s cubic-bezier(.16,1,.3,1),border-color .3s;cursor:pointer}
-  .real-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.9) 50%,transparent);pointer-events:none;z-index:2}
-  .real-card:hover{transform:translateY(-8px);border-color:rgba(0,102,255,.14);box-shadow:0 4px 16px rgba(0,0,0,.07),0 24px 60px rgba(0,102,255,.10)}
-  .real-img-wrap{position:relative;overflow:hidden;aspect-ratio:16/10}
-  .real-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .55s ease}
-  .real-card:hover .real-img-wrap img{transform:scale(1.06)}
-  .real-overlay{position:absolute;inset:0;background:rgba(10,37,64,.78);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .4s ease}
-  .real-card:hover .real-overlay{opacity:1}
-  .real-overlay-btn{padding:12px 30px;background:#fff;color:var(--blue-dk);border-radius:8px;font-size:.8rem;font-weight:700;letter-spacing:.4px;border:none;cursor:pointer;transform:translateY(10px);transition:transform .4s ease;white-space:nowrap}
-  .real-card:hover .real-overlay-btn{transform:translateY(0)}
-  .real-body{padding:1.4rem 1.6rem 1.6rem}
-  .real-cat{font-size:.65rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--blue);margin-bottom:.5rem}
-  .real-name{font-size:1rem;font-weight:800;color:var(--blue-dk);margin-bottom:.4rem;letter-spacing:-.2px}
-  .real-desc{font-size:.82rem;color:#64748b;line-height:1.65}
-  @media(max-width:960px){.real-grid{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:580px){.real-grid{grid-template-columns:1fr}#realisations{padding:80px 4%}}
-  </style>
-
-<!-- ── Tracking — Configuration (remplir avant production) ──────────── -->
-<script>
-  const GTM_CONTAINER_ID   = '';  // Ex : 'GTM-XXXXXXX'
-  const GA4_MEASUREMENT_ID = '';  // Ex : 'G-XXXXXXXXXX'
-  const GADS_CONVERSION_ID = 'AW-18257938456';
-  const GADS_LABELS = {
-    form_submit:      '',   // Conversion : Formulaire envoyé  (Label dans Google Ads)
-    generate_lead:    '',   // Conversion : Demande de devis   (Label dans Google Ads)
-    phone_call:       '',   // Conversion : Clic téléphone     (Label dans Google Ads)
-    whatsapp_click:   '',   // Conversion : Clic WhatsApp      (Label dans Google Ads)
-    book_appointment: '',   // Conversion : Prise de RDV       (Label dans Google Ads)
-  };
-
-  window.dataLayer = window.dataLayer || [];
-
-  // Chargement GTM (prioritaire — gère GA4 + Ads via tags internes)
-  if (GTM_CONTAINER_ID) {
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;
-    f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer',GTM_CONTAINER_ID);
-  }
-
-  // Chargement GA4 direct (fallback si GTM absent ou pour usage sans GTM)
-  if (GA4_MEASUREMENT_ID && !GTM_CONTAINER_ID) {
-    (function(id){
-      var s=document.createElement('script');
-      s.async=true;
-      s.src='https://www.googletagmanager.com/gtag/js?id='+id;
-      document.head.appendChild(s);
-    })(GA4_MEASUREMENT_ID);
-    function gtag(){window.dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', GA4_MEASUREMENT_ID);
-    if (GADS_CONVERSION_ID) gtag('config', GADS_CONVERSION_ID);
-  }
-</script>
-<!-- Fin configuration Tracking ──────────────────────────────────────── -->
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebSite","name":"CA-TECH","url":"https://ca-tech.fr","potentialAction":{"@type":"SearchAction","target":"https://ca-tech.fr/recherche?q={search_term_string}","query-input":"required name=search_term_string"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Combien de temps faut-il pour démarrer un projet avec CA-TECH ?","acceptedAnswer":{"@type":"Answer","text":"En moins de 48h. Après votre diagnostic gratuit avec Loïc, vous recevez un rapport et une proposition dans la journée. Si vous validez, nous commençons dès le lendemain. Premier livrable en 72h dans la plupart des cas."}},{"@type":"Question","name":"Faut-il avoir une équipe technique pour travailler avec vous ?","acceptedAnswer":{"@type":"Answer","text":"Non. Nous nous adaptons à votre niveau de maturité digitale. Que vous ayez une DSI structurée ou un seul ordinateur, nous livrons une solution qui s'intègre à votre environnement actuel."}},{"@type":"Question","name":"Vos tarifs sont-ils transparents ou y a-t-il des coûts cachés ?","acceptedAnswer":{"@type":"Answer","text":"Nos tarifs affichés sont des points d'entrée. Votre devis est établi après le diagnostic et détaille chaque poste au centime près. Aucun surcoût sans votre accord écrit. Et le diagnostic est gratuit."}},{"@type":"Question","name":"Garantissez-vous des résultats ?","acceptedAnswer":{"@type":"Answer","text":"Nous garantissons le respect des KPI définis ensemble au démarrage. Si les objectifs ne sont pas atteints au terme de la mission, nous prolongeons notre accompagnement sans frais supplémentaires."}},{"@type":"Question","name":"Mes données sont-elles en sécurité avec Loïc ?","acceptedAnswer":{"@type":"Answer","text":"Oui. Loïc ne stocke aucune donnée sensible. Les conversations sont chiffrées en transit, non utilisées pour l'entraînement de modèles tiers et supprimées sur demande. Nous respectons le RGPD."}},{"@type":"Question","name":"En quoi CA-TECH est-il différent d'une agence web classique ?","acceptedAnswer":{"@type":"Answer","text":"Une agence web crée des sites. CA-TECH déploie des systèmes qui génèrent de la croissance. Nous démarrons toujours par un diagnostic ROI, pas par une maquette. Et nous mesurons chaque euro investi avec des KPI définis contractuellement."}},{"@type":"Question","name":"Travaillez-vous avec tous les secteurs d'activité ?","acceptedAnswer":{"@type":"Answer","text":"Nous travaillons principalement avec des PME (5 à 200 salariés) dans les services B2B, le commerce, l'artisanat, les professions libérales et les startups."}},{"@type":"Question","name":"Puis-je arrêter à tout moment ?","acceptedAnswer":{"@type":"Answer","text":"Pour les missions Sprint et Audit, le paiement est intégral à la commande. Pour les projets longs (3 mois et plus), chaque mois est facturé séparément avec un préavis de 30 jours. Pas de contrat longue durée imposé."}}]}
+  </script>
 </head>
 <body>
-<!-- Google Tag Manager (noscript) -->
-<noscript id="gtm-ns"></noscript>
-<script>if(GTM_CONTAINER_ID){var _e=document.getElementById('gtm-ns');_e.innerHTML='<iframe src="https://www.googletagmanager.com/ns.html?id='+GTM_CONTAINER_ID+'" height="0" width="0" style="display:none;visibility:hidden"></iframe>';}</script>
-<!-- Fin Google Tag Manager (noscript) -->
-<div id="loader">
-  <img class="ld-logo" src="assets/logos/logo-ca-tech.png" alt="CA-TECH"/>
-  <div class="ld-bar-wrap"><div class="ld-bar"></div></div>
-  <div class="ld-txt">CA-TECH initialisation...</div>
-</div>
-<div id="prog"></div>
-<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Haut de page">↑</button>
 
-<!-- NAV -->
-<nav id="nav">
-  <a href="#" class="logo">
-    <img src="assets/logos/logo-ca-tech.png" alt="CA-TECH Logo"/>
-    <div class="logo-text"><span class="logo-name">CA-TECH</span><span class="logo-sub">Agence Web & Design</span></div>
-  </a>
-  <ul class="nav-links">
-    <li><a href="#hero" data-s="hero">Accueil</a></li>
-    <li><a href="#services" data-s="services">Services</a></li><li><a href="collaborateurs-ia.html">Collaborateurs IA</a></li><li><a href="automatisations.html">Automatisations</a></li>
-    <li><a href="#realisations" data-s="realisations">Réalisations</a></li>
-    <li><a href="#tarifs" data-s="tarifs">Tarifs</a></li>
-    <li><a href="#a-propos" data-s="a-propos">À propos</a></li>
-    <li><a href="#contact" data-s="contact">Contact</a></li>
-    <li><button class="btn-nav" onclick="openDevis()">Demander un devis</button></li>
-  </ul>
-  <button class="ham" id="ham"><span></span><span></span><span></span></button>
-</nav>
-<div class="mob-menu" id="mob">
-  <a href="#hero" onclick="closeMob()">Accueil</a>
-  <a href="#services" onclick="closeMob()">Services</a>
-  <a href="collaborateurs-ia.html" onclick="closeMob()">Collaborateurs IA</a>
-  <a href="automatisations.html" onclick="closeMob()">Automatisations</a>
-  <a href="#realisations" onclick="closeMob()">Réalisations</a>
-  <a href="#tarifs" onclick="closeMob()">Tarifs</a>
-  <a href="#a-propos" onclick="closeMob()">À propos</a>
-  <a href="#contact" onclick="closeMob()">Contact</a>
-  <button class="btn-mob" onclick="closeMob();openDevis()">Demander un devis</button>
-</div>
+<!-- ── SKIP LINK ───────────────────────────────────────────────────────── -->
+<a href="#main-content" class="skip-link">Aller au contenu principal</a>
 
-<!-- HERO -->
-<section id="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-left">
-    <p class="hero-kicker reveal">Partenaire croissance des PME</p>
-    <div class="hero-phrase-wrap reveal d1">
-      <h1 class="hero-phrase active">Vos prospects arrivent. <span class="hl">Ils repartent clients.</span></h1>
-      <h1 class="hero-phrase">Vous perdez 15h par semaine. <span class="hl">Nous les récupérons.</span></h1>
-      <h1 class="hero-phrase">Vous cherchez des clients. <span class="hl">Votre IA les trouve.</span></h1>
-      <h1 class="hero-phrase">Vous dirigez. <span class="hl">Nous automatisons le reste.</span></h1>
-    </div>
-    <p class="hero-desc reveal d2">Votre site attire. Vos agents IA travaillent. Vos processus s'automatisent. Vous, vous développez votre entreprise.</p>
-    <div class="hero-ctas reveal d3">
-      <a href="solutions.html" class="btn-blue">Voir nos solutions →</a>
-      <button class="btn-outline" onclick="openDevis()">Demander un devis</button>
-    </div>
-  </div>
-  <div class="hero-right reveal-r">
-    <div class="hero-collage" id="hero-collage">
-      <div class="hc-card hc-1"><img src="public/portfolio/pasmal/home.webp" alt="Projet web" loading="eager"/></div>
-      <div class="hc-card hc-2"><img src="public/portfolio/cv-magic/home.webp" alt="Projet SaaS" loading="lazy"/></div>
-      <div class="hc-card hc-3"><img src="public/portfolio/pemous-money/home.webp" alt="Projet fintech" loading="lazy"/></div>
-      <div class="hc-card hc-4"><img src="public/portfolio/ca-tech-manager/home.webp" alt="Projet ERP" loading="lazy"/></div>
-    </div>
-  </div>
-</section>
-
-
-<!-- STATS -->
-<div id="stats-bar">
-  <div class="stat-item reveal d1"><span class="stat-num" data-t="50" data-s="+">0+</span><span class="stat-lbl">Projets livrés</span></div>
-  <div class="stat-item reveal d2"><span class="stat-num" data-t="98" data-s="%">0%</span><span class="stat-lbl">Clients satisfaits</span></div>
-  <div class="stat-item reveal d3"><span class="stat-num" data-t="12" data-s="+">0+</span><span class="stat-lbl">Secteurs couverts</span></div>
-  <div class="stat-item reveal d4"><span class="stat-num" data-t="4" data-s="">0</span><span class="stat-lbl">Agences en France</span></div>
-</div>
-
-<!-- SERVICES -->
-<section id="services">
-  <div class="sec-bg" style="background-image:url('https://images.unsplash.com/photo-1618477247222-acbdb0e159b3?w=1600&h=900&fit=crop&q=60&auto=format');opacity:.05" aria-hidden="true"></div>
-  <div class="svc2-header">
-    <p class="section-label reveal">Notre expertise</p>
-    <h2 class="section-title reveal d1">4 univers.<br><em style="font-style:normal;background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Un seul partenaire.</em></h2>
-    <p class="section-desc reveal d2">Du site web aux collaborateurs IA, des automatisations au développement sur mesure — tout ce dont votre entreprise a besoin pour accélérer, au même endroit.</p>
-  </div>
-
-  <div class="univ-grid">
-
-    <!-- ── 01 Création Web ── -->
-    <div class="univ-card reveal d1" style="--uc:#0066FF">
-      <div class="univ-img">
-        <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&h=500&fit=crop&q=80&auto=format" alt="Création Web" loading="lazy"/>
-        <div class="univ-img-ov"></div>
-        <span class="univ-num">01</span>
-      </div>
-      <div class="univ-icon-wrap">
-        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-      </div>
-      <div class="univ-body">
-        <h3 class="univ-title">Création Web</h3>
-        <p class="univ-desc">Des sites qui convertissent, pas seulement qui existent. De la vitrine au e-commerce, chaque pixel travaille pour votre chiffre d'affaires.</p>
-        <div class="univ-subs">
-          <span class="univ-sub">Site vitrine</span>
-          <span class="univ-sub">Site e-commerce</span>
-          <span class="univ-sub">Landing Page</span>
-          <span class="univ-sub">Refonte</span>
-          <span class="univ-sub">Maintenance</span>
-        </div>
-        <a href="/creation-site-vitrine.html" class="univ-cta">Voir nos créations →</a>
-      </div>
-    </div>
-
-    <!-- ── 02 Collaborateurs IA ── -->
-    <div class="univ-card reveal d2" style="--uc:#6366F1">
-      <div class="univ-img">
-        <img src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&h=500&fit=crop&q=80&auto=format" alt="Collaborateurs IA" loading="lazy"/>
-        <div class="univ-img-ov"></div>
-        <span class="univ-num">02</span>
-      </div>
-      <div class="univ-icon-wrap">
-        <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
-      </div>
-      <div class="univ-body">
-        <h3 class="univ-title">Collaborateurs IA</h3>
-        <p class="univ-desc">Des agents IA dédiés à votre entreprise. Ils gèrent, relancent, répondent et analysent — pendant que vous vous concentrez sur l'essentiel.</p>
-        <div class="univ-subs">
-          <span class="univ-sub">Commercial IA</span>
-          <span class="univ-sub">Support IA</span>
-          <span class="univ-sub">RH IA</span>
-          <span class="univ-sub">Juridique IA</span>
-          <span class="univ-sub">SEO IA</span>
-          <span class="univ-sub">Comptable IA</span>
-        </div>
-        <a href="/collaborateurs-ia.html" class="univ-cta">Rencontrer l'équipe →</a>
-      </div>
-    </div>
-
-    <!-- ── 03 Automatisations ── -->
-    <div class="univ-card reveal d3" style="--uc:#0EA5E9">
-      <div class="univ-img">
-        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=500&fit=crop&q=80&auto=format" alt="Automatisations" loading="lazy"/>
-        <div class="univ-img-ov"></div>
-        <span class="univ-num">03</span>
-      </div>
-      <div class="univ-icon-wrap">
-        <svg viewBox="0 0 24 24"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-      </div>
-      <div class="univ-body">
-        <h3 class="univ-title">Automatisations</h3>
-        <p class="univ-desc">15 heures récupérées chaque semaine. Vos outils connectés, vos processus automatisés. Vous faites ce que l'IA ne peut pas faire.</p>
-        <div class="univ-subs">
-          <span class="univ-sub">Google Workspace</span>
-          <span class="univ-sub">Gmail</span>
-          <span class="univ-sub">WhatsApp</span>
-          <span class="univ-sub">Slack</span>
-          <span class="univ-sub">Microsoft 365</span>
-          <span class="univ-sub">HubSpot</span>
-          <span class="univ-sub">CRM</span>
-          <span class="univ-sub">ERP</span>
-          <span class="univ-sub">Shopify</span>
-          <span class="univ-sub">WooCommerce</span>
-          <span class="univ-sub">Stripe</span>
-          <span class="univ-sub">Notion</span>
-          <span class="univ-sub">Airtable</span>
-          <span class="univ-sub">Calendly</span>
-          <span class="univ-sub">Facebook</span>
-          <span class="univ-sub">Instagram</span>
-          <span class="univ-sub">LinkedIn</span>
-          <span class="univ-sub">Telegram</span>
-          <span class="univ-sub">Discord</span>
-          <span class="univ-sub">Zapier</span>
-          <span class="univ-sub">n8n</span>
-        </div>
-        <a href="/automatisations.html" class="univ-cta">Explorer les automatisations →</a>
-      </div>
-    </div>
-
-    <!-- ── 04 Développement sur mesure ── -->
-    <div class="univ-card reveal d4" style="--uc:#F59E0B">
-      <div class="univ-img">
-        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=500&fit=crop&q=80&auto=format" alt="Développement sur mesure" loading="lazy"/>
-        <div class="univ-img-ov"></div>
-        <span class="univ-num">04</span>
-      </div>
-      <div class="univ-icon-wrap">
-        <svg viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-      </div>
-      <div class="univ-body">
-        <h3 class="univ-title">Développement sur mesure</h3>
-        <p class="univ-desc">Votre vision, notre architecture. Des applications métier taillées exactement à vos processus, pas l'inverse.</p>
-        <div class="univ-subs">
-          <span class="univ-sub">SaaS</span>
-          <span class="univ-sub">CRM sur mesure</span>
-          <span class="univ-sub">ERP</span>
-          <span class="univ-sub">Dashboard</span>
-          <span class="univ-sub">API</span>
-          <span class="univ-sub">Applications internes</span>
-        </div>
-        <a href="/solutions.html" class="univ-cta">Discutons de votre projet →</a>
-      </div>
-    </div>
-
-  </div>
-  <div class="reveal d2" style="text-align:center;margin-top:3.5rem;">
-    <a href="solutions.html" style="display:inline-flex;align-items:center;gap:8px;font-size:.95rem;font-weight:600;color:#0066FF;text-decoration:none;border:1px solid rgba(0,102,255,.25);padding:13px 28px;border-radius:10px;transition:background .25s,border-color .25s,transform .3s cubic-bezier(.16,1,.3,1);" onmouseover="this.style.background='rgba(0,102,255,.06)';this.style.borderColor='rgba(0,102,255,.5)';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='';this.style.borderColor='rgba(0,102,255,.25)';this.style.transform=''">
-      Voir toutes nos solutions →
-    </a>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section id="testimonials">
-  <div class="sec-bg" style="background-image:url('https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1600&h=900&fit=crop&q=60&auto=format');opacity:.10" aria-hidden="true"></div>
-  <div class="t-header"><p class="section-label reveal">Témoignages</p><h2 class="section-title reveal d1">Ils ont repris le contrôle.</h2><p class="section-desc reveal d2">Des dirigeants qui gagnent plus, perdent moins de temps, et développent leur activité.</p></div>
-  <div class="t-grid">
-    <div class="t-card reveal d1"><div class="t-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p class="t-text">"CA-TECH a transformé notre présence en ligne. Notre site génère 3× plus de demandes de devis. Équipe ultra-réactive."</p><div class="t-author"><img class="t-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&q=80&fit=crop&crop=face" alt="Sophie M."/><div><div class="t-name">Sophie M.</div><div class="t-role">Directrice, PME Services — Paris</div></div></div></div>
-    <div class="t-card reveal d2"><div class="t-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p class="t-text">"Notre identité visuelle redessinée par CA-TECH a tout changé. Nos clients nous reconnaissent immédiatement. Un travail d'une précision remarquable."</p><div class="t-author"><img class="t-avatar" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&q=80&fit=crop&crop=face" alt="Marc D."/><div><div class="t-name">Marc D.</div><div class="t-role">Gérant, Cabinet Conseil — Lyon</div></div></div></div>
-    <div class="t-card reveal d3"><div class="t-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p class="t-text">"Notre boutique en ligne a triplé ses ventes en 3 mois. Le design est soigné, l'expérience client fluide. CA-TECH a dépassé toutes nos attentes."</p><div class="t-author"><img class="t-avatar" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&q=80&fit=crop&crop=face" alt="Léa T."/><div><div class="t-name">Léa T.</div><div class="t-role">Fondatrice, Boutique Mode — Dijon</div></div></div></div>
-  </div>
-  <div class="brands-row">
-    <div class="brand-chip reveal d1"><div class="brand-dot" style="background:#e30613">SG</div>Société Générale</div>
-    <div class="brand-chip reveal d2"><div class="brand-dot" style="background:#00205b">AB</div>Airbus</div>
-    <div class="brand-chip reveal d3"><div class="brand-dot" style="background:#f01518">EDF</div>EDF</div>
-    <div class="brand-chip reveal d4"><div class="brand-dot" style="background:#003087">PP</div>PayPal France</div>
-    <div class="brand-chip reveal d5"><div class="brand-dot" style="background:#1a1a1a">AC</div>ACCOR Hotels</div>
-  </div>
-</section>
-
-<!-- NOS RÉALISATIONS -->
-<section id="realisations">
-  <div class="sec-bg" style="background-image:url('https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=1600&h=900&fit=crop&q=60&auto=format');opacity:.06" aria-hidden="true"></div>
-  <div class="real-header reveal">
-    <p class="section-label">Réalisations</p>
-    <h2 class="section-title">Des sites qui travaillent.</h2>
-    <p class="section-desc">Pas des vitrines. Des outils qui génèrent des clients, des devis et de la croissance.</p>
-  </div>
-  <div class="real-grid">
-
-    <a href="realisation-pasmal.html" class="real-card reveal d1" style="text-decoration:none;color:inherit;display:block">
-      <div class="real-img-wrap">
-        <img src="public/portfolio/pasmal/home.webp" alt="Pasmal — Site vitrine lifestyle" loading="lazy"/>
-        <div class="real-overlay"><span class="real-overlay-btn">Voir le projet →</span></div>
-      </div>
-      <div class="real-body">
-        <p class="real-cat">Site vitrine</p>
-        <p class="real-name">Pasmal</p>
-        <p class="real-desc">Site vitrine moderne pour une marque lifestyle avec une expérience utilisateur soignée et des performances optimisées. Lighthouse 96.</p>
-      </div>
-    </a>
-
-    <a href="realisation-pemous-money.html" class="real-card reveal d2" style="text-decoration:none;color:inherit;display:block">
-      <div class="real-img-wrap">
-        <img src="public/portfolio/pemous-money/home.webp" alt="Pemous Money — Plateforme fintech e-commerce" loading="lazy"/>
-        <div class="real-overlay"><span class="real-overlay-btn">Voir le projet →</span></div>
-      </div>
-      <div class="real-body">
-        <p class="real-cat">Site e-commerce</p>
-        <p class="real-name">Pemous Money</p>
-        <p class="real-desc">Plateforme fintech intuitive dédiée à la gestion financière personnelle, avec tunnel d'achat optimisé pour la conversion.</p>
-      </div>
-    </a>
-
-    <a href="realisation-cv-magic.html" class="real-card reveal d3" style="text-decoration:none;color:inherit;display:block">
-      <div class="real-img-wrap">
-        <img src="public/portfolio/cv-magic/cv-builder.webp" alt="CV Magic — Landing page SaaS haute conversion" loading="lazy"/>
-        <div class="real-overlay"><span class="real-overlay-btn">Voir le projet →</span></div>
-      </div>
-      <div class="real-body">
-        <p class="real-cat">Landing page</p>
-        <p class="real-name">CV Magic</p>
-        <p class="real-desc">Landing page haute conversion pour un SaaS de création de CV — copywriting percutant, design épuré et CTA optimisé. Conversion ×3.</p>
-      </div>
-    </a>
-
-    <a href="realisation-ca-tech-manager.html" class="real-card reveal d4" style="text-decoration:none;color:inherit;display:block">
-      <div class="real-img-wrap">
-        <img src="public/portfolio/ca-tech-manager/dashboard.webp" alt="CA-TECH Manager — ERP et gestion interne" loading="lazy"/>
-        <div class="real-overlay"><span class="real-overlay-btn">Voir le projet →</span></div>
-      </div>
-      <div class="real-body">
-        <p class="real-cat">Application web sur mesure</p>
-        <p class="real-name">CA-TECH Manager</p>
-        <p class="real-desc">ERP complet sur mesure : CRM, projets, devis, factures, agenda et analytics temps réel. React + TypeScript + Supabase.</p>
-      </div>
-    </a>
-
-    <div class="real-card reveal d5">
-      <div class="real-img-wrap">
-        <img src="public/portfolio/branding/logo2.png" alt="Charte graphique" loading="lazy"/>
-        <div class="real-overlay"><button class="real-overlay-btn">Voir le projet</button></div>
-      </div>
-      <div class="real-body">
-        <p class="real-cat">Charte graphique</p>
-        <p class="real-name">Branding complet</p>
-        <p class="real-desc">Charte graphique complète — typographies, palette de couleurs, iconographie et règles d'utilisation de la marque.</p>
-      </div>
-    </div>
-
-    <div class="real-card reveal d6">
-      <div class="real-img-wrap">
-        <img src="public/portfolio/branding/flyer1.png" alt="Flyer professionnel" loading="lazy"/>
-        <div class="real-overlay"><button class="real-overlay-btn">Voir le projet</button></div>
-      </div>
-      <div class="real-body">
-        <p class="real-cat">Flyer professionnel</p>
-        <p class="real-name">Flyer événementiel</p>
-        <p class="real-desc">Design print A5 recto-verso prêt à l'impression — accrocheur, lisible et fidèle à l'identité visuelle du client.</p>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- TARIFS -->
-<section id="tarifs">
-  <div class="sec-bg" style="background-image:url('https://images.unsplash.com/photo-1553484771-047a44eee27b?w=1600&h=900&fit=crop&q=60&auto=format');opacity:.07" aria-hidden="true"></div>
-  <div class="tarifs-hd">
-    <p class="tarifs-hd-label reveal">Nos Offres & Tarifs</p>
-    <h2 class="tarifs-hd-title reveal d1">Nos Offres & Tarifs</h2>
-    <p class="tarifs-hd-desc reveal d2">Des solutions professionnelles adaptées aux entreprises, artisans, associations et entrepreneurs.</p>
-  </div>
-  <div class="tarifs-grid-home">
-
-    <!-- Logo Professionnel -->
-    <div class="p-card reveal d1">
-      <h3 class="p-name">Logo Professionnel</h3>
-      <div class="p-price"><div class="p-amount">180 €</div></div>
-      <div class="p-divider"></div>
-      <ul class="p-feats">
-        <li>Logo professionnel sur mesure</li>
-        <li>3 propositions créatives</li>
-        <li>Formats PNG, JPG et SVG</li>
-        <li>Version fond clair et fond sombre</li>
-        <li>Livraison rapide</li>
-      </ul>
-      <button class="p-cta-btn" onclick="openDevis()">Commander mon logo</button>
-    </div>
-
-    <!-- Landing Page -->
-    <div class="p-card reveal d2">
-      <h3 class="p-name">Landing Page</h3>
-      <div class="p-price"><div class="p-amount">270 €</div></div>
-      <div class="p-divider"></div>
-      <ul class="p-feats">
-        <li>Design moderne</li>
-        <li>Responsive mobile</li>
-        <li>Formulaire de contact</li>
-        <li>Optimisation SEO de base</li>
-        <li>Livraison clé en main</li>
-      </ul>
-      <button class="p-cta-btn" onclick="openDevis()">Créer ma landing page</button>
-    </div>
-
-    <!-- Site Vitrine — FEATURED -->
-    <div class="p-card p-featured reveal d3">
-      <div class="p-badge-home">OFFRE POPULAIRE</div>
-      <h3 class="p-name">Site Vitrine</h3>
-      <div class="p-price"><div class="p-amount">590 €</div></div>
-      <div class="p-divider"></div>
-      <ul class="p-feats">
-        <li>Jusqu'à 5 pages</li>
-        <li>Design premium</li>
-        <li>Responsive mobile</li>
-        <li>Formulaire de contact</li>
-        <li>Référencement SEO de base</li>
-        <li>Intégration Google Maps</li>
-        <li>Hébergement et nom de domaine en option</li>
-      </ul>
-      <button class="p-cta-btn" onclick="openDevis()">Créer mon site vitrine</button>
-    </div>
-
-    <!-- Site E-commerce -->
-    <div class="p-card reveal d4">
-      <h3 class="p-name">Site E-commerce</h3>
-      <div class="p-price"><div class="p-amount">1 090 €</div></div>
-      <div class="p-divider"></div>
-      <ul class="p-feats">
-        <li>Boutique en ligne complète</li>
-        <li>Gestion des produits</li>
-        <li>Paiement sécurisé Stripe</li>
-        <li>Gestion des commandes</li>
-        <li>Responsive mobile</li>
-        <li>SEO de base</li>
-      </ul>
-      <button class="p-cta-btn" onclick="openDevis()">Créer ma boutique</button>
-    </div>
-
-    <!-- Flyer Professionnel -->
-    <div class="p-card reveal d5">
-      <h3 class="p-name">Flyer Professionnel</h3>
-      <div class="p-price"><div class="p-amount">139 €</div></div>
-      <div class="p-divider"></div>
-      <ul class="p-feats">
-        <li>Design professionnel</li>
-        <li>Format impression HD</li>
-        <li>Version numérique</li>
-        <li>Jusqu'à 2 modifications</li>
-      </ul>
-      <button class="p-cta-btn" onclick="openDevis()">Commander mon flyer</button>
-    </div>
-
-  </div>
-
-  <div class="tarifs-home-cta reveal">
-    <p>Besoin d'un projet sur mesure ? Contactez-nous pour obtenir un devis personnalisé.</p>
-    <button class="btn-blue" onclick="openDevis()">Demander un devis</button>
-    <a href="tarifs.html" class="btn-voir">Voir tous les tarifs →</a>
-  </div>
-</section>
-
-
-<!-- A PROPOS -->
-<section id="a-propos">
-  <div class="sec-bg" style="background-image:url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&h=900&fit=crop&q=60&auto=format');opacity:.14" aria-hidden="true"></div>
-  <div class="apropos-inner">
-    <div class="reveal-l">
-      <span class="apropos-since">Depuis <strong>2013</strong> · Aux côtés des dirigeants de PME</span>
-      <h2 class="apropos-title">Créée pour les dirigeants qui veulent <em>reprendre le contrôle.</em></h2>
-      <p class="apropos-desc">CA-TECH travaille avec des chefs d'entreprise qui n'ont pas le temps de tout faire — et qui refusent de rater des opportunités par manque d'outils.<br><br>Nous créons leur site, automatisons leur quotidien et déployons des agents IA qui travaillent à leur place. L'IA n'est pas une fin. C'est le moyen. Le résultat, c'est votre croissance.</p>
-      <a href="#contact" class="apropos-cta">Discutons de votre situation →</a>
-    </div>
-    <div class="apropos-values reveal-r">
-      <div class="apropos-val">
-        <div class="apropos-val-icon">
-          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        </div>
-        <div class="apropos-val-txt">
-          <h4>Excellence</h4>
-          <p>Chaque projet reçoit la même exigence, quelle que soit son envergure. Pas de templates, pas de raccourcis.</p>
-        </div>
-      </div>
-      <div class="apropos-val">
-        <div class="apropos-val-icon">
-          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-        </div>
-        <div class="apropos-val-txt">
-          <h4>Proximité</h4>
-          <p>Nous travaillons en collaboration étroite avec nos clients — pas pour eux, mais avec eux, à chaque étape.</p>
-        </div>
-      </div>
-      <div class="apropos-val">
-        <div class="apropos-val-icon">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        </div>
-        <div class="apropos-val-txt">
-          <h4>Innovation</h4>
-          <p>Nous intégrons les meilleures technologies pour que vos projets restent performants et en avance sur votre secteur.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ZONES D'INTERVENTION -->
-<section id="zones">
-  <div class="sec-bg" style="background-image:url('https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1600&h=900&fit=crop&q=60&auto=format');opacity:.12" aria-hidden="true"></div>
-  <div class="zones-inner">
-    <div class="zones-header">
-      <p class="section-label reveal" style="justify-content:center">SEO Local</p>
-      <h2 class="section-title reveal d1">Zones d'intervention</h2>
-      <p class="section-desc reveal d2">CA-TECH accompagne les entreprises partout en France avec une expertise particulière sur <strong style="color:var(--cyan)">Paris, Lyon, Dijon et Troyes.</strong></p>
-    </div>
-    <div class="zones-grid">
-      <a href="agence-web-paris.html" class="zone-card reveal">
-        <div class="zone-card-icon">
-          <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        </div>
-        <span class="zone-card-city">Paris</span>
-        <span class="zone-card-desc">Île-de-France · Startups · Luxe · Services</span>
-        <span class="zone-card-link">Voir nos services Paris →</span>
+<!-- ── HEADER ─────────────────────────────────────────────────────────── -->
+<header id="header" role="banner">
+  <div class="container">
+    <nav class="nav-inner" role="navigation" aria-label="Navigation principale">
+      <!-- Logo -->
+      <a href="/" class="nav-logo" aria-label="CA-TECH — Retour à l'accueil">
+        <span class="nav-logo-text">CA-TECH</span>
       </a>
-      <a href="agence-web-lyon.html" class="zone-card reveal d1">
-        <div class="zone-card-icon">
-          <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        </div>
-        <span class="zone-card-city">Lyon</span>
-        <span class="zone-card-desc">Auvergne-Rhône-Alpes · Gastronomie · Biotech</span>
-        <span class="zone-card-link">Voir nos services Lyon →</span>
-      </a>
-      <a href="agence-web-dijon.html" class="zone-card reveal d2">
-        <div class="zone-card-icon">
-          <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        </div>
-        <span class="zone-card-city">Dijon</span>
-        <span class="zone-card-desc">Bourgogne · Vignobles · Agence locale</span>
-        <span class="zone-card-link">Voir nos services Dijon →</span>
-      </a>
-      <a href="agence-web-troyes.html" class="zone-card reveal d3">
-        <div class="zone-card-icon">
-          <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        </div>
-        <span class="zone-card-city">Troyes</span>
-        <span class="zone-card-desc">Aube · Mode · Tourisme · UTT</span>
-        <span class="zone-card-link">Voir nos services Troyes →</span>
-      </a>
-    </div>
-    <div class="zones-tagline reveal">
-      CA-TECH accompagne les entreprises partout en France avec une expertise particulière sur <strong>Paris, Lyon, Dijon et Troyes.</strong><br>
-      <span style="font-size:.8rem;opacity:.7;margin-top:.4rem;display:block">Devis gratuit sous 24h · Travail 100 % à distance ou en présentiel à Dijon</span>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact">
-  <div class="sec-bg" style="background-image:url('https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=1600&h=900&fit=crop&q=60&auto=format');opacity:.10" aria-hidden="true"></div>
-  <div class="contact-inner">
-    <div class="reveal-l">
-      <p class="section-label">Contact</p>
-      <h2 class="section-title">Parlons de votre projet</h2>
-      <p class="section-desc" style="margin-bottom:2rem">Contactez-nous pour discuter de vos besoins. Notre équipe vous répond sous 24h.</p>
-      <form class="contact-form" onsubmit="sendContactForm(event)">
-        <div class="f-row"><input type="text" id="c-nom" placeholder="Votre nom" required/><input type="email" id="c-email" placeholder="Votre email" required/></div>
-        <input type="text" id="c-sujet" placeholder="Sujet"/>
-        <textarea id="c-message" placeholder="Décrivez votre projet ou votre besoin..."></textarea>
-        <button type="submit" id="c-btn" class="btn-blue" style="width:fit-content">Envoyer le message →</button>
-      </form>
-    </div>
-    <div class="reveal-r">
-      <div class="contact-info">
-        <div class="contact-block"><div class="contact-block-icon">📍</div><div><h4>Zones d'intervention</h4><p>CA-TECH accompagne les entreprises partout en France avec une expertise particulière sur <strong style="color:var(--cyan)">Paris · Lyon · Dijon · Troyes</strong></p></div></div>
-        <div class="contact-block"><div class="contact-block-icon">📧</div><div><h4>Email</h4><p>contact@ca-tech.fr</p></div></div>
-        <div class="contact-block"><div class="contact-block-icon">📞</div><div><h4>Téléphone</h4><p>+33 7 75 66 49 75</p></div></div>
-        <div class="contact-block"><div class="contact-block-icon">🕐</div><div><h4>Horaires</h4><p>Lun–Ven : 9h–18h · Support 24/7</p></div></div>
-      </div>
-      <div style="margin-top:1.5rem"><h4 style="font-size:.82rem;font-weight:700;color:var(--white);margin-bottom:.8rem">Suivez-nous</h4>
-        <div class="contact-socials"><a href="#" class="contact-soc" aria-label="LinkedIn">in</a><a href="#" class="contact-soc" aria-label="X">𝕏</a><a href="#" class="contact-soc" aria-label="GitHub">gh</a><a href="#" class="contact-soc" aria-label="Instagram">ig</a></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- DEVIS MODAL -->
-<div id="devis-overlay" onclick="handleOverlayClick(event)">
-  <div class="devis-modal" id="devis-modal">
-    <div class="devis-header"><button class="devis-close" onclick="closeDevis()">✕</button><h2>📋 Demande de devis gratuit</h2><p>Réponse personnalisée sous 24h · Sans engagement · Partout en France</p></div>
-    <div class="devis-progress" id="devis-progress">
-      <div class="step-indicator">
-        <div class="step-wrap"><div class="step-dot active" id="dot-1">1</div><div class="step-lbl">Profil</div></div><div class="step-line" id="line-1"></div>
-        <div class="step-wrap"><div class="step-dot" id="dot-2">2</div><div class="step-lbl">Projet</div></div><div class="step-line" id="line-2"></div>
-        <div class="step-wrap"><div class="step-dot" id="dot-3">3</div><div class="step-lbl">Besoins</div></div><div class="step-line" id="line-3"></div>
-        <div class="step-wrap"><div class="step-dot" id="dot-4">4</div><div class="step-lbl">Budget</div></div><div class="step-line" id="line-4"></div>
-        <div class="step-wrap"><div class="step-dot" id="dot-5">5</div><div class="step-lbl">Récap</div></div>
-      </div>
-    </div>
-    <div class="devis-body" id="devis-body">
-      <!-- STEP 1 -->
-      <div class="devis-step active" id="step-1">
-        <div class="step-title">Votre profil</div><div class="step-sub">Dites-nous qui vous êtes pour mieux vous accompagner.</div>
-        <div class="f-grid cols2">
-          <div class="f-group"><label>Prénom <span class="req">*</span></label><input type="text" id="d-prenom" placeholder="Marie"/></div>
-          <div class="f-group"><label>Nom <span class="req">*</span></label><input type="text" id="d-nom" placeholder="Dupont"/></div>
-          <div class="f-group"><label>Email professionnel <span class="req">*</span></label><input type="email" id="d-email" placeholder="marie@entreprise.fr"/></div>
-          <div class="f-group"><label>Téléphone <span class="req">*</span></label><input type="tel" id="d-tel" placeholder="+33 7 75 66 49 75"/></div>
-          <div class="f-group"><label>Entreprise</label><input type="text" id="d-ent" placeholder="Nom de votre société"/></div>
-          <div class="f-group"><label>Secteur <span class="req">*</span></label><select id="d-secteur"><option value="" disabled selected>Choisir...</option><option>Commerce &amp; Retail</option><option>Restauration &amp; Hôtellerie</option><option>Santé &amp; Bien-être</option><option>Juridique &amp; Conseil</option><option>Artisan &amp; Bâtiment</option><option>Immobilier</option><option>Formation &amp; Éducation</option><option>Association &amp; ONG</option><option>Industrie &amp; Logistique</option><option>Tech &amp; Startups</option><option>Autre</option></select></div>
-          <div class="f-group"><label>Taille</label><select id="d-taille"><option value="" disabled selected>Choisir...</option><option>Auto-entrepreneur / Freelance</option><option>TPE (1–9 salariés)</option><option>PME (10–249 salariés)</option><option>ETI (250–5000 salariés)</option><option>Grande entreprise</option></select></div>
-          <div class="f-group"><label>Agence</label><select id="d-agence"><option value="" disabled selected>Choisir...</option><option>Paris (siège)</option><option>Lyon</option><option>Dijon</option><option>Troyes</option><option>Peu importe (100% en ligne)</option></select></div>
-        </div>
-      </div>
-      <!-- STEP 2 -->
-      <div class="devis-step" id="step-2">
-        <div class="step-title">Type de projet</div><div class="step-sub">Quel(s) service(s) vous intéressent ?</div>
-        <div class="choice-grid" id="project-choices">
-          <div class="choice-card" data-val="site-vitrine"><div class="choice-icon">🖥️</div><div class="choice-name">Site vitrine</div><div class="choice-desc">Site pro & moderne</div></div>
-          <div class="choice-card" data-val="ecommerce"><div class="choice-icon">🛒</div><div class="choice-name">Site e-commerce</div><div class="choice-desc">Boutique en ligne</div></div>
-          <div class="choice-card" data-val="landing-page"><div class="choice-icon">🎯</div><div class="choice-name">Landing page</div><div class="choice-desc">Page haute conversion</div></div>
-          <div class="choice-card" data-val="logo"><div class="choice-icon">✏️</div><div class="choice-name">Logo</div><div class="choice-desc">Création de logo</div></div>
-          <div class="choice-card" data-val="identite"><div class="choice-icon">🎨</div><div class="choice-name">Identité visuelle</div><div class="choice-desc">Charte graphique complète</div></div>
-          <div class="choice-card" data-val="flyer-print"><div class="choice-icon">🗞️</div><div class="choice-name">Flyer & Print</div><div class="choice-desc">Supports imprimés</div></div>
-          <div class="choice-card" data-val="supports-marketing"><div class="choice-icon">📣</div><div class="choice-name">Supports marketing</div><div class="choice-desc">Visuels, bannières</div></div>
-          <div class="choice-card" data-val="application"><div class="choice-icon">📱</div><div class="choice-name">Application web</div><div class="choice-desc">Solution sur mesure</div></div>
-        </div>
-      </div>
-      <!-- STEP 3 -->
-      <div class="devis-step" id="step-3">
-        <div class="step-title">Cahier des charges</div><div class="step-sub">Plus vous êtes précis, plus notre devis sera adapté.</div>
-        <div class="f-grid" style="gap:1.2rem">
-          <div class="f-group"><label>Décrivez votre projet <span class="req">*</span></label><textarea id="d-desc" placeholder="Ex: Nous souhaitons un site vitrine moderne avec une page portfolio et un formulaire de contact..."></textarea></div>
-          <div class="f-group"><label>Site web existant ?</label><select id="d-existant"><option value="" disabled selected>Choisir...</option><option>Non, création from scratch</option><option>Oui, refonte complète</option><option>Oui, amélioration</option><option>Oui, pour référence</option></select></div>
-          <div class="f-group"><label>URL existant</label><input type="url" id="d-url" placeholder="https://votre-site.fr"/></div>
-          <div class="f-group"><label>Sites de référence</label><input type="text" id="d-refs" placeholder="Ex: apple.com, stripe.com"/></div>
-          <div class="f-group"><label>Fonctionnalités souhaitées</label>
-            <div class="check-group">
-              <div class="check-item"><input type="checkbox" id="cf-blog" value="blog"><label for="cf-blog">Blog / Actualités</label></div>
-              <div class="check-item"><input type="checkbox" id="cf-rdv" value="rdv"><label for="cf-rdv">Prise de rendez-vous</label></div>
-              <div class="check-item"><input type="checkbox" id="cf-paiement" value="paiement"><label for="cf-paiement">Paiement en ligne</label></div>
-              <div class="check-item"><input type="checkbox" id="cf-multilingue" value="multilingue"><label for="cf-multilingue">Site multilingue</label></div>
-              <div class="check-item"><input type="checkbox" id="cf-espace-client" value="espace-client"><label for="cf-espace-client">Espace client</label></div>
-              <div class="check-item"><input type="checkbox" id="cf-catalogue" value="catalogue"><label for="cf-catalogue">Catalogue / Portfolio</label></div>
-              <div class="check-item"><input type="checkbox" id="cf-crm" value="crm"><label for="cf-crm">Intégration CRM</label></div>
-              <div class="check-item"><input type="checkbox" id="cf-analytics" value="analytics"><label for="cf-analytics">Analytics &amp; Dashboard</label></div>
-            </div>
+      <!-- Desktop links -->
+      <div class="nav-links">
+        <!-- Dropdown Services -->
+        <div class="nav-dropdown" id="nav-dropdown-services">
+          <button class="nav-dropdown-btn" aria-haspopup="true" aria-expanded="false" aria-controls="dropdown-services">
+            Services
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="nav-dropdown-menu" id="dropdown-services" role="menu">
+            <a href="/intelligence-artificielle" class="nav-dropdown-item" role="menuitem">
+              <div class="nav-dropdown-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M8 8V5a4 4 0 0 1 8 0v3"/><line x1="12" y1="13" x2="12" y2="17"/><line x1="10" y1="15" x2="14" y2="15"/></svg></div>
+              <div><div class="nav-dropdown-item-title">Intelligence Artificielle</div><div class="nav-dropdown-item-desc">Agents IA, copilotes, assistants RAG</div></div>
+            </a>
+            <a href="/automatisation" class="nav-dropdown-item" role="menuitem">
+              <div class="nav-dropdown-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+              <div><div class="nav-dropdown-item-title">Automatisation</div><div class="nav-dropdown-item-desc">Workflows, N8N, scripts sur mesure</div></div>
+            </a>
+            <a href="/seo" class="nav-dropdown-item" role="menuitem">
+              <div class="nav-dropdown-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+              <div><div class="nav-dropdown-item-title">SEO</div><div class="nav-dropdown-item-desc">Audits, contenus, SEO local</div></div>
+            </a>
+            <a href="/developpement-web" class="nav-dropdown-item" role="menuitem">
+              <div class="nav-dropdown-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+              <div><div class="nav-dropdown-item-title">Développement Web</div><div class="nav-dropdown-item-desc">Sites, apps métier, e-commerce</div></div>
+            </a>
+            <a href="/design-identite" class="nav-dropdown-item full-row" role="menuitem">
+              <div class="nav-dropdown-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg></div>
+              <div><div class="nav-dropdown-item-title">Design &amp; Identité</div><div class="nav-dropdown-item-desc">Logos, chartes graphiques, flyers</div></div>
+            </a>
           </div>
-          <div class="f-group"><label>Éléments existants</label>
-            <div class="check-group" style="flex-direction:row;flex-wrap:wrap;gap:.5rem">
-              <div class="check-item" style="flex:1;min-width:160px"><input type="checkbox" id="ce-logo" value="logo"><label for="ce-logo">Logo</label></div>
-              <div class="check-item" style="flex:1;min-width:160px"><input type="checkbox" id="ce-photos" value="photos"><label for="ce-photos">Photos</label></div>
-              <div class="check-item" style="flex:1;min-width:160px"><input type="checkbox" id="ce-charte" value="charte"><label for="ce-charte">Charte graphique</label></div>
-              <div class="check-item" style="flex:1;min-width:160px"><input type="checkbox" id="ce-textes" value="textes"><label for="ce-textes">Textes rédigés</label></div>
+        </div>
+        <a href="/loic" class="nav-link">Loïc</a>
+        <a href="/nos-realisations" class="nav-link">Réalisations</a>
+        <a href="/blog" class="nav-link">Blog</a>
+      </div>
+      <!-- CTA -->
+      <a href="/diagnostic-ia" class="btn btn-primary btn-sm nav-cta">Diagnostic IA →</a>
+      <!-- Hamburger -->
+      <button class="nav-ham" id="nav-ham" aria-label="Ouvrir le menu de navigation" aria-expanded="false" aria-controls="mobile-drawer">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<!-- ── MOBILE DRAWER ───────────────────────────────────────────────────── -->
+<div id="mobile-drawer" aria-label="Menu mobile" aria-hidden="true">
+  <div class="drawer-overlay" id="drawer-overlay"></div>
+  <div class="drawer-panel" role="dialog" aria-modal="true">
+    <div class="drawer-head">
+      <span class="drawer-logo">CA-TECH</span>
+      <button class="drawer-close" id="drawer-close" aria-label="Fermer le menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <nav class="drawer-nav">
+      <span class="drawer-section-label">Services</span>
+      <a href="/intelligence-artificielle" class="drawer-link">Intelligence Artificielle <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+      <a href="/automatisation" class="drawer-link">Automatisation <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+      <a href="/seo" class="drawer-link">SEO <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+      <a href="/developpement-web" class="drawer-link">Développement Web <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+      <a href="/design-identite" class="drawer-link">Design &amp; Identité <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+      <span class="drawer-section-label">Navigation</span>
+      <a href="/loic" class="drawer-link">Loïc <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+      <a href="/nos-realisations" class="drawer-link">Réalisations <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+      <a href="/blog" class="drawer-link">Blog <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+    </nav>
+    <div class="drawer-cta">
+      <a href="/diagnostic-ia" class="btn btn-primary" style="width:100%;justify-content:center">Lancer mon Diagnostic IA →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN ────────────────────────────────────────────────────────────── -->
+<main id="main-content">
+
+<!-- ── 1. HERO ─────────────────────────────────────────────────────────── -->
+<section id="hero" aria-label="Bienvenue sur CA-TECH">
+  <div class="container">
+    <div class="hero-inner">
+      <!-- Content -->
+      <div class="hero-content">
+        <div class="hero-pill">
+          <span class="pill pill-dark">✦ Cabinet de conseil IA-first</span>
+        </div>
+        <h1 class="hero-h1" id="hero-h1" style="opacity:0;transform:translateY(16px)">
+          L'Intelligence Artificielle<br>au service de votre croissance.
+        </h1>
+        <p class="hero-subtitle" id="hero-sub" style="opacity:0;transform:translateY(12px)">
+          CA-TECH déploie des agents IA, des automatisations sur mesure et des stratégies SEO pour transformer votre activité en résultats mesurables.
+        </p>
+        <div class="hero-ctas" id="hero-ctas" style="opacity:0;transform:translateY(8px)">
+          <a href="/diagnostic-ia" class="btn btn-white btn-xl" aria-label="Lancer mon diagnostic IA gratuit">Lancer mon Diagnostic IA →</a>
+          <a href="/nos-realisations" class="btn btn-ghost-white btn-xl">Voir nos réalisations</a>
+        </div>
+        <p class="hero-micro" id="hero-micro" style="opacity:0">Gratuit · Sans engagement · Résultat en 10 minutes</p>
+      </div>
+      <!-- Chat demo (desktop) -->
+      <div class="hero-demo" aria-hidden="true" id="hero-demo" style="opacity:0;transform:scale(.96)">
+        <div class="chat-frame">
+          <div class="chat-bar">
+            <div class="chat-dots"><span></span><span></span><span></span></div>
+            <span class="chat-bar-title">Loïc — Consultant IA</span>
+            <span class="chat-bar-status">En ligne</span>
+          </div>
+          <div class="chat-messages" id="chat-messages"></div>
+          <div class="chat-input-bar">
+            <div class="chat-input-mock">Votre message...</div>
+            <div class="chat-send">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
             </div>
           </div>
         </div>
       </div>
-      <!-- STEP 4 -->
-      <div class="devis-step" id="step-4">
-        <div class="step-title">Budget &amp; Délais</div><div class="step-sub">Aidez-nous à calibrer notre proposition.</div>
-        <div class="f-grid" style="gap:1.5rem">
-          <div class="f-group"><label>Budget <span class="req">*</span></label><div class="budget-display" id="budget-display">2 500 €</div><input type="range" class="budget-slider" id="budget-range" min="500" max="50000" step="500" value="2500" oninput="updateBudget(this.value)"/><div class="budget-labels"><span>500 €</span><span>50 000 €+</span></div></div>
-          <div class="f-group"><label>Délai <span class="req">*</span></label>
-            <div class="choice-grid cols2" id="delai-choices" style="gap:.6rem">
-              <div class="choice-card" data-val="urgent" onclick="selectDelai(this)"><div class="choice-icon">⚡</div><div class="choice-name">Urgent</div><div class="choice-desc">Moins de 2 semaines</div></div>
-              <div class="choice-card" data-val="1mois" onclick="selectDelai(this)"><div class="choice-icon">📅</div><div class="choice-name">Sous 1 mois</div><div class="choice-desc">Dans les 4 semaines</div></div>
-              <div class="choice-card" data-val="3mois" onclick="selectDelai(this)"><div class="choice-icon">🗓️</div><div class="choice-name">1 à 3 mois</div><div class="choice-desc">Projet à planifier</div></div>
-              <div class="choice-card" data-val="flexible" onclick="selectDelai(this)"><div class="choice-icon">🌿</div><div class="choice-name">Flexible</div><div class="choice-desc">Pas de contrainte</div></div>
-            </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 2. PROOF BAR ─────────────────────────────────────────────────────── -->
+<section id="proof-bar" aria-label="Chiffres clés CA-TECH">
+  <div class="container">
+    <dl class="proof-grid">
+      <div class="proof-stat reveal">
+        <dd class="proof-value" data-count="240" data-prefix="+" data-suffix="%">+240%</dd>
+        <dt class="proof-label">de leads qualifiés<br>générés en moyenne</dt>
+      </div>
+      <div class="proof-stat reveal d1">
+        <dd class="proof-value" data-text="72h">72h</dd>
+        <dt class="proof-label">pour un premier<br>agent IA livrable</dt>
+      </div>
+      <div class="proof-stat reveal d2">
+        <dd class="proof-value" data-count="50" data-prefix="+" data-suffix="">+50</dd>
+        <dt class="proof-label">entreprises<br>accompagnées</dt>
+      </div>
+      <div class="proof-stat reveal d3">
+        <dd class="proof-value" data-count="97" data-prefix="" data-suffix="">97</dd>
+        <dt class="proof-label">score Lighthouse<br>en performance</dt>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<!-- ── 3. POURQUOI CA-TECH ─────────────────────────────────────────────── -->
+<section id="why" aria-labelledby="why-title">
+  <div class="container">
+    <div class="section-header centered reveal">
+      <span class="section-pre">Notre différence</span>
+      <h2 class="section-h2" id="why-title">Pourquoi les dirigeants choisissent CA-TECH</h2>
+      <p class="section-intro">Pas une agence de plus. Un cabinet qui mesure chaque euro investi.</p>
+    </div>
+    <ul class="why-grid" role="list">
+      <li>
+        <article class="why-card reveal">
+          <div class="why-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
           </div>
-          <div class="f-group"><label>Collaboration</label>
-            <div class="check-group" style="flex-direction:row;flex-wrap:wrap;gap:.5rem">
-              <div class="check-item" style="flex:1;min-width:180px"><input type="radio" name="collab" id="col-remote" value="remote"><label for="col-remote">100% en ligne</label></div>
-              <div class="check-item" style="flex:1;min-width:180px"><input type="radio" name="collab" id="col-mixte" value="mixte"><label for="col-mixte">Mixte</label></div>
-              <div class="check-item" style="flex:1;min-width:180px"><input type="radio" name="collab" id="col-pres" value="presentiel"><label for="col-pres">Présentiel</label></div>
-            </div>
+          <h3 class="why-title">Chaque mission se mesure</h3>
+          <p class="why-text">Aucun rapport vague. Chaque projet démarre avec des KPI définis et se termine avec une preuve de ROI. +240% de leads en moyenne sur nos missions IA.</p>
+          <div class="why-proof">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            Étude de cas : Agent IA SAV → +180% satisfaction client
           </div>
-          <div class="f-group"><label>Comment nous avez-vous connu ?</label><select id="d-source"><option value="" disabled selected>Choisir...</option><option>Recherche Google</option><option>Réseaux sociaux</option><option>Recommandation</option><option>Bouche à oreille</option><option>Événement</option><option>Publicité</option><option>Autre</option></select></div>
-          <div class="f-group"><label>Informations complémentaires</label><textarea id="d-extra" placeholder="Contraintes techniques, intégrations..."></textarea></div>
+          <a href="/nos-realisations" class="why-link">Voir nos cas clients <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        </article>
+      </li>
+      <li>
+        <article class="why-card reveal d1">
+          <div class="why-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <h3 class="why-title">72h pour un premier livrable</h3>
+          <p class="why-text">Nous livrons un premier résultat concret en 72 heures. Pas de phase de cadrage de 3 mois. L'action d'abord, l'optimisation ensuite.</p>
+          <div class="why-proof">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            50 projets livrés. Délai moyen d'activation : 72h
+          </div>
+          <a href="#processus" class="why-link">Comment nous travaillons <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        </article>
+      </li>
+      <li>
+        <article class="why-card reveal d2">
+          <div class="why-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M8 8V5a4 4 0 0 1 8 0v3"/><line x1="12" y1="13" x2="12" y2="17"/><line x1="10" y1="15" x2="14" y2="15"/></svg>
+          </div>
+          <h3 class="why-title">L'IA qui travaille vraiment</h3>
+          <p class="why-text">Nous ne faisons pas de présentations PowerPoint sur l'IA. Nous déployons des agents qui travaillent dans votre SI, dès la semaine 1.</p>
+          <div class="why-proof">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            Loïc, notre consultant IA, qualifie vos projets en temps réel
+          </div>
+          <a href="/loic" class="why-link">Découvrir Loïc <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        </article>
+      </li>
+      <li>
+        <article class="why-card reveal d3">
+          <div class="why-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h3 class="why-title">Un interlocuteur unique</h3>
+          <p class="why-text">Pas de rotation d'équipe. Votre consultant CA-TECH connaît votre dossier de A à Z et répond en moins de 24h.</p>
+          <div class="why-proof">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            NPS moyen de nos clients : 74 (best-in-class B2B)
+          </div>
+          <a href="#temoignages" class="why-link">Voir les témoignages <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        </article>
+      </li>
+    </ul>
+    <!-- Reassurance bar -->
+    <div class="reassurance-bar reveal">
+      <div class="reassurance-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Devis gratuit et sans engagement</div>
+      <div class="reassurance-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Réponse sous 24h</div>
+      <div class="reassurance-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Résultats mesurables garantis</div>
+      <div class="reassurance-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Pas de contrat long terme</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 4. EXPERTISES ────────────────────────────────────────────────────── -->
+<section id="expertises" aria-labelledby="expertises-title">
+  <div class="container">
+    <div class="section-header centered reveal">
+      <span class="section-pre">Nos expertises</span>
+      <h2 class="section-h2" id="expertises-title">Quatre leviers pour votre croissance</h2>
+      <p class="section-intro">De l'agent IA à la page qui convertit — CA-TECH maîtrise toute la chaîne.</p>
+    </div>
+    <ul class="expertises-grid" role="list" aria-label="Nos expertises">
+      <li>
+        <a href="/intelligence-artificielle" class="expertise-card featured reveal" aria-label="Intelligence Artificielle — Découvrir l'offre IA">
+          <div class="expertise-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M8 8V5a4 4 0 0 1 8 0v3"/><line x1="12" y1="13" x2="12" y2="17"/><line x1="10" y1="15" x2="14" y2="15"/></svg>
+          </div>
+          <div class="expertise-badge"><span class="pill pill-primary">N°1 — Cœur de métier</span></div>
+          <h3 class="expertise-title">Intelligence Artificielle</h3>
+          <p class="expertise-text">Agents IA métier, copilotes, assistants RAG, automatisation cognitive. Nous déployons l'IA là où elle génère un retour mesurable dès les premières semaines.</p>
+          <ul class="expertise-kpis" aria-label="Indicateurs clés">
+            <li>Agents déployés : 12+</li>
+            <li>Gain moyen : +180% productivité équipes</li>
+            <li>Délai premier livrable : 72h</li>
+          </ul>
+          <span class="expertise-cta">Découvrir l'offre IA <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </a>
+      </li>
+      <li>
+        <a href="/automatisation" class="expertise-card reveal d1" aria-label="Automatisation — Automatiser mes processus">
+          <div class="expertise-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <h3 class="expertise-title">Automatisation</h3>
+          <p class="expertise-text">Workflows N8N, Zapier, scripts Python. Vos processus répétitifs tournent seuls pendant que votre équipe se concentre sur ce qui compte vraiment.</p>
+          <ul class="expertise-kpis" aria-label="Indicateurs clés">
+            <li>Processus automatisés : 80+</li>
+            <li>Temps récupéré : -14h/semaine en moyenne</li>
+            <li>ROI moyen : ×4 en 3 mois</li>
+          </ul>
+          <span class="expertise-cta">Automatiser mes processus <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </a>
+      </li>
+      <li>
+        <a href="/seo" class="expertise-card reveal d2" aria-label="SEO — Auditer mon SEO">
+          <div class="expertise-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          </div>
+          <h3 class="expertise-title">SEO</h3>
+          <p class="expertise-text">Audits techniques, piliers de contenu, SEO local et national. Vous êtes trouvé avant vos concurrents sur les requêtes qui convertissent.</p>
+          <ul class="expertise-kpis" aria-label="Indicateurs clés">
+            <li>Trafic moyen ×3.4 en 6 mois</li>
+            <li>100% des clients en page 1</li>
+            <li>Score technique moyen : 97/100</li>
+          </ul>
+          <span class="expertise-cta">Auditer mon SEO <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </a>
+      </li>
+      <li>
+        <a href="/developpement-web" class="expertise-card reveal d3" aria-label="Développement Web — Voir nos réalisations web">
+          <div class="expertise-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
+          <h3 class="expertise-title">Développement Web</h3>
+          <p class="expertise-text">Sites vitrines, e-commerce, applications métier. Chaque ligne de code sert un objectif business précis. Lighthouse ≥ 90, mobile-first, WCAG AA.</p>
+          <ul class="expertise-kpis" aria-label="Indicateurs clés">
+            <li>Sites livrés : 30+</li>
+            <li>Score Lighthouse moyen : 97</li>
+            <li>Délai de livraison : 2 à 6 semaines</li>
+          </ul>
+          <span class="expertise-cta">Voir nos réalisations web <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </a>
+      </li>
+    </ul>
+    <div class="expertises-footer reveal">
+      <a href="/services" class="btn btn-secondary">Voir toutes nos expertises</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── 5. LOÏC DEMO ─────────────────────────────────────────────────────── -->
+<section id="loic-demo" aria-labelledby="loic-demo-title">
+  <div class="container">
+    <div class="loic-inner">
+      <!-- Chat demo -->
+      <div class="loic-visual reveal-l">
+        <div class="chat-frame">
+          <div class="chat-bar">
+            <div class="chat-dots"><span></span><span></span><span></span></div>
+            <span class="chat-bar-title">Loïc — Consultant IA</span>
+            <span class="chat-bar-status">En ligne</span>
+          </div>
+          <div class="chat-messages" id="loic-chat-messages" style="min-height:220px"></div>
+          <!-- Quick choices -->
+          <div id="loic-choices" style="padding:0 18px 16px;display:flex;flex-direction:column;gap:8px;opacity:0;transition:opacity 300ms">
+            <button class="loic-choice-btn" onclick="openLoicWidget('Générer plus de leads')">Générer plus de leads</button>
+            <button class="loic-choice-btn" onclick="openLoicWidget('Automatiser mes processus')">Automatiser mes processus</button>
+            <button class="loic-choice-btn" onclick="openLoicWidget('Améliorer mon référencement')">Améliorer mon référencement</button>
+            <button class="loic-choice-btn" onclick="openLoicWidget('Autre chose')">Autre chose</button>
+          </div>
         </div>
       </div>
-      <!-- STEP 5 -->
-      <div class="devis-step" id="step-5">
-        <div class="step-title">Récapitulatif</div><div class="step-sub">Vérifiez vos informations avant l'envoi.</div>
-        <div id="recap-content"></div>
-        <div style="background:rgba(0,102,255,.08);border:1px solid rgba(0,102,255,.2);border-radius:10px;padding:1rem 1.2rem;margin-top:1rem;font-size:.82rem;color:var(--text2);line-height:1.6">✅ <strong>Devis gratuit et sans engagement.</strong> Proposition personnalisée sous 24h.<br>📍 <strong>Paris · Lyon · Dijon · Troyes</strong></div>
+      <!-- Benefits -->
+      <div class="loic-content reveal-r">
+        <span class="section-pre on-dark">Loïc — Consultant IA</span>
+        <h2 class="section-h2 on-dark" id="loic-demo-title">Rencontrez Loïc, votre consultant IA disponible 24h/7j</h2>
+        <ul class="loic-benefits" aria-label="Ce que Loïc fait pour vous">
+          <li class="loic-benefit"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Analyse votre secteur et vos concurrents</li>
+          <li class="loic-benefit"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Qualifie votre projet en 10 minutes</li>
+          <li class="loic-benefit"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Prépare un rapport personnalisé sous 24h</li>
+          <li class="loic-benefit"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Vous oriente vers la solution la plus rentable</li>
+          <li class="loic-benefit"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Disponible 7j/7, répond en quelques secondes</li>
+        </ul>
+        <div style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:9999px;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.30);margin-bottom:28px" aria-label="Loïc est en ligne">
+          <span id="loic-pulse" style="width:8px;height:8px;border-radius:50%;background:#10B981;display:block"></span>
+          <span style="font-size:14px;color:rgba(255,255,255,.85)">Loïc est en ligne — Répond en quelques secondes</span>
+        </div>
+        <button class="btn btn-white btn-lg" style="width:100%;justify-content:center" onclick="openLoicWidget()" aria-label="Démarrer une conversation avec Loïc">Démarrer avec Loïc →</button>
+        <p style="margin-top:12px;font-size:14px;color:rgba(255,255,255,.55);text-align:center">Gratuit · Aucune inscription requise</p>
+        <p style="margin-top:12px;text-align:center"><a href="/loic" style="font-size:14px;color:rgba(255,255,255,.65);transition:color 150ms" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.65)'">Ou découvrir comment fonctionne Loïc →</a></p>
       </div>
     </div>
-    <div class="devis-success" id="devis-success"><div class="success-icon">🎉</div><h3>Demande envoyée avec succès !</h3><p>Merci <strong id="success-name"></strong> ! Proposition personnalisée <strong>sous 24h ouvrées</strong>.<br>📍 Agence : <strong id="success-agence"></strong></p><button class="btn-blue" onclick="closeDevis()" style="margin:0 auto">Fermer ✕</button></div>
-    <div class="devis-footer" id="devis-footer"><button class="btn-step-back" id="btn-back" onclick="prevStep()" style="visibility:hidden">← Précédent</button><div style="font-size:.72rem;color:var(--text3)">Étape <span id="step-num">1</span> / 5</div><button class="btn-step-next" id="btn-next" onclick="nextStep()">Suivant →</button></div>
   </div>
+</section>
+
+<!-- ── 6. PROCESSUS ─────────────────────────────────────────────────────── -->
+<section id="processus" aria-labelledby="process-title">
+  <div class="container">
+    <div class="section-header centered reveal">
+      <span class="section-pre">Notre méthode</span>
+      <h2 class="section-h2" id="process-title">De la première conversation au premier résultat — en 4 étapes</h2>
+      <p class="section-intro">Un processus transparent, des livrables concrets, un calendrier tenu.</p>
+    </div>
+    <ol class="steps-grid" aria-label="Notre processus de travail">
+      <li class="step reveal">
+        <div class="step-circle" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+        <span class="step-delay pill pill-primary">Jour 1</span>
+        <h3 class="step-title">Diagnostic</h3>
+        <p class="step-text">Loïc analyse votre activité, vos processus et vos objectifs. Vous recevez un rapport de diagnostic personnalisé sous 24h.</p>
+        <span class="step-delay" style="color:var(--color-success);font-weight:700;font-size:12px">✓ Gratuit</span>
+      </li>
+      <li class="step reveal d1">
+        <div class="step-circle" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+        </div>
+        <span class="step-delay pill pill-primary">Jour 2–3</span>
+        <h3 class="step-title">Stratégie</h3>
+        <p class="step-text">Nous définissons ensemble les actions prioritaires, le budget, le calendrier et les KPI de succès de votre mission.</p>
+        <span class="step-delay" style="color:var(--color-success);font-weight:700;font-size:12px">En 48h</span>
+      </li>
+      <li class="step reveal d2">
+        <div class="step-circle" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+        </div>
+        <span class="step-delay pill pill-primary">Semaine 1+</span>
+        <h3 class="step-title">Exécution</h3>
+        <p class="step-text">Notre équipe déploie, teste et affine. Vous avez accès à un dashboard de suivi en temps réel et un point hebdomadaire.</p>
+        <span class="step-delay" style="color:var(--color-success);font-weight:700;font-size:12px">Premier livrable : 72h</span>
+      </li>
+      <li class="step reveal d3">
+        <div class="step-circle" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <span class="step-delay pill pill-primary">Continu</span>
+        <h3 class="step-title">Résultats</h3>
+        <p class="step-text">Mesure des KPI, optimisation continue, rapport de ROI mensuel. Nous ne disparaissons pas après la livraison.</p>
+        <span class="step-delay" style="color:var(--color-success);font-weight:700;font-size:12px">ROI mesuré</span>
+      </li>
+    </ol>
+    <!-- Reassurance -->
+    <div class="reassurance-bar reveal" style="margin-top:48px">
+      <div class="reassurance-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Premier livrable en 72h
+      </div>
+      <div class="reassurance-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+        Dashboard de suivi inclus
+      </div>
+      <div class="reassurance-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Point hebdomadaire
+      </div>
+      <div class="reassurance-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Rapport ROI mensuel
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:36px">
+      <a href="/diagnostic-ia" class="btn btn-primary btn-lg reveal">Démarrer mon Diagnostic →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── 7. CAS CLIENTS ────────────────────────────────────────────────────── -->
+<section id="cas-clients" aria-labelledby="cases-title">
+  <div class="container">
+    <div class="section-header centered reveal">
+      <span class="section-pre">Cas clients</span>
+      <h2 class="section-h2" id="cases-title">Des résultats qui parlent d'eux-mêmes</h2>
+      <p class="section-intro">Trois missions récentes. Des chiffres réels, vérifiables.</p>
+    </div>
+    <ul class="cases-grid" role="list" aria-label="Études de cas clients">
+      <li>
+        <article class="case-card reveal" aria-label="Agent IA SAV — e-commerce">
+          <div class="case-tags">
+            <span class="case-tag ia">Intelligence Artificielle</span>
+            <span class="case-sector">E-commerce · Mode</span>
+          </div>
+          <h3 class="case-title">Agent IA SAV — 3 000 tickets/mois traités automatiquement</h3>
+          <p class="case-desc">Un commerçant en ligne recevait 3 000 demandes SAV par mois. Son équipe était débordée. En 72h, Loïc a déployé un agent qui traite 73% des tickets sans intervention humaine.</p>
+          <div class="case-kpis">
+            <div class="case-kpi"><span class="case-kpi-value">+180%</span><div class="case-kpi-label">Satisfaction client</div></div>
+            <div class="case-kpi"><span class="case-kpi-value">-73%</span><div class="case-kpi-label">Tickets humains</div></div>
+            <div class="case-kpi"><span class="case-kpi-value">72h</span><div class="case-kpi-label">Déploiement</div></div>
+          </div>
+          <a href="/nos-realisations/agent-ia-sav" class="why-link" style="margin-top:16px">Lire l'étude de cas <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        </article>
+      </li>
+      <li>
+        <article class="case-card reveal d1" aria-label="Automatisation devis — BTP">
+          <div class="case-tags">
+            <span class="case-tag auto">Automatisation</span>
+            <span class="case-sector">BTP · Artisanat</span>
+          </div>
+          <h3 class="case-title">Devis automatisés — 14h récupérées par semaine</h3>
+          <p class="case-desc">Un artisan passait 14h par semaine à rédiger des devis manuellement. Nous avons automatisé le processus de A à Z : réception demande → calcul → envoi PDF signable en ligne.</p>
+          <div class="case-kpis">
+            <div class="case-kpi"><span class="case-kpi-value">-14h</span><div class="case-kpi-label">Par semaine</div></div>
+            <div class="case-kpi"><span class="case-kpi-value">×4</span><div class="case-kpi-label">ROI en 3 mois</div></div>
+            <div class="case-kpi"><span class="case-kpi-value">0</span><div class="case-kpi-label">Erreur calcul</div></div>
+          </div>
+          <a href="/nos-realisations/automatisation-devis-btp" class="why-link" style="margin-top:16px">Lire l'étude de cas <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        </article>
+      </li>
+      <li>
+        <article class="case-card reveal d2" aria-label="SEO — Cabinet conseil B2B">
+          <div class="case-tags">
+            <span class="case-tag seo">SEO</span>
+            <span class="case-sector">Services B2B · Conseil</span>
+          </div>
+          <h3 class="case-title">Trafic organique ×3.4 en 6 mois</h3>
+          <p class="case-desc">Un cabinet de conseil B2B était invisible sur Google. Audit technique + stratégie de contenu IA + piliers thématiques : ×3.4 de trafic en 6 mois, sans budget publicitaire.</p>
+          <div class="case-kpis">
+            <div class="case-kpi"><span class="case-kpi-value">×3.4</span><div class="case-kpi-label">Trafic organique</div></div>
+            <div class="case-kpi"><span class="case-kpi-value">+12</span><div class="case-kpi-label">Positions gagnées</div></div>
+            <div class="case-kpi"><span class="case-kpi-value">+67%</span><div class="case-kpi-label">Leads SEO</div></div>
+          </div>
+          <a href="/nos-realisations/seo-cabinet-conseil" class="why-link" style="margin-top:16px">Lire l'étude de cas <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        </article>
+      </li>
+    </ul>
+    <div style="text-align:center;margin-top:40px">
+      <a href="/nos-realisations" class="btn btn-secondary reveal">→ Voir toutes nos réalisations</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── 8. TÉMOIGNAGES ────────────────────────────────────────────────────── -->
+<section id="temoignages" aria-labelledby="testimonials-title" aria-roledescription="carousel">
+  <div class="container">
+    <div class="section-header centered reveal">
+      <span class="section-pre">Ils nous font confiance</span>
+      <h2 class="section-h2" id="testimonials-title">Ce que nos clients disent de CA-TECH</h2>
+    </div>
+    <div class="carousel-wrap reveal">
+      <div class="carousel-track" id="carousel-track" aria-live="polite" aria-atomic="false">
+        <!-- Slide 1 -->
+        <div class="testimonial-slide">
+          <div class="testimonial-card">
+            <div class="testimonial-stars" aria-label="5 étoiles sur 5">★★★★★</div>
+            <blockquote class="testimonial-quote">« En 3 semaines, Loïc a automatisé tout notre processus de relance client. On a récupéré 12h par semaine et nos leads ne tombent plus dans les oubliettes. »</blockquote>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar" aria-hidden="true">T</div>
+              <div>
+                <div class="testimonial-name">Thomas M.</div>
+                <div class="testimonial-role">Directeur commercial, PME industrie · 35 salariés</div>
+              </div>
+              <span class="case-tag auto" style="margin-left:auto">Automatisation</span>
+            </div>
+          </div>
+        </div>
+        <!-- Slide 2 -->
+        <div class="testimonial-slide">
+          <div class="testimonial-card">
+            <div class="testimonial-stars" aria-label="5 étoiles sur 5">★★★★★</div>
+            <blockquote class="testimonial-quote">« Je craignais que l'IA soit trop complexe pour notre structure. CA-TECH nous a prouvé le contraire en 72h. Premier agent livré, premiers résultats mesurés. »</blockquote>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar" aria-hidden="true">S</div>
+              <div>
+                <div class="testimonial-name">Sophie L.</div>
+                <div class="testimonial-role">Fondatrice, startup SaaS RH · 12 salariés</div>
+              </div>
+              <span class="case-tag ia" style="margin-left:auto">IA</span>
+            </div>
+          </div>
+        </div>
+        <!-- Slide 3 -->
+        <div class="testimonial-slide">
+          <div class="testimonial-card">
+            <div class="testimonial-stars" aria-label="5 étoiles sur 5">★★★★★</div>
+            <blockquote class="testimonial-quote">« Notre trafic organique a été multiplié par 3.4 en 6 mois. Sans une seule campagne payante. L'équipe CA-TECH sait exactement ce qu'elle fait en SEO. »</blockquote>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar" aria-hidden="true">M</div>
+              <div>
+                <div class="testimonial-name">Marc D.</div>
+                <div class="testimonial-role">Directeur marketing, cabinet conseil B2B</div>
+              </div>
+              <span class="case-tag seo" style="margin-left:auto">SEO</span>
+            </div>
+          </div>
+        </div>
+        <!-- Slide 4 -->
+        <div class="testimonial-slide">
+          <div class="testimonial-card">
+            <div class="testimonial-stars" aria-label="5 étoiles sur 5">★★★★★</div>
+            <blockquote class="testimonial-quote">« Ce qui m'a convaincu, c'est leur honnêteté. Ils m'ont dit exactement ce qui était faisable et ce qui ne l'était pas. Et ils ont livré. »</blockquote>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar" aria-hidden="true">I</div>
+              <div>
+                <div class="testimonial-name">Isabelle R.</div>
+                <div class="testimonial-role">Gérante, commerce de détail · Paris</div>
+              </div>
+              <span class="case-tag dev" style="margin-left:auto">Dev Web</span>
+            </div>
+          </div>
+        </div>
+        <!-- Slide 5 -->
+        <div class="testimonial-slide">
+          <div class="testimonial-card">
+            <div class="testimonial-stars" aria-label="5 étoiles sur 5">★★★★★</div>
+            <blockquote class="testimonial-quote">« Loïc répond à 3h du matin quand j'en ai besoin. Ce niveau de réactivité avec un résultat aussi concret, je n'avais jamais connu ça. »</blockquote>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar" aria-hidden="true">K</div>
+              <div>
+                <div class="testimonial-name">Karim B.</div>
+                <div class="testimonial-role">CEO, agence événementielle</div>
+              </div>
+              <span class="case-tag ia" style="margin-left:auto">IA</span>
+            </div>
+          </div>
+        </div>
+        <!-- Slide 6 -->
+        <div class="testimonial-slide">
+          <div class="testimonial-card">
+            <div class="testimonial-stars" aria-label="5 étoiles sur 5">★★★★★</div>
+            <blockquote class="testimonial-quote">« NPS de 74 pour CA-TECH dans notre baromètre fournisseurs. C'est le meilleur score de toute notre liste de prestataires tech. »</blockquote>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar" aria-hidden="true">D</div>
+              <div>
+                <div class="testimonial-name">Directrice des opérations</div>
+                <div class="testimonial-role">Groupe retail national (confidentiel)</div>
+              </div>
+              <span class="case-tag auto" style="margin-left:auto">Auto + IA</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-controls">
+        <button class="carousel-btn" id="carousel-prev" aria-label="Témoignage précédent">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="carousel-dots" role="tablist" aria-label="Témoignages">
+          <button class="carousel-dot active" role="tab" aria-selected="true" aria-label="Témoignage 1" data-index="0"></button>
+          <button class="carousel-dot" role="tab" aria-selected="false" aria-label="Témoignage 2" data-index="1"></button>
+          <button class="carousel-dot" role="tab" aria-selected="false" aria-label="Témoignage 3" data-index="2"></button>
+          <button class="carousel-dot" role="tab" aria-selected="false" aria-label="Témoignage 4" data-index="3"></button>
+          <button class="carousel-dot" role="tab" aria-selected="false" aria-label="Témoignage 5" data-index="4"></button>
+          <button class="carousel-dot" role="tab" aria-selected="false" aria-label="Témoignage 6" data-index="5"></button>
+        </div>
+        <button class="carousel-btn" id="carousel-next" aria-label="Témoignage suivant">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 9. TARIFS ─────────────────────────────────────────────────────────── -->
+<section id="tarifs" aria-labelledby="pricing-title">
+  <div class="container">
+    <div class="section-header centered reveal">
+      <span class="section-pre">Tarifs</span>
+      <h2 class="section-h2" id="pricing-title">Des formats adaptés à votre projet</h2>
+      <p class="section-intro">Aucune surprise. Devis détaillé sous 24h, sans engagement.</p>
+    </div>
+    <div class="pricing-grid">
+      <!-- Card 1 -->
+      <div class="pricing-card reveal">
+        <div class="pricing-name">Entrée</div>
+        <div class="pricing-price">490 <sub>€</sub></div>
+        <div class="pricing-period">À partir de · Livré en 48h</div>
+        <p class="pricing-desc">Pour démarrer sans risque et comprendre où l'IA peut vous aider.</p>
+        <ul class="pricing-features">
+          <li class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Audit complet de votre activité par Loïc</span></li>
+          <li class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Rapport de 15 à 20 pages personnalisé</span></li>
+          <li class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Recommandations prioritaires actionnables</span></li>
+          <li class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Appel de restitution 45 minutes</span></li>
+          <li class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Plan d'action sur 90 jours</span></li>
+        </ul>
+        <a href="/devis" class="btn btn-secondary" style="width:100%;justify-content:center">Demander mon audit →</a>
+        <p class="pricing-note">Audit & Diagnostic</p>
+      </div>
+      <!-- Card 2 — Featured -->
+      <div class="pricing-card featured reveal d1">
+        <div class="pricing-featured-badge">Recommandé</div>
+        <div class="pricing-name">Sprint</div>
+        <div class="pricing-price">1 900 <sub>€</sub></div>
+        <div class="pricing-period">À partir de · Premier livrable en 72h</div>
+        <p class="pricing-desc">Pour aller de l'idée au premier résultat en moins d'une semaine.</p>
+        <ul class="pricing-features">
+          <li class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Tout ce qui est dans l'Audit</span></li>
+          <li class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Déploiement d'un agent ou automatisation</span></li>
+          <li class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Formation de votre équipe (2h)</span></li>
+          <li class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Suivi 30 jours post-lancement</span></li>
+          <li class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Dashboard de KPI inclus</span></li>
+          <li class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Interlocuteur dédié</span></li>
+        </ul>
+        <a href="/devis" class="btn btn-primary" style="width:100%;justify-content:center">Démarrer mon Sprint →</a>
+        <p class="pricing-note">Sprint IA</p>
+      </div>
+      <!-- Card 3 -->
+      <div class="pricing-card reveal d2">
+        <div class="pricing-name">Avancé</div>
+        <div class="pricing-price" style="font-size:2rem">Sur devis</div>
+        <div class="pricing-period">Selon périmètre</div>
+        <p class="pricing-desc">Pour une transformation profonde et mesurable de votre activité.</p>
+        <ul class="pricing-features">
+          <li class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Audit + Sprint + itérations</span></li>
+          <li class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Intégrations SI personnalisées</span></li>
+          <li class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Agents IA sur mesure</span></li>
+          <li class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Accompagnement 3 à 12 mois</span></li>
+          <li class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Reporting mensuel ROI</span></li>
+          <li class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Accès prioritaire à Loïc</span></li>
+        </ul>
+        <a href="/devis" class="btn btn-secondary" style="width:100%;justify-content:center">Parlons de votre projet →</a>
+        <p class="pricing-note">Projet complet</p>
+      </div>
+    </div>
+    <p style="text-align:center;font-size:14px;color:var(--color-gray-400);margin-top:28px" class="reveal">
+      💡 Ces tarifs sont indicatifs. Chaque projet est devisé sur mesure après un diagnostic gratuit.<br>
+      Loïc peut vous orienter vers le format le plus adapté à votre budget.
+    </p>
+    <div style="text-align:center;margin-top:28px">
+      <a href="/devis" class="btn btn-primary reveal">Demander un devis gratuit →</a>
+      <p style="font-size:13px;color:var(--color-gray-400);margin-top:10px">Réponse sous 24h · Devis détaillé · Zéro engagement</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── 10. FAQ ────────────────────────────────────────────────────────────── -->
+<section id="faq" aria-labelledby="faq-title">
+  <div class="container">
+    <div class="faq-inner">
+      <div class="faq-sidebar reveal-l">
+        <h2 class="faq-sidebar-title" id="faq-title">Les questions que vous vous posez</h2>
+        <p class="faq-sidebar-text">Nous répondons franchement. Parce que la transparence est la base d'une relation commerciale solide.</p>
+        <a href="/diagnostic-ia" class="btn btn-primary">Lancer mon Diagnostic →</a>
+      </div>
+      <div class="faq-list reveal-r" role="list">
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false">
+            Combien de temps faut-il pour démarrer un projet avec CA-TECH ?
+            <span class="faq-icon" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </span>
+          </button>
+          <div class="faq-answer"><div class="faq-answer-inner">En moins de 48h. Après votre diagnostic gratuit avec Loïc, vous recevez un rapport et une proposition dans la journée. Si vous validez, nous commençons dès le lendemain. Premier livrable en 72h dans la plupart des cas.</div></div>
+        </div>
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false">
+            Faut-il avoir une équipe technique pour travailler avec vous ?
+            <span class="faq-icon" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </span>
+          </button>
+          <div class="faq-answer"><div class="faq-answer-inner">Non. Nous nous adaptons à votre niveau de maturité digitale. Que vous ayez une DSI structurée ou un seul ordinateur, nous livrons une solution qui s'intègre à votre environnement actuel. Loïc évalue ça dès le diagnostic.</div></div>
+        </div>
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false">
+            Vos tarifs sont-ils transparents ou y a-t-il des coûts cachés ?
+            <span class="faq-icon" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </span>
+          </button>
+          <div class="faq-answer"><div class="faq-answer-inner">Nos tarifs affichés sont des points d'entrée. Votre devis est établi après le diagnostic et détaille chaque poste au centime près. Aucun surcoût sans votre accord écrit. Et le diagnostic est gratuit.</div></div>
+        </div>
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false">
+            Garantissez-vous des résultats ?
+            <span class="faq-icon" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </span>
+          </button>
+          <div class="faq-answer"><div class="faq-answer-inner">Nous garantissons le respect des KPI définis ensemble au démarrage. Si les objectifs ne sont pas atteints au terme de la mission, nous prolongeons notre accompagnement sans frais supplémentaires jusqu'à ce qu'ils le soient. Nos engagements sont contractuels.</div></div>
+        </div>
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false">
+            Mes données sont-elles en sécurité avec Loïc ?
+            <span class="faq-icon" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </span>
+          </button>
+          <div class="faq-answer"><div class="faq-answer-inner">Oui. Loïc ne stocke aucune donnée sensible. Les conversations sont chiffrées en transit, non utilisées pour l'entraînement de modèles tiers et supprimées sur demande. Nous respectons le RGPD et travaillons exclusivement avec des hébergements européens.</div></div>
+        </div>
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false">
+            En quoi CA-TECH est-il différent d'une agence web classique ?
+            <span class="faq-icon" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </span>
+          </button>
+          <div class="faq-answer"><div class="faq-answer-inner">Une agence web crée des sites. CA-TECH déploie des systèmes qui génèrent de la croissance. Nous démarrons toujours par un diagnostic ROI, pas par une maquette. Et nous mesurons chaque euro investi avec des KPI définis contractuellement.</div></div>
+        </div>
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false">
+            Travaillez-vous avec tous les secteurs d'activité ?
+            <span class="faq-icon" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </span>
+          </button>
+          <div class="faq-answer"><div class="faq-answer-inner">Nous travaillons principalement avec des PME (5 à 200 salariés) dans les services B2B, le commerce, l'artisanat, les professions libérales et les startups. Certains secteurs réglementés (finance, santé) demandent une qualification spécifique — Loïc vous indiquera si c'est votre cas.</div></div>
+        </div>
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false">
+            Puis-je arrêter à tout moment ?
+            <span class="faq-icon" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </span>
+          </button>
+          <div class="faq-answer"><div class="faq-answer-inner">Pour les missions Sprint et Audit, le paiement est intégral à la commande. Pour les projets longs (3 mois et plus), chaque mois est facturé séparément avec un préavis de 30 jours. Pas de contrat longue durée imposé.</div></div>
+        </div>
+        <div style="text-align:center;padding:32px 0 0">
+          <p style="font-size:15px;color:var(--color-gray-600);margin-bottom:16px">Vous avez une autre question ?</p>
+          <button class="btn btn-primary" onclick="openLoicWidget()">Posez-la à Loïc →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 11. CTA FINAL ──────────────────────────────────────────────────────── -->
+<section id="cta-final" aria-labelledby="cta-final-title">
+  <div class="container">
+    <div class="cta-final-pre"><span class="pill pill-dark">✦ Prêt à démarrer ?</span></div>
+    <h2 class="cta-final-h2" id="cta-final-title">Votre premier résultat IA<br>est à 72 heures.</h2>
+    <p class="cta-final-sub">Diagnostic gratuit · Rapport personnalisé · Premier livrable en 72h.<br>Pas d'engagement, pas de jargon — juste des résultats mesurables.</p>
+    <div class="cta-final-btns">
+      <a href="/diagnostic-ia" class="btn btn-white btn-xl">Lancer mon Diagnostic IA →</a>
+    </div>
+    <p class="cta-final-micro">Gratuit · Sans engagement · Réponse sous 24h</p>
+    <p style="margin-top:16px">
+      <button onclick="openLoicWidget()" style="background:none;border:none;cursor:pointer;font-size:15px;color:rgba(255,255,255,.65);font-family:inherit;transition:color 150ms" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.65)'">Ou parler à Loïc maintenant →</button>
+    </p>
+  </div>
+</section>
+
+</main>
+
+<!-- ── FOOTER ─────────────────────────────────────────────────────────────── -->
+<footer id="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <!-- Brand -->
+      <div>
+        <span class="footer-brand-logo">CA-TECH</span>
+        <p class="footer-brand-slogan">L'Intelligence Artificielle au service de votre croissance.</p>
+      </div>
+      <!-- Expertises -->
+      <div>
+        <div class="footer-col-title">Expertises</div>
+        <nav class="footer-links" aria-label="Navigation footer — Expertises">
+          <a href="/intelligence-artificielle" class="footer-link">Intelligence Artificielle</a>
+          <a href="/automatisation" class="footer-link">Automatisation</a>
+          <a href="/seo" class="footer-link">SEO</a>
+          <a href="/developpement-web" class="footer-link">Développement Web</a>
+          <a href="/design-identite" class="footer-link">Design &amp; Identité</a>
+        </nav>
+      </div>
+      <!-- Pages -->
+      <div>
+        <div class="footer-col-title">Pages</div>
+        <nav class="footer-links" aria-label="Navigation footer — Pages">
+          <a href="/loic" class="footer-link">Loïc</a>
+          <a href="/nos-realisations" class="footer-link">Réalisations</a>
+          <a href="/blog" class="footer-link">Blog</a>
+          <a href="/a-propos" class="footer-link">À propos</a>
+          <a href="/contact" class="footer-link">Contact</a>
+          <a href="/devis" class="footer-link">Demander un devis</a>
+        </nav>
+      </div>
+      <!-- Contact -->
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <address style="font-style:normal">
+          <nav class="footer-links" aria-label="Contact CA-TECH">
+            <a href="mailto:contact@ca-tech.fr" class="footer-link">contact@ca-tech.fr</a>
+            <a href="tel:+33775664975" class="footer-link">+33 7 75 66 49 75</a>
+            <span class="footer-link" style="cursor:default">Paris · Lyon · Dijon · Troyes</span>
+            <a href="https://www.linkedin.com/company/ca-tech" class="footer-link" rel="noopener noreferrer" target="_blank">LinkedIn
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;margin-left:4px" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          </nav>
+        </address>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 CA-TECH — Tous droits réservés</p>
+      <nav class="footer-legal" aria-label="Liens légaux">
+        <a href="/mentions-legales" class="footer-legal-link">Mentions légales</a>
+        <a href="/cgv" class="footer-legal-link">CGV</a>
+        <a href="/politique-de-confidentialite" class="footer-legal-link">Confidentialité</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<!-- ── WIDGET LOÏC ─────────────────────────────────────────────────────────── -->
+<div id="loic-widget" style="position:fixed;bottom:24px;right:24px;z-index:9000">
+  <button id="loic-widget-btn" onclick="openLoicWidget()" aria-label="Parler à Loïc" title="Parler à Loïc"
+    style="width:56px;height:56px;border-radius:50%;background:var(--color-primary);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,102,255,.40);transition:transform 200ms,box-shadow 200ms"
+    onmouseover="this.style.transform='scale(1.1)';this.style.boxShadow='0 6px 28px rgba(0,102,255,.55)'"
+    onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 20px rgba(0,102,255,.40)'">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+  </button>
 </div>
 
-<!-- FOOTER -->
-<footer></footer>
+<!-- ── EXTRA STYLES ────────────────────────────────────────────────────────── -->
+<style>
+/* Loïc choice buttons */
+.loic-choice-btn {
+  background: rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.25);
+  color: rgba(255,255,255,.90);
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: background 150ms;
+}
+.loic-choice-btn:hover { background: rgba(255,255,255,.20); }
+/* Case card footer link */
+.case-card .why-link { font-size: 14px; color: var(--color-primary); display: inline-flex; align-items: center; gap: 6px; transition: gap 150ms; }
+.case-card:hover .why-link { gap: 10px; }
+/* Proof bar animation */
+@keyframes loic-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.4)} }
+#loic-pulse { animation: loic-pulse 1.5s ease-in-out infinite; }
+/* Hero animation classes */
+.hero-anim { transition: opacity 500ms cubic-bezier(0.16,1,0.3,1), transform 500ms cubic-bezier(0.16,1,0.3,1); }
+</style>
 
-
+<!-- ── JAVASCRIPT ──────────────────────────────────────────────────────────── -->
 <script>
-window.addEventListener('load',()=>setTimeout(()=>document.getElementById('loader').classList.add('hidden'),2200));
-window.addEventListener('scroll',()=>{const st=document.documentElement.scrollTop,dh=document.documentElement.scrollHeight-document.documentElement.clientHeight;document.getElementById('prog').style.width=(st/dh*100)+'%';document.getElementById('nav').classList.toggle('scrolled',st>80);document.getElementById('btt').classList.toggle('show',st>400)});
-document.querySelectorAll('section[id]').forEach(s=>{new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.nav-links a[data-s]').forEach(a=>a.classList.remove('active'));const al=document.querySelector('.nav-links a[data-s="'+e.target.id+'"]');if(al)al.classList.add('active')}})},{threshold:.25}).observe(s)});
-const ham=document.getElementById('ham'),mob=document.getElementById('mob');ham.addEventListener('click',()=>{ham.classList.toggle('open');mob.classList.toggle('open')});function closeMob(){ham.classList.remove('open');mob.classList.remove('open')}
-document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el=>{new IntersectionObserver(en=>en.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')}),{threshold:.1}).observe(el)});
-function countUp(el){const t=+el.dataset.t,s=el.dataset.s||'',dur=1600,step=t/(dur/16);let c=0;const tmr=setInterval(()=>{c=Math.min(c+step,t);el.textContent=Math.floor(c)+s;if(c>=t)clearInterval(tmr)},16)}
-const _sb=document.getElementById('stats-bar');if(_sb){new IntersectionObserver(en=>{if(en[0].isIntersecting)_sb.querySelectorAll('[data-t]').forEach(countUp)},{threshold:.4}).observe(_sb);}
-document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();window.scrollTo({top:t.offsetTop-70,behavior:'smooth'})}}));
-function updateBudget(val){val=parseInt(val);document.getElementById('budget-display').textContent=val>=50000?'50 000 €+':val.toLocaleString('fr-FR')+' €'}
-document.querySelectorAll('#project-choices .choice-card').forEach(card=>{card.addEventListener('click',()=>card.classList.toggle('selected'))});
-function selectDelai(el){document.querySelectorAll('#delai-choices .choice-card').forEach(c=>c.classList.remove('selected'));el.classList.add('selected')}
-let currentStep=1;const TOTAL=5;
-function openDevis(){trackDevisOpen();document.getElementById('devis-overlay').classList.add('open');document.body.style.overflow='hidden'}
-function closeDevis(){document.getElementById('devis-overlay').classList.remove('open');document.body.style.overflow=''}
-function handleOverlayClick(e){if(e.target===document.getElementById('devis-overlay'))closeDevis()}
-function updateStepUI(){document.querySelectorAll('.devis-step').forEach((s,i)=>{s.classList.toggle('active',i+1===currentStep)});for(let i=1;i<=TOTAL;i++){const dot=document.getElementById('dot-'+i);if(!dot)continue;if(i<currentStep){dot.className='step-dot done';dot.textContent='✓'}else if(i===currentStep){dot.className='step-dot active';dot.textContent=i}else{dot.className='step-dot';dot.textContent=i}}for(let i=1;i<TOTAL;i++){const line=document.getElementById('line-'+i);if(line)line.className='step-line'+(i<currentStep?' done':'')}document.getElementById('btn-back').style.visibility=currentStep>1?'visible':'hidden';const next=document.getElementById('btn-next');if(currentStep===TOTAL){next.textContent='🚀 Envoyer ma demande';next.classList.add('success-btn')}else{next.textContent='Suivant →';next.classList.remove('success-btn')}document.getElementById('step-num').textContent=currentStep;document.getElementById('devis-modal').scrollTop=0}
-function validateStep(){if(currentStep===1){const p=document.getElementById('d-prenom'),n=document.getElementById('d-nom'),e=document.getElementById('d-email'),t=document.getElementById('d-tel'),s=document.getElementById('d-secteur');[p,n,e,t,s].forEach(f=>f.classList.remove('err'));let ok=true;if(!p.value.trim()){p.classList.add('err');ok=false}if(!n.value.trim()){n.classList.add('err');ok=false}if(!e.value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)){e.classList.add('err');ok=false}if(!t.value.trim()){t.classList.add('err');ok=false}if(!s.value){s.classList.add('err');ok=false}return ok}if(currentStep===2){if(!document.querySelectorAll('#project-choices .choice-card.selected').length){alert('Veuillez sélectionner au moins un type de projet.');return false}return true}if(currentStep===3){const d=document.getElementById('d-desc');d.classList.remove('err');if(!d.value.trim()){d.classList.add('err');alert('Veuillez décrire votre projet.');return false}return true}if(currentStep===4){if(!document.querySelector('#delai-choices .choice-card.selected')){alert('Veuillez sélectionner un délai.');return false}return true}return true}
-function buildRecap(){const p=document.getElementById('d-prenom').value,n=document.getElementById('d-nom').value,e=document.getElementById('d-email').value,t=document.getElementById('d-tel').value,ent=document.getElementById('d-ent').value||'—',sec=document.getElementById('d-secteur').value,tai=document.getElementById('d-taille').value||'—',ag=document.getElementById('d-agence').value||'Non précisé';const proj=[...document.querySelectorAll('#project-choices .choice-card.selected')].map(c=>c.querySelector('.choice-name').textContent).join(', ')||'—';const desc=document.getElementById('d-desc').value,ex=document.getElementById('d-existant').value||'—',bud=document.getElementById('budget-display').textContent,del=document.querySelector('#delai-choices .choice-card.selected')?.querySelector('.choice-name')?.textContent||'—',src=document.getElementById('d-source').value||'—',foncts=[...document.querySelectorAll('[id^="cf-"]:checked')].map(c=>c.nextElementSibling.textContent).join(', ')||'Aucune';document.getElementById('recap-content').innerHTML='<div class="recap-section"><div class="recap-title">👤 Profil</div><div class="recap-row"><span>Nom</span><span>'+p+' '+n+'</span></div><div class="recap-row"><span>Email</span><span>'+e+'</span></div><div class="recap-row"><span>Téléphone</span><span>'+t+'</span></div><div class="recap-row"><span>Entreprise</span><span>'+ent+'</span></div><div class="recap-row"><span>Secteur</span><span>'+sec+'</span></div><div class="recap-row"><span>Taille</span><span>'+tai+'</span></div><div class="recap-row"><span>Agence</span><span>'+ag+'</span></div></div><div class="recap-section"><div class="recap-title">📦 Projet</div><div class="recap-row"><span>Services</span><span>'+proj+'</span></div><div class="recap-row"><span>Site existant</span><span>'+ex+'</span></div><div class="recap-row"><span>Fonctionnalités</span><span>'+foncts+'</span></div></div><div class="recap-section"><div class="recap-title">💰 Budget</div><div class="recap-row"><span>Budget</span><span>'+bud+'</span></div><div class="recap-row"><span>Délai</span><span>'+del+'</span></div><div class="recap-row"><span>Source</span><span>'+src+'</span></div></div><div class="recap-section"><div class="recap-title">📝 Description</div><div style="font-size:.83rem;color:var(--text2);line-height:1.6;padding:.3rem 0">'+desc+'</div></div>'}
-function nextStep(){if(!validateStep())return;if(currentStep===TOTAL){sendDevis();return}currentStep++;if(currentStep===TOTAL)buildRecap();updateStepUI()}
-function prevStep(){if(currentStep>1){currentStep--;updateStepUI()}}
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDevis()}});
-
-// Hero phrase rotation
+/* ── 1. HEADER SCROLL ─────────────────────────────────────────────────── */
 (function(){
-  const phrases=document.querySelectorAll('.hero-phrase');
-  if(!phrases.length)return;
-  let cur=0;
-  setInterval(()=>{
-    phrases[cur].classList.remove('active');
-    cur=(cur+1)%phrases.length;
-    phrases[cur].classList.add('active');
-  },3200);
-})();
-// Collage subtle parallax
-const collage=document.getElementById('hero-collage');
-if(collage){window.addEventListener('scroll',()=>{collage.style.transform='translateY('+window.scrollY*.04+'px)'},{ passive:true });}
-
-// ── EmailJS ──────────────────────────────────────────────────────────
-const EJS_PUBLIC_KEY     = 'gl732OJGQUBaHh-rC';
-const EJS_SERVICE_ID     = 'service_ho3lniw';
-const EJS_TPL_CONTACT    = 'template_gk2gjor';
-const EJS_TPL_DEVIS      = 'template_gk2gjor';
-emailjs.init({ publicKey: EJS_PUBLIC_KEY });
-
-// ── Supabase ──────────────────────────────────────────────────────────
-const SB_URL  = 'https://jhcyooksjeivajdjicka.supabase.co';
-const SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoY3lvb2tzamVpdmFqZGppY2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5NzEwMjQsImV4cCI6MjA5NzU0NzAyNH0.pFYDxJUDD5oZyVfGSDDKnPAnyc-jkXd0scS0LvGdlFk';
-
-function sbInsert(table, row) {
-  return fetch(SB_URL + '/rest/v1/' + table, {
-    method: 'POST',
-    headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-    body: JSON.stringify(row),
-  });
-}
-
-function sendContactForm(e) {
-  e.preventDefault();
-  const btn = document.getElementById('c-btn');
-  const origTxt = btn.textContent;
-  btn.disabled = true;
-  btn.textContent = 'Envoi en cours…';
-
-  emailjs.send(EJS_SERVICE_ID, EJS_TPL_CONTACT, {
-    nom:     document.getElementById('c-nom').value,
-    email:   document.getElementById('c-email').value,
-    sujet:   document.getElementById('c-sujet').value,
-    message: document.getElementById('c-message').value,
-  }).then(() => {
-    trackFormSubmit();
-    sbInsert('messages', {
-      from_name:   document.getElementById('c-nom').value,
-      from_email:  document.getElementById('c-email').value,
-      subject:     document.getElementById('c-sujet').value || 'Contact',
-      body:        document.getElementById('c-message').value,
-      source:      'formulaire',
-      is_read:     false,
-      is_replied:  false,
-      is_archived: false,
-    });
-    btn.textContent = '✓ Message envoyé !';
-    btn.style.background = '#10b981';
-    e.target.reset();
-    setTimeout(() => { btn.disabled=false; btn.textContent=origTxt; btn.style.background=''; }, 5000);
-  }).catch(() => {
-    btn.textContent = 'Erreur — réessayez';
-    btn.style.background = '#ef4444';
-    setTimeout(() => { btn.disabled=false; btn.textContent=origTxt; btn.style.background=''; }, 4000);
-  });
-}
-
-function sendDevis() {
-  const btn = document.getElementById('btn-next');
-  btn.disabled = true;
-  btn.textContent = 'Envoi en cours…';
-
-  const projets = [...document.querySelectorAll('#project-choices .choice-card.selected')]
-    .map(c => c.querySelector('.choice-name').textContent).join(', ') || '—';
-  const fonctionnalites = [...document.querySelectorAll('[id^="cf-"]:checked')]
-    .map(c => c.nextElementSibling.textContent).join(', ') || 'Aucune';
-  const elements_existants = [...document.querySelectorAll('[id^="ce-"]:checked')]
-    .map(c => c.nextElementSibling.textContent).join(', ') || 'Aucun';
-  const delai = document.querySelector('#delai-choices .choice-card.selected')
-    ?.querySelector('.choice-name')?.textContent || '—';
-  const collaboration = document.querySelector('[name="collab"]:checked')?.value || '—';
-
-  emailjs.send(EJS_SERVICE_ID, EJS_TPL_DEVIS, {
-    prenom:              document.getElementById('d-prenom').value,
-    nom:                 document.getElementById('d-nom').value,
-    email:               document.getElementById('d-email').value,
-    tel:                 document.getElementById('d-tel').value,
-    entreprise:          document.getElementById('d-ent').value || '—',
-    secteur:             document.getElementById('d-secteur').value,
-    taille:              document.getElementById('d-taille').value || '—',
-    agence:              document.getElementById('d-agence').value || 'Paris (siège)',
-    projets,
-    description:         document.getElementById('d-desc').value,
-    site_existant:       document.getElementById('d-existant').value || '—',
-    url_existant:        document.getElementById('d-url').value || '—',
-    sites_reference:     document.getElementById('d-refs').value || '—',
-    fonctionnalites,
-    elements_existants,
-    budget:              document.getElementById('budget-display').textContent,
-    delai,
-    collaboration,
-    source:              document.getElementById('d-source').value || '—',
-    infos_complementaires: document.getElementById('d-extra').value || '—',
-  }).then(() => {
-    trackGenerateLead();
-    const _prenom = document.getElementById('d-prenom').value;
-    const _nom    = document.getElementById('d-nom').value;
-    const _email  = document.getElementById('d-email').value;
-    const _tel    = document.getElementById('d-tel').value;
-    const _budget = parseFloat((document.getElementById('budget-display').textContent || '0').replace(/[^0-9.]/g, '')) || null;
-    sbInsert('leads', {
-      first_name:  _prenom,
-      last_name:   _nom,
-      email:       _email,
-      phone:       _tel || null,
-      company:     document.getElementById('d-ent').value || null,
-      source:      'devis',
-      notes:       document.getElementById('d-desc').value,
-      budget_max:  _budget,
-      status:      'new',
-    });
-    sbInsert('messages', {
-      from_name:   _prenom + ' ' + _nom,
-      from_email:  _email,
-      subject:     'Devis — ' + projets,
-      body:        'Projet : ' + projets + '\nDescription : ' + document.getElementById('d-desc').value + '\nBudget : ' + document.getElementById('budget-display').textContent + '\nDélai : ' + delai,
-      source:      'formulaire',
-      is_read:     false,
-      is_replied:  false,
-      is_archived: false,
-    });
-    const p = _prenom;
-    const a = document.getElementById('d-agence').value || 'Paris (siège)';
-    document.getElementById('success-name').textContent = p;
-    document.getElementById('success-agence').textContent = a;
-    document.getElementById('devis-body').style.display = 'none';
-    document.getElementById('devis-footer').style.display = 'none';
-    document.getElementById('devis-progress').style.display = 'none';
-    document.getElementById('devis-success').classList.add('show');
-  }).catch(() => {
-    btn.disabled = false;
-    btn.textContent = '🚀 Envoyer ma demande';
-    alert('Une erreur est survenue. Veuillez réessayer ou nous contacter par email.');
-  });
-}
-
-// ── Conversion Tracking ──────────────────────────────────────────
-function _pushConversion(name){
-  window.dataLayer.push({event:name});
-  if(GADS_CONVERSION_ID&&GADS_LABELS[name])
-    window.dataLayer.push({event:'conversion','send_to':GADS_CONVERSION_ID+'/'+GADS_LABELS[name]});
-}
-function trackFormSubmit()      {_pushConversion('form_submit');}
-function trackGenerateLead()    {_pushConversion('generate_lead');}
-function trackPhoneCall()       {_pushConversion('phone_call');}
-function trackWhatsApp()        {_pushConversion('whatsapp_click');}
-function trackBookAppointment() {_pushConversion('book_appointment');}
-function trackDevisOpen()       {window.dataLayer.push({event:'devis_open'});}
-(function(){
-  var r=document.getElementById('cf-rdv');
-  if(r)r.addEventListener('change',function(){if(this.checked)trackBookAppointment();});
+  var h = document.getElementById('header');
+  function onScroll(){ h.classList.toggle('scrolled', window.scrollY > 60); }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
 })();
 
+/* ── 2. NAV DROPDOWN ─────────────────────────────────────────────────── */
+(function(){
+  var wrap = document.getElementById('nav-dropdown-services');
+  var btn  = wrap.querySelector('.nav-dropdown-btn');
+  function open(){ wrap.classList.add('open'); btn.setAttribute('aria-expanded','true'); }
+  function close(){ wrap.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }
+  wrap.addEventListener('mouseenter', open);
+  wrap.addEventListener('mouseleave', close);
+  btn.addEventListener('focus', open);
+  btn.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+  document.addEventListener('click', function(e){ if(!wrap.contains(e.target)) close(); });
+})();
+
+/* ── 3. MOBILE DRAWER ────────────────────────────────────────────────── */
+(function(){
+  var ham     = document.getElementById('nav-ham');
+  var drawer  = document.getElementById('mobile-drawer');
+  var overlay = document.getElementById('drawer-overlay');
+  var close   = document.getElementById('drawer-close');
+  function openDrawer(){
+    drawer.classList.add('open');
+    drawer.setAttribute('aria-hidden','false');
+    ham.classList.add('open');
+    ham.setAttribute('aria-expanded','true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer(){
+    drawer.classList.remove('open');
+    drawer.setAttribute('aria-hidden','true');
+    ham.classList.remove('open');
+    ham.setAttribute('aria-expanded','false');
+    document.body.style.overflow = '';
+  }
+  ham.addEventListener('click', openDrawer);
+  close.addEventListener('click', closeDrawer);
+  overlay.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeDrawer(); });
+})();
+
+/* ── 4. HERO ENTRANCE ANIMATION ─────────────────────────────────────── */
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){
+    ['hero-h1','hero-sub','hero-ctas','hero-micro','hero-demo'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el){ el.style.opacity='1'; el.style.transform='none'; }
+    });
+    return;
+  }
+  var pill = document.querySelector('.hero-pill');
+  function animate(el, delay){
+    if(!el) return;
+    el.style.transition = 'opacity 500ms cubic-bezier(0.16,1,0.3,1), transform 500ms cubic-bezier(0.16,1,0.3,1)';
+    setTimeout(function(){ el.style.opacity='1'; el.style.transform='none'; }, delay);
+  }
+  if(pill){ pill.style.opacity='0'; pill.style.transform='translateY(12px)'; pill.style.transition='opacity 400ms ease, transform 400ms ease'; setTimeout(function(){ pill.style.opacity='1'; pill.style.transform='none'; },0); }
+  animate(document.getElementById('hero-h1'),   100);
+  animate(document.getElementById('hero-sub'),  250);
+  animate(document.getElementById('hero-ctas'), 400);
+  animate(document.getElementById('hero-micro'),500);
+  animate(document.getElementById('hero-demo'), 600);
+
+  /* Hero chat sequence */
+  var msgs = document.getElementById('chat-messages');
+  if(!msgs) return;
+  var seq = [
+    {role:'loic', text:'Bonjour ! Je suis Loïc, consultant IA chez CA-TECH.', delay:800},
+    {role:'user', text:'Combien d\'heures votre équipe perd-elle sur des tâches répétitives ?', delay:3200},
+    {role:'loic', text:'En moyenne, nos clients récupèrent 8h/semaine dès le premier mois. 🚀', delay:5200},
+  ];
+  seq.forEach(function(m){
+    setTimeout(function(){
+      /* typing */
+      var t = document.createElement('div');
+      t.className='chat-typing show';
+      t.innerHTML='<span></span><span></span><span></span>';
+      msgs.appendChild(t);
+      msgs.scrollTop = msgs.scrollHeight;
+      setTimeout(function(){
+        msgs.removeChild(t);
+        var b = document.createElement('div');
+        b.className='chat-bubble ' + m.role;
+        b.textContent = m.text;
+        msgs.appendChild(b);
+        requestAnimationFrame(function(){ b.classList.add('show'); });
+        msgs.scrollTop = msgs.scrollHeight;
+      }, 900);
+    }, m.delay);
+  });
+  /* CTA bubble in chat */
+  setTimeout(function(){
+    var cta = document.createElement('a');
+    cta.href = '/diagnostic-ia';
+    cta.className='chat-bubble loic show';
+    cta.innerHTML='<strong>→ Lancer mon diagnostic gratuit</strong>';
+    cta.style.cursor='pointer';
+    msgs.appendChild(cta);
+    msgs.scrollTop = msgs.scrollHeight;
+  }, 8000);
+})();
+
+/* ── 5. LOÏC DEMO SECTION CHAT ───────────────────────────────────────── */
+(function(){
+  var reduced = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var msgs = document.getElementById('loic-chat-messages');
+  var choices = document.getElementById('loic-choices');
+  if(!msgs) return;
+
+  function addBubble(role, text, delay){
+    if(reduced){
+      var b = document.createElement('div');
+      b.className='chat-bubble ' + role + ' show';
+      b.textContent = text;
+      msgs.appendChild(b);
+      return;
+    }
+    setTimeout(function(){
+      var t = document.createElement('div');
+      t.className='chat-typing show';
+      t.innerHTML='<span></span><span></span><span></span>';
+      msgs.appendChild(t);
+      setTimeout(function(){
+        msgs.removeChild(t);
+        var b = document.createElement('div');
+        b.className='chat-bubble ' + role;
+        b.textContent = text;
+        msgs.appendChild(b);
+        requestAnimationFrame(function(){ b.classList.add('show'); });
+      }, 900);
+    }, delay);
+  }
+
+  var obs = new IntersectionObserver(function(entries){
+    if(!entries[0].isIntersecting) return;
+    obs.disconnect();
+    addBubble('loic', 'Bonjour ! Je suis Loïc. Pour vous aider efficacement, j\'ai besoin de comprendre votre activité.', reduced ? 0 : 600);
+    addBubble('loic', 'Quel est votre principal défi en ce moment ?', reduced ? 0 : 3200);
+    setTimeout(function(){
+      choices.style.opacity='1';
+    }, reduced ? 0 : 4800);
+  }, {threshold: 0.3});
+  obs.observe(document.getElementById('loic-demo'));
+})();
+
+/* ── 6. WIDGET LOÏC (stub) ───────────────────────────────────────────── */
+function openLoicWidget(prefill){
+  /* Stub — intégrer le SDK Loïc ici */
+  var msg = prefill ? 'Loïc : ' + prefill : '';
+  console.log('Open Loïc widget', msg);
+  /* En attendant l'intégration : scroll to contact */
+  window.location.href = '/diagnostic-ia';
+}
+
+/* ── 7. SCROLL REVEAL ────────────────────────────────────────────────── */
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){
+    document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(function(el){ el.classList.add('visible'); });
+    return;
+  }
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, {threshold:0.12});
+  document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(function(el){ obs.observe(el); });
+})();
+
+/* ── 8. COUNT-UP ─────────────────────────────────────────────────────── */
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(!entry.isIntersecting) return;
+      obs.unobserve(entry.target);
+      var el = entry.target;
+      var count = parseInt(el.dataset.count,10);
+      if(isNaN(count)) return;
+      var prefix = el.dataset.prefix || '';
+      var suffix = el.dataset.suffix || '';
+      var duration = 1200;
+      var start = performance.now();
+      function update(now){
+        var p = Math.min((now-start)/duration, 1);
+        var ease = 1 - Math.pow(1-p, 3);
+        el.textContent = prefix + Math.round(ease*count) + suffix;
+        if(p<1) requestAnimationFrame(update);
+      }
+      requestAnimationFrame(update);
+    });
+  }, {threshold:0.3});
+  document.querySelectorAll('.proof-value[data-count]').forEach(function(el){ obs.observe(el); });
+})();
+
+/* ── 9. FAQ ACCORDION ────────────────────────────────────────────────── */
+(function(){
+  document.querySelectorAll('.faq-question').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var item = btn.closest('.faq-item');
+      var isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(function(i){
+        i.classList.remove('open');
+        i.querySelector('.faq-question').setAttribute('aria-expanded','false');
+      });
+      if(!isOpen){
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded','true');
+      }
+    });
+  });
+})();
+
+/* ── 10. TESTIMONIAL CAROUSEL ────────────────────────────────────────── */
+(function(){
+  var track = document.getElementById('carousel-track');
+  var dots  = document.querySelectorAll('.carousel-dot');
+  var prev  = document.getElementById('carousel-prev');
+  var next  = document.getElementById('carousel-next');
+  var total = dots.length;
+  var cur   = 0;
+  var timer;
+
+  function goTo(idx){
+    cur = (idx + total) % total;
+    track.style.transform = 'translateX(-' + (cur*100) + '%)';
+    dots.forEach(function(d,i){
+      d.classList.toggle('active', i===cur);
+      d.setAttribute('aria-selected', i===cur ? 'true' : 'false');
+    });
+  }
+  function startTimer(){ timer = setInterval(function(){ goTo(cur+1); }, 6000); }
+  function stopTimer(){ clearInterval(timer); }
+
+  prev.addEventListener('click', function(){ stopTimer(); goTo(cur-1); startTimer(); });
+  next.addEventListener('click', function(){ stopTimer(); goTo(cur+1); startTimer(); });
+  dots.forEach(function(d){ d.addEventListener('click', function(){ stopTimer(); goTo(parseInt(d.dataset.index,10)); startTimer(); }); });
+  track.parentElement.addEventListener('mouseenter', stopTimer);
+  track.parentElement.addEventListener('mouseleave', startTimer);
+
+  /* Swipe */
+  var sx = 0;
+  track.addEventListener('touchstart', function(e){ sx = e.touches[0].clientX; }, {passive:true});
+  track.addEventListener('touchend', function(e){
+    var dx = e.changedTouches[0].clientX - sx;
+    if(Math.abs(dx) > 40){ stopTimer(); goTo(dx < 0 ? cur+1 : cur-1); startTimer(); }
+  }, {passive:true});
+
+  startTimer();
+})();
 </script>
-<script src="/loic-widget.js"></script>
-<script src="/nav.js"></script>
-<script src="/js/scroll-animations.js" defer></script>
-  <script src="/footer.js"></script>
+
 </body>
 </html>
