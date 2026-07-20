@@ -138,15 +138,18 @@ img{display:block;max-width:100%}
 }
 
 /* ── MAIN ── */
-.cat-main{padding:0 6% 100px}
+.cat-main{padding:0}
+.cat-wrap{display:flex;gap:1.5rem;padding:0 6% 100px;align-items:flex-start}
+.cat-grid-wrap{flex:1;min-width:0}
 
 /* ── GRID ── */
 .cat-grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:repeat(2,1fr);
   gap:1.4rem;
   padding-top:28px;
 }
+@media(min-width:1500px){.cat-grid{grid-template-columns:repeat(3,1fr)}}
 
 /* ── CARD ── */
 .cat-card{
@@ -300,14 +303,155 @@ img{display:block;max-width:100%}
 }
 .btn-ghost:hover{border-color:rgba(255,255,255,.4);color:#fff}
 
+/* ── CART ── */
+.cat-cart{
+  width:320px;flex-shrink:0;
+  position:sticky;top:130px;
+  background:#fff;
+  border:1px solid rgba(15,23,42,.08);
+  border-radius:18px;
+  box-shadow:0 4px 28px rgba(0,0,0,.07);
+  overflow:hidden;
+  max-height:calc(100vh - 160px);
+  display:flex;flex-direction:column;
+}
+.cat-cart-head{
+  padding:1rem 1.2rem .85rem;
+  border-bottom:1px solid rgba(15,23,42,.06);
+  display:flex;align-items:center;justify-content:space-between;
+  background:#fff;
+}
+.cat-cart-title{
+  font-size:.88rem;font-weight:800;color:#0A2540;
+  display:flex;align-items:center;gap:8px;letter-spacing:-.15px;
+}
+.cat-cart-title svg{width:16px;height:16px;stroke:var(--blue);fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.cat-cart-count{
+  background:var(--blue);color:#fff;
+  font-size:.65rem;font-weight:700;
+  border-radius:20px;padding:2px 8px;min-width:20px;
+  text-align:center;line-height:1.6;
+  transition:transform .25s cubic-bezier(.16,1,.3,1);
+}
+.cat-cart-count.bump{transform:scale(1.35)}
+.cat-cart-clear{
+  font-size:.7rem;color:#94A3B8;cursor:pointer;
+  background:none;border:none;font-family:'Inter',sans-serif;
+  transition:color .2s;padding:0;
+}
+.cat-cart-clear:hover{color:#EF4444}
+.cat-cart-items{
+  flex:1;overflow-y:auto;padding:.5rem .75rem;
+  scrollbar-width:thin;scrollbar-color:rgba(15,23,42,.08) transparent;
+}
+.cat-cart-empty{text-align:center;padding:2.2rem 1rem}
+.cat-cart-empty-icon{
+  width:44px;height:44px;border-radius:12px;
+  background:#F8FAFC;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 12px;
+}
+.cat-cart-empty-icon svg{width:22px;height:22px;stroke:#CBD5E1;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.cat-cart-empty-t{font-size:.8rem;color:#94A3B8;font-weight:700;margin-bottom:4px}
+.cat-cart-empty-p{font-size:.7rem;color:#CBD5E1;line-height:1.55}
+
+.cat-cart-item{
+  display:flex;align-items:center;gap:.55rem;
+  padding:.6rem .4rem;
+  border-bottom:1px solid rgba(15,23,42,.04);
+  animation:ciIn .22s cubic-bezier(.16,1,.3,1);
+}
+.cat-cart-item:last-child{border-bottom:none}
+@keyframes ciIn{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:translateX(0)}}
+.cat-cart-item-icon{
+  width:30px;height:30px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.cat-cart-item-icon svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.cat-cart-item-body{flex:1;min-width:0}
+.cat-cart-item-name{
+  font-size:.75rem;font-weight:700;color:#0A2540;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  line-height:1.3;margin-bottom:1px;
+}
+.cat-cart-item-price{font-size:.67rem;color:#64748b;font-weight:500}
+.cat-cart-item-rm{
+  background:none;border:none;cursor:pointer;
+  width:20px;height:20px;flex-shrink:0;padding:0;
+  display:flex;align-items:center;justify-content:center;
+  color:#CBD5E1;transition:color .2s;
+}
+.cat-cart-item-rm:hover{color:#EF4444}
+.cat-cart-item-rm svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round}
+
+.cat-cart-divider{
+  margin:.3rem .4rem .5rem;
+  border:none;border-top:1px solid rgba(15,23,42,.06);
+}
+.cat-cart-foot{
+  padding:.85rem 1.2rem 1.1rem;
+  border-top:1px solid rgba(15,23,42,.06);
+  background:#fff;
+}
+.cat-cart-total-row{
+  display:flex;align-items:baseline;justify-content:space-between;
+  margin-bottom:.45rem;
+}
+.cat-cart-total-lbl{font-size:.76rem;color:#64748b;font-weight:500}
+.cat-cart-total{
+  font-size:1.35rem;font-weight:900;color:#0A2540;
+  font-family:'Rajdhani',sans-serif;letter-spacing:-.02em;
+  transition:all .3s cubic-bezier(.16,1,.3,1);
+}
+.cat-cart-note{
+  font-size:.63rem;color:#94A3B8;
+  text-align:center;margin-bottom:.75rem;line-height:1.5;
+}
+.cat-cart-cta{
+  display:block;width:100%;
+  background:var(--blue);color:#fff;
+  border:none;border-radius:10px;
+  font-size:.84rem;font-weight:700;
+  padding:12px 16px;font-family:'Inter',sans-serif;
+  cursor:pointer;text-align:center;
+  transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s;
+}
+.cat-cart-cta:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,102,255,.3)}
+.cat-cart-cta:disabled{background:#E2E8F0;color:#94A3B8;cursor:not-allowed}
+
+/* ── ADD BUTTON ── */
+.cat-add-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:.76rem;font-weight:700;
+  border-radius:8px;padding:8px 14px;
+  font-family:'Inter',sans-serif;white-space:nowrap;cursor:pointer;
+  transition:background .2s,border-color .2s;
+  color:var(--cc,#0066FF);
+  background:color-mix(in srgb,var(--cc,#0066FF) 7%,transparent);
+  border:1px solid color-mix(in srgb,var(--cc,#0066FF) 15%,transparent);
+}
+.cat-add-btn:hover,.cat-card:hover .cat-add-btn{
+  background:color-mix(in srgb,var(--cc,#0066FF) 14%,transparent);
+  border-color:color-mix(in srgb,var(--cc,#0066FF) 28%,transparent);
+}
+.cat-add-btn.added{background:#DCFCE7;border-color:#86EFAC;color:#166534}
+.cat-add-btn.added:hover{background:#FEE2E2;border-color:#FCA5A5;color:#991B1B}
+.cat-add-btn svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
 /* ── RESPONSIVE ── */
-@media(max-width:1100px){.cat-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:1060px){
+  .cat-cart{width:280px}
+}
+@media(max-width:900px){
+  .cat-wrap{flex-direction:column;padding:0 4% 80px;gap:1rem}
+  .cat-cart{width:100%;position:static;max-height:none;border-radius:14px}
+  .cat-cart-items{max-height:240px}
+}
 @media(max-width:720px){
   .cat-grid{grid-template-columns:1fr}
   .cat-filter{top:62px;padding:12px 4%}
   .cat-search-wrap{max-width:none;min-width:0;flex:1}
   .cat-sort{display:none}
-  .cat-main{padding:0 4% 80px}
   .cat-hero{padding:140px 4% 75px}
   .cat-hero-stats{gap:1.5rem}
   .cat-cta-sec{padding:80px 4%}
@@ -376,12 +520,48 @@ img{display:block;max-width:100%}
 
 <!-- ══ MAIN ══════════════════════════════════════════════════════ -->
 <main class="cat-main">
-  <div class="cat-grid" id="catGrid">
-    <div class="cat-empty" id="catEmpty">
-      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <p class="cat-empty-t">Aucune solution trouvée</p>
-      <p class="cat-empty-p">Essayez d'autres mots-clés ou réinitialisez les filtres.</p>
+  <div class="cat-wrap">
+
+    <!-- Grille -->
+    <div class="cat-grid-wrap">
+      <div class="cat-grid" id="catGrid">
+        <div class="cat-empty" id="catEmpty">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <p class="cat-empty-t">Aucune solution trouvée</p>
+          <p class="cat-empty-p">Essayez d'autres mots-clés ou réinitialisez les filtres.</p>
+        </div>
+      </div>
     </div>
+
+    <!-- Panier -->
+    <aside class="cat-cart" id="catCart">
+      <div class="cat-cart-head">
+        <div class="cat-cart-title">
+          <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          Ma sélection
+          <span class="cat-cart-count" id="cartCount">0</span>
+        </div>
+        <button class="cat-cart-clear" onclick="cartClear()">Vider</button>
+      </div>
+      <div class="cat-cart-items" id="cartItems">
+        <div class="cat-cart-empty" id="cartEmpty">
+          <div class="cat-cart-empty-icon">
+            <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          </div>
+          <p class="cat-cart-empty-t">Panier vide</p>
+          <p class="cat-cart-empty-p">Cliquez sur « Ajouter » pour simuler votre budget.</p>
+        </div>
+      </div>
+      <div class="cat-cart-foot" id="cartFoot" style="display:none">
+        <div class="cat-cart-total-row">
+          <span class="cat-cart-total-lbl">Total estimé</span>
+          <span class="cat-cart-total" id="cartTotal">0 €</span>
+        </div>
+        <p class="cat-cart-note">Prix indicatifs · hors personnalisation</p>
+        <button class="cat-cart-cta" id="cartCta" disabled onclick="window.location.href='index.html#contact'">Demander un devis →</button>
+      </div>
+    </aside>
+
   </div>
 </main>
 
@@ -596,6 +776,7 @@ var DATA = [
    State
 ──────────────────────────────────────────── */
 var state = { cat:'tous', q:'', sort:'populaire' };
+var cart  = {}; /* id → solution */
 
 /* ────────────────────────────────────────────
    Helpers
@@ -617,9 +798,111 @@ function badge(b){
 var SETUP_ORDER = {'48h':0.2,'72h':0.3,'1j':1,'2j':2,'3j':3,'4j':4,'5j':5,'10j':10};
 
 /* ────────────────────────────────────────────
+   Cart helpers
+──────────────────────────────────────────── */
+function fmtPrix(n){
+  return n.toLocaleString('fr-FR') + ' €';
+}
+
+function renderCart(){
+  var countEl = document.getElementById('cartCount');
+  var itemsEl = document.getElementById('cartItems');
+  var emptyEl = document.getElementById('cartEmpty');
+  var footEl  = document.getElementById('cartFoot');
+  var totalEl = document.getElementById('cartTotal');
+  var ctaEl   = document.getElementById('cartCta');
+
+  var items = Object.values(cart);
+  var n     = items.length;
+  var total = items.reduce(function(acc,s){ return acc + s.prixN; }, 0);
+
+  /* count badge */
+  if (countEl){
+    countEl.textContent = n;
+    countEl.classList.remove('bump');
+    void countEl.offsetWidth; /* reflow to restart animation */
+    countEl.classList.add('bump');
+    setTimeout(function(){ countEl.classList.remove('bump'); }, 300);
+  }
+
+  /* empty vs filled */
+  if (n === 0){
+    if (emptyEl) emptyEl.style.display = '';
+    if (footEl)  footEl.style.display  = 'none';
+    /* remove old items */
+    if (itemsEl){
+      Array.from(itemsEl.querySelectorAll('.cat-cart-item')).forEach(function(el){ el.remove(); });
+    }
+    return;
+  }
+
+  if (emptyEl) emptyEl.style.display = 'none';
+  if (footEl)  footEl.style.display  = '';
+
+  /* rebuild item list */
+  if (itemsEl){
+    Array.from(itemsEl.querySelectorAll('.cat-cart-item')).forEach(function(el){ el.remove(); });
+    var frag = document.createDocumentFragment();
+    items.forEach(function(s){
+      var div = document.createElement('div');
+      div.className = 'cat-cart-item';
+      div.innerHTML = [
+        '<div class="cat-cart-item-icon" style="background:' + s.cc + '">',
+          '<svg viewBox="0 0 24 24">' + (ICONS[s.slug]||ICONS.ia) + '</svg>',
+        '</div>',
+        '<div class="cat-cart-item-body">',
+          '<div class="cat-cart-item-name">' + s.titre + '</div>',
+          '<div class="cat-cart-item-price">' + s.prix + (s.sub ? ' ' + s.sub : '') + '</div>',
+        '</div>',
+        '<button class="cat-cart-item-rm" onclick="cartToggle(' + s.ordre + ')" title="Retirer">',
+          '<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+        '</button>',
+      ].join('');
+      frag.appendChild(div);
+    });
+    itemsEl.appendChild(frag);
+  }
+
+  if (totalEl) totalEl.textContent = fmtPrix(total);
+  if (ctaEl)   ctaEl.disabled = false;
+}
+
+/* Exposed to global scope (called from onclick attributes) */
+window.cartToggle = function(id){
+  var s = DATA.find(function(d){ return d.ordre === id; });
+  if (!s) return;
+  if (cart[id]) { delete cart[id]; } else { cart[id] = s; }
+
+  /* sync all buttons in grid that match this id */
+  document.querySelectorAll('[data-cart-id="' + id + '"]').forEach(function(btn){
+    if (cart[id]){
+      btn.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Ajouté';
+      btn.classList.add('added');
+    } else {
+      btn.innerHTML = 'Ajouter';
+      btn.classList.remove('added');
+    }
+  });
+  renderCart();
+};
+
+window.cartClear = function(){
+  cart = {};
+  document.querySelectorAll('.cat-add-btn').forEach(function(btn){
+    btn.innerHTML = 'Ajouter';
+    btn.classList.remove('added');
+  });
+  renderCart();
+};
+
+/* ────────────────────────────────────────────
    Card template
 ──────────────────────────────────────────── */
 function card(s){
+  var inCart  = !!cart[s.ordre];
+  var btnHtml = inCart
+    ? '<button class="cat-add-btn added" onclick="cartToggle(' + s.ordre + ')" data-cart-id="' + s.ordre + '"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Ajouté</button>'
+    : '<button class="cat-add-btn" onclick="cartToggle(' + s.ordre + ')" data-cart-id="' + s.ordre + '">Ajouter</button>';
   return [
     '<div class="cat-card" style="--cc:' + s.cc + '" data-slug="' + s.slug + '">',
       '<div class="cat-card-img">',
@@ -645,7 +928,7 @@ function card(s){
             '<div class="cat-price">' + s.prix + '</div>',
             (s.sub ? '<div class="cat-price-sub">' + s.sub + '</div>' : ''),
           '</div>',
-          '<a href="' + s.lien + '" class="cat-cta-btn">Voir la solution →</a>',
+          btnHtml,
         '</div>',
       '</div>',
     '</div>',
