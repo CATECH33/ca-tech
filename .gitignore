@@ -33,3 +33,36 @@ test-screenshot-*.png
 pdf-screenshot-*.png
 pdf-devis-preview.pdf
 test-pdf-*.png
+
+# Dev screenshots générés par scripts/screenshot-*.mjs
+catalogue-*.png
+eco-*.png
+faq-*.png
+live-*.png
+local-*.png
+services-*.png
+res-*.png
+
+# Screenshots debug & vérification visuelle à la racine
+debug-*.png
+manager-*.png
+ss-*.png
+
+# Artifacts de déploiement manuel Vercel
+deploy-payload*.json
+
+# Logs de développement manager
+manager/dev-output*.txt
+manager/dev-error.txt
+
+# Screenshots de tests Playwright du manager
+manager/apify-*.png
+manager/auto-*.png
+manager/workflow-*.png
+manager/manual-*.png
+manager/maps-*.png
+manager/prospect-*.png
+manager/test-*.png
+manager/test-*.mjs
+
+.vercel
