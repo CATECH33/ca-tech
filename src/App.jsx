@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom'
 import Header from './components/Header.jsx'
+import Footer from './components/Footer.jsx'
 import Home from './pages/Home.jsx'
 import Services from './pages/Services.jsx'
 import Loic from './pages/Loic.jsx'
@@ -14,6 +15,7 @@ function Layout() {
     <>
       <Header />
       <Outlet />
+      <Footer />
     </>
   )
 }
