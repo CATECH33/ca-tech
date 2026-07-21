@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build && for f in index.html services.html loic.html collaborateurs-ia.html automatisations.html realisations.html blog.html contact.html; do cp dist/index.html $f; done",
+  "buildCommand": "npm run build && for f in index.html services.html loic.html collaborateurs-ia.html automatisations.html realisations.html blog.html contact.html; do cp dist/index.html $f; done && cp manager/dist/index.html manager/index.html",
   "outputDirectory": ".",
   "cleanUrls": true,
   "trailingSlash": false,
@@ -38,13 +38,7 @@
     { "source": "/loic-ia",          "destination": "/loic",         "permanent": true }
   ],
   "rewrites": [
-    { "source": "/manager/assets/(.*)",          "destination": "/manager/dist/assets/$1" },
-    { "source": "/manager/favicon.ico",          "destination": "/manager/dist/favicon.ico" },
-    { "source": "/manager/favicon-32x32.png",    "destination": "/manager/dist/favicon-32x32.png" },
-    { "source": "/manager/apple-touch-icon.png", "destination": "/manager/dist/apple-touch-icon.png" },
-    { "source": "/manager/site.webmanifest",     "destination": "/manager/dist/site.webmanifest" },
-    { "source": "/manager/icons.svg",            "destination": "/manager/dist/icons.svg" },
-    { "source": "/manager",                      "destination": "/manager/dist/" },
-    { "source": "/manager/(.*)",                 "destination": "/manager/dist/" }
+    { "source": "/manager/assets/(.*)", "destination": "/manager/dist/assets/$1" },
+    { "source": "/manager/(.*)",        "destination": "/manager/dist/index.html" }
   ]
 }
