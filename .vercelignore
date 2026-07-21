@@ -1,4 +1,2 @@
-# Vite dev entry — en prod Vercel doit servir dist/index.html via le rewrite
-index.html
 manager/dev-output.txt
 manager/dev-error.txt
