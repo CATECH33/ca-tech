@@ -1,13 +1,2 @@
 manager/dev-output.txt
 manager/dev-error.txt
-
-# These static HTML files conflict with React SPA routes.
-# Vercel serves filesystem matches before rewrites, so without exclusion
-# Vercel would serve these redirect pages instead of the React app.
-services.html
-loic.html
-collaborateurs-ia.html
-automatisations.html
-realisations.html
-blog.html
-contact.html
