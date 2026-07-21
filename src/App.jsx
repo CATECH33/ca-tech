@@ -10,6 +10,7 @@ import Realisations from './pages/Realisations.jsx'
 import Blog from './pages/Blog.jsx'
 import Contact from './pages/Contact.jsx'
 import Catalogue from './pages/Catalogue.jsx'
+import Tarifs from './pages/Tarifs.jsx'
 
 function Layout() {
   return (
@@ -35,6 +36,7 @@ export default function App() {
           <Route path="/blog"              element={<Blog />} />
           <Route path="/contact"           element={<Contact />} />
           <Route path="/catalogue"         element={<Catalogue />} />
+          <Route path="/tarifs"            element={<Tarifs />} />
         </Route>
       </Routes>
     </BrowserRouter>
