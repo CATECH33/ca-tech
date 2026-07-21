@@ -201,13 +201,13 @@
 
 <!-- NAV -->
 <nav>
-  <a href="index.html" class="logo">
+  <a href="/" class="logo">
     <img src="assets/logos/logo-ca-tech.png" alt="CA-TECH"/>
     <div><span class="logo-name">CA-TECH</span><span class="logo-sub">Agence Web & Design</span></div>
   </a>
   <div class="nav-right">
-    <a href="tarifs.html" class="nav-link">Voir les tarifs</a>
-    <a href="index.html" class="btn-back">← Retour</a>
+    <a href="/tarifs" class="nav-link">Voir les tarifs</a>
+    <a href="/" class="btn-back">← Retour</a>
   </div>
 </nav>
 
@@ -238,8 +238,8 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
           Télécharger mon devis PDF
         </button>
-        <a href="index.html" class="btn-outline-w">🏠 Retour à l'accueil</a>
-        <a href="tarifs.html" class="btn-outline-w">💳 Commander directement</a>
+        <a href="/" class="btn-outline-w">🏠 Retour à l'accueil</a>
+        <a href="/tarifs" class="btn-outline-w">💳 Commander directement</a>
         <button class="btn-outline-w" id="btnNewDevis" style="display:none" onclick="resetForm()">🔄 Nouveau devis</button>
       </div>
     </div>
@@ -838,7 +838,7 @@ function stepContact() {
       </div>
       <label class="legal-check" style="margin-top:.5rem">
         <input type="checkbox" id="fLegal" ${state.contact_email ? 'checked' : ''}/>
-        J'accepte que CA-TECH conserve mes coordonnées pour traiter ma demande de devis conformément à la <a href="politique-de-confidentialite.html" target="_blank">politique de confidentialité</a>.
+        J'accepte que CA-TECH conserve mes coordonnées pour traiter ma demande de devis conformément à la <a href="/politique-de-confidentialite" target="_blank">politique de confidentialité</a>.
       </label>
       <div class="action-row" style="margin-top:1rem">
         <button class="btn-prev" onclick="showStep(5)">← Retour</button>
