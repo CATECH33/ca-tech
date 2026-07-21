@@ -1,0 +1,194 @@
+:root {
+  --blue:   #0066FF;
+  --cyan:   #00D4FF;
+  --dark:   #050d1a;
+  --text2:  rgba(255,255,255,.7);
+  --border: rgba(255,255,255,.08);
+  --nav-h:  72px;
+}
+
+nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 1000;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5%;
+  background: rgba(5,13,26,.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: background .3s, box-shadow .3s, height .3s;
+}
+
+nav.scrolled {
+  height: 60px;
+  background: rgba(5,13,26,.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 1px 0 rgba(255,255,255,.06), 0 8px 32px rgba(0,0,0,.4);
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.logo img {
+  height: 36px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(0,102,255,.4));
+}
+.logo-name {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #fff;
+  display: block;
+  line-height: 1.2;
+}
+.logo-sub {
+  font-size: .48rem;
+  color: var(--cyan);
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  display: block;
+}
+
+/* Desktop nav */
+.nav-links {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  gap: .1rem;
+}
+.nav-links a {
+  color: var(--text2);
+  text-decoration: none;
+  padding: 6px 12px;
+  font-size: .78rem;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: color .25s, background .25s;
+  position: relative;
+}
+.nav-links a:hover {
+  color: var(--cyan);
+  background: rgba(0,212,255,.08);
+}
+
+/* Active state */
+.nav-links a.nav-active {
+  color: var(--cyan);
+}
+.nav-links a.nav-active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 12px;
+  right: 12px;
+  height: 2px;
+  background: var(--cyan);
+  border-radius: 2px;
+  animation: nav-bar-in .3s cubic-bezier(.4,0,.2,1) forwards;
+}
+@keyframes nav-bar-in {
+  from { transform: scaleX(0); opacity: 0; }
+  to   { transform: scaleX(1); opacity: 1; }
+}
+
+/* CTA button */
+.btn-nav {
+  background: var(--blue) !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+  padding: 10px 22px !important;
+  font-weight: 700 !important;
+  font-size: .78rem !important;
+  box-shadow: 0 0 20px rgba(0,102,255,.3);
+  transition: all .3s !important;
+  white-space: nowrap;
+}
+.btn-nav:hover {
+  background: #1a7aff !important;
+  transform: translateY(-2px) !important;
+}
+.btn-nav.nav-active::after { display: none; }
+
+/* Hamburger */
+.ham {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+.ham span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #fff;
+  border-radius: 2px;
+  transition: transform .3s, opacity .3s;
+}
+.ham.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.ham.open span:nth-child(2) { opacity: 0; }
+.ham.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Mobile menu */
+.mob-menu {
+  display: none;
+  position: fixed;
+  top: var(--nav-h);
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: rgba(5,13,26,.97);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 1.5rem 5%;
+  flex-direction: column;
+  gap: .7rem;
+  opacity: 0;
+  transform: translateY(-12px);
+  transition: opacity .3s, transform .3s;
+}
+.mob-menu.open {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+}
+.mob-menu a {
+  color: var(--text2);
+  text-decoration: none;
+  font-size: .88rem;
+  padding: .7rem 0;
+  border-bottom: 1px solid var(--border);
+  transition: color .25s;
+}
+.mob-menu a:hover,
+.mob-menu a.nav-active { color: var(--cyan); }
+.btn-mob {
+  display: block;
+  background: var(--blue);
+  color: #fff !important;
+  text-align: center;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  margin-top: .5rem;
+  text-decoration: none;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .ham { display: flex; }
+}
