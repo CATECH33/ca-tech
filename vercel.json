@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build && for f in index.html services.html loic.html collaborateurs-ia.html automatisations.html realisations.html blog.html contact.html; do cp dist/index.html $f; done && cp manager/dist/index.html manager/index.html",
+  "buildCommand": "npm run build && for f in index.html services.html loic.html collaborateurs-ia.html automatisations.html realisations.html blog.html contact.html catalogue.html; do cp dist/index.html $f; done && cp manager/dist/index.html manager/index.html",
   "outputDirectory": ".",
   "cleanUrls": true,
   "trailingSlash": false,

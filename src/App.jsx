@@ -9,6 +9,7 @@ import Automatisations from './pages/Automatisations.jsx'
 import Realisations from './pages/Realisations.jsx'
 import Blog from './pages/Blog.jsx'
 import Contact from './pages/Contact.jsx'
+import Catalogue from './pages/Catalogue.jsx'
 
 function Layout() {
   return (
@@ -33,6 +34,7 @@ export default function App() {
           <Route path="/realisations"      element={<Realisations />} />
           <Route path="/blog"              element={<Blog />} />
           <Route path="/contact"           element={<Contact />} />
+          <Route path="/catalogue"         element={<Catalogue />} />
         </Route>
       </Routes>
     </BrowserRouter>
