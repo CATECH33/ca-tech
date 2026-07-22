@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  background: linear-gradient(135deg, #050D1A 0%, #0A1F45 100%);
+  background: linear-gradient(160deg, #020b18 0%, #050d1a 55%, #060f20 100%);
   padding: calc(var(--nav-h) + 60px) 5% 80px;
   position: relative;
   overflow: hidden;
@@ -32,17 +32,20 @@
 }
 
 .blog-hero h1 {
-  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
   font-weight: 800;
   color: #fff;
-  line-height: 1.1;
-  letter-spacing: -.03em;
+  line-height: 1.08;
+  letter-spacing: -.02em;
   margin-bottom: 20px;
 }
 
 .blog-hero h1 em {
   font-style: normal;
-  color: #60A5FA;
+  background: linear-gradient(90deg, #0066FF, #38bdf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .blog-hero p {

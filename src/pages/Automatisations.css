@@ -2,7 +2,7 @@
 /* ── HERO ─────────────────────────────────────────────────── */
 .at-hero {
   position: relative;
-  min-height: 88vh;
+  min-height: 72vh;
   display: flex;
   align-items: center;
   padding: calc(var(--nav-h) + 70px) 5% 80px;
@@ -55,20 +55,20 @@
 
 .at-kicker {
   display:inline-flex;align-items:center;gap:10px;
-  font-size:.68rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;
-  color:var(--cyan);margin-bottom:1.5rem;
+  font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(255,255,255,.5);margin-bottom:1.5rem;
 }
 .at-kicker span {
-  display:block;width:26px;height:2px;
-  background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:2px;
+  display:block;width:28px;height:1px;
+  background:rgba(0,102,255,.6);border-radius:2px;
 }
 .at-hero h1 {
-  font-size:clamp(2.4rem,5vw,4rem);font-weight:900;
-  color:#fff;line-height:1.06;letter-spacing:-.04em;margin-bottom:1.4rem;
+  font-size:clamp(2.2rem,5vw,3.6rem);font-weight:800;
+  color:#fff;line-height:1.08;letter-spacing:-.02em;margin-bottom:1.4rem;
 }
 .at-hero h1 em {
   font-style:normal;
-  background:linear-gradient(135deg,#fff 20%,var(--cyan) 90%);
+  background:linear-gradient(90deg,#0066FF,#38bdf8);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 .at-hero-sub {
@@ -143,7 +143,7 @@
 
 /* ── SHARED SECTION WRAPPER ────────────────────────────────── */
 .at-section {
-  padding:100px 5%;
+  padding:80px 5%;
   position:relative;
   overflow:hidden;
 }
@@ -492,7 +492,7 @@
 
 /* ── CTA ───────────────────────────────────────────────────── */
 .at-cta {
-  padding:130px 5%;
+  padding:100px 5%;
   background:linear-gradient(115deg,#0a0f1e 0%,#08224d 45%,#0043b8 78%,#0066FF 100%);
   position:relative;overflow:hidden;
 }
@@ -969,7 +969,7 @@
 @media (max-width: 680px) {
   .at-int-grid   { grid-template-columns: 1fr; }
   .at-why-grid   { grid-template-columns: 1fr; }
-  .at-int-section { padding: 56px 6% 72px; }
-  .at-int-filters { margin: 0 -6%; }
+  .at-int-section { padding: 56px 5% 72px; }
+  .at-int-filters { margin: 0 -5%; }
   .at-int-name { white-space: normal; }
 }

@@ -3,12 +3,12 @@
 /* ══════════════════════════════════════════════════════════ */
 .cai-hero {
   position: relative;
-  min-height: 100vh;
+  min-height: 76vh;
   display: flex;
   align-items: center;
-  padding: calc(var(--nav-h) + 60px) 6% 90px;
+  padding: calc(var(--nav-h) + 60px) 5% 80px;
   overflow: hidden;
-  background: linear-gradient(160deg, #020b18 0%, #050d1a 50%, #060f20 100%);
+  background: linear-gradient(160deg, #020b18 0%, #050d1a 55%, #060f20 100%);
 }
 .cai-canvas {
   position: absolute; inset: 0;
@@ -79,30 +79,30 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-size: .68rem;
+  font-size: .72rem;
   font-weight: 700;
-  letter-spacing: 3px;
+  letter-spacing: .12em;
   text-transform: uppercase;
-  color: var(--cyan);
+  color: rgba(255,255,255,.5);
   margin-bottom: 1.6rem;
 }
 .cai-kicker span {
   display: block;
-  width: 28px; height: 2px;
-  background: linear-gradient(90deg, var(--blue), var(--cyan));
+  width: 28px; height: 1px;
+  background: rgba(0,102,255,.6);
   border-radius: 2px;
 }
 .cai-hero h1 {
-  font-size: clamp(2.2rem, 4.4vw, 3.8rem);
-  font-weight: 900;
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  font-weight: 800;
   color: #fff;
-  line-height: 1.06;
-  letter-spacing: -.035em;
+  line-height: 1.08;
+  letter-spacing: -.02em;
   margin-bottom: 1.6rem;
 }
 .cai-hero h1 em {
   font-style: normal;
-  background: linear-gradient(135deg, #fff 20%, var(--cyan) 90%);
+  background: linear-gradient(90deg, #0066FF, #38bdf8);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -222,7 +222,7 @@
 /*  COLLABORATEURS — BENTO GRID sur fond sombre                */
 /* ══════════════════════════════════════════════════════════ */
 .cai-section {
-  padding: 120px 5% 130px;
+  padding: 88px 5% 96px;
   background: #0a0f1e;
   position: relative;
   overflow: hidden;
@@ -501,7 +501,7 @@
 /*  CTA — diagonal gradient                                    */
 /* ══════════════════════════════════════════════════════════ */
 .cai-cta {
-  padding: 130px 5%;
+  padding: 100px 5%;
   background: linear-gradient(115deg, #0a0f1e 0%, #08224d 45%, #0043b8 78%, #0066FF 100%);
   position: relative;
   overflow: hidden;
@@ -758,8 +758,8 @@
   .cai-col-grid { grid-template-columns: 1fr; max-width: 600px; }
 }
 @media (max-width: 768px) {
-  .cai-section { padding: 90px 5% 100px; }
-  .cai-cta     { padding: 100px 5%; }
+  .cai-section { padding: 64px 5% 72px; }
+  .cai-cta     { padding: 72px 5%; }
   .cai-col-img  { height: 200px; }
 }
 @media (max-width: 480px) {
