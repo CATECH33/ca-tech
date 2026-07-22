@@ -183,6 +183,11 @@ export interface Paiement {
   stripe_payment_id?: string
 }
 
+export interface PortfolioResultat {
+  val: string
+  lbl: string
+}
+
 export interface PortfolioItem {
   id: string
   created_at: string
@@ -201,6 +206,9 @@ export interface PortfolioItem {
   publie: boolean
   ordre: number
   date_livraison?: string
+  probleme?: string
+  solution?: string
+  resultats: PortfolioResultat[]
 }
 
 export interface Message {

@@ -20,14 +20,11 @@ import type { PortfolioItem } from '@/types'
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const CATEGORIES = [
-  { value: 'web',       label: 'Site Web',     icon: '🌐', bg: 'bg-blue-50',    text: 'text-blue-700'   },
-  { value: 'ecommerce', label: 'E-commerce',   icon: '🛍️', bg: 'bg-emerald-50', text: 'text-emerald-700' },
-  { value: 'landing',   label: 'Landing Page', icon: '📄', bg: 'bg-violet-50',  text: 'text-violet-700' },
-  { value: 'logo',      label: 'Logo',         icon: '🎨', bg: 'bg-rose-50',    text: 'text-rose-700'   },
-  { value: 'branding',  label: 'Branding',     icon: '✨', bg: 'bg-amber-50',   text: 'text-amber-700'  },
-  { value: 'print',     label: 'Print',        icon: '🖨️', bg: 'bg-orange-50',  text: 'text-orange-700' },
-  { value: 'ia',        label: 'IA / Auto.',   icon: '🤖', bg: 'bg-teal-50',    text: 'text-teal-700'   },
-  { value: 'autre',     label: 'Autre',        icon: '📦', bg: 'bg-gray-100',   text: 'text-gray-600'   },
+  { value: 'sites',          label: 'Sites web',        icon: '🌐', bg: 'bg-blue-50',    text: 'text-blue-700'    },
+  { value: 'automatisations',label: 'Automatisations',  icon: '⚡', bg: 'bg-violet-50',  text: 'text-violet-700'  },
+  { value: 'collaborateurs', label: 'Collaborateurs IA',icon: '🤖', bg: 'bg-teal-50',    text: 'text-teal-700'    },
+  { value: 'seo',            label: 'SEO',              icon: '📈', bg: 'bg-emerald-50', text: 'text-emerald-700' },
+  { value: 'applications',   label: 'Applications',     icon: '📱', bg: 'bg-amber-50',   text: 'text-amber-700'   },
 ]
 const CAT_MAP = Object.fromEntries(CATEGORIES.map(c => [c.value, c]))
 const CAT_OPTIONS = [{ value: '', label: 'Sans catégorie' }, ...CATEGORIES.map(c => ({ value: c.value, label: `${c.icon} ${c.label}` }))]
@@ -38,6 +35,8 @@ const FORM_INIT: PortfolioFormState = {
   featured: false, publie: false,
   thumbFile: null, thumbPreview: null,
   galleryFiles: [], keepImages: [], removeImages: [],
+  probleme: '', solution: '',
+  resultats: [{ val: '', lbl: '' }, { val: '', lbl: '' }, { val: '', lbl: '' }],
 }
 
 interface PortfolioFormState {
@@ -48,6 +47,8 @@ interface PortfolioFormState {
   thumbFile: File | null; thumbPreview: string | null
   galleryFiles: Array<{ file: File; preview: string }>
   keepImages: string[]; removeImages: string[]
+  probleme: string; solution: string
+  resultats: Array<{ val: string; lbl: string }>
 }
 
 // ─── Category badge ───────────────────────────────────────────────────────────
@@ -596,6 +597,11 @@ export function Portfolio() {
       keepImages: [...item.images],
       galleryFiles: [],
       removeImages: [],
+      probleme: item.probleme ?? '',
+      solution: item.solution ?? '',
+      resultats: item.resultats.length > 0
+        ? [...item.resultats, ...Array(Math.max(0, 3 - item.resultats.length)).fill({ val: '', lbl: '' })]
+        : [{ val: '', lbl: '' }, { val: '', lbl: '' }, { val: '', lbl: '' }],
     })
     setEditItem(item)
     setPanelMode('edit')
@@ -620,6 +626,9 @@ export function Portfolio() {
     galleryFiles: form.galleryFiles.map(g => g.file),
     keepImages: form.keepImages,
     removeImages: form.removeImages,
+    probleme: form.probleme || undefined,
+    solution: form.solution || undefined,
+    resultats: form.resultats.filter(r => r.val.trim() && r.lbl.trim()),
   })
 
   const handleSave = async () => {
@@ -882,6 +891,41 @@ export function Portfolio() {
                     />
                   </div>
                   <TechInput value={form.technologies} onChange={v => setF('technologies', v)} />
+                  <Textarea
+                    label="Problème client"
+                    placeholder="Situation initiale, douleur principale du client…"
+                    value={form.probleme}
+                    onChange={e => setF('probleme', e.target.value)}
+                    rows={2}
+                  />
+                  <Textarea
+                    label="Solution apportée"
+                    placeholder="Ce qui a été mis en place, technologies, approche…"
+                    value={form.solution}
+                    onChange={e => setF('solution', e.target.value)}
+                    rows={2}
+                  />
+                  <div>
+                    <label className="text-xs font-medium text-gray-700 block mb-1.5">Résultats (3 métriques)</label>
+                    <div className="space-y-2">
+                      {form.resultats.map((r, i) => (
+                        <div key={i} className="flex gap-2">
+                          <input
+                            value={r.val}
+                            onChange={e => setF('resultats', form.resultats.map((x, j) => j === i ? { ...x, val: e.target.value } : x))}
+                            placeholder="+280 %"
+                            className="w-24 h-8 px-2.5 text-xs rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent font-semibold"
+                          />
+                          <input
+                            value={r.lbl}
+                            onChange={e => setF('resultats', form.resultats.map((x, j) => j === i ? { ...x, lbl: e.target.value } : x))}
+                            placeholder="Chiffre d'affaires"
+                            className="flex-1 h-8 px-2.5 text-xs rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
 
                 {/* Right — images + toggles */}

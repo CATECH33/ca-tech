@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
 import './Realisations.css'
 
 const CATEGORIES = [
@@ -213,9 +214,40 @@ const PROJECTS = [
 
 export default function Realisations() {
   const [active, setActive] = useState('tous')
+  const [liveProjects, setLiveProjects] = useState(null) // null = loading, [] = empty
+
+  useEffect(() => {
+    supabase
+      .from('portfolio_projects')
+      .select('*')
+      .eq('is_published', true)
+      .order('sort_order', { ascending: true })
+      .order('created_at', { ascending: false })
+      .then(({ data }) => {
+        if (data && data.length > 0) {
+          setLiveProjects(data.map(r => ({
+            id: r.id,
+            cat: r.category ?? 'sites',
+            title: r.title,
+            company: r.client_name ?? '',
+            img: r.thumbnail_url ?? 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
+            probleme: r.probleme ?? r.description ?? '',
+            solution: r.solution ?? '',
+            resultats: Array.isArray(r.resultats) ? r.resultats : [],
+            techs: Array.isArray(r.technologies) ? r.technologies : [],
+            url: r.live_url ?? null,
+          })))
+        } else {
+          setLiveProjects([])
+        }
+      })
+  }, [])
+
+  const projects = liveProjects && liveProjects.length > 0 ? liveProjects : PROJECTS
+
   const visible = useMemo(
-    () => active === 'tous' ? PROJECTS : PROJECTS.filter(p => p.cat === active),
-    [active]
+    () => active === 'tous' ? projects : projects.filter(p => p.cat === active),
+    [active, projects]
   )
 
   /* ── Particles (hero canvas) ── */
@@ -379,10 +411,17 @@ export default function Realisations() {
 
                 {/* Footer */}
                 <div className="pf-card-foot">
-                  <Link to="/contact" className="pf-cta">
-                    Voir le projet
-                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-                  </Link>
+                  {project.url ? (
+                    <a href={project.url} target="_blank" rel="noopener noreferrer" className="pf-cta">
+                      Voir le projet
+                      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+                    </a>
+                  ) : (
+                    <Link to="/contact" className="pf-cta">
+                      Demander un devis
+                      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+                    </Link>
+                  )}
                 </div>
               </article>
             )

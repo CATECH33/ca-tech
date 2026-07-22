@@ -26,6 +26,9 @@ function mapRow(r: Record<string, any>): PortfolioItem {
     publie: Boolean(r.is_published),
     ordre: Number(r.sort_order ?? 0),
     date_livraison: r.delivery_date ?? undefined,
+    probleme: r.probleme ?? undefined,
+    solution: r.solution ?? undefined,
+    resultats: Array.isArray(r.resultats) ? r.resultats : [],
   }
 }
 
@@ -95,6 +98,9 @@ export interface PortfolioPayload {
   galleryFiles?: File[]
   removeImages?: string[]
   keepImages?: string[]
+  probleme?: string
+  solution?: string
+  resultats?: Array<{ val: string; lbl: string }>
 }
 
 export function useCreatePortfolioItem() {
@@ -118,6 +124,9 @@ export function useCreatePortfolioItem() {
           is_published: p.publie,
           images: [],
           published_at: p.publie ? new Date().toISOString() : null,
+          probleme: p.probleme || null,
+          solution: p.solution || null,
+          resultats: p.resultats ?? [],
         }])
         .select()
         .single()
@@ -163,6 +172,9 @@ export function useUpdatePortfolioItem() {
         is_published: p.publie,
         published_at: p.publie ? new Date().toISOString() : null,
         updated_at: new Date().toISOString(),
+        probleme: p.probleme || null,
+        solution: p.solution || null,
+        resultats: p.resultats ?? [],
       }
 
       if (p.thumbFile) {
