@@ -135,7 +135,7 @@ function ImageDropzone({ preview, onFile, onRemove }: ImageDropzoneProps) {
           </div>
           <div className="text-center">
             <p className="text-sm font-medium text-gray-700">
-              {dragging ? 'Déposez l'image' : 'Glissez une image ici'}
+              {dragging ? "Déposez l'image" : 'Glissez une image ici'}
             </p>
             <p className="text-xs text-gray-400 mt-0.5">
               ou <span className="text-brand-500 font-medium">parcourez</span> · PNG, JPG, WEBP
