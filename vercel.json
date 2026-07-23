@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build && cd manager && npm install && npm run build && cd .. && for f in index.html services.html loic.html collaborateurs-ia.html automatisations.html realisations.html contact.html catalogue.html tarifs.html; do cp dist/index.html $f; done && cp manager/dist/index.html manager/index.html",
+  "buildCommand": "sh build.sh",
   "outputDirectory": ".",
   "cleanUrls": true,
   "trailingSlash": false,
