@@ -5,7 +5,7 @@ import {
   CheckSquare, Briefcase, CreditCard, Image, MessageSquare, Headphones,
   Settings, ChevronLeft, ChevronRight, Zap, Calendar, Bot, Bell, Paperclip,
   Target, UsersRound, Search, Sparkles, FilePen, BellRing, BarChart3,
-  SlidersHorizontal, ChevronDown, Layers, Plug, Workflow,
+  SlidersHorizontal, ChevronDown, Layers, Plug, Workflow, BookOpen, ShoppingBag,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useUnreadMessageCount } from '@/hooks/useMessages'
@@ -41,7 +41,13 @@ interface SidebarProps {
 export function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose }: SidebarProps) {
   const location = useLocation()
   const isProspectionActive = location.pathname.startsWith('/prospection')
+  const isCatalogueActive = location.pathname.startsWith('/catalogue')
   const [prospOpen, setProspOpen] = useState(isProspectionActive)
+  const [catalogueOpen, setCatalogueOpen] = useState(isCatalogueActive)
+
+  const catalogueItems: NavItem[] = [
+    { label: 'Services', icon: ShoppingBag, to: '/catalogue/services' },
+  ]
 
   const { data: unreadMessages = 0 } = useUnreadMessageCount()
 
@@ -123,6 +129,69 @@ export function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose }: Side
               </NavLink>
             )
           })}
+
+          {/* ── Section Catalogue ────────────────────────────────── */}
+          <div className="pt-2">
+            {collapsed ? (
+              <NavLink
+                to="/catalogue/services"
+                title="Catalogue"
+                className={cn(
+                  'flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm font-medium transition-colors group',
+                  isCatalogueActive
+                    ? 'bg-brand-50 text-brand-600'
+                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                )}
+              >
+                <BookOpen className={cn('h-4 w-4 shrink-0', isCatalogueActive ? 'text-brand-500' : 'text-gray-400 group-hover:text-gray-600')} />
+              </NavLink>
+            ) : (
+              <>
+                <div className="mb-1 px-1">
+                  <div className="h-px bg-gray-100 mb-2" />
+                  <button
+                    onClick={() => setCatalogueOpen(v => !v)}
+                    className={cn(
+                      'w-full flex items-center gap-2 px-1.5 py-1 rounded-lg transition-colors group',
+                      isCatalogueActive ? 'text-brand-600' : 'text-gray-500 hover:text-gray-700'
+                    )}
+                  >
+                    <BookOpen className={cn('h-3.5 w-3.5 shrink-0', isCatalogueActive ? 'text-brand-500' : 'text-gray-400 group-hover:text-gray-500')} />
+                    <span className="text-[11px] font-bold uppercase tracking-wider flex-1 text-left">
+                      Catalogue
+                    </span>
+                    <ChevronDown className={cn(
+                      'h-3 w-3 text-gray-400 transition-transform duration-200',
+                      catalogueOpen && 'rotate-180'
+                    )} />
+                  </button>
+                </div>
+                {catalogueOpen && (
+                  <div className="space-y-0.5 pl-2">
+                    {catalogueItems.map(item => {
+                      const Icon = item.icon
+                      const isActive = location.pathname.startsWith(item.to)
+                      return (
+                        <NavLink
+                          key={item.to}
+                          to={item.to}
+                          className={cn(
+                            'flex items-center gap-2 px-2 py-1.5 rounded-lg text-sm font-medium transition-colors group',
+                            isActive
+                              ? 'bg-brand-50 text-brand-600'
+                              : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800'
+                          )}
+                        >
+                          <Icon className={cn('h-3.5 w-3.5 shrink-0', isActive ? 'text-brand-500' : 'text-gray-400 group-hover:text-gray-500')} />
+                          <span className="truncate text-[13px]">{item.label}</span>
+                        </NavLink>
+                      )
+                    })}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
 
           {/* ── Section Prospection IA ────────────────────────────── */}
           <div className="pt-2">
