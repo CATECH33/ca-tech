@@ -46,7 +46,8 @@ export function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose }: Side
   const [catalogueOpen, setCatalogueOpen] = useState(isCatalogueActive)
 
   const catalogueItems: NavItem[] = [
-    { label: 'Services', icon: ShoppingBag, to: '/catalogue/services' },
+    { label: 'Services',          icon: ShoppingBag, to: '/catalogue/services' },
+    { label: 'Collaborateurs IA', icon: Bot,         to: '/catalogue/collaborateurs' },
   ]
 
   const { data: unreadMessages = 0 } = useUnreadMessageCount()
