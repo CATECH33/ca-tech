@@ -47,6 +47,7 @@ const ProspectionConnecteurs         = lazy(() => import('./pages/prospection/Pr
 
 // Module catalogue
 const CatalogueServices              = lazy(() => import('./pages/catalogue/CatalogueServices').then(m => ({ default: m.CatalogueServices })))
+const CatalogueServiceForm           = lazy(() => import('./pages/catalogue/CatalogueServiceForm').then(m => ({ default: m.CatalogueServiceForm })))
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { staleTime: 5 * 60 * 1000, retry: 1 } },
@@ -99,7 +100,9 @@ function ProtectedApp() {
         <Route path="/prospection/pipeline"     element={<ProtectedRoute><ProspectionPipeline /></ProtectedRoute>} />
         <Route path="/prospection/prospects/:id" element={<ProtectedRoute><ProspectionProspectDetail /></ProtectedRoute>} />
         <Route path="/prospection/connecteurs"  element={<ProtectedRoute><ProspectionConnecteurs /></ProtectedRoute>} />
-        <Route path="/catalogue/services"       element={<ProtectedRoute><CatalogueServices /></ProtectedRoute>} />
+        <Route path="/catalogue/services"         element={<ProtectedRoute><CatalogueServices /></ProtectedRoute>} />
+        <Route path="/catalogue/services/new"    element={<ProtectedRoute><CatalogueServiceForm /></ProtectedRoute>} />
+        <Route path="/catalogue/services/:id/edit" element={<ProtectedRoute><CatalogueServiceForm /></ProtectedRoute>} />
         <Route path="/auth/google/callback" element={<GoogleOAuthCallback />} />
       </Routes>
     </Suspense>

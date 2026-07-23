@@ -1,18 +1,16 @@
 import { useState, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Plus, Search, Edit, Trash2, Copy, Eye, EyeOff,
   ChevronUp, ChevronDown, MoreHorizontal, Loader2,
 } from 'lucide-react'
 import { Layout } from '@/components/layout/Layout'
 import { Button } from '@/components/ui/Button'
-import { Input, Select, Textarea } from '@/components/ui/Input'
 import { Modal } from '@/components/ui/Modal'
 import { Table, Thead, Tbody, Tr, Th, Td, EmptyRow } from '@/components/ui/Table'
 import { formatCurrency, formatDate, cn } from '@/lib/utils'
 import {
   useCatalogueServices,
-  useCreateCatalogueService,
-  useUpdateCatalogueService,
   useDeleteCatalogueService,
   useToggleCatalogueVisible,
   useDuplicateCatalogueService,
@@ -32,14 +30,6 @@ const CAT_STYLES: Record<CatalogueCategorie, { bg: string; text: string; label: 
 }
 
 const CAT_OPTIONS = Object.entries(CAT_STYLES).map(([value, { label }]) => ({ value, label }))
-
-const FORM_INIT = {
-  nom: '',
-  description: '',
-  categorie: 'web' as CatalogueCategorie,
-  prix: '',
-  ordre: '',
-}
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -67,23 +57,19 @@ function VisiblePill({ visible }: { visible: boolean }) {
 // ─── Page ──────────────────────────────────────────────────────────────────────
 
 export function CatalogueServices() {
+  const navigate = useNavigate()
   const { data: services = [], isLoading, isError } = useCatalogueServices()
-  const createMut    = useCreateCatalogueService()
-  const updateMut    = useUpdateCatalogueService()
-  const deleteMut    = useDeleteCatalogueService()
-  const toggleMut    = useToggleCatalogueVisible()
-  const dupMut       = useDuplicateCatalogueService()
+  const deleteMut = useDeleteCatalogueService()
+  const toggleMut = useToggleCatalogueVisible()
+  const dupMut    = useDuplicateCatalogueService()
 
   const [search, setSearch]       = useState('')
   const [catFilter, setCatFilter] = useState<CatalogueCategorie | 'all'>('all')
   const [sortKey, setSortKey]     = useState<'ordre' | 'nom' | 'prix'>('ordre')
   const [sortDir, setSortDir]     = useState<'asc' | 'desc'>('asc')
 
-  const [modalOpen, setModalOpen]       = useState(false)
-  const [editing, setEditing]           = useState<CatalogueService | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<CatalogueService | null>(null)
   const [openMenu, setOpenMenu]         = useState<string | null>(null)
-  const [form, setForm]                 = useState(FORM_INIT)
 
   // ── Filtres + tri ───────────────────────────────────────────────────────────
 
@@ -118,37 +104,6 @@ export function CatalogueServices() {
 
   // ── Actions ─────────────────────────────────────────────────────────────────
 
-  function openCreate() {
-    const maxOrdre = services.length ? Math.max(...services.map(s => s.ordre)) : 0
-    setEditing(null)
-    setForm({ ...FORM_INIT, ordre: String(maxOrdre + 1) })
-    setModalOpen(true)
-  }
-
-  function openEdit(s: CatalogueService) {
-    setEditing(s)
-    setForm({ nom: s.nom, description: s.description, categorie: s.categorie, prix: String(s.prix), ordre: String(s.ordre) })
-    setModalOpen(true)
-    setOpenMenu(null)
-  }
-
-  async function handleSave() {
-    if (!form.nom.trim() || !form.prix) return
-    const payload = {
-      nom:         form.nom.trim(),
-      description: form.description,
-      categorie:   form.categorie,
-      prix:        Number(form.prix),
-      ordre:       Number(form.ordre) || 0,
-    }
-    if (editing) {
-      await updateMut.mutateAsync({ id: editing.id, ...payload })
-    } else {
-      await createMut.mutateAsync(payload)
-    }
-    setModalOpen(false)
-  }
-
   async function handleDelete(s: CatalogueService) {
     await deleteMut.mutateAsync(s.id)
     setDeleteTarget(null)
@@ -157,7 +112,6 @@ export function CatalogueServices() {
   // ── Render ──────────────────────────────────────────────────────────────────
 
   const stats = { total: services.length, visible: services.filter(s => s.visible).length }
-  const isSaving = createMut.isPending || updateMut.isPending
 
   return (
     <Layout>
@@ -175,7 +129,7 @@ export function CatalogueServices() {
               {stats.total} service{stats.total !== 1 ? 's' : ''} · {stats.visible} visible{stats.visible !== 1 ? 's' : ''}
             </p>
           </div>
-          <Button onClick={openCreate} className="gap-2">
+          <Button onClick={() => navigate('/catalogue/services/new')} className="gap-2">
             <Plus className="h-4 w-4" />
             Ajouter
           </Button>
@@ -273,7 +227,7 @@ export function CatalogueServices() {
                     <Td className="text-right">
                       <div className="flex items-center justify-end gap-1">
                         <button
-                          onClick={() => openEdit(s)}
+                          onClick={() => navigate(`/catalogue/services/${s.id}/edit`)}
                           title="Modifier"
                           className="h-8 w-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-brand-600 hover:bg-brand-50 transition-colors"
                         >
@@ -335,63 +289,6 @@ export function CatalogueServices() {
           </p>
         )}
       </div>
-
-      {/* ── Modal Créer / Modifier ───────────────────────────────────────────── */}
-      <Modal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        title={editing ? 'Modifier le service' : 'Nouveau service'}
-        description={editing ? editing.nom : 'Remplissez les informations du service.'}
-        size="md"
-        footer={
-          <>
-            <Button variant="outline" onClick={() => setModalOpen(false)}>Annuler</Button>
-            <Button onClick={handleSave} loading={isSaving} disabled={!form.nom.trim() || !form.prix}>
-              {editing ? 'Enregistrer' : 'Créer'}
-            </Button>
-          </>
-        }
-      >
-        <div className="space-y-4">
-          <Input
-            label="Nom *"
-            placeholder="Ex : Site Vitrine"
-            value={form.nom}
-            onChange={e => setForm(f => ({ ...f, nom: e.target.value }))}
-          />
-          <Textarea
-            label="Description"
-            placeholder="Décrivez brièvement ce service…"
-            value={form.description}
-            onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-          />
-          <div className="grid grid-cols-2 gap-3">
-            <Select
-              label="Catégorie"
-              value={form.categorie}
-              options={CAT_OPTIONS}
-              onChange={e => setForm(f => ({ ...f, categorie: e.target.value as CatalogueCategorie }))}
-            />
-            <Input
-              label="Prix (€) *"
-              type="number"
-              min="0"
-              placeholder="0"
-              value={form.prix}
-              onChange={e => setForm(f => ({ ...f, prix: e.target.value }))}
-            />
-          </div>
-          <Input
-            label="Ordre d'affichage"
-            type="number"
-            min="1"
-            placeholder="1"
-            value={form.ordre}
-            onChange={e => setForm(f => ({ ...f, ordre: e.target.value }))}
-            hint="Détermine la position dans la liste (1 = premier)"
-          />
-        </div>
-      </Modal>
 
       {/* ── Modal Suppression ───────────────────────────────────────────────── */}
       <Modal
