@@ -38,11 +38,12 @@
     { "source": "/diagnostic-ia",    "destination": "/contact",      "permanent": true },
     { "source": "/nos-realisations", "destination": "/realisations", "permanent": true },
     { "source": "/loic-ia",         "destination": "/loic",          "permanent": true },
-    { "source": "/manager/(.*)",    "destination": "https://manager.ca-tech.fr/$1", "permanent": false },
-    { "source": "/manager",         "destination": "https://manager.ca-tech.fr/",   "permanent": false }
+    { "source": "/manager/(.*)", "missing": [{ "type": "host", "value": "manager.ca-tech.fr" }], "destination": "https://manager.ca-tech.fr/manager/$1", "permanent": false },
+    { "source": "/manager",      "missing": [{ "type": "host", "value": "manager.ca-tech.fr" }], "destination": "https://manager.ca-tech.fr/manager",    "permanent": false },
+    { "source": "/",             "has":     [{ "type": "host", "value": "manager.ca-tech.fr" }], "destination": "/manager",                               "permanent": false }
   ],
   "rewrites": [
     { "source": "/manager/assets/(.*)", "has": [{ "type": "host", "value": "manager.ca-tech.fr" }], "destination": "/manager/dist/assets/$1" },
-    { "source": "/(.*)",                "has": [{ "type": "host", "value": "manager.ca-tech.fr" }], "destination": "/manager/dist/index.html" }
+    { "source": "/manager/(.*)",        "has": [{ "type": "host", "value": "manager.ca-tech.fr" }], "destination": "/manager/dist/index.html" }
   ]
 }
