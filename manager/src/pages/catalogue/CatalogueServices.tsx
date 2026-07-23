@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import {
-  Plus, Search, Edit, Trash2, Copy, Eye, EyeOff, ShoppingBag,
-  ChevronUp, ChevronDown, MoreHorizontal,
+  Plus, Search, Edit, Trash2, Copy, Eye, EyeOff,
+  ChevronUp, ChevronDown, MoreHorizontal, Loader2,
 } from 'lucide-react'
 import { Layout } from '@/components/layout/Layout'
 import { Button } from '@/components/ui/Button'
@@ -9,32 +9,26 @@ import { Input, Select, Textarea } from '@/components/ui/Input'
 import { Modal } from '@/components/ui/Modal'
 import { Table, Thead, Tbody, Tr, Th, Td, EmptyRow } from '@/components/ui/Table'
 import { formatCurrency, formatDate, cn } from '@/lib/utils'
-
-// ─── Types ─────────────────────────────────────────────────────────────────────
-
-type Categorie = 'web' | 'ecommerce' | 'seo' | 'ia' | 'branding' | 'application' | 'autre'
-
-interface CatalogueService {
-  id: string
-  nom: string
-  description: string
-  categorie: Categorie
-  prix: number
-  visible: boolean
-  ordre: number
-  created_at: string
-}
+import {
+  useCatalogueServices,
+  useCreateCatalogueService,
+  useUpdateCatalogueService,
+  useDeleteCatalogueService,
+  useToggleCatalogueVisible,
+  useDuplicateCatalogueService,
+} from '@/hooks/useCatalogueServices'
+import type { CatalogueService, CatalogueCategorie } from '@/hooks/useCatalogueServices'
 
 // ─── Constants ─────────────────────────────────────────────────────────────────
 
-const CAT_STYLES: Record<Categorie, { bg: string; text: string; label: string }> = {
-  web:         { bg: 'bg-blue-50',    text: 'text-blue-600',   label: 'Site web' },
-  ecommerce:   { bg: 'bg-violet-50',  text: 'text-violet-600', label: 'E-commerce' },
-  seo:         { bg: 'bg-amber-50',   text: 'text-amber-600',  label: 'SEO' },
-  ia:          { bg: 'bg-teal-50',    text: 'text-teal-600',   label: 'IA & Auto.' },
-  branding:    { bg: 'bg-pink-50',    text: 'text-pink-600',   label: 'Branding' },
-  application: { bg: 'bg-orange-50',  text: 'text-orange-600', label: 'Application' },
-  autre:       { bg: 'bg-gray-100',   text: 'text-gray-600',   label: 'Autre' },
+const CAT_STYLES: Record<CatalogueCategorie, { bg: string; text: string; label: string }> = {
+  web:         { bg: 'bg-blue-50',   text: 'text-blue-600',   label: 'Site web' },
+  ecommerce:   { bg: 'bg-violet-50', text: 'text-violet-600', label: 'E-commerce' },
+  seo:         { bg: 'bg-amber-50',  text: 'text-amber-600',  label: 'SEO' },
+  ia:          { bg: 'bg-teal-50',   text: 'text-teal-600',   label: 'IA & Auto.' },
+  branding:    { bg: 'bg-pink-50',   text: 'text-pink-600',   label: 'Branding' },
+  application: { bg: 'bg-orange-50', text: 'text-orange-600', label: 'Application' },
+  autre:       { bg: 'bg-gray-100',  text: 'text-gray-600',   label: 'Autre' },
 }
 
 const CAT_OPTIONS = Object.entries(CAT_STYLES).map(([value, { label }]) => ({ value, label }))
@@ -42,25 +36,14 @@ const CAT_OPTIONS = Object.entries(CAT_STYLES).map(([value, { label }]) => ({ va
 const FORM_INIT = {
   nom: '',
   description: '',
-  categorie: 'web' as Categorie,
+  categorie: 'web' as CatalogueCategorie,
   prix: '',
   ordre: '',
 }
 
-// ─── Données exemple (remplacer par hook Supabase) ──────────────────────────
-
-const SEED: CatalogueService[] = [
-  { id: '1', nom: 'Site Vitrine',       description: 'Site professionnel responsive, jusqu'à 5 pages, SEO optimisé.',    categorie: 'web',         prix: 990,  visible: true,  ordre: 1, created_at: '2025-01-10T10:00:00Z' },
-  { id: '2', nom: 'Site E-commerce',    description: 'Boutique en ligne complète avec paiements intégrés.',               categorie: 'ecommerce',   prix: 2490, visible: true,  ordre: 2, created_at: '2025-01-12T10:00:00Z' },
-  { id: '3', nom: 'Landing Page',       description: 'Page de conversion haute performance, optimisée publicité & SEO.',  categorie: 'web',         prix: 490,  visible: true,  ordre: 3, created_at: '2025-01-15T10:00:00Z' },
-  { id: '4', nom: 'Audit SEO',          description: 'Analyse complète de votre référencement + rapport d'actions.',      categorie: 'seo',         prix: 349,  visible: true,  ordre: 4, created_at: '2025-02-01T10:00:00Z' },
-  { id: '5', nom: 'Collaborateur IA',   description: 'Assistant IA personnalisé intégré à votre site ou outil métier.',   categorie: 'ia',          prix: 1490, visible: false, ordre: 5, created_at: '2025-02-10T10:00:00Z' },
-  { id: '6', nom: 'Identité Visuelle',  description: 'Logo + charte graphique + typographie + palette de couleurs.',      categorie: 'branding',    prix: 790,  visible: true,  ordre: 6, created_at: '2025-02-20T10:00:00Z' },
-]
-
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 
-function CatBadge({ cat }: { cat: Categorie }) {
+function CatBadge({ cat }: { cat: CatalogueCategorie }) {
   const s = CAT_STYLES[cat]
   return (
     <span className={cn('inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium', s.bg, s.text)}>
@@ -84,20 +67,23 @@ function VisiblePill({ visible }: { visible: boolean }) {
 // ─── Page ──────────────────────────────────────────────────────────────────────
 
 export function CatalogueServices() {
-  const [services, setServices] = useState<CatalogueService[]>(SEED)
-  const [search, setSearch]     = useState('')
-  const [catFilter, setCatFilter] = useState<Categorie | 'all'>('all')
-  const [sortKey, setSortKey]   = useState<'ordre' | 'nom' | 'prix'>('ordre')
-  const [sortDir, setSortDir]   = useState<'asc' | 'desc'>('asc')
+  const { data: services = [], isLoading, isError } = useCatalogueServices()
+  const createMut    = useCreateCatalogueService()
+  const updateMut    = useUpdateCatalogueService()
+  const deleteMut    = useDeleteCatalogueService()
+  const toggleMut    = useToggleCatalogueVisible()
+  const dupMut       = useDuplicateCatalogueService()
 
-  // Modal état
-  const [modalOpen, setModalOpen]   = useState(false)
-  const [editing, setEditing]       = useState<CatalogueService | null>(null)
+  const [search, setSearch]       = useState('')
+  const [catFilter, setCatFilter] = useState<CatalogueCategorie | 'all'>('all')
+  const [sortKey, setSortKey]     = useState<'ordre' | 'nom' | 'prix'>('ordre')
+  const [sortDir, setSortDir]     = useState<'asc' | 'desc'>('asc')
+
+  const [modalOpen, setModalOpen]       = useState(false)
+  const [editing, setEditing]           = useState<CatalogueService | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<CatalogueService | null>(null)
-  const [openMenu, setOpenMenu]     = useState<string | null>(null)
-
-  const [form, setForm] = useState(FORM_INIT)
-  const [saving, setSaving] = useState(false)
+  const [openMenu, setOpenMenu]         = useState<string | null>(null)
+  const [form, setForm]                 = useState(FORM_INIT)
 
   // ── Filtres + tri ───────────────────────────────────────────────────────────
 
@@ -111,8 +97,8 @@ export function CatalogueServices() {
     list.sort((a, b) => {
       let diff = 0
       if (sortKey === 'ordre') diff = a.ordre - b.ordre
-      else if (sortKey === 'nom')   diff = a.nom.localeCompare(b.nom)
-      else if (sortKey === 'prix')  diff = a.prix - b.prix
+      else if (sortKey === 'nom')  diff = a.nom.localeCompare(b.nom)
+      else if (sortKey === 'prix') diff = a.prix - b.prix
       return sortDir === 'asc' ? diff : -diff
     })
     return list
@@ -133,8 +119,9 @@ export function CatalogueServices() {
   // ── Actions ─────────────────────────────────────────────────────────────────
 
   function openCreate() {
+    const maxOrdre = services.length ? Math.max(...services.map(s => s.ordre)) : 0
     setEditing(null)
-    setForm(FORM_INIT)
+    setForm({ ...FORM_INIT, ordre: String(maxOrdre + 1) })
     setModalOpen(true)
   }
 
@@ -145,59 +132,32 @@ export function CatalogueServices() {
     setOpenMenu(null)
   }
 
-  function handleSave() {
+  async function handleSave() {
     if (!form.nom.trim() || !form.prix) return
-    setSaving(true)
-    setTimeout(() => {
-      if (editing) {
-        setServices(prev => prev.map(s => s.id === editing.id
-          ? { ...s, nom: form.nom.trim(), description: form.description, categorie: form.categorie, prix: Number(form.prix), ordre: Number(form.ordre) || s.ordre }
-          : s
-        ))
-      } else {
-        const maxOrdre = services.length ? Math.max(...services.map(s => s.ordre)) : 0
-        setServices(prev => [...prev, {
-          id: crypto.randomUUID(),
-          nom: form.nom.trim(),
-          description: form.description,
-          categorie: form.categorie,
-          prix: Number(form.prix),
-          visible: false,
-          ordre: Number(form.ordre) || maxOrdre + 1,
-          created_at: new Date().toISOString(),
-        }])
-      }
-      setSaving(false)
-      setModalOpen(false)
-    }, 400)
+    const payload = {
+      nom:         form.nom.trim(),
+      description: form.description,
+      categorie:   form.categorie,
+      prix:        Number(form.prix),
+      ordre:       Number(form.ordre) || 0,
+    }
+    if (editing) {
+      await updateMut.mutateAsync({ id: editing.id, ...payload })
+    } else {
+      await createMut.mutateAsync(payload)
+    }
+    setModalOpen(false)
   }
 
-  function handleDelete(s: CatalogueService) {
-    setServices(prev => prev.filter(x => x.id !== s.id))
+  async function handleDelete(s: CatalogueService) {
+    await deleteMut.mutateAsync(s.id)
     setDeleteTarget(null)
-  }
-
-  function handleDuplicate(s: CatalogueService) {
-    const maxOrdre = Math.max(...services.map(x => x.ordre))
-    setServices(prev => [...prev, {
-      ...s,
-      id: crypto.randomUUID(),
-      nom: `${s.nom} (copie)`,
-      visible: false,
-      ordre: maxOrdre + 1,
-      created_at: new Date().toISOString(),
-    }])
-    setOpenMenu(null)
-  }
-
-  function handleToggleVisible(s: CatalogueService) {
-    setServices(prev => prev.map(x => x.id === s.id ? { ...x, visible: !x.visible } : x))
-    setOpenMenu(null)
   }
 
   // ── Render ──────────────────────────────────────────────────────────────────
 
   const stats = { total: services.length, visible: services.filter(s => s.visible).length }
+  const isSaving = createMut.isPending || updateMut.isPending
 
   return (
     <Layout>
@@ -212,7 +172,7 @@ export function CatalogueServices() {
             </div>
             <h1 className="text-xl font-bold text-gray-900">Services</h1>
             <p className="text-sm text-gray-500 mt-0.5">
-              {stats.total} service{stats.total > 1 ? 's' : ''} · {stats.visible} visible{stats.visible > 1 ? 's' : ''}
+              {stats.total} service{stats.total !== 1 ? 's' : ''} · {stats.visible} visible{stats.visible !== 1 ? 's' : ''}
             </p>
           </div>
           <Button onClick={openCreate} className="gap-2">
@@ -234,7 +194,7 @@ export function CatalogueServices() {
           </div>
           <select
             value={catFilter}
-            onChange={e => setCatFilter(e.target.value as Categorie | 'all')}
+            onChange={e => setCatFilter(e.target.value as CatalogueCategorie | 'all')}
             className="h-9 rounded-lg border border-gray-200 bg-white px-3 pr-8 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500"
           >
             <option value="all">Toutes catégories</option>
@@ -244,120 +204,134 @@ export function CatalogueServices() {
 
         {/* Tableau */}
         <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
-          <Table>
-            <Thead>
-              <Tr className="hover:bg-transparent">
-                <Th>
-                  <button onClick={() => toggleSort('nom')} className="flex items-center gap-0.5 hover:text-gray-700">
-                    Nom <SortIcon col="nom" />
-                  </button>
-                </Th>
-                <Th>Catégorie</Th>
-                <Th>
-                  <button onClick={() => toggleSort('prix')} className="flex items-center gap-0.5 hover:text-gray-700">
-                    Prix <SortIcon col="prix" />
-                  </button>
-                </Th>
-                <Th>Visible</Th>
-                <Th>
-                  <button onClick={() => toggleSort('ordre')} className="flex items-center gap-0.5 hover:text-gray-700">
-                    Ordre <SortIcon col="ordre" />
-                  </button>
-                </Th>
-                <Th>Création</Th>
-                <Th className="text-right">Actions</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {filtered.length === 0 ? (
-                <EmptyRow cols={7} message="Aucun service trouvé" />
-              ) : filtered.map(s => (
-                <Tr key={s.id}>
-                  <Td>
-                    <div>
-                      <p className="font-medium text-gray-900 text-sm">{s.nom}</p>
-                      {s.description && (
-                        <p className="text-xs text-gray-400 mt-0.5 max-w-[260px] truncate">{s.description}</p>
-                      )}
-                    </div>
-                  </Td>
-                  <Td><CatBadge cat={s.categorie} /></Td>
-                  <Td>
-                    <span className="font-semibold text-gray-900">{formatCurrency(s.prix)}</span>
-                  </Td>
-                  <Td>
-                    <button onClick={() => handleToggleVisible(s)} title={s.visible ? 'Masquer' : 'Rendre visible'}>
-                      <VisiblePill visible={s.visible} />
+          {isLoading ? (
+            <div className="flex items-center justify-center gap-2 py-16 text-sm text-gray-400">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Chargement…
+            </div>
+          ) : isError ? (
+            <div className="py-16 text-center text-sm text-red-500">
+              Erreur lors du chargement des services.
+            </div>
+          ) : (
+            <Table>
+              <Thead>
+                <Tr className="hover:bg-transparent">
+                  <Th>
+                    <button onClick={() => toggleSort('nom')} className="flex items-center gap-0.5 hover:text-gray-700">
+                      Nom <SortIcon col="nom" />
                     </button>
-                  </Td>
-                  <Td>
-                    <span className="text-xs text-gray-500 font-mono tabular-nums">{s.ordre}</span>
-                  </Td>
-                  <Td>
-                    <span className="text-xs text-gray-400">{formatDate(s.created_at)}</span>
-                  </Td>
-                  <Td className="text-right">
-                    <div className="flex items-center justify-end gap-1">
-                      {/* Modifier */}
-                      <button
-                        onClick={() => openEdit(s)}
-                        title="Modifier"
-                        className="h-8 w-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-brand-600 hover:bg-brand-50 transition-colors"
-                      >
-                        <Edit className="h-3.5 w-3.5" />
-                      </button>
-
-                      {/* Menu plus */}
-                      <div className="relative">
-                        <button
-                          onClick={() => setOpenMenu(openMenu === s.id ? null : s.id)}
-                          title="Plus d'actions"
-                          className="h-8 w-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
-                        >
-                          <MoreHorizontal className="h-3.5 w-3.5" />
-                        </button>
-                        {openMenu === s.id && (
-                          <>
-                            <div className="fixed inset-0 z-10" onClick={() => setOpenMenu(null)} />
-                            <div className="absolute right-0 top-9 z-20 w-44 bg-white border border-gray-100 rounded-xl shadow-elevated py-1">
-                              <button
-                                onClick={() => handleToggleVisible(s)}
-                                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                              >
-                                {s.visible ? <EyeOff className="h-3.5 w-3.5 text-gray-400" /> : <Eye className="h-3.5 w-3.5 text-gray-400" />}
-                                {s.visible ? 'Masquer' : 'Rendre visible'}
-                              </button>
-                              <button
-                                onClick={() => handleDuplicate(s)}
-                                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                              >
-                                <Copy className="h-3.5 w-3.5 text-gray-400" />
-                                Dupliquer
-                              </button>
-                              <div className="h-px bg-gray-100 my-1" />
-                              <button
-                                onClick={() => { setDeleteTarget(s); setOpenMenu(null) }}
-                                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                              >
-                                <Trash2 className="h-3.5 w-3.5" />
-                                Supprimer
-                              </button>
-                            </div>
-                          </>
+                  </Th>
+                  <Th>Catégorie</Th>
+                  <Th>
+                    <button onClick={() => toggleSort('prix')} className="flex items-center gap-0.5 hover:text-gray-700">
+                      Prix <SortIcon col="prix" />
+                    </button>
+                  </Th>
+                  <Th>Visible</Th>
+                  <Th>
+                    <button onClick={() => toggleSort('ordre')} className="flex items-center gap-0.5 hover:text-gray-700">
+                      Ordre <SortIcon col="ordre" />
+                    </button>
+                  </Th>
+                  <Th>Création</Th>
+                  <Th className="text-right">Actions</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {filtered.length === 0 ? (
+                  <EmptyRow cols={7} message={search || catFilter !== 'all' ? 'Aucun service trouvé' : 'Aucun service — cliquez sur Ajouter'} />
+                ) : filtered.map(s => (
+                  <Tr key={s.id}>
+                    <Td>
+                      <div>
+                        <p className="font-medium text-gray-900 text-sm">{s.nom}</p>
+                        {s.description && (
+                          <p className="text-xs text-gray-400 mt-0.5 max-w-[260px] truncate">{s.description}</p>
                         )}
                       </div>
-                    </div>
-                  </Td>
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
+                    </Td>
+                    <Td><CatBadge cat={s.categorie} /></Td>
+                    <Td>
+                      <span className="font-semibold text-gray-900">{formatCurrency(s.prix)}</span>
+                    </Td>
+                    <Td>
+                      <button
+                        onClick={() => toggleMut.mutate({ id: s.id, visible: !s.visible })}
+                        title={s.visible ? 'Masquer' : 'Rendre visible'}
+                        disabled={toggleMut.isPending}
+                      >
+                        <VisiblePill visible={s.visible} />
+                      </button>
+                    </Td>
+                    <Td>
+                      <span className="text-xs text-gray-500 font-mono tabular-nums">{s.ordre}</span>
+                    </Td>
+                    <Td>
+                      <span className="text-xs text-gray-400">{formatDate(s.created_at)}</span>
+                    </Td>
+                    <Td className="text-right">
+                      <div className="flex items-center justify-end gap-1">
+                        <button
+                          onClick={() => openEdit(s)}
+                          title="Modifier"
+                          className="h-8 w-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-brand-600 hover:bg-brand-50 transition-colors"
+                        >
+                          <Edit className="h-3.5 w-3.5" />
+                        </button>
+                        <div className="relative">
+                          <button
+                            onClick={() => setOpenMenu(openMenu === s.id ? null : s.id)}
+                            title="Plus d'actions"
+                            className="h-8 w-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+                          >
+                            <MoreHorizontal className="h-3.5 w-3.5" />
+                          </button>
+                          {openMenu === s.id && (
+                            <>
+                              <div className="fixed inset-0 z-10" onClick={() => setOpenMenu(null)} />
+                              <div className="absolute right-0 top-9 z-20 w-44 bg-white border border-gray-100 rounded-xl shadow-elevated py-1">
+                                <button
+                                  onClick={() => { toggleMut.mutate({ id: s.id, visible: !s.visible }); setOpenMenu(null) }}
+                                  className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                                >
+                                  {s.visible
+                                    ? <EyeOff className="h-3.5 w-3.5 text-gray-400" />
+                                    : <Eye className="h-3.5 w-3.5 text-gray-400" />}
+                                  {s.visible ? 'Masquer' : 'Rendre visible'}
+                                </button>
+                                <button
+                                  onClick={() => { dupMut.mutate(s); setOpenMenu(null) }}
+                                  disabled={dupMut.isPending}
+                                  className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50"
+                                >
+                                  <Copy className="h-3.5 w-3.5 text-gray-400" />
+                                  Dupliquer
+                                </button>
+                                <div className="h-px bg-gray-100 my-1" />
+                                <button
+                                  onClick={() => { setDeleteTarget(s); setOpenMenu(null) }}
+                                  className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                  Supprimer
+                                </button>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          )}
         </div>
 
-        {/* Footer count */}
         {filtered.length > 0 && (
           <p className="text-xs text-gray-400 mt-3 text-right">
-            {filtered.length} résultat{filtered.length > 1 ? 's' : ''}
+            {filtered.length} résultat{filtered.length !== 1 ? 's' : ''}
           </p>
         )}
       </div>
@@ -372,7 +346,7 @@ export function CatalogueServices() {
         footer={
           <>
             <Button variant="outline" onClick={() => setModalOpen(false)}>Annuler</Button>
-            <Button onClick={handleSave} loading={saving} disabled={!form.nom.trim() || !form.prix}>
+            <Button onClick={handleSave} loading={isSaving} disabled={!form.nom.trim() || !form.prix}>
               {editing ? 'Enregistrer' : 'Créer'}
             </Button>
           </>
@@ -396,7 +370,7 @@ export function CatalogueServices() {
               label="Catégorie"
               value={form.categorie}
               options={CAT_OPTIONS}
-              onChange={e => setForm(f => ({ ...f, categorie: e.target.value as Categorie }))}
+              onChange={e => setForm(f => ({ ...f, categorie: e.target.value as CatalogueCategorie }))}
             />
             <Input
               label="Prix (€) *"
@@ -429,7 +403,11 @@ export function CatalogueServices() {
         footer={
           <>
             <Button variant="outline" onClick={() => setDeleteTarget(null)}>Annuler</Button>
-            <Button variant="danger" onClick={() => deleteTarget && handleDelete(deleteTarget)}>
+            <Button
+              variant="danger"
+              loading={deleteMut.isPending}
+              onClick={() => deleteTarget && handleDelete(deleteTarget)}
+            >
               Supprimer
             </Button>
           </>
