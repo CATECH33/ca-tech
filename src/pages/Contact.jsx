@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
 import './Contact.css'
 
+const EDGE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/contact-form`
+
 export default function Contact() {
-  const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' })
+  const [form, setForm] = useState({ name: '', company: '', email: '', phone: '', subject: '', message: '' })
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -18,23 +19,27 @@ export default function Contact() {
     setLoading(true)
     setError(null)
 
-    const body = form.phone
-      ? `Tél : ${form.phone}\n\n${form.message}`
-      : form.message
+    try {
+      const res = await fetch(EDGE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name:    form.name,
+          company: form.company || undefined,
+          email:   form.email,
+          phone:   form.phone   || undefined,
+          subject: form.subject || undefined,
+          message: form.message,
+        }),
+      })
 
-    const { error: err } = await supabase.from('messages').insert({
-      from_name: form.name,
-      from_email: form.email,
-      subject: 'Contact depuis le site',
-      body,
-      source: 'contact',
-    })
-
-    setLoading(false)
-    if (err) {
-      setError('Une erreur est survenue. Veuillez réessayer ou nous contacter par email.')
-    } else {
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || `Erreur ${res.status}`)
       setSent(true)
+    } catch (err) {
+      setError('Une erreur est survenue. Veuillez réessayer ou nous contacter par email.')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -123,14 +128,25 @@ export default function Contact() {
                     <input id="ct-name" type="text" placeholder="Jean Dupont" required value={form.name} onChange={set('name')} />
                   </div>
                   <div className="ct-field">
+                    <label htmlFor="ct-company">Entreprise</label>
+                    <input id="ct-company" type="text" placeholder="Mon Entreprise SAS" value={form.company} onChange={set('company')} />
+                  </div>
+                </div>
+
+                <div className="ct-form-row">
+                  <div className="ct-field">
                     <label htmlFor="ct-email">Email *</label>
                     <input id="ct-email" type="email" placeholder="jean@entreprise.fr" required value={form.email} onChange={set('email')} />
+                  </div>
+                  <div className="ct-field">
+                    <label htmlFor="ct-phone">Téléphone</label>
+                    <input id="ct-phone" type="tel" placeholder="+33 6 00 00 00 00" value={form.phone} onChange={set('phone')} />
                   </div>
                 </div>
 
                 <div className="ct-field">
-                  <label htmlFor="ct-phone">Téléphone</label>
-                  <input id="ct-phone" type="tel" placeholder="+33 6 00 00 00 00" value={form.phone} onChange={set('phone')} />
+                  <label htmlFor="ct-subject">Sujet *</label>
+                  <input id="ct-subject" type="text" placeholder="Création d'un site vitrine, question sur l'IA…" required value={form.subject} onChange={set('subject')} />
                 </div>
 
                 <div className="ct-field">

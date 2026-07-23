@@ -223,6 +223,9 @@ export interface Message {
   client_id?: string
   lead_id?: string
   replied: boolean
+  company?: string
+  phone?: string
+  ip_address?: string
 }
 
 export interface Ticket {

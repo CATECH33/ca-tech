@@ -23,6 +23,9 @@ function mapRow(r: Record<string, any>): MessageRow {
     lead_id: r.lead_id ?? undefined,
     is_archived: Boolean(r.is_archived),
     reply_body: r.reply_body ?? undefined,
+    company: r.company ?? undefined,
+    phone: r.phone ?? undefined,
+    ip_address: r.ip_address ?? undefined,
   }
 }
 
@@ -71,7 +74,10 @@ export function useMarkAllRead() {
 export function useReplyMessage() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: async ({ id, reply_body }: { id: string; reply_body: string }) => {
+    mutationFn: async ({ id, reply_body, to_email, to_name, original_subject }: {
+      id: string; reply_body: string
+      to_email: string; to_name: string; original_subject?: string
+    }) => {
       const { error } = await supabase
         .from('messages')
         .update({
@@ -82,6 +88,17 @@ export function useReplyMessage() {
         })
         .eq('id', id)
       if (error) throw error
+
+      const { data: { session } } = await supabase.auth.getSession()
+      await fetch(`${SUPABASE_URL}/functions/v1/send-reply-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session?.access_token ?? SUPABASE_ANON_KEY}`,
+          apikey: SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({ to_email, to_name, reply_body, original_subject }),
+      })
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: Q }),
   })

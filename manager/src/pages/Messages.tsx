@@ -241,7 +241,13 @@ export function Messages() {
 
   function handleSendReply() {
     if (!selected || !replyText.trim()) return
-    replyMessage.mutate({ id: selected.id, reply_body: replyText.trim() }, {
+    replyMessage.mutate({
+      id: selected.id,
+      reply_body: replyText.trim(),
+      to_email: selected.from_email,
+      to_name: selected.from_name,
+      original_subject: selected.subject,
+    }, {
       onSuccess: () => { setShowReply(false); setReplyText('') },
     })
   }
@@ -558,6 +564,25 @@ export function Messages() {
                           </span>
                         )}
                       </div>
+                      {(selected.company || selected.phone || selected.ip_address) && (
+                        <div className="flex items-center gap-3 mt-2 flex-wrap">
+                          {selected.company && (
+                            <span className="text-[11px] text-gray-500 flex items-center gap-1">
+                              🏢 {selected.company}
+                            </span>
+                          )}
+                          {selected.phone && (
+                            <a href={`tel:${selected.phone}`} className="text-[11px] text-gray-500 hover:text-brand-600 transition flex items-center gap-1">
+                              📞 {selected.phone}
+                            </a>
+                          )}
+                          {selected.ip_address && (
+                            <span className="text-[10px] text-gray-300 font-mono">
+                              🌐 {selected.ip_address}
+                            </span>
+                          )}
+                        </div>
+                      )}
 
                       {/* Linked entities */}
                       {(linkedClient || linkedLead) && (
