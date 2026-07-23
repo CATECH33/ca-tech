@@ -1,18 +1,21 @@
-import { useState, useRef, useCallback, type ChangeEvent } from 'react'
+import { useState, useEffect, useRef, useCallback, type ChangeEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
   ArrowLeft, Upload, X, ImageIcon, Smile, Eye, EyeOff,
-  Globe, Tag, Save, ChevronDown,
+  Globe, Tag, Save, ChevronDown, Loader2, AlertCircle,
 } from 'lucide-react'
 import { Layout } from '@/components/layout/Layout'
 import { Button } from '@/components/ui/Button'
 import { Input, Select, Textarea } from '@/components/ui/Input'
 import { Card, CardHeader, CardTitle } from '@/components/ui/Card'
 import { cn } from '@/lib/utils'
-
-// ─── Types ─────────────────────────────────────────────────────────────────────
-
-type CatalogueCategorie = 'web' | 'ecommerce' | 'seo' | 'ia' | 'branding' | 'application' | 'autre'
+import {
+  useCatalogueServiceById,
+  useCreateCatalogueService,
+  useUpdateCatalogueService,
+  type CatalogueCategorie,
+  type CatalogueServicePayload,
+} from '@/hooks/useCatalogueServices'
 
 interface FormState {
   nom: string
@@ -233,12 +236,43 @@ function SeoPreview({ title, description }: { title: string; description: string
 // ─── Page ──────────────────────────────────────────────────────────────────────
 
 export function CatalogueServiceForm() {
-  const navigate = useNavigate()
-  const { id }   = useParams<{ id: string }>()
-  const isEdit   = Boolean(id)
+  const navigate   = useNavigate()
+  const { id }     = useParams<{ id: string }>()
+  const isEdit     = Boolean(id)
 
-  const [form, setForm] = useState<FormState>(FORM_INIT)
+  const createMut  = useCreateCatalogueService()
+  const updateMut  = useUpdateCatalogueService()
+  const { data: service, isLoading: loadingService } = useCatalogueServiceById(id)
+
+  const [form, setForm]         = useState<FormState>(FORM_INIT)
   const [slugManual, setSlugManual] = useState(false)
+  const [error, setError]       = useState<string | null>(null)
+
+  // ── Chargement en mode édition ─────────────────────────────────────────────
+
+  useEffect(() => {
+    if (!service) return
+    setSlugManual(Boolean(service.slug))
+    setForm({
+      nom:                  service.nom,
+      slug:                 service.slug ?? makeSlug(service.nom),
+      categorie:            service.categorie,
+      description_courte:   service.description,
+      description_complete: service.description_complete ?? '',
+      image:                null,
+      imagePreview:         service.image_url ?? null,
+      icone:                service.icone ?? '',
+      prix:                 String(service.prix),
+      prix_barre:           service.prix_barre != null ? String(service.prix_barre) : '',
+      cta_label:            service.cta_label ?? 'Demander un devis',
+      ordre:                String(service.ordre),
+      visible:              service.visible,
+      seo_title:            service.seo_title ?? '',
+      seo_description:      service.seo_description ?? '',
+    })
+  }, [service])
+
+  // ── Helpers ────────────────────────────────────────────────────────────────
 
   function set<K extends keyof FormState>(key: K, val: FormState[K]) {
     setForm(f => ({ ...f, [key]: val }))
@@ -256,11 +290,55 @@ export function CatalogueServiceForm() {
   }
 
   function removeImage() {
-    if (form.imagePreview) URL.revokeObjectURL(form.imagePreview)
+    if (form.imagePreview && form.image) URL.revokeObjectURL(form.imagePreview)
     setForm(f => ({ ...f, image: null, imagePreview: null }))
   }
 
-  const canSave = form.nom.trim().length > 0 && form.prix.length > 0
+  // ── Submit ─────────────────────────────────────────────────────────────────
+
+  async function handleSubmit() {
+    setError(null)
+    const payload: CatalogueServicePayload = {
+      nom:                  form.nom.trim(),
+      slug:                 form.slug,
+      categorie:            form.categorie,
+      description_courte:   form.description_courte,
+      description_complete: form.description_complete,
+      image_url:            null,    // upload à connecter après migration 010
+      icone:                form.icone,
+      prix:                 Number(form.prix) || 0,
+      prix_barre:           form.prix_barre ? Number(form.prix_barre) : null,
+      cta_label:            form.cta_label,
+      ordre:                Number(form.ordre) || 1,
+      visible:              form.visible,
+      seo_title:            form.seo_title,
+      seo_description:      form.seo_description,
+    }
+    try {
+      if (isEdit && id) {
+        await updateMut.mutateAsync({ id, ...payload })
+      } else {
+        await createMut.mutateAsync(payload)
+      }
+      navigate('/catalogue/services')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Une erreur est survenue')
+    }
+  }
+
+  const isSaving = createMut.isPending || updateMut.isPending
+  const canSave  = form.nom.trim().length > 0 && form.prix.length > 0 && !isSaving
+
+  if (isEdit && loadingService) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center gap-2 py-32 text-sm text-gray-400">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          Chargement…
+        </div>
+      </Layout>
+    )
+  }
 
   return (
     <Layout>
@@ -291,7 +369,7 @@ export function CatalogueServiceForm() {
             <Button variant="outline" onClick={() => navigate('/catalogue/services')}>
               Annuler
             </Button>
-            <Button disabled={!canSave} className="gap-2">
+            <Button disabled={!canSave} loading={isSaving} onClick={handleSubmit} className="gap-2">
               <Save className="h-4 w-4" />
               {isEdit ? 'Enregistrer' : 'Créer'}
             </Button>
@@ -556,12 +634,20 @@ export function CatalogueServiceForm() {
           </div>
         </div>
 
+        {/* Bannière d'erreur */}
+        {error && (
+          <div className="flex items-start gap-2.5 mt-5 p-3 rounded-xl border border-red-100 bg-red-50 text-sm text-red-700">
+            <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+            <span>{error}</span>
+          </div>
+        )}
+
         {/* Footer actions */}
-        <div className="flex items-center justify-end gap-2 mt-6 pt-5 border-t border-gray-100">
+        <div className="flex items-center justify-end gap-2 mt-5 pt-5 border-t border-gray-100">
           <Button variant="outline" onClick={() => navigate('/catalogue/services')}>
             Annuler
           </Button>
-          <Button disabled={!canSave} className="gap-2">
+          <Button disabled={!canSave} loading={isSaving} onClick={handleSubmit} className="gap-2">
             <Save className="h-4 w-4" />
             {isEdit ? 'Enregistrer les modifications' : 'Créer le service'}
           </Button>

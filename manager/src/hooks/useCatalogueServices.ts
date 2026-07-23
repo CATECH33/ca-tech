@@ -5,31 +5,54 @@ import { supabase } from '@/lib/supabase'
 
 export type CatalogueCategorie = 'web' | 'ecommerce' | 'seo' | 'ia' | 'branding' | 'application' | 'autre'
 
+/** Shape complète d'un service (migration 009 + champs futurs migration 010). */
 export interface CatalogueService {
-  id: string
-  created_at: string
-  updated_at: string
-  nom: string
-  description: string
-  categorie: CatalogueCategorie
-  prix: number
-  visible: boolean
-  ordre: number
+  id:          string
+  created_at:  string
+  updated_at:  string
+  // ── Migration 009 (existant) ──────────────────────────────────────
+  nom:         string
+  description: string          // description_courte mappée à la colonne 'description'
+  categorie:   CatalogueCategorie
+  prix:        number
+  visible:     boolean
+  ordre:       number
+  // ── Migration 010 (à venir) ───────────────────────────────────────
+  slug:                 string | null
+  description_complete: string | null
+  image_url:            string | null
+  icone:                string | null
+  prix_barre:           number | null
+  cta_label:            string | null
+  seo_title:            string | null
+  seo_description:      string | null
 }
 
+/** Payload complet du formulaire → ce que les hooks acceptent. */
 export interface CatalogueServicePayload {
-  nom: string
-  description: string
-  categorie: CatalogueCategorie
-  prix: number
-  ordre: number
+  // ── Migration 009 ─────────────────────────────────────────────────
+  nom:               string
+  description_courte: string
+  categorie:         CatalogueCategorie
+  prix:              number
+  ordre:             number
+  visible:           boolean
+  // ── Migration 010 ─────────────────────────────────────────────────
+  slug:                 string
+  description_complete: string
+  image_url:            string | null
+  icone:                string
+  prix_barre:           number | null
+  cta_label:            string
+  seo_title:            string
+  seo_description:      string
 }
 
 // ─── Query key ─────────────────────────────────────────────────────────────────
 
 const Q = ['catalogue_services'] as const
 
-// ─── Map ──────────────────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function mapRow(r: Record<string, unknown>): CatalogueService {
   return {
@@ -42,6 +65,34 @@ function mapRow(r: Record<string, unknown>): CatalogueService {
     prix:        Number(r.prix ?? 0),
     visible:     Boolean(r.visible),
     ordre:       Number(r.ordre ?? 0),
+    // Champs migration 010
+    slug:                 (r.slug as string | null) ?? null,
+    description_complete: (r.description_complete as string | null) ?? null,
+    image_url:            (r.image_url as string | null) ?? null,
+    icone:                (r.icone as string | null) ?? null,
+    prix_barre:           r.prix_barre != null ? Number(r.prix_barre) : null,
+    cta_label:            (r.cta_label as string | null) ?? null,
+    seo_title:            (r.seo_title as string | null) ?? null,
+    seo_description:      (r.seo_description as string | null) ?? null,
+  }
+}
+
+function toDbRow(p: CatalogueServicePayload) {
+  return {
+    nom:                  p.nom,
+    description:          p.description_courte,
+    categorie:            p.categorie,
+    prix:                 p.prix,
+    ordre:                p.ordre,
+    visible:              p.visible,
+    slug:                 p.slug || null,
+    description_complete: p.description_complete,
+    image_url:            p.image_url,
+    icone:                p.icone,
+    prix_barre:           p.prix_barre,
+    cta_label:            p.cta_label,
+    seo_title:            p.seo_title,
+    seo_description:      p.seo_description,
   }
 }
 
@@ -62,6 +113,22 @@ export function useCatalogueServices() {
   })
 }
 
+export function useCatalogueServiceById(id: string | undefined) {
+  return useQuery({
+    queryKey: [...Q, id] as const,
+    enabled:  Boolean(id),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('catalogue_services')
+        .select('*')
+        .eq('id', id!)
+        .single()
+      if (error) throw error
+      return mapRow(data)
+    },
+  })
+}
+
 // ─── Mutations ────────────────────────────────────────────────────────────────
 
 export function useCreateCatalogueService() {
@@ -70,14 +137,7 @@ export function useCreateCatalogueService() {
     mutationFn: async (p: CatalogueServicePayload) => {
       const { data, error } = await supabase
         .from('catalogue_services')
-        .insert([{
-          nom:         p.nom,
-          description: p.description,
-          categorie:   p.categorie,
-          prix:        p.prix,
-          ordre:       p.ordre,
-          visible:     false,
-        }])
+        .insert([toDbRow(p)])
         .select()
         .single()
       if (error) throw error
@@ -93,13 +153,7 @@ export function useUpdateCatalogueService() {
     mutationFn: async ({ id, ...p }: CatalogueServicePayload & { id: string }) => {
       const { data, error } = await supabase
         .from('catalogue_services')
-        .update({
-          nom:         p.nom,
-          description: p.description,
-          categorie:   p.categorie,
-          prix:        p.prix,
-          ordre:       p.ordre,
-        })
+        .update(toDbRow(p))
         .eq('id', id)
         .select()
         .single()
