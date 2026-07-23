@@ -2,14 +2,21 @@ import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   Plus, Search, Edit, Trash2, Copy, Eye, EyeOff,
-  ChevronUp, ChevronDown, MoreHorizontal,
+  ChevronUp, ChevronDown, MoreHorizontal, Loader2,
 } from 'lucide-react'
 import { Layout } from '@/components/layout/Layout'
 import { Button } from '@/components/ui/Button'
 import { Modal } from '@/components/ui/Modal'
 import { Table, Thead, Tbody, Tr, Th, Td, EmptyRow } from '@/components/ui/Table'
 import { formatCurrency, formatDate, cn } from '@/lib/utils'
-import type { CatalogueCollaborateur, CollaborateurCategorie } from '@/hooks/useCatalogueCollaborateurs'
+import {
+  useCatalogueCollaborateurs,
+  useDeleteCatalogueCollaborateur,
+  useToggleCatalogueCollaborateurVisible,
+  useDuplicateCatalogueCollaborateur,
+  type CatalogueCollaborateur,
+  type CollaborateurCategorie,
+} from '@/hooks/useCatalogueCollaborateurs'
 
 // ─── Constants ─────────────────────────────────────────────────────────────────
 
@@ -52,16 +59,18 @@ function VisiblePill({ visible }: { visible: boolean }) {
 export function CatalogueCollaborateurs() {
   const navigate = useNavigate()
 
-  // Données locales — à brancher sur Supabase ultérieurement
-  const [collaborateurs, setCollaborateurs] = useState<CatalogueCollaborateur[]>([])
+  const { data: collaborateurs = [], isLoading, error: fetchError } = useCatalogueCollaborateurs()
+  const deleteMut    = useDeleteCatalogueCollaborateur()
+  const toggleMut    = useToggleCatalogueCollaborateurVisible()
+  const duplicateMut = useDuplicateCatalogueCollaborateur()
 
-  const [search, setSearch]       = useState('')
+  const [search,    setSearch]    = useState('')
   const [catFilter, setCatFilter] = useState<CollaborateurCategorie | 'all'>('all')
-  const [sortKey, setSortKey]     = useState<'ordre' | 'nom' | 'prix'>('ordre')
-  const [sortDir, setSortDir]     = useState<'asc' | 'desc'>('asc')
+  const [sortKey,   setSortKey]   = useState<'ordre' | 'nom' | 'prix'>('ordre')
+  const [sortDir,   setSortDir]   = useState<'asc' | 'desc'>('asc')
 
   const [deleteTarget, setDeleteTarget] = useState<CatalogueCollaborateur | null>(null)
-  const [openMenu, setOpenMenu]         = useState<string | null>(null)
+  const [openMenu,     setOpenMenu]     = useState<string | null>(null)
 
   // ── Filtres + tri ───────────────────────────────────────────────────────────
 
@@ -94,20 +103,41 @@ export function CatalogueCollaborateurs() {
       : <ChevronDown className="h-3 w-3 text-brand-500 inline ml-0.5" />
   }
 
-  // ── Actions (local) ─────────────────────────────────────────────────────────
+  // ── Actions ─────────────────────────────────────────────────────────────────
 
-  function handleDelete(c: CatalogueCollaborateur) {
-    setCollaborateurs(prev => prev.filter(x => x.id !== c.id))
+  async function handleDelete(c: CatalogueCollaborateur) {
+    await deleteMut.mutateAsync(c.id)
     setDeleteTarget(null)
   }
 
-  function handleToggle(c: CatalogueCollaborateur) {
-    setCollaborateurs(prev => prev.map(x => x.id === c.id ? { ...x, visible: !x.visible } : x))
+  async function handleToggle(c: CatalogueCollaborateur) {
+    await toggleMut.mutateAsync({ id: c.id, visible: !c.visible })
   }
 
-  // ── Render ──────────────────────────────────────────────────────────────────
+  async function handleDuplicate(c: CatalogueCollaborateur) {
+    setOpenMenu(null)
+    await duplicateMut.mutateAsync(c)
+  }
 
-  const stats = { total: collaborateurs.length, visible: collaborateurs.filter(c => c.visible).length }
+  // ── Stats ───────────────────────────────────────────────────────────────────
+
+  const stats = {
+    total:   collaborateurs.length,
+    visible: collaborateurs.filter(c => c.visible).length,
+  }
+
+  // ── Loading ─────────────────────────────────────────────────────────────────
+
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center gap-2 py-32 text-sm text-gray-400">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          Chargement…
+        </div>
+      </Layout>
+    )
+  }
 
   return (
     <Layout>
@@ -126,10 +156,16 @@ export function CatalogueCollaborateurs() {
             </p>
           </div>
           <Button onClick={() => navigate('/catalogue/collaborateurs/new')} className="gap-2">
-            <Plus className="h-4 w-4" />
-            Ajouter
+            <Plus className="h-4 w-4" />Ajouter
           </Button>
         </div>
+
+        {/* Erreur fetch */}
+        {fetchError && (
+          <div className="mb-4 p-3 rounded-xl border border-red-100 bg-red-50 text-sm text-red-700">
+            Impossible de charger les collaborateurs : {(fetchError as Error).message}
+          </div>
+        )}
 
         {/* Filtres */}
         <div className="flex flex-wrap items-center gap-3 mb-4">
@@ -184,19 +220,27 @@ export function CatalogueCollaborateurs() {
               ) : filtered.map(c => (
                 <Tr key={c.id}>
                   <Td>
-                    <div>
-                      <p className="font-medium text-gray-900 text-sm">{c.nom}</p>
-                      {c.description && (
-                        <p className="text-xs text-gray-400 mt-0.5 max-w-[260px] truncate">{c.description}</p>
-                      )}
+                    <div className="flex items-center gap-2.5">
+                      {c.icone && <span className="text-lg leading-none shrink-0">{c.icone}</span>}
+                      <div>
+                        <p className="font-medium text-gray-900 text-sm">{c.nom}</p>
+                        {c.description && (
+                          <p className="text-xs text-gray-400 mt-0.5 max-w-[240px] truncate">{c.description}</p>
+                        )}
+                      </div>
                     </div>
                   </Td>
                   <Td><CatBadge cat={c.categorie} /></Td>
                   <Td>
-                    <span className="font-semibold text-gray-900">{formatCurrency(c.prix)}</span>
+                    <div>
+                      <span className="font-semibold text-gray-900 text-sm">{formatCurrency(c.prix)}</span>
+                      {c.prix_barre && (
+                        <span className="ml-1.5 text-xs text-gray-400 line-through">{formatCurrency(c.prix_barre)}</span>
+                      )}
+                    </div>
                   </Td>
                   <Td>
-                    <button onClick={() => handleToggle(c)} title={c.visible ? 'Masquer' : 'Rendre visible'}>
+                    <button onClick={() => handleToggle(c)} title={c.visible ? 'Masquer' : 'Rendre visible'} disabled={toggleMut.isPending}>
                       <VisiblePill visible={c.visible} />
                     </button>
                   </Td>
@@ -231,14 +275,13 @@ export function CatalogueCollaborateurs() {
                                 onClick={() => { handleToggle(c); setOpenMenu(null) }}
                                 className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                               >
-                                {c.visible
-                                  ? <EyeOff className="h-3.5 w-3.5 text-gray-400" />
-                                  : <Eye className="h-3.5 w-3.5 text-gray-400" />}
+                                {c.visible ? <EyeOff className="h-3.5 w-3.5 text-gray-400" /> : <Eye className="h-3.5 w-3.5 text-gray-400" />}
                                 {c.visible ? 'Masquer' : 'Rendre visible'}
                               </button>
                               <button
-                                onClick={() => setOpenMenu(null)}
-                                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                                onClick={() => handleDuplicate(c)}
+                                disabled={duplicateMut.isPending}
+                                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50"
                               >
                                 <Copy className="h-3.5 w-3.5 text-gray-400" />
                                 Dupliquer
@@ -270,7 +313,7 @@ export function CatalogueCollaborateurs() {
         )}
       </div>
 
-      {/* ── Modal Suppression ───────────────────────────────────────────────── */}
+      {/* Modal suppression */}
       <Modal
         open={!!deleteTarget}
         onClose={() => setDeleteTarget(null)}
@@ -282,6 +325,7 @@ export function CatalogueCollaborateurs() {
             <Button variant="outline" onClick={() => setDeleteTarget(null)}>Annuler</Button>
             <Button
               variant="danger"
+              loading={deleteMut.isPending}
               onClick={() => deleteTarget && handleDelete(deleteTarget)}
             >
               Supprimer

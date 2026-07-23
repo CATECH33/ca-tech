@@ -304,7 +304,8 @@ export function CatalogueServiceForm() {
       categorie:            form.categorie,
       description_courte:   form.description_courte,
       description_complete: form.description_complete,
-      image_url:            null,    // upload à connecter après migration 010
+      image_url:            form.image ? null : form.imagePreview,
+      imageFile:            form.image ?? undefined,
       icone:                form.icone,
       prix:                 Number(form.prix) || 0,
       prix_barre:           form.prix_barre ? Number(form.prix_barre) : null,

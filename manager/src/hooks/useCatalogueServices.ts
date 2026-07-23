@@ -41,11 +41,25 @@ export interface CatalogueServicePayload {
   slug:                 string
   description_complete: string
   image_url:            string | null
+  imageFile?:           File | null
   icone:                string
   prix_barre:           number | null
   cta_label:            string
   seo_title:            string
   seo_description:      string
+}
+
+// ─── Storage ───────────────────────────────────────────────────────────────────
+
+const BUCKET = 'catalogue'
+
+async function uploadServiceImage(id: string, file: File): Promise<string> {
+  const ext = file.name.split('.').pop() ?? 'jpg'
+  const path = `services/${id}/main-${Date.now()}.${ext}`
+  const { error } = await supabase.storage.from(BUCKET).upload(path, file, { upsert: true })
+  if (error) throw error
+  const { data } = supabase.storage.from(BUCKET).getPublicUrl(path)
+  return data.publicUrl
 }
 
 // ─── Query key ─────────────────────────────────────────────────────────────────
@@ -141,7 +155,18 @@ export function useCreateCatalogueService() {
         .select()
         .single()
       if (error) throw error
-      return mapRow(data)
+      const row = mapRow(data)
+
+      if (p.imageFile) {
+        const url = await uploadServiceImage(row.id, p.imageFile)
+        const { error: e2 } = await supabase
+          .from('catalogue_services')
+          .update({ image_url: url })
+          .eq('id', row.id)
+        if (e2) throw e2
+        row.image_url = url
+      }
+      return row
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: Q }),
   })
@@ -151,9 +176,13 @@ export function useUpdateCatalogueService() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async ({ id, ...p }: CatalogueServicePayload & { id: string }) => {
+      const dbRow = toDbRow(p)
+      if (p.imageFile) {
+        dbRow.image_url = await uploadServiceImage(id, p.imageFile)
+      }
       const { data, error } = await supabase
         .from('catalogue_services')
-        .update(toDbRow(p))
+        .update(dbRow)
         .eq('id', id)
         .select()
         .single()

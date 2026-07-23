@@ -1,34 +1,51 @@
-import { useState, useRef, useCallback, type ChangeEvent } from 'react'
+import { useState, useEffect, useRef, useCallback, type ChangeEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
   ArrowLeft, Upload, X, ImageIcon, Smile, Eye, EyeOff,
-  Globe, Tag, Save, ChevronDown,
+  Globe, Tag, Save, ChevronDown, Plus, Trash2, Clock,
+  Target, Zap, Building2, Wrench, TrendingUp, HelpCircle,
+  MousePointerClick, ChevronUp, Loader2, AlertCircle,
 } from 'lucide-react'
 import { Layout } from '@/components/layout/Layout'
 import { Button } from '@/components/ui/Button'
 import { Input, Select, Textarea } from '@/components/ui/Input'
 import { Card, CardHeader, CardTitle } from '@/components/ui/Card'
 import { cn } from '@/lib/utils'
-import type { CollaborateurCategorie } from '@/hooks/useCatalogueCollaborateurs'
+import {
+  useCatalogueCollaborateurById,
+  useCreateCatalogueCollaborateur,
+  useUpdateCatalogueCollaborateur,
+  type CollaborateurCategorie,
+  type FaqItem,
+  type CatalogueCollaborateurPayload,
+} from '@/hooks/useCatalogueCollaborateurs'
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
 interface FormState {
-  nom: string
-  slug: string
-  categorie: CollaborateurCategorie
-  description_courte: string
+  nom:                  string
+  slug:                 string
+  categorie:            CollaborateurCategorie
+  description_courte:   string
   description_complete: string
-  image: File | null
-  imagePreview: string | null
-  icone: string
-  prix: string
-  prix_barre: string
-  cta_label: string
-  ordre: string
-  visible: boolean
-  seo_title: string
-  seo_description: string
+  mission:              string
+  fonctionnalites:      string[]
+  secteurs:             string[]
+  outils_compatibles:   string[]
+  resultats_attendus:   string[]
+  temps_installation:   string
+  image:                File | null
+  imagePreview:         string | null
+  icone:                string
+  prix:                 string
+  prix_barre:           string
+  cta_label:            string
+  cta_secondaire:       string
+  faq:                  FaqItem[]
+  seo_title:            string
+  seo_description:      string
+  ordre:                string
+  visible:              boolean
 }
 
 // ─── Constants ─────────────────────────────────────────────────────────────────
@@ -45,21 +62,29 @@ const CAT_OPTIONS = [
 const ICON_SUGGESTIONS = ['🤖', '🧠', '⚡', '✨', '🔮', '💡', '📊', '🎯', '🚀', '🔧', '📝', '🌐']
 
 const FORM_INIT: FormState = {
-  nom: '',
-  slug: '',
-  categorie: 'assistant',
-  description_courte: '',
+  nom:                  '',
+  slug:                 '',
+  categorie:            'assistant',
+  description_courte:   '',
   description_complete: '',
-  image: null,
-  imagePreview: null,
-  icone: '',
-  prix: '',
-  prix_barre: '',
-  cta_label: 'Activer ce collaborateur',
-  ordre: '1',
-  visible: false,
-  seo_title: '',
-  seo_description: '',
+  mission:              '',
+  fonctionnalites:      [],
+  secteurs:             [],
+  outils_compatibles:   [],
+  resultats_attendus:   [],
+  temps_installation:   '',
+  image:                null,
+  imagePreview:         null,
+  icone:                '',
+  prix:                 '',
+  prix_barre:           '',
+  cta_label:            'Activer ce collaborateur',
+  cta_secondaire:       '',
+  faq:                  [],
+  seo_title:            '',
+  seo_description:      '',
+  ordre:                '1',
+  visible:              false,
 }
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
@@ -77,7 +102,7 @@ function makeSlug(nom: string): string {
 
 interface ImageDropzoneProps {
   preview: string | null
-  onFile: (file: File) => void
+  onFile:  (file: File) => void
   onRemove: () => void
 }
 
@@ -204,20 +229,143 @@ function IconPicker({ value, onChange }: { value: string; onChange: (v: string) 
   )
 }
 
+// ─── DynamicList ───────────────────────────────────────────────────────────────
+
+interface DynamicListProps {
+  items:       string[]
+  onChange:    (items: string[]) => void
+  placeholder: string
+  addLabel:    string
+  asTags?:     boolean
+}
+
+function DynamicList({ items, onChange, placeholder, addLabel, asTags }: DynamicListProps) {
+  function add() { onChange([...items, '']) }
+  function remove(i: number) { onChange(items.filter((_, idx) => idx !== i)) }
+  function update(i: number, val: string) {
+    const next = [...items]; next[i] = val; onChange(next)
+  }
+  const filled = items.filter(s => s.trim())
+
+  return (
+    <div className="space-y-2">
+      {items.map((item, i) => (
+        <div key={i} className="flex items-center gap-2">
+          <input
+            value={item}
+            onChange={e => update(i, e.target.value)}
+            placeholder={placeholder}
+            className="flex-1 h-9 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+          />
+          <button
+            type="button"
+            onClick={() => remove(i)}
+            className="h-9 w-9 flex items-center justify-center rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors shrink-0"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={add}
+        className="flex items-center gap-1.5 text-xs text-brand-500 hover:text-brand-600 font-medium transition-colors mt-1"
+      >
+        <Plus className="h-3.5 w-3.5" />{addLabel}
+      </button>
+      {asTags && filled.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 pt-2 border-t border-gray-100 mt-2">
+          {filled.map((tag, i) => (
+            <span key={i} className="inline-flex items-center px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 text-xs font-medium">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ─── FaqEditor ─────────────────────────────────────────────────────────────────
+
+function FaqEditor({ items, onChange }: { items: FaqItem[]; onChange: (items: FaqItem[]) => void }) {
+  const [openIdx, setOpenIdx] = useState<number | null>(null)
+
+  function add() {
+    const next = [...items, { question: '', reponse: '' }]
+    onChange(next)
+    setOpenIdx(next.length - 1)
+  }
+  function remove(i: number) {
+    onChange(items.filter((_, idx) => idx !== i))
+    if (openIdx === i) setOpenIdx(null)
+  }
+  function updateQ(i: number, val: string) {
+    const next = [...items]; next[i] = { ...next[i], question: val }; onChange(next)
+  }
+  function updateR(i: number, val: string) {
+    const next = [...items]; next[i] = { ...next[i], reponse: val }; onChange(next)
+  }
+
+  return (
+    <div className="space-y-2">
+      {items.map((item, i) => {
+        const isOpen = openIdx === i
+        return (
+          <div key={i} className="border border-gray-200 rounded-xl overflow-hidden">
+            <div className="flex items-center gap-2 px-3 py-2.5 bg-gray-50">
+              <button type="button" onClick={() => setOpenIdx(isOpen ? null : i)} className="flex-1 flex items-center gap-2 text-left min-w-0">
+                <span className="h-5 w-5 rounded-full bg-brand-100 text-brand-600 text-[10px] font-bold flex items-center justify-center shrink-0">{i + 1}</span>
+                <span className={cn('text-sm truncate', item.question.trim() ? 'text-gray-800 font-medium' : 'text-gray-400 italic')}>
+                  {item.question.trim() || 'Nouvelle question…'}
+                </span>
+                {isOpen ? <ChevronUp className="h-3.5 w-3.5 text-gray-400 ml-auto shrink-0" /> : <ChevronDown className="h-3.5 w-3.5 text-gray-400 ml-auto shrink-0" />}
+              </button>
+              <button type="button" onClick={() => remove(i)} className="h-7 w-7 flex items-center justify-center rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors shrink-0">
+                <Trash2 className="h-3.5 w-3.5" />
+              </button>
+            </div>
+            {isOpen && (
+              <div className="p-3 space-y-3 border-t border-gray-100">
+                <input
+                  value={item.question}
+                  onChange={e => updateQ(i, e.target.value)}
+                  placeholder="Quelle est la question ?"
+                  className="w-full h-9 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                />
+                <textarea
+                  value={item.reponse}
+                  onChange={e => updateR(i, e.target.value)}
+                  placeholder="Réponse complète…"
+                  rows={3}
+                  className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent resize-y"
+                />
+              </div>
+            )}
+          </div>
+        )
+      })}
+      <button type="button" onClick={add} className="flex items-center gap-1.5 text-xs text-brand-500 hover:text-brand-600 font-medium transition-colors mt-1">
+        <Plus className="h-3.5 w-3.5" />Ajouter une question
+      </button>
+    </div>
+  )
+}
+
 // ─── SeoPreview ────────────────────────────────────────────────────────────────
 
 function SeoPreview({ title, description }: { title: string; description: string }) {
-  const displayTitle = title || 'Titre SEO du collaborateur'
-  const displayDesc  = description || 'Description meta qui apparaît dans les résultats Google.'
+  const t = title || 'Titre SEO du collaborateur'
+  const d = description || 'Description meta qui apparaît dans les résultats Google.'
   return (
     <div className="mt-3 rounded-xl border border-gray-100 bg-gray-50 p-3">
       <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-2 font-medium">Aperçu Google</p>
       <p className="text-[13px] text-[#1a0dab] font-medium leading-tight truncate">
-        {displayTitle.length > 60 ? displayTitle.slice(0, 57) + '…' : displayTitle}
+        {t.length > 60 ? t.slice(0, 57) + '…' : t}
       </p>
       <p className="text-[11px] text-[#006621] mt-0.5">ca-tech.fr › collaborateurs › …</p>
       <p className="text-[12px] text-[#545454] mt-0.5 leading-snug line-clamp-2">
-        {displayDesc.length > 160 ? displayDesc.slice(0, 157) + '…' : displayDesc}
+        {d.length > 160 ? d.slice(0, 157) + '…' : d}
       </p>
     </div>
   )
@@ -226,12 +374,51 @@ function SeoPreview({ title, description }: { title: string; description: string
 // ─── Page ──────────────────────────────────────────────────────────────────────
 
 export function CatalogueCollaborateurForm() {
-  const navigate = useNavigate()
-  const { id }   = useParams<{ id: string }>()
-  const isEdit   = Boolean(id)
+  const navigate  = useNavigate()
+  const { id }    = useParams<{ id: string }>()
+  const isEdit    = Boolean(id)
 
-  const [form, setForm]         = useState<FormState>(FORM_INIT)
+  const createMut = useCreateCatalogueCollaborateur()
+  const updateMut = useUpdateCatalogueCollaborateur()
+  const { data: collab, isLoading: loadingCollab } = useCatalogueCollaborateurById(id)
+
+  const [form, setForm]             = useState<FormState>(FORM_INIT)
   const [slugManual, setSlugManual] = useState(false)
+  const [error, setError]           = useState<string | null>(null)
+
+  // ── Hydratation en mode édition ─────────────────────────────────────────────
+
+  useEffect(() => {
+    if (!collab) return
+    setSlugManual(Boolean(collab.slug))
+    setForm({
+      nom:                  collab.nom,
+      slug:                 collab.slug ?? makeSlug(collab.nom),
+      categorie:            collab.categorie,
+      description_courte:   collab.description,
+      description_complete: collab.description_complete,
+      mission:              collab.mission,
+      fonctionnalites:      collab.fonctionnalites,
+      secteurs:             collab.secteurs,
+      outils_compatibles:   collab.outils_compatibles,
+      resultats_attendus:   collab.resultats_attendus,
+      temps_installation:   collab.temps_installation,
+      image:                null,
+      imagePreview:         collab.image_url ?? null,
+      icone:                collab.icone,
+      prix:                 String(collab.prix),
+      prix_barre:           collab.prix_barre != null ? String(collab.prix_barre) : '',
+      cta_label:            collab.cta_label,
+      cta_secondaire:       collab.cta_secondaire,
+      faq:                  collab.faq,
+      seo_title:            collab.seo_title,
+      seo_description:      collab.seo_description,
+      ordre:                String(collab.ordre),
+      visible:              collab.visible,
+    })
+  }, [collab])
+
+  // ── Helpers ─────────────────────────────────────────────────────────────────
 
   function set<K extends keyof FormState>(key: K, val: FormState[K]) {
     setForm(f => ({ ...f, [key]: val }))
@@ -253,7 +440,62 @@ export function CatalogueCollaborateurForm() {
     setForm(f => ({ ...f, image: null, imagePreview: null }))
   }
 
-  const canSave = form.nom.trim().length > 0 && form.prix.length > 0
+  // ── Submit ──────────────────────────────────────────────────────────────────
+
+  async function handleSubmit() {
+    setError(null)
+    const payload: CatalogueCollaborateurPayload = {
+      nom:                  form.nom.trim(),
+      slug:                 form.slug,
+      description_courte:   form.description_courte,
+      description_complete: form.description_complete,
+      mission:              form.mission,
+      fonctionnalites:      form.fonctionnalites.filter(s => s.trim()),
+      secteurs:             form.secteurs.filter(s => s.trim()),
+      outils_compatibles:   form.outils_compatibles.filter(s => s.trim()),
+      resultats_attendus:   form.resultats_attendus.filter(s => s.trim()),
+      temps_installation:   form.temps_installation,
+      categorie:            form.categorie,
+      image_url:            form.image ? null : form.imagePreview,
+      imageFile:            form.image ?? undefined,
+      icone:                form.icone,
+      prix:                 Number(form.prix) || 0,
+      prix_barre:           form.prix_barre ? Number(form.prix_barre) : null,
+      cta_label:            form.cta_label,
+      cta_secondaire:       form.cta_secondaire,
+      faq:                  form.faq.filter(f => f.question.trim()),
+      seo_title:            form.seo_title,
+      seo_description:      form.seo_description,
+      visible:              form.visible,
+      ordre:                Number(form.ordre) || 1,
+    }
+    try {
+      if (isEdit && id) {
+        await updateMut.mutateAsync({ id, ...payload })
+      } else {
+        await createMut.mutateAsync(payload)
+      }
+      navigate('/catalogue/collaborateurs')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Une erreur est survenue')
+    }
+  }
+
+  const isSaving = createMut.isPending || updateMut.isPending
+  const canSave  = form.nom.trim().length > 0 && form.prix.length > 0 && !isSaving
+
+  // ── Loading skeleton (edit) ─────────────────────────────────────────────────
+
+  if (isEdit && loadingCollab) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center gap-2 py-32 text-sm text-gray-400">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          Chargement…
+        </div>
+      </Layout>
+    )
+  }
 
   return (
     <Layout>
@@ -281,10 +523,8 @@ export function CatalogueCollaborateurForm() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={() => navigate('/catalogue/collaborateurs')}>
-              Annuler
-            </Button>
-            <Button disabled={!canSave} className="gap-2">
+            <Button variant="outline" onClick={() => navigate('/catalogue/collaborateurs')}>Annuler</Button>
+            <Button disabled={!canSave} loading={isSaving} onClick={handleSubmit} className="gap-2">
               <Save className="h-4 w-4" />
               {isEdit ? 'Enregistrer' : 'Créer'}
             </Button>
@@ -294,144 +534,112 @@ export function CatalogueCollaborateurForm() {
         {/* Layout deux colonnes */}
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-5">
 
-          {/* ── Colonne principale ──────────────────────────────────────── */}
+          {/* ── Colonne principale ── */}
           <div className="space-y-5">
 
-            {/* Informations générales */}
             <Card>
               <CardHeader><CardTitle>Informations générales</CardTitle></CardHeader>
               <div className="space-y-4">
-                <Input
-                  label="Nom *"
-                  placeholder="Ex : Assistant Rédaction IA"
-                  value={form.nom}
-                  onChange={e => handleNomChange(e.target.value)}
-                />
+                <Input label="Nom *" placeholder="Ex : Assistant Rédaction IA" value={form.nom} onChange={e => handleNomChange(e.target.value)} />
 
-                {/* Slug */}
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-medium text-gray-700">Slug</label>
                   <div className="flex items-center gap-0 rounded-lg border border-gray-200 focus-within:ring-2 focus-within:ring-brand-500 focus-within:border-transparent overflow-hidden bg-white">
-                    <span className="h-9 px-3 flex items-center text-xs text-gray-400 bg-gray-50 border-r border-gray-200 shrink-0 select-none">
-                      /collaborateurs/
-                    </span>
+                    <span className="h-9 px-3 flex items-center text-xs text-gray-400 bg-gray-50 border-r border-gray-200 shrink-0 select-none">/collaborateurs/</span>
                     <input
                       value={form.slug}
-                      onChange={e => {
-                        setSlugManual(true)
-                        set('slug', e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))
-                      }}
+                      onChange={e => { setSlugManual(true); set('slug', e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '')) }}
                       placeholder="nom-du-collaborateur"
                       className="flex-1 h-9 px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none bg-transparent"
                     />
                   </div>
                   {slugManual && (
-                    <button
-                      type="button"
-                      onClick={() => { setSlugManual(false); set('slug', makeSlug(form.nom)) }}
-                      className="text-[11px] text-brand-500 hover:text-brand-600 text-left transition-colors"
-                    >
+                    <button type="button" onClick={() => { setSlugManual(false); set('slug', makeSlug(form.nom)) }} className="text-[11px] text-brand-500 hover:text-brand-600 text-left transition-colors">
                       Regénérer depuis le nom
                     </button>
                   )}
                 </div>
 
-                <Select
-                  label="Catégorie"
-                  value={form.categorie}
-                  options={CAT_OPTIONS}
-                  onChange={e => set('categorie', e.target.value as CollaborateurCategorie)}
-                />
+                <Select label="Catégorie" value={form.categorie} options={CAT_OPTIONS} onChange={e => set('categorie', e.target.value as CollaborateurCategorie)} />
 
-                <Textarea
-                  label="Description courte"
-                  placeholder="Résumé en 1-2 phrases affiché dans les cartes et les aperçus…"
-                  value={form.description_courte}
-                  onChange={e => set('description_courte', e.target.value)}
-                />
-                <div className="flex justify-end">
-                  <span className={cn(
-                    'text-[11px]',
-                    form.description_courte.length > 160 ? 'text-amber-500' : 'text-gray-400'
-                  )}>
-                    {form.description_courte.length}/160
-                  </span>
+                <div className="flex flex-col gap-1">
+                  <Textarea label="Description courte" placeholder="Résumé en 1-2 phrases affiché dans les cartes…" value={form.description_courte} onChange={e => set('description_courte', e.target.value)} />
+                  <div className="flex justify-end">
+                    <span className={cn('text-[11px]', form.description_courte.length > 160 ? 'text-amber-500' : 'text-gray-400')}>{form.description_courte.length}/160</span>
+                  </div>
                 </div>
               </div>
             </Card>
 
-            {/* Description complète */}
             <Card>
-              <CardHeader><CardTitle>Description complète</CardTitle></CardHeader>
-              <Textarea
-                placeholder="Décrivez le collaborateur en détail : ses capacités, cas d'usage, limites, exemples concrets…"
-                value={form.description_complete}
-                onChange={e => set('description_complete', e.target.value)}
-                className="min-h-[180px]"
-              />
+              <CardHeader><CardTitle>Présentation & Mission</CardTitle></CardHeader>
+              <div className="space-y-4">
+                <Textarea label="Présentation complète" placeholder="Décrivez le collaborateur en détail : capacités, cas d'usage, exemples…" value={form.description_complete} onChange={e => set('description_complete', e.target.value)} className="min-h-[160px]" />
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-medium text-gray-700 flex items-center gap-1.5">
+                    <Target className="h-3.5 w-3.5 text-gray-400" />Mission
+                  </label>
+                  <Textarea placeholder="En une ou deux phrases, quelle est la mission principale de ce collaborateur IA ?" value={form.mission} onChange={e => set('mission', e.target.value)} className="min-h-[80px]" />
+                </div>
+              </div>
             </Card>
 
-            {/* Médias */}
             <Card>
-              <CardHeader>
-                <CardTitle>Médias</CardTitle>
-              </CardHeader>
+              <CardHeader><CardTitle className="flex items-center gap-2"><Zap className="h-4 w-4 text-gray-400" />Fonctionnalités</CardTitle></CardHeader>
+              <DynamicList items={form.fonctionnalites} onChange={v => set('fonctionnalites', v)} placeholder="Ex : Génération automatique de contenu SEO" addLabel="Ajouter une fonctionnalité" />
+              {form.fonctionnalites.length === 0 && <p className="text-xs text-gray-400 mt-2">Aucune fonctionnalité ajoutée</p>}
+            </Card>
+
+            <Card>
+              <CardHeader><CardTitle className="flex items-center gap-2"><Building2 className="h-4 w-4 text-gray-400" />Secteurs d'activité</CardTitle></CardHeader>
+              <DynamicList items={form.secteurs} onChange={v => set('secteurs', v)} placeholder="Ex : E-commerce, Immobilier, Santé…" addLabel="Ajouter un secteur" asTags />
+              {form.secteurs.length === 0 && <p className="text-xs text-gray-400 mt-2">Aucun secteur ajouté</p>}
+            </Card>
+
+            <Card>
+              <CardHeader><CardTitle className="flex items-center gap-2"><Wrench className="h-4 w-4 text-gray-400" />Outils compatibles</CardTitle></CardHeader>
+              <DynamicList items={form.outils_compatibles} onChange={v => set('outils_compatibles', v)} placeholder="Ex : Notion, Slack, Google Sheets…" addLabel="Ajouter un outil" asTags />
+              {form.outils_compatibles.length === 0 && <p className="text-xs text-gray-400 mt-2">Aucun outil ajouté</p>}
+            </Card>
+
+            <Card>
+              <CardHeader><CardTitle className="flex items-center gap-2"><TrendingUp className="h-4 w-4 text-gray-400" />Résultats attendus</CardTitle></CardHeader>
+              <DynamicList items={form.resultats_attendus} onChange={v => set('resultats_attendus', v)} placeholder="Ex : +40% de productivité sur la création de contenu" addLabel="Ajouter un résultat" />
+              {form.resultats_attendus.length === 0 && <p className="text-xs text-gray-400 mt-2">Aucun résultat ajouté</p>}
+            </Card>
+
+            <Card>
+              <CardHeader><CardTitle className="flex items-center gap-2"><HelpCircle className="h-4 w-4 text-gray-400" />FAQ</CardTitle></CardHeader>
+              <FaqEditor items={form.faq} onChange={v => set('faq', v)} />
+              {form.faq.length === 0 && <p className="text-xs text-gray-400 mt-2">Aucune question ajoutée</p>}
+            </Card>
+
+            <Card>
+              <CardHeader><CardTitle>Médias</CardTitle></CardHeader>
               <div className="space-y-5">
                 <div>
                   <p className="text-xs font-medium text-gray-700 mb-2 flex items-center gap-1.5">
-                    <Upload className="h-3.5 w-3.5 text-gray-400" />
-                    Image principale
+                    <Upload className="h-3.5 w-3.5 text-gray-400" />Image principale
                   </p>
-                  <ImageDropzone
-                    preview={form.imagePreview}
-                    onFile={handleImage}
-                    onRemove={removeImage}
-                  />
+                  <ImageDropzone preview={form.imagePreview} onFile={handleImage} onRemove={removeImage} />
                 </div>
                 <IconPicker value={form.icone} onChange={v => set('icone', v)} />
               </div>
             </Card>
 
-            {/* SEO */}
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Globe className="h-4 w-4 text-gray-400" />
-                  Référencement (SEO)
-                </CardTitle>
-              </CardHeader>
+              <CardHeader><CardTitle className="flex items-center gap-2"><Globe className="h-4 w-4 text-gray-400" />Référencement (SEO)</CardTitle></CardHeader>
               <div className="space-y-4">
                 <div className="flex flex-col gap-1">
-                  <Input
-                    label="Titre SEO"
-                    placeholder="Titre optimisé pour Google…"
-                    value={form.seo_title}
-                    onChange={e => set('seo_title', e.target.value)}
-                  />
+                  <Input label="Titre SEO" placeholder="Titre optimisé pour Google…" value={form.seo_title} onChange={e => set('seo_title', e.target.value)} />
                   <div className="flex justify-end">
-                    <span className={cn(
-                      'text-[11px]',
-                      form.seo_title.length > 60 ? 'text-amber-500' : 'text-gray-400'
-                    )}>
-                      {form.seo_title.length}/60
-                    </span>
+                    <span className={cn('text-[11px]', form.seo_title.length > 60 ? 'text-amber-500' : 'text-gray-400')}>{form.seo_title.length}/60</span>
                   </div>
                 </div>
                 <div className="flex flex-col gap-1">
-                  <Textarea
-                    label="Description SEO"
-                    placeholder="Description meta affichée dans les résultats de recherche…"
-                    value={form.seo_description}
-                    onChange={e => set('seo_description', e.target.value)}
-                    className="min-h-[80px]"
-                  />
+                  <Textarea label="Description SEO" placeholder="Description meta affichée dans les résultats de recherche…" value={form.seo_description} onChange={e => set('seo_description', e.target.value)} className="min-h-[80px]" />
                   <div className="flex justify-end">
-                    <span className={cn(
-                      'text-[11px]',
-                      form.seo_description.length > 160 ? 'text-amber-500' : 'text-gray-400'
-                    )}>
-                      {form.seo_description.length}/160
-                    </span>
+                    <span className={cn('text-[11px]', form.seo_description.length > 160 ? 'text-amber-500' : 'text-gray-400')}>{form.seo_description.length}/160</span>
                   </div>
                 </div>
                 <SeoPreview title={form.seo_title} description={form.seo_description} />
@@ -439,10 +647,9 @@ export function CatalogueCollaborateurForm() {
             </Card>
           </div>
 
-          {/* ── Colonne latérale ────────────────────────────────────────── */}
+          {/* ── Colonne latérale ── */}
           <div className="space-y-5">
 
-            {/* Publication */}
             <Card>
               <CardHeader><CardTitle>Publication</CardTitle></CardHeader>
               <div className="space-y-4">
@@ -454,106 +661,76 @@ export function CatalogueCollaborateurForm() {
                   <button
                     type="button"
                     onClick={() => set('visible', !form.visible)}
-                    className={cn(
-                      'relative w-10 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-1',
-                      form.visible ? 'bg-brand-500' : 'bg-gray-200'
-                    )}
+                    className={cn('relative w-10 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-1', form.visible ? 'bg-brand-500' : 'bg-gray-200')}
                     style={{ height: '22px' }}
                     role="switch"
                     aria-checked={form.visible}
                   >
-                    <span className={cn(
-                      'absolute top-0.5 h-4 w-4 rounded-full bg-white shadow-sm transition-transform',
-                      form.visible ? 'translate-x-5' : 'translate-x-0.5'
-                    )} />
+                    <span className={cn('absolute top-0.5 h-4 w-4 rounded-full bg-white shadow-sm transition-transform', form.visible ? 'translate-x-5' : 'translate-x-0.5')} />
                   </button>
                 </div>
-
-                {form.visible ? (
-                  <div className="flex items-center gap-1.5 text-xs text-emerald-600 bg-emerald-50 rounded-lg px-3 py-2">
-                    <Eye className="h-3.5 w-3.5" />
-                    Visible sur le site
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-1.5 text-xs text-gray-500 bg-gray-50 rounded-lg px-3 py-2">
-                    <EyeOff className="h-3.5 w-3.5" />
-                    Non publié
-                  </div>
-                )}
-
-                <Input
-                  label="Ordre d'affichage"
-                  type="number"
-                  min="1"
-                  value={form.ordre}
-                  onChange={e => set('ordre', e.target.value)}
-                  hint="1 = affiché en premier"
-                />
+                {form.visible
+                  ? <div className="flex items-center gap-1.5 text-xs text-emerald-600 bg-emerald-50 rounded-lg px-3 py-2"><Eye className="h-3.5 w-3.5" />Visible sur le site</div>
+                  : <div className="flex items-center gap-1.5 text-xs text-gray-500 bg-gray-50 rounded-lg px-3 py-2"><EyeOff className="h-3.5 w-3.5" />Non publié</div>
+                }
+                <Input label="Ordre d'affichage" type="number" min="1" value={form.ordre} onChange={e => set('ordre', e.target.value)} hint="1 = affiché en premier" />
               </div>
             </Card>
 
-            {/* Tarification */}
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Tag className="h-4 w-4 text-gray-400" />
-                  Tarification
-                </CardTitle>
-              </CardHeader>
+              <CardHeader><CardTitle className="flex items-center gap-2"><Tag className="h-4 w-4 text-gray-400" />Tarification</CardTitle></CardHeader>
               <div className="space-y-4">
-                <Input
-                  label="Prix (€) *"
-                  type="number"
-                  min="0"
-                  placeholder="0"
-                  value={form.prix}
-                  onChange={e => set('prix', e.target.value)}
-                />
-
+                <Input label="Prix (€) *" type="number" min="0" placeholder="0" value={form.prix} onChange={e => set('prix', e.target.value)} />
                 <div className="flex flex-col gap-1">
-                  <Input
-                    label="Prix barré (€)"
-                    type="number"
-                    min="0"
-                    placeholder="Optionnel"
-                    value={form.prix_barre}
-                    onChange={e => set('prix_barre', e.target.value)}
-                  />
+                  <Input label="Prix barré (€)" type="number" min="0" placeholder="Optionnel" value={form.prix_barre} onChange={e => set('prix_barre', e.target.value)} />
                   {form.prix_barre && form.prix && Number(form.prix_barre) > Number(form.prix) && (
                     <div className="flex items-center gap-2 text-xs text-gray-600 bg-gray-50 rounded-lg px-3 py-2 mt-1">
                       <span className="line-through text-gray-400">{form.prix_barre} €</span>
                       <span className="text-gray-700 font-semibold">{form.prix} €</span>
-                      <span className="ml-auto text-emerald-600 font-medium">
-                        -{Math.round((1 - Number(form.prix) / Number(form.prix_barre)) * 100)}%
-                      </span>
+                      <span className="ml-auto text-emerald-600 font-medium">-{Math.round((1 - Number(form.prix) / Number(form.prix_barre)) * 100)}%</span>
                     </div>
                   )}
                 </div>
+                <Input label="Temps d'installation" placeholder="Ex : 2 heures, 30 minutes…" value={form.temps_installation} onChange={e => set('temps_installation', e.target.value)} leading={<Clock className="h-3.5 w-3.5" />} />
+              </div>
+            </Card>
 
-                <Input
-                  label="Libellé du bouton CTA"
-                  placeholder="Ex : Activer ce collaborateur"
-                  value={form.cta_label}
-                  onChange={e => set('cta_label', e.target.value)}
-                />
-                {form.cta_label && (
-                  <div className="flex">
-                    <span className="inline-flex items-center px-4 py-2 rounded-lg bg-brand-500 text-white text-sm font-medium">
-                      {form.cta_label}
-                    </span>
-                  </div>
-                )}
+            <Card>
+              <CardHeader><CardTitle className="flex items-center gap-2"><MousePointerClick className="h-4 w-4 text-gray-400" />Appels à l'action</CardTitle></CardHeader>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Input label="CTA principal" placeholder="Ex : Activer ce collaborateur" value={form.cta_label} onChange={e => set('cta_label', e.target.value)} />
+                  {form.cta_label && (
+                    <div className="flex">
+                      <span className="inline-flex items-center px-4 py-2 rounded-lg bg-brand-500 text-white text-sm font-medium">{form.cta_label}</span>
+                    </div>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <Input label="CTA secondaire" placeholder="Ex : Voir une démo" value={form.cta_secondaire} onChange={e => set('cta_secondaire', e.target.value)} />
+                  {form.cta_secondaire && (
+                    <div className="flex">
+                      <span className="inline-flex items-center px-4 py-2 rounded-lg border border-gray-300 text-gray-700 text-sm font-medium">{form.cta_secondaire}</span>
+                    </div>
+                  )}
+                </div>
               </div>
             </Card>
           </div>
         </div>
 
-        {/* Footer actions */}
+        {/* Bannière d'erreur */}
+        {error && (
+          <div className="flex items-start gap-2.5 mt-5 p-3 rounded-xl border border-red-100 bg-red-50 text-sm text-red-700">
+            <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+            <span>{error}</span>
+          </div>
+        )}
+
+        {/* Footer */}
         <div className="flex items-center justify-end gap-2 mt-5 pt-5 border-t border-gray-100">
-          <Button variant="outline" onClick={() => navigate('/catalogue/collaborateurs')}>
-            Annuler
-          </Button>
-          <Button disabled={!canSave} className="gap-2">
+          <Button variant="outline" onClick={() => navigate('/catalogue/collaborateurs')}>Annuler</Button>
+          <Button disabled={!canSave} loading={isSaving} onClick={handleSubmit} className="gap-2">
             <Save className="h-4 w-4" />
             {isEdit ? 'Enregistrer les modifications' : 'Créer le collaborateur'}
           </Button>
