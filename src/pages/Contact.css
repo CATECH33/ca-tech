@@ -200,6 +200,16 @@ a.ct-info-value:hover { color: #60A5FA; }
   background: rgba(0,102,255,.06);
 }
 
+.ct-error {
+  background: rgba(239,68,68,.12);
+  border: 1px solid rgba(239,68,68,.35);
+  color: #fca5a5;
+  border-radius: 8px;
+  padding: .75rem 1rem;
+  font-size: .85rem;
+  margin-bottom: .5rem;
+}
+
 .ct-submit {
   background: #0066FF;
   color: #fff;
@@ -214,9 +224,14 @@ a.ct-info-value:hover { color: #60A5FA; }
   box-shadow: 0 0 25px rgba(0,102,255,.3);
 }
 
-.ct-submit:hover {
+.ct-submit:hover:not(:disabled) {
   background: #1a7aff;
   transform: translateY(-2px);
+}
+
+.ct-submit:disabled {
+  opacity: .6;
+  cursor: not-allowed;
 }
 
 .ct-legal {

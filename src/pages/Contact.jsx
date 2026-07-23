@@ -1,18 +1,41 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
 import './Contact.css'
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' })
   const [sent, setSent] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
 
   function set(field) {
     return e => setForm(f => ({ ...f, [field]: e.target.value }))
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
-    setSent(true)
+    setLoading(true)
+    setError(null)
+
+    const body = form.phone
+      ? `Tél : ${form.phone}\n\n${form.message}`
+      : form.message
+
+    const { error: err } = await supabase.from('messages').insert({
+      from_name: form.name,
+      from_email: form.email,
+      subject: 'Contact depuis le site',
+      body,
+      source: 'contact',
+    })
+
+    setLoading(false)
+    if (err) {
+      setError('Une erreur est survenue. Veuillez réessayer ou nous contacter par email.')
+    } else {
+      setSent(true)
+    }
   }
 
   return (
@@ -115,7 +138,10 @@ export default function Contact() {
                   <textarea id="ct-message" rows={6} placeholder="Décrivez votre projet ou votre besoin..." required value={form.message} onChange={set('message')} />
                 </div>
 
-                <button type="submit" className="ct-submit">Envoyer le message →</button>
+                {error && <p className="ct-error">{error}</p>}
+                <button type="submit" className="ct-submit" disabled={loading}>
+                  {loading ? 'Envoi en cours…' : 'Envoyer le message →'}
+                </button>
                 <p className="ct-legal">En soumettant ce formulaire, vous acceptez notre <a href="/politique-de-confidentialite">politique de confidentialité</a>.</p>
               </form>
             )}
