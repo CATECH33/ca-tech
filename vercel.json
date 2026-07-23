@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build && for f in index.html services.html loic.html collaborateurs-ia.html automatisations.html realisations.html contact.html catalogue.html tarifs.html; do cp dist/index.html $f; done && cp manager/dist/index.html manager/index.html",
+  "buildCommand": "npm run build && cd manager && npm install && npm run build && cd .. && for f in index.html services.html loic.html collaborateurs-ia.html automatisations.html realisations.html contact.html catalogue.html tarifs.html; do cp dist/index.html $f; done && cp manager/dist/index.html manager/index.html",
   "outputDirectory": ".",
   "cleanUrls": true,
   "trailingSlash": false,
@@ -37,10 +37,12 @@
     { "source": "/blog/(.*)",        "destination": "/",             "permanent": true },
     { "source": "/diagnostic-ia",    "destination": "/contact",      "permanent": true },
     { "source": "/nos-realisations", "destination": "/realisations", "permanent": true },
-    { "source": "/loic-ia",         "destination": "/loic",          "permanent": true }
+    { "source": "/loic-ia",         "destination": "/loic",          "permanent": true },
+    { "source": "/manager/(.*)",    "destination": "https://manager.ca-tech.fr/$1", "permanent": false },
+    { "source": "/manager",         "destination": "https://manager.ca-tech.fr/",   "permanent": false }
   ],
   "rewrites": [
-    { "source": "/manager/assets/(.*)", "destination": "/manager/dist/assets/$1" },
-    { "source": "/manager/(.*)",        "destination": "/manager/dist/index.html" }
+    { "source": "/manager/assets/(.*)", "has": [{ "type": "host", "value": "manager.ca-tech.fr" }], "destination": "/manager/dist/assets/$1" },
+    { "source": "/(.*)",                "has": [{ "type": "host", "value": "manager.ca-tech.fr" }], "destination": "/manager/dist/index.html" }
   ]
 }

@@ -105,7 +105,7 @@ function ProtectedApp() {
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter basename="/manager">
+      <BrowserRouter basename="/">
         <AuthProvider>
           <ProtectedApp />
         </AuthProvider>
