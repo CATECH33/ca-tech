@@ -1,7 +1,11 @@
-import { useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import DetailDrawer from '../components/DetailDrawer'
 import './CollaborateursIA.css'
 
+/* ══════════════════════════════════════════════════
+   DONNÉES COLLABORATEURS
+══════════════════════════════════════════════════ */
 const COLLABORATEURS = [
   {
     id: 'commercial',
@@ -19,7 +23,40 @@ const COLLABORATEURS = [
       { val: '−12h', lbl: '/semaine sur la prospection' },
       { val: '+38 %', lbl: 'de taux de réponse' },
     ],
-    cta: { label: 'Tester Loïc', href: '/loic', variant: 'primary' },
+    fonctionnalites: [
+      'Scoring de leads de 0 à 100',
+      'Propositions commerciales en < 10 min',
+      'Séquences multicanal email · LinkedIn · WhatsApp',
+      'Analyse des objections et réponses adaptées',
+      'Mise à jour automatique du CRM',
+      'Reporting commercial hebdomadaire',
+    ],
+    secteurs: ['PME & Startups', 'Agences', 'E-commerce', 'Conseil', 'BTP & Artisans'],
+    exemples: [
+      {
+        ctx: 'Agence web — 5 collaborateurs',
+        desc: 'Le Commercial IA reçoit chaque formulaire, score le lead, rédige une proposition sur mesure en 10 min et relance 3 fois en 7 jours. Résultat : +42 % de devis signés sans recruter.',
+      },
+      {
+        ctx: 'Startup SaaS — 12 personnes',
+        desc: 'Chaque lead Meta Ads est qualifié, nourri par 5 emails personnalisés et transmis au bon commercial au bon moment. Coût d\'acquisition divisé par 2 en 3 mois.',
+      },
+    ],
+    integrationsCompatibles: ['HubSpot', 'Pipedrive', 'Gmail', 'LinkedIn', 'Slack', 'Calendly', 'WhatsApp'],
+    faq: [
+      {
+        q: 'En combien de temps est-il opérationnel ?',
+        a: 'Entre 24 et 48h. On configure vos offres, vos cibles et vos outils lors d\'une session initiale — ensuite tout tourne automatiquement.',
+      },
+      {
+        q: 'Peut-il gérer plusieurs offres ou segments clients ?',
+        a: 'Oui. On définit autant de profils d\'acheteur que vous avez d\'offres. Il adapte son discours à chaque segment automatiquement.',
+      },
+      {
+        q: 'Que se passe-t-il si un lead pose une question complexe ?',
+        a: 'Il escalade la conversation vers vous avec le contexte complet — vous n\'intervenez que quand c\'est vraiment nécessaire.',
+      },
+    ],
   },
   {
     id: 'support',
@@ -37,7 +74,40 @@ const COLLABORATEURS = [
       { val: '−60 %', lbl: 'de tickets traités manuellement' },
       { val: '< 2 s', lbl: 'de temps de réponse moyen' },
     ],
-    cta: { label: 'Découvrir', href: '/contact', variant: 'outline' },
+    fonctionnalites: [
+      'Réponse instantanée < 2 secondes',
+      'Base de connaissance apprise sur vos docs',
+      'Escalade intelligente vers l\'humain',
+      'Support multicanal — email, chat, WhatsApp',
+      'Enquêtes de satisfaction automatiques',
+      'Tableau de bord des tickets en temps réel',
+    ],
+    secteurs: ['E-commerce', 'SaaS & Tech', 'Services B2B', 'Immobilier', 'Restauration & Hôtellerie'],
+    exemples: [
+      {
+        ctx: 'E-commerce — 2 000 commandes/mois',
+        desc: '80 % des questions sur les livraisons, retours et tailles sont résolues sans intervention humaine. L\'équipe ne traite plus que les cas réellement complexes.',
+      },
+      {
+        ctx: 'SaaS — 5 000 utilisateurs actifs',
+        desc: 'Le Support IA connaît la documentation, le changelog et les bugs connus. Il répond, crée les tickets critiques et avertit l\'équipe technique en temps réel.',
+      },
+    ],
+    integrationsCompatibles: ['Zendesk', 'Intercom', 'WhatsApp', 'Gmail', 'Slack', 'Notion', 'Freshdesk'],
+    faq: [
+      {
+        q: 'Comment l\'IA apprend-elle mon activité ?',
+        a: 'On lui fournit vos FAQs, CGV, documentation produit et anciens tickets. Elle apprend en quelques heures et s\'améliore chaque semaine au fil des interactions.',
+      },
+      {
+        q: 'Gère-t-il plusieurs langues ?',
+        a: 'Oui — français, anglais et 20+ langues. Il détecte automatiquement la langue du client et répond dans la même langue sans configuration supplémentaire.',
+      },
+      {
+        q: 'Que se passe-t-il sur un cas très complexe ?',
+        a: 'Il escalade proprement : résume la conversation, identifie l\'urgence et notifie le bon membre de l\'équipe par Slack ou email avec tout le contexte.',
+      },
+    ],
   },
   {
     id: 'rh',
@@ -55,7 +125,40 @@ const COLLABORATEURS = [
       { val: '−8h', lbl: '/semaine de tâches administratives' },
       { val: '100 CVs', lbl: 'traités en 10 minutes' },
     ],
-    cta: { label: 'Découvrir', href: '/contact', variant: 'outline' },
+    fonctionnalites: [
+      'Tri et scoring automatique des CVs',
+      'Parcours d\'onboarding J+1 à J+90',
+      'Gestion des congés et absences',
+      'Réponses aux questions RH des équipes',
+      'Suivi des périodes d\'essai',
+      'Reporting RH mensuel automatique',
+    ],
+    secteurs: ['PME', 'Agences', 'Retail & Distribution', 'Industrie', 'Services'],
+    exemples: [
+      {
+        ctx: 'PME industrielle — 80 employés',
+        desc: '100 CVs triés en 10 minutes pour un poste d\'opérateur. Le RH reçoit les 5 meilleurs profils avec un résumé comparatif — zéro lecture manuelle.',
+      },
+      {
+        ctx: 'Agence marketing — 30 personnes',
+        desc: 'L\'onboarding de chaque nouveau collaborateur est entièrement automatisé : contrats, accès, formation initiale et check-ins à J+15, J+30 et J+90.',
+      },
+    ],
+    integrationsCompatibles: ['Google Workspace', 'Microsoft 365', 'Notion', 'Slack', 'BambooHR', 'Calendly'],
+    faq: [
+      {
+        q: 'Est-ce conforme au RGPD ?',
+        a: 'Oui. Les données des candidats sont traitées selon le RGPD : consentement explicite, durée de conservation définie et droit à l\'oubli automatiquement appliqué.',
+      },
+      {
+        q: 'Peut-il gérer des conventions collectives spécifiques ?',
+        a: 'Il peut être configuré avec vos accords d\'entreprise, conventions et règles internes pour répondre précisément à chaque situation particulière.',
+      },
+      {
+        q: 'Remplace-t-il un DRH humain ?',
+        a: 'Non — il gère l\'administratif et les questions courantes. Votre DRH se concentre sur le management, le développement des talents et les situations sensibles.',
+      },
+    ],
   },
   {
     id: 'juridique',
@@ -73,7 +176,40 @@ const COLLABORATEURS = [
       { val: '−80 %', lbl: 'de coûts juridiques courants' },
       { val: '< 5 min', lbl: 'pour un contrat complet' },
     ],
-    cta: { label: 'Découvrir', href: '/contact', variant: 'outline' },
+    fonctionnalites: [
+      'Rédaction de contrats sur mesure en < 5 min',
+      'Analyse des risques contractuels',
+      'Conformité RGPD automatisée',
+      'Veille juridique sectorielle hebdomadaire',
+      'Bibliothèque de modèles personnalisables',
+      'Révision et suggestions de clauses protectrices',
+    ],
+    secteurs: ['Agences & Freelances', 'Startups', 'E-commerce', 'Immobilier', 'Conseil'],
+    exemples: [
+      {
+        ctx: 'Freelance consultant — activité solo',
+        desc: 'Chaque proposition commerciale génère automatiquement un contrat adapté avec clauses de propriété intellectuelle et conditions de paiement sur mesure.',
+      },
+      {
+        ctx: 'Startup en croissance — 20 personnes',
+        desc: 'CGV, contrats de prestation, accords de confidentialité : tous générés et mis à jour automatiquement dès que la législation évolue.',
+      },
+    ],
+    integrationsCompatibles: ['Google Drive', 'DocuSign', 'Gmail', 'Notion', 'Slack', 'HubSpot'],
+    faq: [
+      {
+        q: 'L\'IA peut-elle remplacer un avocat ?',
+        a: 'Pour les contrats courants, oui. Pour les litiges, fusions-acquisitions ou contentieux complexes, elle prépare le dossier mais un avocat reste indispensable.',
+      },
+      {
+        q: 'Est-elle à jour des dernières lois ?',
+        a: 'Elle est mise à jour chaque semaine. Dès qu\'une loi impactant votre secteur évolue, vous recevez une alerte avec les modifications à apporter à vos documents.',
+      },
+      {
+        q: 'Peut-elle analyser des contrats reçus de partenaires ?',
+        a: 'Oui — importez le document, elle identifie les clauses risquées, les zones d\'ambiguïté et suggère des modifications protectrices en quelques secondes.',
+      },
+    ],
   },
   {
     id: 'seo',
@@ -91,7 +227,40 @@ const COLLABORATEURS = [
       { val: '91/100', lbl: 'score SEO moyen obtenu' },
       { val: '×3', lbl: 'de trafic organique en 6 mois' },
     ],
-    cta: { label: 'Découvrir', href: '/contact', variant: 'outline' },
+    fonctionnalites: [
+      'Articles SEO publiés chaque semaine',
+      'Audit et optimisation des pages existantes',
+      'Recherche de mots-clés et opportunités',
+      'Maillage interne automatisé',
+      'Fiches produits et pages de service optimisées',
+      'Reporting de positionnement hebdomadaire',
+    ],
+    secteurs: ['E-commerce', 'Services locaux', 'Startups SaaS', 'Professions libérales', 'Artisans'],
+    exemples: [
+      {
+        ctx: 'E-commerce mode — 500 références',
+        desc: 'Chaque fiche produit est réoptimisée avec les bons mots-clés, une description unique et le balisage structuré. Trafic organique ×2,8 en 4 mois.',
+      },
+      {
+        ctx: 'Cabinet d\'expertise comptable',
+        desc: '4 articles de blog publiés chaque mois sur des requêtes locales ciblées. 1ère page Google sur 12 mots-clés stratégiques en 90 jours.',
+      },
+    ],
+    integrationsCompatibles: ['WordPress', 'Webflow', 'Google Search Console', 'Ahrefs', 'Notion', 'Slack'],
+    faq: [
+      {
+        q: 'Le contenu est-il détectable comme IA par Google ?',
+        a: 'Non, si produit avec notre méthode. Chaque article est personnalisé avec vos exemples, votre ton et votre expertise réelle. Google récompense la valeur, pas la source.',
+      },
+      {
+        q: 'Combien de temps avant les premiers résultats ?',
+        a: 'Entre 6 et 12 semaines pour les premières remontées, 3 à 6 mois pour un impact significatif. Le SEO est un investissement moyen terme, pas une campagne.',
+      },
+      {
+        q: 'Peut-il travailler sur un site existant avec du contenu ?',
+        a: 'Oui. Il commence par auditer ce qui existe, identifie ce qui freine votre positionnement et optimise avant de produire du nouveau contenu.',
+      },
+    ],
   },
   {
     id: 'comptable',
@@ -109,11 +278,207 @@ const COLLABORATEURS = [
       { val: '−35 %', lbl: 'd\'impayés après 90 jours' },
       { val: '< 1 min', lbl: 'pour générer une facture' },
     ],
-    cta: { label: 'Découvrir', href: '/contact', variant: 'outline' },
+    fonctionnalites: [
+      'Génération et envoi automatique des factures',
+      'Rapprochement bancaire automatisé',
+      'Séquences de relance impayés J+15, J+30, J+45',
+      'Tableaux de bord financiers en temps réel',
+      'Déclarations TVA préparées automatiquement',
+      'Alertes trésorerie et seuils critiques',
+    ],
+    secteurs: ['Freelances & Indépendants', 'PME', 'E-commerce', 'Agences', 'Professions libérales'],
+    exemples: [
+      {
+        ctx: 'Consultant indépendant',
+        desc: 'Chaque mission terminée génère une facture automatique, envoyée par email avec relance à J+15, J+30 et J+45 si impayée. Temps passé sur la compta : zéro.',
+      },
+      {
+        ctx: 'Agence de communication — 15 personnes',
+        desc: 'Chaque fin de mois, le Comptable IA réconcilie les transactions, identifie les anomalies et prépare un tableau de bord complet pour le cabinet comptable.',
+      },
+    ],
+    integrationsCompatibles: ['Stripe', 'Pennylane', 'QuickBooks', 'Gmail', 'Notion', 'Slack', 'Google Sheets'],
+    faq: [
+      {
+        q: 'Remplace-t-il mon expert-comptable ?',
+        a: 'Non — il gère l\'administratif et prépare les données. Votre expert-comptable travaille avec des dossiers propres et passe moins de temps sur les tâches de base.',
+      },
+      {
+        q: 'Que se passe-t-il si une facture est contestée ?',
+        a: 'Il vous alerte immédiatement, archive la réponse du client et vous propose un modèle d\'avoir ou de réponse adaptée selon la situation.',
+      },
+      {
+        q: 'Est-ce sécurisé pour mes données financières ?',
+        a: 'Oui. Toutes les données sont chiffrées AES-256, hébergées en France et traitées selon le RGPD. Aucune donnée ne transite vers des tiers sans votre accord.',
+      },
+    ],
   },
 ]
 
+/* ══════════════════════════════════════════════════
+   FAQ ITEM — accordion
+══════════════════════════════════════════════════ */
+function FaqItem({ q, a }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className={`dd-faq-item${open ? ' open' : ''}`}>
+      <button className="dd-faq-q" onClick={() => setOpen(o => !o)}>
+        {q}
+        <span className="dd-faq-chevron">
+          <svg viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2 5l5 4.5L12 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </span>
+      </button>
+      <p className="dd-faq-a">{a}</p>
+    </div>
+  )
+}
+
+/* ══════════════════════════════════════════════════
+   COLLABORATEUR PANEL — contenu du drawer
+══════════════════════════════════════════════════ */
+function CollaborateurPanel({ collab, onClose }) {
+  const CheckIcon = () => (
+    <svg viewBox="0 0 10 10" fill="none" aria-hidden="true">
+      <path d="M1.5 5l2.5 2.5L8.5 2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+
+  return (
+    <>
+      {/* Header */}
+      <div className="dd-header">
+        <button className="dd-close" onClick={onClose} aria-label="Fermer la fiche">
+          <svg viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Body */}
+      <div className="dd-body">
+
+        {/* Hero image */}
+        <div className="dd-hero-img-wrap">
+          <img src={collab.img} alt={collab.name} className="dd-hero-img" loading="eager" />
+          <div className="dd-hero-fade" />
+        </div>
+
+        <div className="dd-hero-info">
+          <div className="dd-badge dd-badge--active">
+            <span className="dd-badge-dot" />
+            Actif 24/7
+          </div>
+          <h2 className="dd-title">{collab.name}</h2>
+          <p className="dd-lead">{collab.desc}</p>
+        </div>
+
+        {/* Missions */}
+        <div className="dd-section">
+          <p className="dd-section-title">Missions</p>
+          <ul className="dd-list">
+            {collab.missions.map(m => (
+              <li key={m}>
+                <span className="dd-list-dot"><CheckIcon /></span>
+                {m}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Fonctionnalités */}
+        <div className="dd-section">
+          <p className="dd-section-title">Fonctionnalités</p>
+          <div className="dd-chips">
+            {collab.fonctionnalites.map(f => (
+              <span key={f} className="dd-chip">{f}</span>
+            ))}
+          </div>
+        </div>
+
+        {/* Secteurs */}
+        <div className="dd-section">
+          <p className="dd-section-title">Secteurs concernés</p>
+          <div className="dd-sectors">
+            {collab.secteurs.map(s => (
+              <span key={s} className="dd-sector">{s}</span>
+            ))}
+          </div>
+        </div>
+
+        {/* Gains */}
+        <div className="dd-section">
+          <p className="dd-section-title">Gains estimés</p>
+          <div className="dd-metrics">
+            {collab.resultats.map(r => (
+              <div key={r.lbl} className="dd-metric">
+                <span className="dd-metric-val">{r.val}</span>
+                <span className="dd-metric-lbl">{r.lbl}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Exemples */}
+        <div className="dd-section">
+          <p className="dd-section-title">Exemples d&apos;utilisation</p>
+          <div className="dd-examples">
+            {collab.exemples.map(ex => (
+              <div key={ex.ctx} className="dd-example">
+                <p className="dd-example-ctx">📌 {ex.ctx}</p>
+                <p className="dd-example-desc">{ex.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Intégrations */}
+        <div className="dd-section">
+          <p className="dd-section-title">Intégrations compatibles</p>
+          <div className="dd-int-chips">
+            {collab.integrationsCompatibles.map(i => (
+              <span key={i} className="dd-int-chip">{i}</span>
+            ))}
+          </div>
+        </div>
+
+        {/* FAQ */}
+        <div className="dd-section">
+          <p className="dd-section-title">Questions fréquentes</p>
+          <div className="dd-faq">
+            {collab.faq.map(item => (
+              <FaqItem key={item.q} q={item.q} a={item.a} />
+            ))}
+          </div>
+        </div>
+
+        <div className="dd-spacer" />
+      </div>
+
+      {/* Footer CTAs */}
+      <div className="dd-footer">
+        <Link to="/contact" className="dd-btn dd-btn--primary" onClick={onClose}>
+          <svg viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <rect x="1" y="3" width="12" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.5"/>
+            <path d="M1 5l6 4 6-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+          </svg>
+          Demander une démonstration
+        </Link>
+        <Link to="/contact" className="dd-btn dd-btn--outline" onClick={onClose}>
+          Demander un devis
+        </Link>
+      </div>
+    </>
+  )
+}
+
+/* ══════════════════════════════════════════════════
+   PAGE
+══════════════════════════════════════════════════ */
 export default function CollaborateursIA() {
+  const [selected, setSelected] = useState(null)
+
   useEffect(() => {
     /* ── Canvas particle network ── */
     const canvas = document.getElementById('caiCanvas')
@@ -218,6 +583,9 @@ export default function CollaborateursIA() {
       revealObs.disconnect()
     }
   }, [])
+
+  const openDrawer = useCallback(c => setSelected(c), [])
+  const closeDrawer = useCallback(() => setSelected(null), [])
 
   return (
     <>
@@ -330,16 +698,17 @@ export default function CollaborateursIA() {
                   ))}
                 </div>
 
-                {/* CTA */}
-                <Link
-                  to={c.cta.href}
-                  className={`cai-col-cta${c.cta.variant === 'primary' ? ' cai-col-cta--primary' : ' cai-col-cta--outline'}`}
+                {/* CTA — ouvre le drawer */}
+                <button
+                  className="cai-col-cta cai-col-cta--outline"
+                  onClick={() => openDrawer(c)}
+                  aria-label={`Voir la fiche complète — ${c.name}`}
                 >
-                  {c.cta.label}
+                  Voir la fiche complète
                   <svg viewBox="0 0 14 14" fill="none" aria-hidden="true">
                     <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                </Link>
+                </button>
               </div>
             </article>
           ))}
@@ -364,6 +733,11 @@ export default function CollaborateursIA() {
           </div>
         </div>
       </section>
+
+      {/* ════════════════════════════ DRAWER */}
+      <DetailDrawer open={!!selected} onClose={closeDrawer} accentColor={selected?.color}>
+        {selected && <CollaborateurPanel collab={selected} onClose={closeDrawer} />}
+      </DetailDrawer>
     </>
   )
 }

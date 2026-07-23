@@ -716,10 +716,10 @@
 .cai-col-cta {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 11px 20px;
-  font-size: .88rem; font-weight: 600;
+  font-size: .88rem; font-weight: 600; font-family: inherit;
   border-radius: 9px; text-decoration: none;
   width: 100%; justify-content: center;
-  margin-top: auto;
+  margin-top: auto; cursor: pointer;
   transition: opacity .2s, transform .2s, background .2s;
 }
 .cai-col-cta svg { width: 14px; height: 14px; transition: transform .2s; }

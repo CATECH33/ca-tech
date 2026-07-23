@@ -1,9 +1,10 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import DetailDrawer from '../components/DetailDrawer'
 import './Automatisations.css'
 
 /* ══════════════════════════════════════════════════════════
-   LOGOS SVG (inline — représentations brand)
+   LOGOS SVG (inline)
 ══════════════════════════════════════════════════════════ */
 const L = {
   'google-workspace': (
@@ -118,7 +119,7 @@ const L = {
 }
 
 /* ══════════════════════════════════════════════════════════
-   DONNÉES — 14 INTÉGRATIONS
+   DONNÉES — 14 INTÉGRATIONS enrichies
 ══════════════════════════════════════════════════════════ */
 const INTEGRATIONS = [
   {
@@ -133,6 +134,38 @@ const INTEGRATIONS = [
       'Fichier Drive → Classement IA + notification équipe',
     ],
     timeSaved: '−8h / semaine',
+    apps: ['Gmail', 'Google Forms', 'Google Drive', 'Google Sheets', 'HubSpot', 'Slack'],
+    workflow: [
+      { label: 'Email Gmail reçu', type: 'trigger' },
+      { label: 'Analyse IA du message', type: 'action' },
+      { label: 'Lead créé dans le CRM', type: 'action' },
+      { label: 'Réponse + alerte Slack', type: 'result' },
+    ],
+    declencheur: 'Réception d\'un email dans Gmail ou soumission d\'un formulaire Google Forms',
+    actionsRealisees: [
+      'Extraction automatique des coordonnées et du contexte',
+      'Création ou mise à jour de la fiche dans votre CRM',
+      'Envoi d\'une réponse personnalisée en moins de 5 min',
+      'Notification dans le canal Slack #commercial',
+      'Classement automatique du fichier Drive associé',
+    ],
+    benefices: [
+      'Zéro lead perdu — chaque message déclenche une action',
+      'Réponse client sous 5 minutes, 24h/24 7j/7',
+      'CRM toujours à jour, zéro saisie manuelle',
+    ],
+    frequence: 'En temps réel — déclenché à chaque email entrant ou soumission de formulaire',
+    prerequis: ['Compte Google Workspace actif', 'Accès API Google activé (2 min)', 'CRM connecté — HubSpot, Pipedrive ou autre'],
+    faq: [
+      {
+        q: 'Fonctionne-t-il avec un Gmail personnel ?',
+        a: 'Oui, mais nous recommandons Google Workspace pour la fiabilité des intégrations avancées. La mise en place est identique.',
+      },
+      {
+        q: 'Peut-on traiter plusieurs boîtes email en même temps ?',
+        a: 'Oui — on configure autant d\'alias ou de boîtes que nécessaire, chacun avec son propre workflow et ses propres règles.',
+      },
+    ],
   },
   {
     id: 'microsoft-365',
@@ -146,6 +179,38 @@ const INTEGRATIONS = [
       'Fichier OneDrive → Classement et archivage auto',
     ],
     timeSaved: '−6h / semaine',
+    apps: ['Outlook', 'Microsoft Teams', 'OneDrive', 'SharePoint', 'Notion', 'Slack'],
+    workflow: [
+      { label: 'Email Outlook reçu', type: 'trigger' },
+      { label: 'Qualification IA', type: 'action' },
+      { label: 'CRM mis à jour', type: 'action' },
+      { label: 'Alerte Teams + note auto', type: 'result' },
+    ],
+    declencheur: 'Réception d\'un email dans Outlook ou fin d\'une réunion Microsoft Teams',
+    actionsRealisees: [
+      'Extraction des coordonnées et du contexte du message',
+      'Création ou mise à jour de la fiche CRM',
+      'Notification dans le canal Teams approprié',
+      'Génération automatique du compte-rendu de réunion dans Notion',
+      'Archivage intelligent dans OneDrive avec nommage automatique',
+    ],
+    benefices: [
+      'Zéro saisie manuelle dans le CRM depuis Outlook',
+      'Comptes-rendus de réunion disponibles en 30 secondes',
+      'Visibilité équipe complète sur les échanges clients',
+    ],
+    frequence: 'En temps réel pour les emails — automatique après chaque réunion Teams',
+    prerequis: ['Abonnement Microsoft 365 Business', 'Droits administrateur pour les intégrations API', 'CRM compatible'],
+    faq: [
+      {
+        q: 'Compatible avec toutes les versions de Microsoft 365 ?',
+        a: 'Oui, à partir de Microsoft 365 Business Basic. Les fonctions Teams avancées nécessitent Business Standard ou supérieur.',
+      },
+      {
+        q: 'Peut-on exclure certains expéditeurs ou types d\'emails ?',
+        a: 'Absolument — on configure des règles de filtrage par expéditeur, objet, domaine ou mots-clés pour ne traiter que ce qui vous intéresse.',
+      },
+    ],
   },
   {
     id: 'whatsapp',
@@ -159,6 +224,38 @@ const INTEGRATIONS = [
       'Commande → Confirmation livraison automatique',
     ],
     timeSaved: '−4h / semaine',
+    apps: ['WhatsApp Business API', 'HubSpot', 'Slack', 'Gmail'],
+    workflow: [
+      { label: 'Message WhatsApp entrant', type: 'trigger' },
+      { label: 'Analyse et qualification IA', type: 'action' },
+      { label: 'Fiche CRM créée ou mise à jour', type: 'action' },
+      { label: 'Réponse automatique envoyée', type: 'result' },
+    ],
+    declencheur: 'Réception d\'un message ou d\'une demande via WhatsApp Business',
+    actionsRealisees: [
+      'Identification automatique du contact (prospect, client ou inconnu)',
+      'Création ou mise à jour de la fiche CRM avec l\'historique de la conversation',
+      'Réponse automatique personnalisée envoyée dans les 10 secondes',
+      'Création d\'un ticket support si demande de SAV',
+      'Notification à l\'agent assigné via Slack',
+    ],
+    benefices: [
+      'Temps de réponse < 10 secondes même la nuit et le week-end',
+      'Aucun message sans suite — chaque demande est traitée',
+      'Satisfaction client améliorée grâce à la réactivité',
+    ],
+    frequence: 'En temps réel — dès réception du message',
+    prerequis: ['Compte WhatsApp Business vérifié', 'Accès à l\'API WhatsApp Business (Meta)', 'Numéro de téléphone dédié'],
+    faq: [
+      {
+        q: 'Faut-il l\'API officielle WhatsApp Business ?',
+        a: 'Oui, pour les automatisations avancées. On vous aide à obtenir l\'accès API en quelques jours si vous ne l\'avez pas encore.',
+      },
+      {
+        q: 'Peut-on répondre manuellement quand on le souhaite ?',
+        a: 'Oui — l\'IA prend le relais uniquement si aucun agent n\'a répondu dans un délai que vous définissez (ex. 5 min).',
+      },
+    ],
   },
   {
     id: 'slack',
@@ -172,6 +269,37 @@ const INTEGRATIONS = [
       'Rapport 18h → Résumé quotidien dans votre canal',
     ],
     timeSaved: '−3h / semaine',
+    apps: ['Slack', 'HubSpot', 'Stripe', 'Gmail', 'Notion'],
+    workflow: [
+      { label: 'Événement métier détecté', type: 'trigger' },
+      { label: 'Formatage de l\'alerte IA', type: 'action' },
+      { label: 'Message Slack envoyé au bon canal', type: 'result' },
+    ],
+    declencheur: 'Tout événement métier : nouveau lead, paiement, ticket, mention, rapport programmé',
+    actionsRealisees: [
+      'Détection de l\'événement depuis votre outil source (CRM, Stripe, Gmail…)',
+      'Formatage intelligent du message avec les infos pertinentes',
+      'Envoi dans le bon canal Slack avec les bonnes personnes taguées',
+      'Rapport quotidien automatique à 18h avec les KPIs du jour',
+      'Alertes d\'urgence avec @here pour les événements critiques',
+    ],
+    benefices: [
+      'L\'équipe est informée en temps réel sans consulter 5 outils',
+      'Zéro information manquée sur les événements importants',
+      'Rapports automatiques — plus de réunions de suivi inutiles',
+    ],
+    frequence: 'En temps réel pour les alertes, programmé pour les rapports quotidiens',
+    prerequis: ['Espace de travail Slack actif', 'Droits d\'administration pour créer les bots', 'Canaux dédiés créés'],
+    faq: [
+      {
+        q: 'Peut-on trier les alertes par priorité ?',
+        a: 'Oui — on configure des niveaux de priorité (normal, urgent, critique) avec des formats et des canaux différents pour chaque niveau.',
+      },
+      {
+        q: 'Fonctionne-t-il avec la version gratuite de Slack ?',
+        a: 'Pour les fonctions de base, oui. Les workflows avancés (plusieurs étapes, actions conditionnelles) nécessitent Slack Pro ou supérieur.',
+      },
+    ],
   },
   {
     id: 'hubspot',
@@ -185,6 +313,38 @@ const INTEGRATIONS = [
       'Contact enrichi → Campagne personnalisée lancée',
     ],
     timeSaved: '−5h / semaine',
+    apps: ['HubSpot CRM', 'Gmail', 'Slack', 'Calendly', 'LinkedIn', 'Stripe'],
+    workflow: [
+      { label: 'Deal créé ou changement d\'étape', type: 'trigger' },
+      { label: 'Scoring et segmentation IA', type: 'action' },
+      { label: 'Séquence email + tâche créée', type: 'action' },
+      { label: 'Alerte Slack + agenda mis à jour', type: 'result' },
+    ],
+    declencheur: 'Création d\'un contact, changement d\'étape d\'un deal ou soumission d\'un formulaire HubSpot',
+    actionsRealisees: [
+      'Qualification et scoring automatique du nouveau contact',
+      'Attribution du deal au bon commercial selon les règles de routing',
+      'Déclenchement de la séquence email adaptée au segment',
+      'Création automatique d\'une tâche de suivi dans le calendrier',
+      'Notification Slack au commercial responsable avec le contexte complet',
+    ],
+    benefices: [
+      'Chaque lead est pris en charge en < 5 minutes, 24h/24',
+      'Zéro deal qui stagne — chaque étape déclenche une action',
+      'Taux de closing augmenté grâce aux relances automatisées',
+    ],
+    frequence: 'En temps réel à chaque événement CRM, séquences selon planning défini',
+    prerequis: ['Compte HubSpot (Starter ou supérieur recommandé)', 'Accès API HubSpot activé', 'Séquences email configurées'],
+    faq: [
+      {
+        q: 'Compatible avec HubSpot gratuit ?',
+        a: 'Les fonctions de base oui. Les workflows avancés, séquences email et scoring nécessitent HubSpot Starter (environ 50€/mois).',
+      },
+      {
+        q: 'Peut-on garder notre processus commercial existant ?',
+        a: 'Oui — on s\'adapte à votre pipeline et vos étapes existants. On automatise sans tout reconfigurer.',
+      },
+    ],
   },
   {
     id: 'notion',
@@ -198,6 +358,38 @@ const INTEGRATIONS = [
       'RDV Calendly → Note de réunion ajoutée auto',
     ],
     timeSaved: '−3h / semaine',
+    apps: ['Notion', 'Calendly', 'HubSpot', 'Slack', 'Gmail', 'Google Drive'],
+    workflow: [
+      { label: 'Client signé ou RDV pris', type: 'trigger' },
+      { label: 'Création de l\'espace Notion', type: 'action' },
+      { label: 'Base de données mise à jour', type: 'action' },
+      { label: 'Équipe notifiée via Slack', type: 'result' },
+    ],
+    declencheur: 'Nouveau client signé dans le CRM, RDV Calendly confirmé ou tâche marquée terminée',
+    actionsRealisees: [
+      'Création automatique d\'un espace de travail Notion dédié au client',
+      'Population des informations client depuis le CRM dans Notion',
+      'Ajout automatique de la note de réunion après chaque RDV Calendly',
+      'Mise à jour des bases de données Notion en temps réel',
+      'Notification de l\'équipe dans Slack avec le lien vers l\'espace Notion',
+    ],
+    benefices: [
+      'Chaque client a son espace Notion prêt dès la signature — sans effort',
+      'Toute l\'équipe a accès au même contexte en temps réel',
+      'Zéro copier-coller entre CRM, email et Notion',
+    ],
+    frequence: 'Déclenchement instantané à chaque événement, mises à jour en temps réel',
+    prerequis: ['Espace Notion avec accès API', 'Templates Notion créés et partagés', 'Connexion CRM ou Calendly'],
+    faq: [
+      {
+        q: 'Fonctionne-t-il avec Notion gratuit ?',
+        a: 'L\'API Notion est disponible sur tous les plans. Les fonctions d\'automatisation avancées nécessitent Notion Plus (16€/mois).',
+      },
+      {
+        q: 'Peut-on utiliser nos templates Notion existants ?',
+        a: 'Oui — on connecte vos templates actuels. L\'automatisation les duplique et les remplit avec les bonnes données à chaque déclenchement.',
+      },
+    ],
   },
   {
     id: 'stripe',
@@ -211,6 +403,38 @@ const INTEGRATIONS = [
       'Échec paiement → Séquence de relance déclenchée',
     ],
     timeSaved: 'Instantané',
+    apps: ['Stripe', 'Gmail', 'HubSpot', 'Notion', 'Slack', 'QuickBooks'],
+    workflow: [
+      { label: 'Paiement confirmé ou échoué', type: 'trigger' },
+      { label: 'Génération de la facture PDF', type: 'action' },
+      { label: 'CRM + comptabilité mis à jour', type: 'action' },
+      { label: 'Email client + alerte équipe', type: 'result' },
+    ],
+    declencheur: 'Paiement reçu, abonnement créé ou renouvelé, échec de paiement détecté',
+    actionsRealisees: [
+      'Génération automatique de la facture PDF aux normes légales',
+      'Envoi de la facture au client par email avec votre branding',
+      'Mise à jour du CRM et de la comptabilité (QuickBooks, Pennylane)',
+      'Déclenchement d\'une séquence de relance en cas d\'échec paiement',
+      'Notification Slack au service finance avec les détails de la transaction',
+    ],
+    benefices: [
+      'Facturation émise en < 30 secondes après chaque paiement',
+      'Taux de récupération des impayés augmenté de 35 %',
+      'Comptabilité à jour en temps réel sans saisie manuelle',
+    ],
+    frequence: 'En temps réel à chaque événement Stripe (paiement, abonnement, remboursement)',
+    prerequis: ['Compte Stripe actif avec accès API', 'Template de facture configuré', 'Email expéditeur vérifié'],
+    faq: [
+      {
+        q: 'Les factures sont-elles conformes à la législation française ?',
+        a: 'Oui — numéro séquentiel, mentions légales, TVA, tous les éléments obligatoires sont inclus et configurables selon votre statut.',
+      },
+      {
+        q: 'Peut-on personnaliser les emails de relance impayés ?',
+        a: 'Oui — on configure le ton, le nombre de relances, les délais (J+5, J+15, J+30) et le contenu de chaque email selon votre approche commerciale.',
+      },
+    ],
   },
   {
     id: 'meta',
@@ -224,6 +448,37 @@ const INTEGRATIONS = [
       'DM entrant → Ticket support créé et assigné',
     ],
     timeSaved: '−4h / semaine',
+    apps: ['Facebook Lead Ads', 'Instagram DMs', 'HubSpot', 'Gmail', 'Slack'],
+    workflow: [
+      { label: 'Lead Ad ou DM reçu', type: 'trigger' },
+      { label: 'Qualification et enrichissement', type: 'action' },
+      { label: 'CRM + email bienvenue envoyé', type: 'result' },
+    ],
+    declencheur: 'Soumission d\'un Lead Ad Facebook/Instagram, DM entrant ou commentaire sur une publication',
+    actionsRealisees: [
+      'Capture instantanée du lead depuis les formulaires Meta Lead Ads',
+      'Enrichissement du contact avec les données disponibles',
+      'Création de la fiche dans le CRM avec la source exacte (campagne, publicité)',
+      'Envoi d\'un email de bienvenue personnalisé dans les 2 minutes',
+      'Réponse automatique au commentaire ou DM selon vos templates',
+    ],
+    benefices: [
+      'Chaque euro dépensé en pub génère un lead traité instantanément',
+      'Zéro lead "froid" — contact pris dans les 2 minutes',
+      'ROI publicitaire amélioré grâce à la réactivité',
+    ],
+    frequence: 'En temps réel — dès la soumission du formulaire ou réception du message',
+    prerequis: ['Page Facebook/Instagram Business active', 'Accès API Meta (Meta Business Suite)', 'CRM connecté'],
+    faq: [
+      {
+        q: 'Fonctionne-t-il avec les publicités existantes ?',
+        a: 'Oui — on connecte vos campagnes actuelles sans les modifier. Chaque nouveau lead Ad existant sera automatiquement traité.',
+      },
+      {
+        q: 'Les réponses automatiques aux commentaires sont-elles personnalisées ?',
+        a: 'Oui — l\'IA analyse le contenu du commentaire et adapte la réponse. Elle peut aussi taguer le bon membre de l\'équipe selon le sujet.',
+      },
+    ],
   },
   {
     id: 'linkedin',
@@ -237,6 +492,37 @@ const INTEGRATIONS = [
       'Post publié → Partage multicanal automatique',
     ],
     timeSaved: '−5h / semaine',
+    apps: ['LinkedIn', 'HubSpot', 'Gmail', 'Slack', 'Notion'],
+    workflow: [
+      { label: 'Profil ciblé identifié', type: 'trigger' },
+      { label: 'Enrichissement du contact', type: 'action' },
+      { label: 'CRM créé + séquence lancée', type: 'result' },
+    ],
+    declencheur: 'Nouveau contact LinkedIn identifié, connexion acceptée ou interaction sur une publication',
+    actionsRealisees: [
+      'Extraction et enrichissement des données du profil LinkedIn',
+      'Création de la fiche contact dans le CRM avec toutes les infos disponibles',
+      'Déclenchement d\'une séquence de suivi email sur 7 jours',
+      'Ajout d\'une tâche de relance pour le commercial responsable',
+      'Partage automatique des nouveaux articles sur LinkedIn + Twitter + Facebook',
+    ],
+    benefices: [
+      'Pipeline alimenté en continu sans prospection manuelle',
+      'Chaque connexion LinkedIn devient une opportunité commerciale',
+      'Présence multicanale amplifiée sans effort supplémentaire',
+    ],
+    frequence: 'En temps réel pour les nouvelles connexions, quotidien pour la veille et le partage',
+    prerequis: ['Compte LinkedIn actif', 'Outil de scraping LinkedIn compatible (Apify, PhantomBuster)', 'CRM connecté'],
+    faq: [
+      {
+        q: 'Est-ce conforme aux CGU de LinkedIn ?',
+        a: 'Oui, si utilisé dans les limites de LinkedIn (volume raisonnable, interactions authentiques). On vous guide pour rester dans les règles.',
+      },
+      {
+        q: 'Peut-on cibler des secteurs ou titres spécifiques ?',
+        a: 'Oui — on définit ensemble vos critères de ciblage (secteur, taille d\'entreprise, titre, localisation) et l\'automatisation ne traite que ces profils.',
+      },
+    ],
   },
   {
     id: 'calendly',
@@ -250,6 +536,37 @@ const INTEGRATIONS = [
       'Après RDV → Email de suivi + proposition envoyée',
     ],
     timeSaved: '−2h / semaine',
+    apps: ['Calendly', 'HubSpot', 'Gmail', 'Slack', 'Notion', 'Stripe'],
+    workflow: [
+      { label: 'Rendez-vous réservé', type: 'trigger' },
+      { label: 'Lead CRM + séquence pré-RDV', type: 'action' },
+      { label: 'Note réunion + email post-RDV', type: 'result' },
+    ],
+    declencheur: 'Réservation d\'un rendez-vous via Calendly (nouveau RDV, annulation ou report)',
+    actionsRealisees: [
+      'Création ou mise à jour de la fiche lead dans le CRM avec les réponses du formulaire',
+      'Envoi d\'un email de confirmation personnalisé avec les infos pratiques',
+      'Rappel automatique à J-1 et H-1 avant le rendez-vous',
+      'Création d\'une note de réunion dans Notion avec l\'agenda préparé',
+      'Email de suivi envoyé automatiquement 2h après la fin du RDV',
+    ],
+    benefices: [
+      'Taux de no-show réduit de 40 % grâce aux rappels automatiques',
+      'Chaque RDV est préparé — le prospect arrive avec le bon contexte',
+      'Proposition commerciale envoyée avant même d\'avoir raccroché',
+    ],
+    frequence: 'Déclenché à chaque réservation Calendly, rappels selon le planning du RDV',
+    prerequis: ['Compte Calendly actif (Basic ou supérieur)', 'Formulaire d\'inscription Calendly configuré', 'CRM connecté'],
+    faq: [
+      {
+        q: 'Fonctionne-t-il avec plusieurs types de rendez-vous ?',
+        a: 'Oui — chaque type de RDV (démo, audit, suivi) peut avoir son propre workflow avec des emails et actions différents.',
+      },
+      {
+        q: 'Peut-on personnaliser le suivi selon le type de prospect ?',
+        a: 'Oui — selon les réponses du formulaire Calendly, on envoie des emails de suivi différents et on déclenche la bonne séquence commerciale.',
+      },
+    ],
   },
   {
     id: 'apify',
@@ -263,6 +580,38 @@ const INTEGRATIONS = [
       'Veille concurrentielle → Rapport hebdo automatique',
     ],
     timeSaved: '−10h / semaine',
+    apps: ['Apify', 'LinkedIn', 'Google Maps', 'HubSpot', 'Gmail', 'Notion'],
+    workflow: [
+      { label: 'Scraping déclenché (cible définie)', type: 'trigger' },
+      { label: 'Qualification IA des résultats', type: 'action' },
+      { label: 'Prospects ajoutés au CRM', type: 'action' },
+      { label: 'Séquence prospection lancée', type: 'result' },
+    ],
+    declencheur: 'Lancement programmé du scraping (quotidien, hebdomadaire) ou déclenchement manuel sur une cible',
+    actionsRealisees: [
+      'Extraction des données depuis LinkedIn, Google Maps ou toute source web',
+      'Nettoyage et déduplication des contacts extraits',
+      'Qualification IA selon vos critères (secteur, taille, localisation)',
+      'Import automatique des prospects qualifiés dans votre CRM',
+      'Déclenchement de la séquence email de prospection',
+    ],
+    benefices: [
+      'Jusqu\'à 500 prospects qualifiés extraits en 30 minutes',
+      'Pipeline commercial alimenté en continu sans action manuelle',
+      'Veille concurrentielle automatique chaque semaine',
+    ],
+    frequence: 'Programmable — quotidien, hebdomadaire ou à la demande selon votre stratégie',
+    prerequis: ['Compte Apify actif (plan Starter suffisant)', 'Critères de ciblage définis', 'CRM connecté pour l\'import automatique'],
+    faq: [
+      {
+        q: 'Est-ce légal de scraper ces données ?',
+        a: 'Oui pour les données publiques. On configure les scrapers dans le respect des CGU de chaque plateforme et de la réglementation RGPD.',
+      },
+      {
+        q: 'Peut-on scraper des sources spécifiques à notre secteur ?',
+        a: 'Oui — Apify supporte des centaines de sources. On développe aussi des scrapers sur mesure si votre source cible n\'est pas encore disponible.',
+      },
+    ],
   },
   {
     id: 'google-maps',
@@ -276,6 +625,38 @@ const INTEGRATIONS = [
       'Zone géo → Campagne de prospection ciblée lancée',
     ],
     timeSaved: '−8h / semaine',
+    apps: ['Google Maps', 'Apify', 'HubSpot', 'Gmail', 'Slack'],
+    workflow: [
+      { label: 'Zone et secteur ciblés', type: 'trigger' },
+      { label: 'Extraction des établissements', type: 'action' },
+      { label: 'Enrichissement et qualification', type: 'action' },
+      { label: 'CRM + campagne lancée', type: 'result' },
+    ],
+    declencheur: 'Définition d\'une zone géographique et d\'un type d\'établissement à cibler',
+    actionsRealisees: [
+      'Extraction de tous les établissements correspondant à vos critères sur Google Maps',
+      'Collecte des informations : nom, adresse, téléphone, site web, horaires, note',
+      'Recherche et vérification des adresses email associées',
+      'Import et enrichissement dans votre CRM avec score de pertinence',
+      'Lancement automatique d\'une campagne de prospection locale ciblée',
+    ],
+    benefices: [
+      '500 à 2 000 prospects locaux qualifiés en moins d\'une heure',
+      'Données fraîches directement depuis Google — toujours à jour',
+      'Prospection locale à grande échelle sans aucune recherche manuelle',
+    ],
+    frequence: 'À la demande ou programmé selon vos zones de prospection',
+    prerequis: ['Accès API Google Maps (clé API Google)', 'Outil de scraping configuré (Apify)', 'CRM pour l\'import des leads'],
+    faq: [
+      {
+        q: 'Combien de résultats peut-on extraire en une session ?',
+        a: 'Jusqu\'à 2 000 établissements par recherche. Pour des volumes plus importants, on fractionne les extractions sur plusieurs sessions.',
+      },
+      {
+        q: 'Les emails des établissements sont-ils toujours disponibles ?',
+        a: 'Environ 60 à 70 % des établissements ont une adresse email trouvable (site web, réseaux sociaux). On complète avec d\'autres sources quand c\'est possible.',
+      },
+    ],
   },
   {
     id: 'telegram',
@@ -289,6 +670,37 @@ const INTEGRATIONS = [
       'Rapport 18h → Résumé quotidien de vos KPIs',
     ],
     timeSaved: '−2h / semaine',
+    apps: ['Telegram Bot API', 'HubSpot', 'Stripe', 'Gmail', 'Apify'],
+    workflow: [
+      { label: 'Événement métier critique', type: 'trigger' },
+      { label: 'Formatage du message', type: 'action' },
+      { label: 'Alerte Telegram instantanée', type: 'result' },
+    ],
+    declencheur: 'Tout événement critique : nouveau lead, paiement, erreur système ou rapport programmé',
+    actionsRealisees: [
+      'Détection de l\'événement depuis vos outils source',
+      'Formatage du message avec les infos essentielles (montant, nom, statut)',
+      'Envoi immédiat sur votre bot Telegram personnel ou de groupe',
+      'Rapport KPI quotidien automatique à l\'heure que vous choisissez',
+      'Alertes d\'urgence avec boutons d\'action directs dans Telegram',
+    ],
+    benefices: [
+      'Informé partout, même sans ouvrir votre ordinateur',
+      'Réactivité maximale sur les événements qui comptent',
+      'Un seul endroit pour toutes vos alertes métier importantes',
+    ],
+    frequence: 'En temps réel pour les alertes critiques, programmé pour les rapports quotidiens',
+    prerequis: ['Compte Telegram actif', 'Bot Telegram créé via BotFather (5 minutes)', 'Outils source connectés'],
+    faq: [
+      {
+        q: 'Peut-on recevoir les alertes sur un groupe Telegram d\'équipe ?',
+        a: 'Oui — le bot peut envoyer dans votre chat personnel ET dans un ou plusieurs groupes d\'équipe selon le type d\'alerte.',
+      },
+      {
+        q: 'Peut-on répondre au bot pour déclencher des actions ?',
+        a: 'Oui — on configure des commandes Telegram (/rapport, /stats, /leads) qui déclenchent des actions dans vos outils depuis Telegram.',
+      },
+    ],
   },
   {
     id: 'discord',
@@ -302,6 +714,37 @@ const INTEGRATIONS = [
       'KPI hebdo → Rapport automatique dans #reporting',
     ],
     timeSaved: '−2h / semaine',
+    apps: ['Discord Bot API', 'HubSpot', 'Stripe', 'Notion', 'Gmail'],
+    workflow: [
+      { label: 'Commande ou ticket reçu', type: 'trigger' },
+      { label: 'Routage et enrichissement', type: 'action' },
+      { label: 'Canal Discord notifié + thread créé', type: 'result' },
+    ],
+    declencheur: 'Nouvelle commande, ticket support entrant, KPI à reporter ou événement communautaire',
+    actionsRealisees: [
+      'Détection de l\'événement depuis vos outils (boutique, CRM, email)',
+      'Routage vers le bon canal Discord selon le type d\'événement',
+      'Création automatique d\'un thread dédié pour chaque ticket support',
+      'Assignation d\'un membre de l\'équipe avec @mention',
+      'Rapport de performance hebdomadaire posté dans #reporting le lundi matin',
+    ],
+    benefices: [
+      'Toute l\'équipe coordonnée depuis un seul endroit — Discord',
+      'Support communautaire organisé avec un thread par problème',
+      'Visibilité opérationnelle complète sans changer d\'outil',
+    ],
+    frequence: 'En temps réel pour les alertes, hebdomadaire pour les rapports KPI',
+    prerequis: ['Serveur Discord créé avec les bons canaux', 'Bot Discord créé via le portail développeur Discord', 'Permissions configurées'],
+    faq: [
+      {
+        q: 'Notre équipe peut-elle interagir avec le bot depuis Discord ?',
+        a: 'Oui — on configure des commandes slash (/stats, /leads, /rapport) que n\'importe quel membre autorisé peut utiliser dans Discord.',
+      },
+      {
+        q: 'Fonctionne-t-il pour les communautés (pas seulement les équipes) ?',
+        a: 'Oui — on peut configurer le bot pour modérer automatiquement, accueillir les nouveaux membres et animer la communauté avec des posts programmés.',
+      },
+    ],
   },
 ]
 
@@ -310,7 +753,7 @@ const CATEGORIES = [
   { key: 'google',        label: 'Google' },
   { key: 'microsoft',     label: 'Microsoft' },
   { key: 'communication', label: 'Communication' },
-  { key: 'crm',          label: 'CRM & Sales' },
+  { key: 'crm',           label: 'CRM & Sales' },
   { key: 'finance',       label: 'Finance' },
   { key: 'outils',        label: 'Outils' },
 ]
@@ -324,13 +767,236 @@ const CAT_COLORS = {
   outils:        { bg: 'rgba(0,107,255,.1)',   color: '#006BFF' },
 }
 
+/* ══════════════════════════════════════════════════════════
+   FAQ ITEM
+══════════════════════════════════════════════════════════ */
+function FaqItem({ q, a }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className={`dd-faq-item${open ? ' open' : ''}`}>
+      <button className="dd-faq-q" onClick={() => setOpen(o => !o)}>
+        {q}
+        <span className="dd-faq-chevron">
+          <svg viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2 5l5 4.5L12 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </span>
+      </button>
+      <p className="dd-faq-a">{a}</p>
+    </div>
+  )
+}
+
+/* ══════════════════════════════════════════════════════════
+   ICÔNES WORKFLOW
+══════════════════════════════════════════════════════════ */
+const WfIcon = ({ type }) => {
+  if (type === 'trigger') return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+    </svg>
+  )
+  if (type === 'action') return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="3" />
+      <path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14" />
+    </svg>
+  )
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  )
+}
+
+/* ══════════════════════════════════════════════════════════
+   AUTOMATISATION PANEL — contenu du drawer
+══════════════════════════════════════════════════════════ */
+function AutomatisationPanel({ item, onClose }) {
+  const catLabel = CATEGORIES.find(c => c.key === item.category)?.label ?? item.category
+  const catStyle = CAT_COLORS[item.category] || { bg: 'rgba(0,102,255,.1)', color: '#0066FF' }
+
+  return (
+    <>
+      {/* Header */}
+      <div className="dd-header">
+        <button className="dd-close" onClick={onClose} aria-label="Fermer la fiche">
+          <svg viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Body */}
+      <div className="dd-body">
+
+        {/* Hero logo + info */}
+        <div className="dd-hero-info" style={{ paddingTop: '1.5rem' }}>
+          <div className="dd-logo-wrap" style={{ borderColor: item.color + '30' }}>
+            {L[item.id]}
+          </div>
+          <div
+            className="dd-badge dd-badge--cat"
+            style={{ '--acc': catStyle.color, background: catStyle.bg, color: catStyle.color, borderColor: catStyle.color + '40' }}
+          >
+            {catLabel}
+          </div>
+          <h2 className="dd-title">{item.name}</h2>
+          <p className="dd-lead">{item.desc}</p>
+        </div>
+
+        {/* Applications utilisées */}
+        <div className="dd-section">
+          <p className="dd-section-title">Applications utilisées</p>
+          <div className="dd-int-chips">
+            {item.apps.map(a => (
+              <span key={a} className="dd-int-chip">{a}</span>
+            ))}
+          </div>
+        </div>
+
+        {/* Workflow illustré */}
+        <div className="dd-section">
+          <p className="dd-section-title">Workflow illustré</p>
+          <div className="dd-workflow">
+            {item.workflow.map((step, i) => (
+              <span key={i} style={{ display: 'contents' }}>
+                {i > 0 && (
+                  <div className="dd-wf-arr" aria-hidden="true">
+                    <svg viewBox="0 0 14 14" fill="none">
+                      <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                )}
+                <div className="dd-wf-step">
+                  <div className={`dd-wf-icon dd-wf-icon--${step.type}`}>
+                    <WfIcon type={step.type} />
+                  </div>
+                  <span className="dd-wf-label">{step.label}</span>
+                </div>
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Déclencheur */}
+        <div className="dd-section">
+          <p className="dd-section-title">Déclencheur</p>
+          <div className="dd-trigger">
+            <span className="dd-trigger-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+              </svg>
+            </span>
+            <p className="dd-trigger-text">{item.declencheur}</p>
+          </div>
+        </div>
+
+        {/* Actions réalisées */}
+        <div className="dd-section">
+          <p className="dd-section-title">Actions réalisées</p>
+          <ol className="dd-actions">
+            {item.actionsRealisees.map(a => (
+              <li key={a}>{a}</li>
+            ))}
+          </ol>
+        </div>
+
+        {/* Bénéfices */}
+        <div className="dd-section">
+          <p className="dd-section-title">Bénéfices</p>
+          <ul className="dd-benefits">
+            {item.benefices.map(b => (
+              <li key={b}>
+                <span className="dd-benefits-icon">
+                  <svg viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                    <polyline points="2 7 5.5 10.5 12 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+                {b}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Temps économisé + Fréquence */}
+        <div className="dd-section">
+          <p className="dd-section-title">Informations pratiques</p>
+          <div className="dd-meta-row">
+            <div className="dd-meta-card">
+              <p className="dd-meta-lbl">Temps économisé</p>
+              <p className="dd-meta-val">{item.timeSaved}</p>
+            </div>
+            <div className="dd-meta-card">
+              <p className="dd-meta-lbl">Fréquence d&apos;exécution</p>
+              <p className="dd-meta-val">{item.frequence.split(' — ')[0]}</p>
+            </div>
+          </div>
+          {item.frequence.includes(' — ') && (
+            <p style={{ fontSize: '.78rem', color: '#4d6580', marginTop: '.65rem', lineHeight: 1.6 }}>
+              {item.frequence}
+            </p>
+          )}
+        </div>
+
+        {/* Prérequis */}
+        <div className="dd-section">
+          <p className="dd-section-title">Prérequis</p>
+          <ul className="dd-prereqs">
+            {item.prerequis.map(p => (
+              <li key={p}>{p}</li>
+            ))}
+          </ul>
+        </div>
+
+        {/* FAQ */}
+        <div className="dd-section">
+          <p className="dd-section-title">Questions fréquentes</p>
+          <div className="dd-faq">
+            {item.faq.map(f => (
+              <FaqItem key={f.q} q={f.q} a={f.a} />
+            ))}
+          </div>
+        </div>
+
+        <div className="dd-spacer" />
+      </div>
+
+      {/* Footer CTAs */}
+      <div className="dd-footer">
+        <Link
+          to="/contact"
+          className="dd-btn dd-btn--primary"
+          onClick={onClose}
+          style={{ '--acc': item.color }}
+        >
+          <svg viewBox="0 0 14 14" fill="currentColor" aria-hidden="true">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+          </svg>
+          Installer cette automatisation
+        </Link>
+        <Link to="/contact" className="dd-btn dd-btn--outline" onClick={onClose}>
+          Demander une démo
+        </Link>
+      </div>
+    </>
+  )
+}
+
+/* ══════════════════════════════════════════════════════════
+   PAGE
+══════════════════════════════════════════════════════════ */
 export default function Automatisations() {
   const [active, setActive] = useState('tous')
+  const [selected, setSelected] = useState(null)
 
   const visible = useMemo(
     () => active === 'tous' ? INTEGRATIONS : INTEGRATIONS.filter(i => i.category === active),
     [active]
   )
+
+  const openDrawer  = useCallback(item => setSelected(item), [])
+  const closeDrawer = useCallback(() => setSelected(null), [])
 
   useEffect(() => {
     /* ── Canvas particles ── */
@@ -465,7 +1131,7 @@ export default function Automatisations() {
             <p className="at-int-label">Bibliothèque d'intégrations</p>
             <h2 className="at-int-title">Vos outils, <em>connectés.</em></h2>
             <p className="at-int-desc">
-              Sélectionnez une intégration pour découvrir les workflows disponibles et le temps que vous récupérez dès la première semaine.
+              Cliquez sur une intégration pour découvrir le workflow complet, les actions réalisées et le temps que vous récupérez dès la première semaine.
             </p>
           </div>
 
@@ -494,7 +1160,6 @@ export default function Automatisations() {
               return (
                 <article key={int.id} className="at-int-card at-reveal">
 
-                  {/* Header: logo + name + cat */}
                   <div className="at-int-card-header">
                     <div className="at-int-logo" style={{ borderColor: int.color + '30' }}>
                       {L[int.id]}
@@ -514,7 +1179,6 @@ export default function Automatisations() {
 
                   <div className="at-int-divider" />
 
-                  {/* Use cases */}
                   <p className="at-int-uses-label">Cas d'usage</p>
                   <ul className="at-int-uses">
                     {int.useCases.map(uc => (
@@ -527,7 +1191,6 @@ export default function Automatisations() {
                     ))}
                   </ul>
 
-                  {/* Footer */}
                   <div className="at-int-footer">
                     <div className="at-int-time">
                       <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -536,12 +1199,17 @@ export default function Automatisations() {
                       </svg>
                       {int.timeSaved}
                     </div>
-                    <Link to="/contact" className="at-int-btn" style={{ '--int-color': int.color }}>
+                    <button
+                      className="at-int-btn"
+                      style={{ '--int-color': int.color }}
+                      onClick={() => openDrawer(int)}
+                      aria-label={`Voir le workflow complet — ${int.name}`}
+                    >
                       Voir le workflow
                       <svg viewBox="0 0 14 14" fill="none" aria-hidden="true">
                         <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
-                    </Link>
+                    </button>
                   </div>
                 </article>
               )
@@ -592,6 +1260,15 @@ export default function Automatisations() {
           </div>
         </div>
       </section>
+
+      {/* ════════════════════════════════ DRAWER */}
+      <DetailDrawer
+        open={!!selected}
+        onClose={closeDrawer}
+        accentColor={selected?.color}
+      >
+        {selected && <AutomatisationPanel item={selected} onClose={closeDrawer} />}
+      </DetailDrawer>
     </>
   )
 }

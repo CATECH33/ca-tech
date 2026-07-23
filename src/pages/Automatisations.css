@@ -919,12 +919,15 @@
   padding: 8px 14px;
   font-size: .8rem;
   font-weight: 600;
+  font-family: inherit;
   color: #fff;
   background: var(--int-color, #0066FF);
+  border: none;
   border-radius: 8px;
   text-decoration: none;
   white-space: nowrap;
   flex-shrink: 0;
+  cursor: pointer;
   transition: opacity .2s, transform .2s;
 }
 .at-int-btn:hover { opacity: .88; transform: translateY(-1px); }
