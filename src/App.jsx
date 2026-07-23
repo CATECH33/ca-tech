@@ -7,7 +7,6 @@ import Loic from './pages/Loic.jsx'
 import CollaborateursIA from './pages/CollaborateursIA.jsx'
 import Automatisations from './pages/Automatisations.jsx'
 import Realisations from './pages/Realisations.jsx'
-import Blog from './pages/Blog.jsx'
 import Contact from './pages/Contact.jsx'
 import Catalogue from './pages/Catalogue.jsx'
 import Tarifs from './pages/Tarifs.jsx'
@@ -33,7 +32,6 @@ export default function App() {
           <Route path="/collaborateurs-ia" element={<CollaborateursIA />} />
           <Route path="/automatisations"   element={<Automatisations />} />
           <Route path="/realisations"      element={<Realisations />} />
-          <Route path="/blog"              element={<Blog />} />
           <Route path="/contact"           element={<Contact />} />
           <Route path="/catalogue"         element={<Catalogue />} />
           <Route path="/tarifs"            element={<Tarifs />} />

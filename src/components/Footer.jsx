@@ -20,7 +20,6 @@ const SOLUTIONS = [
 const PAGES = [
   ['/loic', 'Loïc'],
   ['/realisations', 'Réalisations'],
-  ['/blog', 'Blog'],
   ['/a-propos', 'À propos'],
   ['/tarifs', 'Tarifs'],
   ['/contact', 'Contact'],

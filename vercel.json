@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build && for f in index.html services.html loic.html collaborateurs-ia.html automatisations.html realisations.html blog.html contact.html catalogue.html tarifs.html; do cp dist/index.html $f; done && cp manager/dist/index.html manager/index.html",
+  "buildCommand": "npm run build && for f in index.html services.html loic.html collaborateurs-ia.html automatisations.html realisations.html contact.html catalogue.html tarifs.html; do cp dist/index.html $f; done && cp manager/dist/index.html manager/index.html",
   "outputDirectory": ".",
   "cleanUrls": true,
   "trailingSlash": false,
@@ -33,9 +33,11 @@
   ],
   "redirects": [
     { "source": "/index",            "destination": "/",             "permanent": true },
+    { "source": "/blog",             "destination": "/",             "permanent": true },
+    { "source": "/blog/(.*)",        "destination": "/",             "permanent": true },
     { "source": "/diagnostic-ia",    "destination": "/contact",      "permanent": true },
     { "source": "/nos-realisations", "destination": "/realisations", "permanent": true },
-    { "source": "/loic-ia",          "destination": "/loic",         "permanent": true }
+    { "source": "/loic-ia",         "destination": "/loic",          "permanent": true }
   ],
   "rewrites": [
     { "source": "/manager/assets/(.*)", "destination": "/manager/dist/assets/$1" },

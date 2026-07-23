@@ -9,7 +9,6 @@ const NAV_ITEMS = [
   { to: '/collaborateurs-ia', label: 'Collaborateurs IA' },
   { to: '/automatisations',   label: 'Automatisations' },
   { to: '/realisations',      label: 'Réalisations' },
-  { to: '/blog',              label: 'Blog' },
   { to: '/contact',           label: 'Contact' },
 ]
 
