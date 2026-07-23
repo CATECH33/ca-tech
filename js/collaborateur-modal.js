@@ -128,6 +128,16 @@ const GRAD_BY_CATEGORIE = {
   autre:        'linear-gradient(135deg,rgba(100,116,139,.6) 0%,rgba(148,163,184,.3) 100%)',
 }
 
+// Correspondance entre les clés courtes des cartes HTML et les slugs complets en base
+const SHORT_SLUG_MAP = {
+  commercial: 'assistant-commercial-ia',
+  support:    'assistant-support-client-ia',
+  rh:         'collaborateur-rh-ia',
+  juridique:  'juriste-ia',
+  seo:        'referenceur-seo-ia',
+  comptable:  'comptable-ia',
+}
+
 // ── Supabase fetch ────────────────────────────────────────────
 
 // Map slug → données Supabase (peuplé au chargement)
@@ -173,6 +183,7 @@ async function fetchCollaborateurs() {
         cta_secondaire:       row.cta_secondaire || 'Demander une démo',
       }
     })
+    renderBento()
   } catch (_) {
     // Fetch failed → fallback data utilisé silencieusement
   } finally {
@@ -180,9 +191,38 @@ async function fetchCollaborateurs() {
   }
 }
 
-// Résoudre : Supabase en priorité, sinon fallback statique
+// Résoudre : Supabase en priorité (slug complet ou alias court), sinon fallback statique
 function resolveCollab(slug) {
-  return dbCollabs[slug] || FALLBACK[slug] || null
+  return dbCollabs[slug] || dbCollabs[SHORT_SLUG_MAP[slug]] || FALLBACK[slug] || null
+}
+
+// Mettre à jour les cartes bento avec les données live (image, nom, data-collab → slug complet)
+function renderBento() {
+  document.querySelectorAll('[data-collab]').forEach(card => {
+    const shortSlug = card.getAttribute('data-collab')
+    const dbSlug    = SHORT_SLUG_MAP[shortSlug] || shortSlug
+    const data      = dbCollabs[dbSlug]
+    if (!data) return
+
+    // Pointer data-collab vers le slug complet pour que les CTAs du modal aient le bon slug
+    card.setAttribute('data-collab', dbSlug)
+
+    // Remplacer l'image Unsplash par l'image Supabase Storage si disponible
+    if (data.image) {
+      const img = card.querySelector('.cai-thumb img')
+      if (img) {
+        img.src = data.image
+        img.alt = data.nom
+      }
+    }
+
+    // Mettre à jour le nom
+    const nameEl = card.querySelector('.cai-card-name')
+    if (nameEl && data.nom) nameEl.textContent = data.nom
+
+    // Mettre à jour l'aria-label
+    card.setAttribute('aria-label', `Découvrir ${data.nom}`)
+  })
 }
 
 // ── État ─────────────────────────────────────────────────────
