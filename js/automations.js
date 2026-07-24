@@ -638,7 +638,6 @@ function _flowRow(apps, size = 'md') {
 function renderCard(auto) {
   const cat    = CATEGORY_LABELS[auto.category] || auto.category;
   const colors = CATEGORY_COLORS[auto.category] || { bg: 'rgba(255,255,255,.1)', color: '#fff' };
-  const dest   = auto.href ? auto.href : 'index.html#contact';
 
   return `
 <article class="alib-card alib-reveal"
@@ -646,7 +645,7 @@ function renderCard(auto) {
   data-cat="${auto.category}"
   data-keywords="${(auto.tags || []).join(' ')}"
   data-popular="${auto.popular ? '1' : '0'}"
-  onclick="location.href='${dest}'"
+  onclick="openAutoModal('${auto.id}')"
   tabindex="0"
   role="button"
   aria-label="${auto.name}">
@@ -666,7 +665,7 @@ function renderCard(auto) {
       ${auto.timeSaved}
     </div>
     <span class="alib-btn">
-      ${auto.href ? 'Voir la fiche' : 'Découvrir'}
+      Découvrir
       <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg>
     </span>
   </div>
