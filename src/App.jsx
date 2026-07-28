@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Outlet, Link } from 'react-router-dom'
 import Header from './components/Header.jsx'
 import Footer from './components/Footer.jsx'
 import Home from './pages/Home.jsx'
@@ -21,6 +21,19 @@ function Layout() {
   )
 }
 
+function NotFound() {
+  return (
+    <section style={{ minHeight: '70vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '80px 24px' }}>
+      <p style={{ fontSize: '4rem', fontWeight: 800, color: 'var(--color-primary)', lineHeight: 1 }}>404</p>
+      <h1 style={{ fontSize: '1.75rem', fontWeight: 700, margin: '16px 0 12px' }}>Page introuvable</h1>
+      <p style={{ color: 'var(--color-gray-600)', marginBottom: '32px' }}>Cette page n'existe pas ou a été déplacée.</p>
+      <Link to="/" style={{ background: 'var(--color-primary)', color: '#fff', padding: '12px 28px', borderRadius: '8px', fontWeight: 600, textDecoration: 'none' }}>
+        Retour à l'accueil →
+      </Link>
+    </section>
+  )
+}
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -35,6 +48,7 @@ export default function App() {
           <Route path="/contact"           element={<Contact />} />
           <Route path="/catalogue"         element={<Catalogue />} />
           <Route path="/tarifs"            element={<Tarifs />} />
+          <Route path="*"                  element={<NotFound />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,10 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './Contact.css'
 
 const EDGE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/contact-form`
 
 export default function Contact() {
+  useEffect(() => {
+    document.title = 'Contact — Devis gratuit sous 24h · CA-TECH'
+  }, [])
+
   const [form, setForm] = useState({ name: '', company: '', email: '', phone: '', subject: '', message: '' })
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)

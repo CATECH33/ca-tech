@@ -555,4 +555,16 @@
     init()
   }
 
+  // API globale pour l'ouvrir depuis React / autres scripts
+  window.loicOpen = function(prefill) {
+    if (!btn) return
+    if (!isOpen) openPanel()
+    if (prefill && typeof prefill === 'string') {
+      setTimeout(function() {
+        if (inp) { inp.value = prefill; inp.dispatchEvent(new Event('input')) }
+      }, 350)
+    }
+  }
+  window.loicClose = function() { if (isOpen) closePanel() }
+
 })()

@@ -990,6 +990,10 @@ export default function Automatisations() {
   const [active, setActive] = useState('tous')
   const [selected, setSelected] = useState(null)
 
+  useEffect(() => {
+    document.title = 'Automatisations — Connectez vos outils, éliminez les tâches répétitives · CA-TECH'
+  }, [])
+
   const visible = useMemo(
     () => active === 'tous' ? INTEGRATIONS : INTEGRATIONS.filter(i => i.category === active),
     [active]

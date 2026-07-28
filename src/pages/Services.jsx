@@ -18,16 +18,21 @@ function scrollTo(id) {
 
 export default function Services() {
   useEffect(() => {
+    document.title = 'Services — Création de sites, IA, SEO, Automatisation · CA-TECH'
+  }, [])
+
+  useEffect(() => {
     /* ── Canvas particles ── */
     const cv = document.getElementById('srvCanvas')
     let rafId
+    let canvasResize = null
     if (cv) {
       const cx = cv.getContext('2d')
       let W, H, pts = []
       const N = 40, LK = 100
-      const resize = () => { W = cv.width = cv.offsetWidth; H = cv.height = cv.offsetHeight }
-      window.addEventListener('resize', resize, { passive: true })
-      resize()
+      canvasResize = () => { W = cv.width = cv.offsetWidth; H = cv.height = cv.offsetHeight }
+      window.addEventListener('resize', canvasResize, { passive: true })
+      canvasResize()
       const r = (a, b) => a + Math.random() * (b - a)
       for (let i = 0; i < N; i++) pts.push({ x: r(0, W), y: r(0, H), vx: r(-.2, .2), vy: r(-.2, .2), s: r(.8, 1.6) })
       const frame = () => {
@@ -59,7 +64,6 @@ export default function Services() {
     document.querySelectorAll('[data-srv]').forEach(el => obs.observe(el))
 
     /* ── Active nav link ── */
-    const navLinks = document.querySelectorAll('.srv-nav-link')
     const sectionIds = NAV_ITEMS.map(n => n.id)
     const navObs = new IntersectionObserver(entries => {
       entries.forEach(e => {
@@ -71,7 +75,7 @@ export default function Services() {
 
     return () => {
       cancelAnimationFrame(rafId)
-      window.removeEventListener('resize', () => {})
+      if (canvasResize) window.removeEventListener('resize', canvasResize)
       obs.disconnect()
       navObs.disconnect()
     }

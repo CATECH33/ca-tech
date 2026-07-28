@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './Tarifs.css'
 
@@ -78,6 +78,10 @@ function FaqItem({ q, a }) {
 }
 
 export default function Tarifs() {
+  useEffect(() => {
+    document.title = 'Tarifs — Sites web, Logo, E-commerce, Maintenance · CA-TECH'
+  }, [])
+
   return (
     <>
       {/* ═══════════════════════════════════ HERO */}

@@ -480,6 +480,10 @@ export default function CollaborateursIA() {
   const [selected, setSelected] = useState(null)
 
   useEffect(() => {
+    document.title = 'Collaborateurs IA — Agents disponibles 24h/7j · CA-TECH'
+  }, [])
+
+  useEffect(() => {
     /* ── Canvas particle network ── */
     const canvas = document.getElementById('caiCanvas')
     let animFrameCanvas

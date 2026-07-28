@@ -129,6 +129,10 @@ export default function Loic() {
   const inputRef = useRef(null)
 
   useEffect(() => {
+    document.title = 'Loïc — Démonstrateur IA CA-TECH · Testez notre IA en live'
+  }, [])
+
+  useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }

@@ -4,6 +4,10 @@ import '../../css/main.css'
 
 export default function Home() {
   useEffect(() => {
+    document.title = 'CA-TECH — Cabinet de conseil IA-first · Agents IA, Automatisations, SEO'
+  }, [])
+
+  useEffect(() => {
     /* ── 4. HERO ENTRANCE ANIMATION ─────────────────────────────────────── */
     (function () {
       if (window.matchMedia('(prefers-reduced-motion:reduce)').matches) {
@@ -219,9 +223,11 @@ export default function Home() {
   }, [])
 
   function openLoicWidget(prefill) {
-    var msg = prefill ? 'Loïc : ' + prefill : ''
-    console.log('Open Loïc widget', msg)
-    window.location.href = '/contact'
+    if (typeof window.loicOpen === 'function') {
+      window.loicOpen(prefill || '')
+    } else {
+      window.location.href = '/contact'
+    }
   }
 
   return (

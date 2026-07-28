@@ -213,6 +213,10 @@ const PROJECTS = [
 ]
 
 export default function Realisations() {
+  useEffect(() => {
+    document.title = 'Réalisations — Portfolio de projets IA, Web & Automatisations · CA-TECH'
+  }, [])
+
   const [active, setActive] = useState('tous')
   const [liveProjects, setLiveProjects] = useState(null) // null = loading, [] = empty
 

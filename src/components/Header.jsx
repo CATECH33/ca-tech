@@ -185,7 +185,7 @@ export default function Header() {
       {/* ── Mobile menu ── */}
       <div className={`mob-menu${menuOpen ? ' open' : ''}`}>
         <NavLink to="/"             className={activeClass} end onClick={closeMenu}>Accueil</NavLink>
-        <NavLink to="/services"     className={`${activeClass({ isActive: false })} mob-srv-hd`} onClick={closeMenu}>Services</NavLink>
+        <NavLink to="/services"     className={({ isActive }) => `${isActive ? 'nav-active ' : ''}mob-srv-hd`} onClick={closeMenu}>Services</NavLink>
         {MOB_SERVICES.map(({ label, href, to }) =>
           to
             ? <NavLink key={to}   to={to}   className={activeClass}    onClick={closeMenu} style={{ paddingLeft: '1rem' }}>{label}</NavLink>

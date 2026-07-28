@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './Catalogue.css'
 
@@ -99,6 +99,10 @@ const HERO_STATS = [
 
 export default function Catalogue() {
   const [active, setActive] = useState('Tous')
+
+  useEffect(() => {
+    document.title = 'Catalogue — 24 solutions IA & Automatisations · CA-TECH'
+  }, [])
 
   const visible = useMemo(
     () => active === 'Tous' ? SOLUTIONS : SOLUTIONS.filter(s => s.cat === active),
