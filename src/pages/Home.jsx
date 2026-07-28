@@ -4,7 +4,7 @@ import '../../css/main.css'
 
 export default function Home() {
   useEffect(() => {
-    document.title = 'CA-TECH — Cabinet de conseil IA-first · Agents IA, Automatisations, SEO'
+    document.title = 'CA-TECH — Cabinet de Développement Digital · Sites Internet, Applications Web, CRM, SaaS'
   }, [])
 
   useEffect(() => {
@@ -31,9 +31,10 @@ export default function Home() {
       }
       animate(document.getElementById('hero-h1'), 100)
       animate(document.getElementById('hero-sub'), 250)
-      animate(document.getElementById('hero-ctas'), 400)
-      animate(document.getElementById('hero-micro'), 500)
-      animate(document.getElementById('hero-demo'), 600)
+      animate(document.getElementById('hero-desc'), 350)
+      animate(document.getElementById('hero-ctas'), 450)
+      animate(document.getElementById('hero-micro'), 550)
+      animate(document.getElementById('hero-demo'), 650)
 
       /* Hero chat sequence */
       var msgs = document.getElementById('chat-messages')
@@ -239,19 +240,22 @@ export default function Home() {
             {/* Content */}
             <div className="hero-content">
               <div className="hero-pill">
-                <span className="pill pill-dark">✦ Cabinet de conseil IA-first</span>
+                <span className="pill pill-dark">✦ Cabinet de Développement Digital</span>
               </div>
               <h1 className="hero-h1" id="hero-h1" style={{ opacity: 0, transform: 'translateY(16px)' }}>
-                L'Intelligence Artificielle<br />au service de votre croissance.
+                Nous développons les outils qui font grandir votre entreprise.
               </h1>
               <p className="hero-subtitle" id="hero-sub" style={{ opacity: 0, transform: 'translateY(12px)' }}>
-                CA-TECH déploie des agents IA, des automatisations sur mesure et des stratégies SEO pour transformer votre activité en résultats mesurables.
+                Sites Internet • Applications Web • CRM • Plateformes SaaS • Intelligence Artificielle • Automatisations • SEO
+              </p>
+              <p className="hero-desc" style={{ opacity: 0, transform: 'translateY(8px)', color: 'rgba(255,255,255,.65)', fontSize: '1rem', lineHeight: 1.65, maxWidth: '520px', marginBottom: '2rem' }} id="hero-desc">
+                CA-TECH conçoit des solutions digitales sur mesure pour automatiser votre activité, attirer plus de clients et accompagner votre croissance.
               </p>
               <div className="hero-ctas" id="hero-ctas" style={{ opacity: 0, transform: 'translateY(8px)' }}>
-                <a href="/devis" className="btn btn-white btn-xl" aria-label="Lancer mon diagnostic IA gratuit">Lancer mon Diagnostic IA →</a>
-                <Link to="/realisations" className="btn btn-ghost-white btn-xl">Voir nos réalisations</Link>
+                <a href="/devis" className="btn btn-white btn-xl" aria-label="Créer mon projet">Créer mon projet →</a>
+                <Link to="/services" className="btn btn-ghost-white btn-xl">Découvrir nos solutions</Link>
               </div>
-              <p className="hero-micro" id="hero-micro" style={{ opacity: 0 }}>Gratuit · Sans engagement · Résultat en 10 minutes</p>
+              <p className="hero-micro" id="hero-micro" style={{ opacity: 0 }}>Gratuit · Sans engagement · Premier livrable en 72h</p>
             </div>
             {/* Chat demo (desktop) */}
             <div className="hero-demo" aria-hidden="true" id="hero-demo" style={{ opacity: 0, transform: 'scale(.96)' }}>
