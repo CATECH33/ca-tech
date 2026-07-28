@@ -9,14 +9,18 @@
   var FN_URL  = 'https://jhcyooksjeivajdjicka.supabase.co/functions/v1/loic-chat'
   var BRAND   = '#0066FF'
   var DARK    = '#0A2540'
-  var WELCOME = 'Bonjour ! Je suis Loïc, le conseiller commercial de CA-TECH 👋\n\nJe peux vous présenter nos services, calculer un devis gratuit et répondre à toutes vos questions.\n\nComment puis-je vous aider ?'
+  var WELCOME = 'Bonjour ! Je suis Loïc, le conseiller commercial de CA-TECH 👋\n\nSites web, e-commerce, logo, automatisations IA… je peux vous présenter nos services, calculer un devis gratuit et répondre à toutes vos questions.\n\nQuel est votre projet ?'
 
   // ── Demo mode responses (fallback si API indisponible) ──────────
   var DEMO_RESPONSES = [
-    'Bien sûr ! CA-TECH propose : création de sites vitrines (à partir de 590€), sites e-commerce (à partir de 1 090€), logos et identités visuelles (à partir de 180€) et des solutions IA sur mesure.\n\nQuel type de projet vous intéresse ?',
-    'Pour vous faire une estimation précise, j\'ai besoin de quelques informations. Quel est votre projet ? (site vitrine, e-commerce, logo, application...)',
-    'Très bien ! Nos délais moyens : 2 à 3 semaines pour un site vitrine, 4 à 6 semaines pour un e-commerce. Nous travaillons en méthode agile avec validation à chaque étape.\n\nVoulez-vous qu\'on planifie un appel découverte gratuit de 30 minutes ?',
-    'Je transmets votre demande à notre équipe. Vous pouvez aussi nous contacter directement :\n• Email : contact@ca-tech.fr\n• Tél : +33 7 75 66 49 75\n\nNous répondons sous 24h !',
+    'CA-TECH propose un catalogue complet :\n\n🌐 Sites web : landing page (270€), vitrine (590€), e-commerce (1 090€)\n🎨 Design : logo (180€), identité visuelle (500€), flyers (139€)\n🤖 IA & Automatisation : chatbots, workflows, agents IA (à partir de 800€)\n\nQuel type de projet vous intéresse ?',
+    'Pour un site vitrine, on démarre à 590 € — de 3 à 10 pages, mobile-first et SEO optimisé dès le départ. Livraison en 2 à 3 semaines.\n\nSi vous avez besoin d\'une boutique en ligne avec paiement Stripe, comptez à partir de 1 090 €.\n\nC\'est pour quel secteur d\'activité ?',
+    'Les automatisations, c\'est l\'une de nos spécialités ! On peut automatiser vos emails, votre CRM, vos factures, vos réseaux sociaux ou vos imports de données.\n\nÀ partir de 800 €, on connecte vos outils existants (Zapier, Make, n8n…) et on vous fait gagner des heures chaque semaine.\n\nVous avez une tâche répétitive en tête ?',
+    'Un logo professionnel chez CA-TECH, c\'est à partir de 180 €. Vous recevez 3 propositions créatives + les fichiers HD (SVG, PNG, PDF vectoriel).\n\nSi vous voulez aller plus loin avec une charte graphique complète, l\'identité visuelle démarre à 500 €.\n\nVous avez déjà une idée de style ou vous partez de zéro ?',
+    'Les collaborateurs IA, c\'est exactement comme moi — des assistants intelligents intégrés à votre site ou vos outils internes.\n\nIls répondent à vos clients 24h/24, qualifient des prospects, prennent des RDV, gèrent vos FAQ…\n\nÀ partir de 800 €. Vous avez un cas d\'usage précis en tête ?',
+    'Une landing page, c\'est la solution la plus rapide : une page unique pensée pour la conversion, livrée en 5 à 7 jours à partir de 270 €.\n\nIdéale pour tester une offre, lancer un produit ou capturer des leads avant de créer un site complet.\n\nVous avez une offre à mettre en avant ?',
+    'On intervient à Paris, Lyon, Dijon et Troyes — et partout en France à distance.\n\nNos délais : 5-7 jours pour une landing page, 2-3 semaines pour un site vitrine, 4-6 semaines pour un e-commerce.\n\nVous avez une deadline particulière ?',
+    'Je transmets votre demande à notre équipe.\n\nVous pouvez aussi nous contacter directement :\n📧 contact@ca-tech.fr\n📞 +33 7 75 66 49 75\n\nNous répondons sous 24h ! Souhaitez-vous qu\'on vous rappelle ?',
   ]
   var demoIdx = 0
 
