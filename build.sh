@@ -17,3 +17,8 @@ done
 
 # Copie index.html du manager pour le fallback
 cp manager/dist/index.html manager/index.html
+
+# Copie des assets images à la racine pour les chemins /collaborateurs/..., /services/..., etc.
+for dir in collaborateurs services portfolio automatisations; do
+  [ -d "dist/$dir" ] && cp -r "dist/$dir" . || true
+done
