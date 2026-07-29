@@ -2,6 +2,126 @@ import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import '../../css/main.css'
 
+/* ── Carte expertise réutilisable ───────────────────────────────────────── */
+function ExpertiseCard({ img, alt, badge, badgeColor, title, desc, benefits, href, className }) {
+  function onEnter(e) {
+    e.currentTarget.style.boxShadow = '0 16px 48px rgba(0,0,0,.13)'
+    e.currentTarget.style.transform = 'translateY(-5px)'
+    const z = e.currentTarget.querySelector('[data-zoom]')
+    if (z) z.style.transform = 'scale(1.07)'
+  }
+  function onLeave(e) {
+    e.currentTarget.style.boxShadow = 'none'
+    e.currentTarget.style.transform = 'none'
+    const z = e.currentTarget.querySelector('[data-zoom]')
+    if (z) z.style.transform = 'none'
+  }
+  return (
+    <Link
+      to={href}
+      className={className}
+      style={{ display: 'flex', flexDirection: 'column', background: '#fff', borderRadius: '16px', border: '1px solid #e5e7eb', overflow: 'hidden', textDecoration: 'none', color: 'inherit', transition: 'box-shadow 250ms ease, transform 250ms cubic-bezier(.16,1,.3,1)', height: '100%' }}
+      onMouseEnter={onEnter}
+      onMouseLeave={onLeave}
+    >
+      {/* Image */}
+      <div style={{ position: 'relative', aspectRatio: '16/9', overflow: 'hidden', flexShrink: 0 }}>
+        <img data-zoom="1" src={img} alt={alt} loading="lazy" decoding="async" width="640" height="360"
+          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 600ms cubic-bezier(.16,1,.3,1)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 40%, rgba(0,0,0,.42) 100%)', pointerEvents: 'none' }} />
+      </div>
+      {/* Contenu */}
+      <div style={{ padding: '22px 24px 26px', display: 'flex', flexDirection: 'column', gap: '11px', flex: 1 }}>
+        <span style={{ fontSize: '.68rem', fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: badgeColor }}>{badge}</span>
+        <h3 style={{ fontSize: '1.05rem', fontWeight: 800, lineHeight: 1.25, color: '#0A2540', margin: 0, letterSpacing: '-.01em' }}>{title}</h3>
+        <p style={{ fontSize: '.875rem', lineHeight: 1.65, color: '#4a5568', margin: 0 }}>{desc}</p>
+        <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '7px' }}>
+          {benefits.map((b, i) => (
+            <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '.83rem', color: '#374151' }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={badgeColor} strokeWidth="2.5" style={{ flexShrink: 0, marginTop: '2px' }} aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg>
+              {b}
+            </li>
+          ))}
+        </ul>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '.875rem', fontWeight: 700, color: '#0A2540', marginTop: 'auto', paddingTop: '8px' }}>
+          Découvrir
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+        </span>
+      </div>
+    </Link>
+  )
+}
+
+/* ── Données expertises ─────────────────────────────────────────────────── */
+const EXPERTISES = [
+  {
+    img: '/services/site-vitrine.webp',
+    alt: 'Site vitrine professionnel',
+    badge: 'Développement Web',
+    badgeColor: '#0066FF',
+    title: 'Un site qui attire et convertit vos clients',
+    desc: 'Sites vitrines, e-commerce, landing pages. Design premium, chargement ultra-rapide, SEO intégré dès le départ.',
+    benefits: ['Chargement < 2 secondes', 'Compatible mobile & tablette', 'Livré en 1 à 6 semaines'],
+    href: '/services',
+    className: 'reveal',
+  },
+  {
+    img: '/portfolio/ca-tech-manager/dashboard.webp',
+    alt: 'Application métier sur mesure',
+    badge: 'Applications Métier',
+    badgeColor: '#6366F1',
+    title: 'Des outils métier adaptés à vos processus',
+    desc: 'CRM, ERP, portails clients, dashboards. Des logiciels sur mesure pour piloter votre activité et gagner en efficacité.',
+    benefits: ['Interface intuitive, prise en main < 1h', 'Données en temps réel', 'Intégration avec vos outils'],
+    href: '/services',
+    className: 'reveal d1',
+  },
+  {
+    img: '/portfolio/ca-tech-manager/clients.webp',
+    alt: 'CRM sur mesure',
+    badge: 'CRM sur mesure',
+    badgeColor: '#8B5CF6',
+    title: 'Gérez vos clients et prospects sans effort',
+    desc: 'Un CRM pensé pour votre secteur. Suivi des opportunités, relances automatiques, tableaux de bord — fini les tableurs.',
+    benefits: ['Adapté à votre métier', 'Relances automatisées', 'Accès équipe illimité'],
+    href: '/services',
+    className: 'reveal d2',
+  },
+  {
+    img: '/collaborateurs/collaborateur-ia-hero.webp',
+    alt: 'Collaborateurs IA',
+    badge: 'Solutions IA',
+    badgeColor: '#0066FF',
+    title: 'Un collaborateur IA opérationnel en 48h',
+    desc: 'Agents IA qui qualifient vos leads, répondent à vos clients et automatisent votre SAV — disponibles 24h/24 sans pause.',
+    benefits: ['ROI visible dès le 1er mois', '+180% satisfaction client', 'À partir de 800 €'],
+    href: '/collaborateurs-ia',
+    className: 'reveal d3',
+  },
+  {
+    img: '/automatisations/automatisation-hero.webp',
+    alt: 'Automatisations de processus',
+    badge: 'Automatisations',
+    badgeColor: '#10B981',
+    title: '14h récupérées par semaine en moyenne',
+    desc: 'Workflows N8N, Make, Zapier. Vos tâches répétitives tournent seules — devis, relances, reporting, synchro — en 48h.',
+    benefits: ['ROI ×4 en 3 mois', 'Sans coder ni former vos équipes', 'N8N · Make · Zapier · Python'],
+    href: '/automatisations',
+    className: 'reveal d1',
+  },
+  {
+    img: '/collaborateurs/seo-ia.webp',
+    alt: 'Référencement SEO',
+    badge: 'Marketing Digital',
+    badgeColor: '#F59E0B',
+    title: 'Soyez trouvé avant vos concurrents',
+    desc: 'Audit technique, contenu optimisé, SEO local et national. Trafic organique ×3.4 en 6 mois en moyenne.',
+    benefits: ['Audit SEO offert au démarrage', 'Reporting mensuel inclus', 'Résultats sous 90 jours'],
+    href: '/services',
+    className: 'reveal d2',
+  },
+]
+
 export default function Home() {
   useEffect(() => {
     document.title = 'CA-TECH — Cabinet de Développement Digital · Sites Internet, Applications Web, CRM, SaaS'
@@ -82,7 +202,7 @@ export default function Home() {
         entries.forEach(function (e) {
           if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target) }
         })
-      }, { threshold: 0.12 })
+      }, { threshold: 0.10 })
       document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(function (el) { obs.observe(el) })
     })()
 
@@ -166,171 +286,17 @@ export default function Home() {
             <h2 className="section-h2" id="expertises-title">Des solutions pour chaque défi digital</h2>
             <p className="section-intro">De la vitrine au système complet — CA-TECH maîtrise toute la chaîne du digital.</p>
           </div>
-
           <ul
             role="list"
             aria-label="Nos expertises"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 320px), 1fr))',
-              gap: '24px',
-              listStyle: 'none',
-              padding: 0,
-              margin: '56px 0 0',
-            }}
+            style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 320px), 1fr))', gap: '24px', listStyle: 'none', padding: 0, margin: '56px 0 0' }}
           >
-            {/* Développement Web */}
-            <li className="reveal">
-              <Link
-                to="/services"
-                style={{ display: 'flex', flexDirection: 'column', background: 'var(--color-surface, #fff)', borderRadius: '16px', border: '1px solid var(--color-border, #e5e7eb)', overflow: 'hidden', textDecoration: 'none', transition: 'box-shadow 200ms, transform 200ms', color: 'inherit' }}
-                onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,102,255,.12)'; e.currentTarget.style.transform = 'translateY(-4px)' }}
-                onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'none' }}
-                aria-label="Développement Web — Découvrir"
-              >
-                <div style={{ background: 'linear-gradient(135deg, #0066FF18 0%, #0A254010 100%)', padding: '36px 24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: '#0066FF', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(0,102,255,.35)' }}>
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" aria-hidden="true"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>
-                  </div>
-                </div>
-                <div style={{ padding: '24px' }}>
-                  <h3 style={{ fontSize: '1.125rem', fontWeight: '700', marginBottom: '10px', color: 'var(--color-text, #0A2540)' }}>Développement Web</h3>
-                  <p style={{ fontSize: '0.9rem', lineHeight: 1.65, color: 'var(--color-gray-600, #6b7280)', marginBottom: '20px' }}>Sites vitrines, e-commerce, landing pages haute conversion. Livrés en 5 à 42 jours, mobile-first, Lighthouse ≥ 95.</p>
-                  <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#0066FF', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                    Découvrir
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6" /></svg>
-                  </span>
-                </div>
-              </Link>
-            </li>
-
-            {/* Applications Métier */}
-            <li className="reveal d1">
-              <Link
-                to="/services"
-                style={{ display: 'flex', flexDirection: 'column', background: 'var(--color-surface, #fff)', borderRadius: '16px', border: '1px solid var(--color-border, #e5e7eb)', overflow: 'hidden', textDecoration: 'none', transition: 'box-shadow 200ms, transform 200ms', color: 'inherit' }}
-                onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 32px rgba(99,102,241,.12)'; e.currentTarget.style.transform = 'translateY(-4px)' }}
-                onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'none' }}
-                aria-label="Applications Métier — Découvrir"
-              >
-                <div style={{ background: 'linear-gradient(135deg, #6366F118 0%, #4F46E510 100%)', padding: '36px 24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: '#6366F1', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(99,102,241,.35)' }}>
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
-                  </div>
-                </div>
-                <div style={{ padding: '24px' }}>
-                  <h3 style={{ fontSize: '1.125rem', fontWeight: '700', marginBottom: '10px', color: 'var(--color-text, #0A2540)' }}>Applications Métier</h3>
-                  <p style={{ fontSize: '0.9rem', lineHeight: 1.65, color: 'var(--color-gray-600, #6b7280)', marginBottom: '20px' }}>Plateformes SaaS, outils internes, dashboards sur mesure. Des solutions qui s'adaptent exactement à vos processus.</p>
-                  <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#6366F1', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                    Découvrir
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6" /></svg>
-                  </span>
-                </div>
-              </Link>
-            </li>
-
-            {/* CRM sur mesure */}
-            <li className="reveal d2">
-              <Link
-                to="/services"
-                style={{ display: 'flex', flexDirection: 'column', background: 'var(--color-surface, #fff)', borderRadius: '16px', border: '1px solid var(--color-border, #e5e7eb)', overflow: 'hidden', textDecoration: 'none', transition: 'box-shadow 200ms, transform 200ms', color: 'inherit' }}
-                onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 32px rgba(139,92,246,.12)'; e.currentTarget.style.transform = 'translateY(-4px)' }}
-                onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'none' }}
-                aria-label="CRM sur mesure — Découvrir"
-              >
-                <div style={{ background: 'linear-gradient(135deg, #8B5CF618 0%, #7C3AED10 100%)', padding: '36px 24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: '#8B5CF6', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(139,92,246,.35)' }}>
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
-                  </div>
-                </div>
-                <div style={{ padding: '24px' }}>
-                  <h3 style={{ fontSize: '1.125rem', fontWeight: '700', marginBottom: '10px', color: 'var(--color-text, #0A2540)' }}>CRM sur mesure</h3>
-                  <p style={{ fontSize: '0.9rem', lineHeight: 1.65, color: 'var(--color-gray-600, #6b7280)', marginBottom: '20px' }}>Gérez vos clients, prospects et opportunités dans un outil pensé pour votre métier. Fini les tableurs Excel.</p>
-                  <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#8B5CF6', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                    Découvrir
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6" /></svg>
-                  </span>
-                </div>
-              </Link>
-            </li>
-
-            {/* Solutions IA */}
-            <li className="reveal d3">
-              <Link
-                to="/collaborateurs-ia"
-                style={{ display: 'flex', flexDirection: 'column', background: 'var(--color-surface, #fff)', borderRadius: '16px', border: '1px solid var(--color-border, #e5e7eb)', overflow: 'hidden', textDecoration: 'none', transition: 'box-shadow 200ms, transform 200ms', color: 'inherit' }}
-                onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,102,255,.15)'; e.currentTarget.style.transform = 'translateY(-4px)' }}
-                onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'none' }}
-                aria-label="Solutions IA — Découvrir"
-              >
-                <div style={{ background: 'linear-gradient(135deg, #0066FF22 0%, #0A254015 100%)', padding: '36px 24px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-                  <span style={{ position: 'absolute', top: '12px', right: '12px', fontSize: '11px', fontWeight: '700', letterSpacing: '.05em', background: '#0066FF', color: '#fff', borderRadius: '6px', padding: '3px 8px' }}>N°1</span>
-                  <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: 'linear-gradient(135deg, #0066FF, #0A2540)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(0,102,255,.40)' }}>
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" aria-hidden="true"><rect x="3" y="8" width="18" height="13" rx="2" /><path d="M8 8V5a4 4 0 0 1 8 0v3" /><line x1="12" y1="13" x2="12" y2="17" /><line x1="10" y1="15" x2="14" y2="15" /></svg>
-                  </div>
-                </div>
-                <div style={{ padding: '24px' }}>
-                  <h3 style={{ fontSize: '1.125rem', fontWeight: '700', marginBottom: '10px', color: 'var(--color-text, #0A2540)' }}>Solutions IA</h3>
-                  <p style={{ fontSize: '0.9rem', lineHeight: 1.65, color: 'var(--color-gray-600, #6b7280)', marginBottom: '20px' }}>Agents IA sur mesure, assistants RAG, chatbots qualifiants. L'IA déployée là où elle génère un ROI mesurable.</p>
-                  <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#0066FF', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                    Découvrir
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6" /></svg>
-                  </span>
-                </div>
-              </Link>
-            </li>
-
-            {/* Automatisations */}
-            <li className="reveal d1">
-              <Link
-                to="/automatisations"
-                style={{ display: 'flex', flexDirection: 'column', background: 'var(--color-surface, #fff)', borderRadius: '16px', border: '1px solid var(--color-border, #e5e7eb)', overflow: 'hidden', textDecoration: 'none', transition: 'box-shadow 200ms, transform 200ms', color: 'inherit' }}
-                onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 32px rgba(16,185,129,.12)'; e.currentTarget.style.transform = 'translateY(-4px)' }}
-                onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'none' }}
-                aria-label="Automatisations — Découvrir"
-              >
-                <div style={{ background: 'linear-gradient(135deg, #10B98118 0%, #059F6B10 100%)', padding: '36px 24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(16,185,129,.35)' }}>
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
-                  </div>
-                </div>
-                <div style={{ padding: '24px' }}>
-                  <h3 style={{ fontSize: '1.125rem', fontWeight: '700', marginBottom: '10px', color: 'var(--color-text, #0A2540)' }}>Automatisations</h3>
-                  <p style={{ fontSize: '0.9rem', lineHeight: 1.65, color: 'var(--color-gray-600, #6b7280)', marginBottom: '20px' }}>Workflows N8N, Make, Zapier, scripts Python. Vos processus répétitifs tournent seuls — 14h récupérées/semaine en moyenne.</p>
-                  <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#10B981', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                    Découvrir
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6" /></svg>
-                  </span>
-                </div>
-              </Link>
-            </li>
-
-            {/* Référencement SEO */}
-            <li className="reveal d2">
-              <Link
-                to="/services"
-                style={{ display: 'flex', flexDirection: 'column', background: 'var(--color-surface, #fff)', borderRadius: '16px', border: '1px solid var(--color-border, #e5e7eb)', overflow: 'hidden', textDecoration: 'none', transition: 'box-shadow 200ms, transform 200ms', color: 'inherit' }}
-                onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 32px rgba(245,158,11,.12)'; e.currentTarget.style.transform = 'translateY(-4px)' }}
-                onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'none' }}
-                aria-label="Référencement SEO — Découvrir"
-              >
-                <div style={{ background: 'linear-gradient(135deg, #F59E0B18 0%, #D9770610 100%)', padding: '36px 24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: '#F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(245,158,11,.35)' }}>
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" /><polyline points="17 6 23 6 23 12" /></svg>
-                  </div>
-                </div>
-                <div style={{ padding: '24px' }}>
-                  <h3 style={{ fontSize: '1.125rem', fontWeight: '700', marginBottom: '10px', color: 'var(--color-text, #0A2540)' }}>Référencement SEO</h3>
-                  <p style={{ fontSize: '0.9rem', lineHeight: 1.65, color: 'var(--color-gray-600, #6b7280)', marginBottom: '20px' }}>Audit technique, stratégie de contenu, SEO local et national. Trafic organique ×3.4 en 6 mois en moyenne.</p>
-                  <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#F59E0B', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                    Découvrir
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6" /></svg>
-                  </span>
-                </div>
-              </Link>
-            </li>
+            {EXPERTISES.map((card, i) => (
+              <li key={i} style={{ display: 'flex' }}>
+                <ExpertiseCard {...card} />
+              </li>
+            ))}
           </ul>
-
           <div style={{ textAlign: 'center', marginTop: '48px' }} className="reveal">
             <Link to="/services" className="btn btn-secondary">Voir toutes nos solutions →</Link>
           </div>
@@ -345,7 +311,6 @@ export default function Home() {
             <h2 className="section-h2" id="why-title">Des résultats mesurables, pas des promesses</h2>
             <p className="section-intro">Chaque chiffre est issu de missions réelles, vérifiables.</p>
           </div>
-
           <dl className="proof-grid" style={{ marginTop: '56px' }}>
             <div className="proof-stat reveal">
               <dd className="proof-value" data-count="200" data-prefix="" data-suffix="+">200+</dd>
@@ -364,7 +329,6 @@ export default function Home() {
               <dt className="proof-label">Support & Collaborateurs IA<br />disponibles en permanence</dt>
             </div>
           </dl>
-
           <div className="reassurance-bar reveal" style={{ marginTop: '56px' }}>
             <div className="reassurance-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg>
@@ -394,58 +358,46 @@ export default function Home() {
             <h2 className="section-h2" id="solutions-ia-title">Nos solutions IA qui travaillent pour vous</h2>
             <p className="section-intro">Deux produits phares. Des résultats concrets dès la première semaine.</p>
           </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 480px), 1fr))', gap: '28px', marginTop: '56px' }}>
 
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 460px), 1fr))',
-              gap: '32px',
-              marginTop: '56px',
-            }}
-          >
             {/* Collaborateurs IA */}
             <article
               className="reveal-l"
-              style={{
-                borderRadius: '20px',
-                border: '1px solid rgba(0,102,255,.15)',
-                overflow: 'hidden',
-                background: '#fff',
-                boxShadow: '0 2px 16px rgba(0,102,255,.06)',
-              }}
+              style={{ borderRadius: '20px', border: '1px solid #e5e7eb', overflow: 'hidden', background: '#fff', transition: 'box-shadow 250ms ease, transform 250ms cubic-bezier(.16,1,.3,1)' }}
               aria-label="Collaborateurs IA"
+              onMouseEnter={e => {
+                e.currentTarget.style.boxShadow = '0 16px 48px rgba(0,102,255,.15)'
+                e.currentTarget.style.transform = 'translateY(-4px)'
+                const z = e.currentTarget.querySelector('[data-zoom]')
+                if (z) z.style.transform = 'scale(1.05)'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.boxShadow = 'none'
+                e.currentTarget.style.transform = 'none'
+                const z = e.currentTarget.querySelector('[data-zoom]')
+                if (z) z.style.transform = 'none'
+              }}
             >
-              <div
-                style={{
-                  background: 'linear-gradient(135deg, #0A2540 0%, #0066FF 100%)',
-                  padding: '48px 40px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '16px',
-                  minHeight: '220px',
-                  justifyContent: 'flex-end',
-                }}
-              >
-                <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: 'rgba(255,255,255,.15)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '8px' }}>
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" aria-hidden="true"><rect x="3" y="8" width="18" height="13" rx="2" /><path d="M8 8V5a4 4 0 0 1 8 0v3" /><line x1="12" y1="13" x2="12" y2="17" /><line x1="10" y1="15" x2="14" y2="15" /></svg>
+              {/* Image avec texte overlay */}
+              <div style={{ position: 'relative', aspectRatio: '16/8', overflow: 'hidden' }}>
+                <img data-zoom="1" src="/collaborateurs/collaborateur-ia-hero.webp" alt="Collaborateurs IA" loading="lazy" decoding="async" width="960" height="480"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 600ms cubic-bezier(.16,1,.3,1)' }} />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,.1) 0%, rgba(5,15,40,.82) 100%)' }} />
+                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '28px 32px' }}>
+                  <span style={{ display: 'inline-block', fontSize: '.68rem', fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,.6)', marginBottom: '10px' }}>Solutions IA · N°1</span>
+                  <h3 style={{ color: '#fff', fontSize: '1.5rem', fontWeight: 800, margin: '0 0 8px', letterSpacing: '-.02em', lineHeight: 1.15 }}>Un employé IA disponible 24h/24</h3>
+                  <p style={{ color: 'rgba(255,255,255,.7)', fontSize: '.9rem', lineHeight: 1.6, margin: 0 }}>Il répond à vos clients, qualifie vos leads et traite votre SAV — sans pause ni congé.</p>
                 </div>
-                <h3 style={{ color: '#fff', fontSize: '1.5rem', fontWeight: '800', margin: 0 }}>Collaborateurs IA</h3>
-                <p style={{ color: 'rgba(255,255,255,.75)', fontSize: '0.9rem', lineHeight: 1.6, margin: 0 }}>Des assistants IA qui répondent à vos clients, qualifient vos leads et automatisent votre SAV — 24h/24, sans pause.</p>
               </div>
-              <div style={{ padding: '32px 40px' }}>
-                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 28px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '0.9rem', color: 'var(--color-gray-700, #374151)' }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0066FF" strokeWidth="2.5" style={{ flexShrink: 0, marginTop: '2px' }} aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg>
-                    Chatbot qualifiant intégré à votre site
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '0.9rem', color: 'var(--color-gray-700, #374151)' }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0066FF" strokeWidth="2.5" style={{ flexShrink: 0, marginTop: '2px' }} aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg>
-                    Agent SAV — 73% des tickets traités sans humain
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '0.9rem', color: 'var(--color-gray-700, #374151)' }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0066FF" strokeWidth="2.5" style={{ flexShrink: 0, marginTop: '2px' }} aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg>
-                    À partir de 800 € — premier livrable en 72h
-                  </li>
+              {/* Corps */}
+              <div style={{ padding: '28px 32px 32px' }}>
+                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {['Chatbot qualifiant intégré à votre site', 'Agent SAV — 73% des tickets traités sans humain', 'À partir de 800 € — premier livrable en 72h'].map((b, i) => (
+                    <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '.9rem', color: '#374151' }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0066FF" strokeWidth="2.5" style={{ flexShrink: 0, marginTop: '2px' }} aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg>
+                      {b}
+                    </li>
+                  ))}
                 </ul>
                 <Link to="/collaborateurs-ia" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
                   Découvrir les Collaborateurs IA →
@@ -456,52 +408,48 @@ export default function Home() {
             {/* Automatisations */}
             <article
               className="reveal-r"
-              style={{
-                borderRadius: '20px',
-                border: '1px solid rgba(16,185,129,.15)',
-                overflow: 'hidden',
-                background: '#fff',
-                boxShadow: '0 2px 16px rgba(16,185,129,.06)',
-              }}
+              style={{ borderRadius: '20px', border: '1px solid #e5e7eb', overflow: 'hidden', background: '#fff', transition: 'box-shadow 250ms ease, transform 250ms cubic-bezier(.16,1,.3,1)' }}
               aria-label="Automatisations"
+              onMouseEnter={e => {
+                e.currentTarget.style.boxShadow = '0 16px 48px rgba(16,185,129,.15)'
+                e.currentTarget.style.transform = 'translateY(-4px)'
+                const z = e.currentTarget.querySelector('[data-zoom]')
+                if (z) z.style.transform = 'scale(1.05)'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.boxShadow = 'none'
+                e.currentTarget.style.transform = 'none'
+                const z = e.currentTarget.querySelector('[data-zoom]')
+                if (z) z.style.transform = 'none'
+              }}
             >
-              <div
-                style={{
-                  background: 'linear-gradient(135deg, #064E3B 0%, #10B981 100%)',
-                  padding: '48px 40px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '16px',
-                  minHeight: '220px',
-                  justifyContent: 'flex-end',
-                }}
-              >
-                <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: 'rgba(255,255,255,.15)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '8px' }}>
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
+              {/* Image avec texte overlay */}
+              <div style={{ position: 'relative', aspectRatio: '16/8', overflow: 'hidden' }}>
+                <img data-zoom="1" src="/automatisations/automatisation-hero.webp" alt="Automatisations" loading="lazy" decoding="async" width="960" height="480"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 600ms cubic-bezier(.16,1,.3,1)' }} />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,.1) 0%, rgba(3,30,20,.82) 100%)' }} />
+                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '28px 32px' }}>
+                  <span style={{ display: 'inline-block', fontSize: '.68rem', fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,.6)', marginBottom: '10px' }}>Automatisations · N8N · Make · Zapier</span>
+                  <h3 style={{ color: '#fff', fontSize: '1.5rem', fontWeight: 800, margin: '0 0 8px', letterSpacing: '-.02em', lineHeight: 1.15 }}>14h récupérées par semaine en moyenne</h3>
+                  <p style={{ color: 'rgba(255,255,255,.7)', fontSize: '.9rem', lineHeight: 1.6, margin: 0 }}>Vos processus répétitifs tournent seuls. Déployé en 48h, ROI ×4 en 3 mois.</p>
                 </div>
-                <h3 style={{ color: '#fff', fontSize: '1.5rem', fontWeight: '800', margin: 0 }}>Automatisations</h3>
-                <p style={{ color: 'rgba(255,255,255,.75)', fontSize: '0.9rem', lineHeight: 1.6, margin: 0 }}>Connectez vos outils, éliminez les tâches répétitives et récupérez 14h par semaine en moyenne grâce à nos workflows sur mesure.</p>
               </div>
-              <div style={{ padding: '32px 40px' }}>
-                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 28px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '0.9rem', color: 'var(--color-gray-700, #374151)' }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5" style={{ flexShrink: 0, marginTop: '2px' }} aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg>
-                    N8N, Make, Zapier, scripts Python sur mesure
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '0.9rem', color: 'var(--color-gray-700, #374151)' }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5" style={{ flexShrink: 0, marginTop: '2px' }} aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg>
-                    Devis, relances, facturation — 100% automatiques
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '0.9rem', color: 'var(--color-gray-700, #374151)' }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5" style={{ flexShrink: 0, marginTop: '2px' }} aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg>
-                    À partir de 800 € — ROI moyen ×4 en 3 mois
-                  </li>
+              {/* Corps */}
+              <div style={{ padding: '28px 32px 32px' }}>
+                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {['N8N, Make, Zapier, scripts Python sur mesure', 'Devis, relances, facturation — 100% automatiques', 'À partir de 800 € — ROI moyen ×4 en 3 mois'].map((b, i) => (
+                    <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '.9rem', color: '#374151' }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5" style={{ flexShrink: 0, marginTop: '2px' }} aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg>
+                      {b}
+                    </li>
+                  ))}
                 </ul>
                 <Link to="/automatisations" className="btn btn-secondary" style={{ width: '100%', justifyContent: 'center', borderColor: '#10B981', color: '#10B981' }}>
                   Découvrir les Automatisations →
                 </Link>
               </div>
             </article>
+
           </div>
         </div>
       </section>
@@ -514,7 +462,6 @@ export default function Home() {
             <h2 className="section-h2" id="cases-title">Des résultats réels, vérifiables</h2>
             <p className="section-intro">Trois missions récentes. Des chiffres issus de projets livrés.</p>
           </div>
-
           <ul className="cases-grid" role="list" aria-label="Études de cas clients" style={{ marginTop: '56px' }}>
             <li>
               <article className="case-card reveal" aria-label="Agent IA SAV — e-commerce">
@@ -571,7 +518,6 @@ export default function Home() {
               </article>
             </li>
           </ul>
-
           <div style={{ textAlign: 'center', marginTop: '48px' }} className="reveal">
             <Link to="/realisations" className="btn btn-secondary">→ Voir toutes nos réalisations</Link>
           </div>
