@@ -159,9 +159,17 @@ export default function Home() {
       var msgs = document.getElementById('chat-messages')
       if (!msgs) return
       var seq = [
-        { role: 'loic', text: 'Bonjour ! Je suis Loïc, consultant IA chez CA-TECH.', delay: 800 },
-        { role: 'user', text: "Combien d'heures votre équipe perd-elle sur des tâches répétitives ?", delay: 3200 },
-        { role: 'loic', text: 'En moyenne, nos clients récupèrent 8h/semaine dès le premier mois. 🚀', delay: 5200 },
+        { role: 'loic', text: 'Bonjour ! Je suis Loïc, votre consultant IA chez CA-TECH. 👋', delay: 800 },
+        { role: 'user', text: "Combien d'heures mon équipe perd-elle sur des tâches répétitives ?", delay: 3200 },
+        { role: 'loic', text: 'En moyenne, nos clients récupèrent 14h/semaine dès le premier mois. 🚀', delay: 5200 },
+        { role: 'user', text: 'Vous faites aussi des sites internet ?', delay: 8400 },
+        { role: 'loic', text: 'Oui — vitrines, e-commerce, applications métier. Livré en 1 à 6 semaines. ✅', delay: 10400 },
+        { role: 'user', text: "C'est quoi exactement un collaborateur IA ?", delay: 13800 },
+        { role: 'loic', text: 'Un agent qui répond à vos clients, traite vos tickets et relance vos prospects — 24h/24, sans congé. 🤖', delay: 15800 },
+        { role: 'user', text: 'Et pour le SEO et le marketing ?', delay: 19600 },
+        { role: 'loic', text: 'Notre SEO IA publie du contenu optimisé chaque semaine. Résultat moyen : ×3 de trafic en 6 mois. 📈', delay: 21600 },
+        { role: 'user', text: 'Quel est le prix pour démarrer ?', delay: 25200 },
+        { role: 'loic', text: 'À partir de 800 € — ROI dès le 1er mois. 🎯', delay: 27200 },
       ]
       seq.forEach(function (m) {
         setTimeout(function () {
@@ -189,7 +197,7 @@ export default function Home() {
         cta.style.cursor = 'pointer'
         msgs.appendChild(cta)
         msgs.scrollTop = msgs.scrollHeight
-      }, 8000)
+      }, 30000)
     })()
 
     /* ── SCROLL REVEAL ────────────────────────────────────────────────── */

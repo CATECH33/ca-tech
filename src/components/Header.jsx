@@ -100,6 +100,11 @@ export default function Header() {
         </NavLink>
 
         <ul className="nav-links">
+          {/* ── Accueil ── */}
+          <li>
+            <NavLink to="/" className={activeClass} end>Accueil</NavLink>
+          </li>
+
           {/* ── Services + Mega Menu ── */}
           <li className="nav-dropdown">
             <NavLink

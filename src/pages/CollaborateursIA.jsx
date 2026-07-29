@@ -11,7 +11,7 @@ const COLLABORATEURS = [
     id: 'commercial',
     name: 'Commercial IA',
     color: '#0066FF',
-    img: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=640&h=380&fit=crop&q=85&auto=format',
+    img: '/collaborateurs/commercial-ia.webp',
     desc: 'Votre meilleur commercial — sans pause café, sans jours fériés. Il qualifie chaque lead entrant, relance automatiquement et personnalise chaque proposition pour maximiser vos conversions.',
     missions: [
       'Qualification automatique des leads entrants',
@@ -62,7 +62,7 @@ const COLLABORATEURS = [
     id: 'support',
     name: 'Support IA',
     color: '#7c3aed',
-    img: 'https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=640&h=380&fit=crop&q=85&auto=format',
+    img: '/collaborateurs/support-ia.webp',
     desc: 'Disponible 24h/24, 7j/7, sans jamais perdre patience. Il répond, classe et résout les demandes clients instantanément pendant que vos équipes se concentrent sur les cas complexes.',
     missions: [
       'Réponse aux questions fréquentes 24/7',
@@ -113,7 +113,7 @@ const COLLABORATEURS = [
     id: 'rh',
     name: 'RH IA',
     color: '#0891b2',
-    img: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=640&h=380&fit=crop&q=85&auto=format',
+    img: '/collaborateurs/rh-ia.webp',
     desc: 'Recrutement, onboarding, congés, réponses aux équipes — votre RH IA prend en charge tout l\'administratif pour que vous vous consacriez au développement des talents.',
     missions: [
       'Analyse automatique des candidatures',
@@ -164,7 +164,7 @@ const COLLABORATEURS = [
     id: 'juridique',
     name: 'Juridique IA',
     color: '#6d28d9',
-    img: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=640&h=380&fit=crop&q=85&auto=format',
+    img: '/collaborateurs/juridique-ia.webp',
     desc: 'Contrats, CGV, clauses spécifiques — rédigés et analysés en quelques secondes. Signez en confiance sans attendre un avocat ni payer 500 €/heure.',
     missions: [
       'Rédaction de contrats sur mesure',
@@ -215,7 +215,7 @@ const COLLABORATEURS = [
     id: 'seo',
     name: 'SEO IA',
     color: '#059669',
-    img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=640&h=380&fit=crop&q=85&auto=format',
+    img: '/collaborateurs/seo-ia.webp',
     desc: 'Articles de blog, pages et fiches optimisés pour Google chaque semaine. Vos clients vous trouvent avant vos concurrents — sans que vous écriviez une seule ligne.',
     missions: [
       'Rédaction d\'articles de blog SEO-optimisés',
@@ -266,7 +266,7 @@ const COLLABORATEURS = [
     id: 'comptable',
     name: 'Comptable IA',
     color: '#d97706',
-    img: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=640&h=380&fit=crop&q=85&auto=format',
+    img: '/collaborateurs/collaborateur-ia-hero.webp',
     desc: 'Factures, rapprochements bancaires, relances impayés, déclarations — gérés en temps réel. Vos fins de mois cessent d\'être chaotiques.',
     missions: [
       'Génération et envoi automatique des factures',
@@ -628,7 +628,7 @@ export default function CollaborateursIA() {
           <div className="cai-hero-right" aria-hidden="true">
             <div className="cai-hero-photo-wrap">
               <img
-                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=620&h=560&fit=crop&q=85&auto=format"
+                src="/collaborateurs/collaborateur-ia-hero.webp"
                 alt="Équipe CA-TECH"
                 loading="eager" decoding="async" width="620" height="560"
               />
