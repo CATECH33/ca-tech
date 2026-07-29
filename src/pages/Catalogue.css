@@ -323,6 +323,37 @@
 /* ══════════════════════════════════════════════════════════
    RESPONSIVE
 ══════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════
+   SKELETON (état de chargement)
+══════════════════════════════════════════════════════════ */
+.cat-card--skeleton {
+  pointer-events: none;
+  border-color: #f0f0f0;
+  box-shadow: none;
+}
+.cat-card--skeleton::after { display: none; }
+
+.cat-sk-line {
+  height: 12px; border-radius: 6px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e4e4e4 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: catSkShimmer 1.4s infinite;
+  margin-bottom: 12px;
+}
+.cat-sk-line--sm  { width: 48%; height: 10px; }
+.cat-sk-line--lg  { width: 90%; }
+.cat-sk-circle {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e4e4e4 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: catSkShimmer 1.4s infinite;
+  margin-bottom: 14px;
+}
+@keyframes catSkShimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 @media (max-width: 1024px) {
   .cat-grid { grid-template-columns: repeat(2, 1fr); }
 }
