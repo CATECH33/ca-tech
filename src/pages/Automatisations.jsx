@@ -3,14 +3,18 @@ import { Link } from 'react-router-dom'
 import './Automatisations.css'
 
 /* ══════════════════════════════════════════════════════════
+   URLs Unsplash — photos business premium
+══════════════════════════════════════════════════════════ */
+const U = id => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=900&q=80`
+
+/* ══════════════════════════════════════════════════════════
    14 SERVICES MÉTIER
 ══════════════════════════════════════════════════════════ */
 const SERVICES = [
   {
     id: 'devis-auto',
     cat: 'commercial',
-    gradient: 'linear-gradient(135deg,#1d4ed8,#0066FF)',
-    icon: '📋',
+    image: U('1556761175-b413da4baf72'),
     name: 'Génération automatique de devis',
     benefit: 'Un devis professionnel envoyé en moins de 2 minutes, 24h/24 — sans ouvrir un fichier.',
     gains: [
@@ -24,8 +28,7 @@ const SERVICES = [
   {
     id: 'qualification-prospects',
     cat: 'commercial',
-    gradient: 'linear-gradient(135deg,#5b21b6,#7c3aed)',
-    icon: '🎯',
+    image: '/collaborateurs/commercial-ia.webp',
     name: 'Qualification automatique des prospects',
     benefit: 'Chaque lead est scoré, trié et assigné au bon commercial en temps réel.',
     gains: [
@@ -39,8 +42,7 @@ const SERVICES = [
   {
     id: 'relance-devis',
     cat: 'commercial',
-    gradient: 'linear-gradient(135deg,#b45309,#d97706)',
-    icon: '🔔',
+    image: U('1552664730-d307ca884978'),
     name: 'Relance automatique des devis',
     benefit: 'Vos devis sans réponse sont relancés automatiquement au bon moment, avec le bon ton.',
     gains: [
@@ -54,8 +56,7 @@ const SERVICES = [
   {
     id: 'reponse-emails',
     cat: 'communication',
-    gradient: 'linear-gradient(135deg,#0e7490,#0891b2)',
-    icon: '✉️',
+    image: '/automatisations/gmail.webp',
     name: 'Réponse automatique aux emails',
     benefit: 'Chaque email entrant reçoit une réponse personnalisée en moins de 5 minutes.',
     gains: [
@@ -69,8 +70,7 @@ const SERVICES = [
   {
     id: 'assistant-tel',
     cat: 'communication',
-    gradient: 'linear-gradient(135deg,#047857,#059669)',
-    icon: '📞',
+    image: U('1551836022-d5d88e9218df'),
     name: 'Assistant téléphonique IA',
     benefit: 'Un assistant vocal prend vos appels, qualifie et transfère selon vos règles — même en réunion.',
     gains: [
@@ -84,8 +84,7 @@ const SERVICES = [
   {
     id: 'support-client',
     cat: 'communication',
-    gradient: 'linear-gradient(135deg,#b91c1c,#dc2626)',
-    icon: '💬',
+    image: '/collaborateurs/support-ia.webp',
     name: 'Support client 24h/24',
     benefit: 'Un agent IA répond à vos clients sur tous les canaux — email, chat, WhatsApp — sans interruption.',
     gains: [
@@ -99,8 +98,7 @@ const SERVICES = [
   {
     id: 'facturation-auto',
     cat: 'finance',
-    gradient: 'linear-gradient(135deg,#4338ca,#6366f1)',
-    icon: '🧾',
+    image: U('1554224155-8d04cb21cd6c'),
     name: 'Facturation automatique',
     benefit: 'Chaque paiement reçu génère automatiquement une facture conforme et l\'envoie au client.',
     gains: [
@@ -114,8 +112,7 @@ const SERVICES = [
   {
     id: 'signature-elec',
     cat: 'finance',
-    gradient: 'linear-gradient(135deg,#1d4ed8,#0066FF)',
-    icon: '✍️',
+    image: '/collaborateurs/juridique-ia.webp',
     name: 'Signature électronique',
     benefit: 'Vos contrats et devis sont signés en quelques clics — sans impression, sans déplacement.',
     gains: [
@@ -129,8 +126,7 @@ const SERVICES = [
   {
     id: 'prise-rdv',
     cat: 'commercial',
-    gradient: 'linear-gradient(135deg,#0e7490,#0891b2)',
-    icon: '📅',
+    image: '/automatisations/google-calendar.webp',
     name: 'Prise de rendez-vous automatique',
     benefit: 'Vos prospects réservent un créneau directement dans votre agenda — sans aller-retour d\'emails.',
     gains: [
@@ -144,8 +140,7 @@ const SERVICES = [
   {
     id: 'automatisation-rh',
     cat: 'rh',
-    gradient: 'linear-gradient(135deg,#b45309,#d97706)',
-    icon: '👥',
+    image: '/collaborateurs/rh-ia.webp',
     name: 'Automatisation RH',
     benefit: 'Onboarding, congés, notes de frais, contrats — tous vos processus RH en pilote automatique.',
     gains: [
@@ -159,8 +154,7 @@ const SERVICES = [
   {
     id: 'gestion-docs',
     cat: 'rh',
-    gradient: 'linear-gradient(135deg,#047857,#059669)',
-    icon: '📁',
+    image: U('1450101499163-c8848c66ca85'),
     name: 'Gestion documentaire',
     benefit: 'Vos documents sont classés, nommés et archivés automatiquement — retrouvables en 3 secondes.',
     gains: [
@@ -174,8 +168,7 @@ const SERVICES = [
   {
     id: 'prospection-auto',
     cat: 'commercial',
-    gradient: 'linear-gradient(135deg,#b91c1c,#dc2626)',
-    icon: '🚀',
+    image: U('1560250097-0b93528c311a'),
     name: 'Prospection commerciale automatique',
     benefit: 'Votre pipeline est alimenté en continu avec des prospects qualifiés — sans prospection manuelle.',
     gains: [
@@ -189,8 +182,7 @@ const SERVICES = [
   {
     id: 'reporting-auto',
     cat: 'reporting',
-    gradient: 'linear-gradient(135deg,#5b21b6,#7c3aed)',
-    icon: '📊',
+    image: U('1551288049-bebda4e38f71'),
     name: 'Reporting automatique',
     benefit: 'Vos KPIs et tableaux de bord sont générés et envoyés automatiquement, à la bonne fréquence.',
     gains: [
@@ -204,8 +196,7 @@ const SERVICES = [
   {
     id: 'crm-intelligent',
     cat: 'commercial',
-    gradient: 'linear-gradient(135deg,#1d4ed8,#0066FF)',
-    icon: '🧠',
+    image: '/automatisations/automatisation-hero.webp',
     name: 'CRM intelligent',
     benefit: 'Votre CRM se met à jour seul — chaque appel, email, réunion et action tracé automatiquement.',
     gains: [
@@ -392,11 +383,10 @@ export default function Automatisations() {
             {visible.map(s => (
               <article key={s.id} className="aut-card at-reveal">
 
-                {/* Visual header */}
-                <div className="aut-card-visual" style={{ background: s.gradient }}>
-                  <div className="aut-card-visual-deco" aria-hidden="true" />
-                  <div className="aut-card-visual-deco2" aria-hidden="true" />
-                  <span className="aut-card-icon" role="img" aria-hidden="true">{s.icon}</span>
+                {/* Image premium */}
+                <div className="aut-card-visual">
+                  <img src={s.image} alt={s.name} loading="lazy" />
+                  <div className="aut-card-visual-overlay" />
                   <span className="aut-card-cat-badge">
                     {CATS.find(c => c.key === s.cat)?.label ?? s.cat}
                   </span>
@@ -430,7 +420,7 @@ export default function Automatisations() {
                     <span style={{ color: s.color }}>{s.result}</span>
                   </div>
 
-                  <Link to="/contact" className="aut-card-btn" style={{ background: s.gradient }}>
+                  <Link to="/contact" className="aut-card-btn" style={{ background: s.color }}>
                     Découvrir ce service →
                   </Link>
                 </div>
