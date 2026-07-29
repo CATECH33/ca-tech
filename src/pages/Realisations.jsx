@@ -27,7 +27,7 @@ const PROJECTS = [
     cat: 'sites',
     title: 'Boutique mode en ligne',
     company: 'Camille & Co · Paris',
-    img: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80',
+    img: '/services/ecommerce.webp',
     probleme: 'Aucune présence en ligne, 100 % des ventes en boutique physique, saisonnalité forte.',
     solution: 'E-commerce Stripe + SEO local + automatisation stocks & commandes + Google Shopping.',
     resultats: [
@@ -74,7 +74,7 @@ const PROJECTS = [
     cat: 'automatisations',
     title: 'Reporting RH entièrement automatisé',
     company: 'Cabinet RH · Lyon',
-    img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
+    img: '/portfolio/ca-tech-manager/dashboard.webp',
     probleme: 'Reporting 100 % manuel sur Excel, chaque proposition reconstruite de zéro.',
     solution: 'Pipeline : données → rapport → envoi client, templates intelligents, CRM intégré.',
     resultats: [
@@ -89,7 +89,7 @@ const PROJECTS = [
     cat: 'automatisations',
     title: 'Pipeline leads immobiliers',
     company: 'Agence Bordelais · Toulouse',
-    img: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80',
+    img: '/portfolio/pasmal/dashboard.webp',
     probleme: 'Leads dispersés, suivi manuel, 100 % dépendant des portails payants.',
     solution: 'Qualification automatique + CRM + scoring leads + relances séquencées.',
     resultats: [
@@ -104,7 +104,7 @@ const PROJECTS = [
     cat: 'automatisations',
     title: 'Facturation e-commerce automatisée',
     company: 'Startup SaaS · Nantes',
-    img: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80',
+    img: '/portfolio/pemous-money/home.webp',
     probleme: 'Facturation manuelle pour 200+ commandes/mois, erreurs comptables fréquentes.',
     solution: 'Pipeline commande → facture → comptabilité → relances impayés, 100 % auto.',
     resultats: [
@@ -121,7 +121,7 @@ const PROJECTS = [
     cat: 'collaborateurs',
     title: 'Commercial IA — Loïc',
     company: 'Agence de services · Bordeaux',
-    img: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&q=80',
+    img: '/collaborateurs/commercial-ia.webp',
     probleme: 'Commerciaux débordés, relances oubliées, pipeline CRM mal suivi.',
     solution: 'Commercial IA qui qualifie, relance et planifie les RDV automatiquement 24 h/24.',
     resultats: [
@@ -136,7 +136,7 @@ const PROJECTS = [
     cat: 'collaborateurs',
     title: 'Support IA 24/7',
     company: 'E-commerce · Paris',
-    img: 'https://images.unsplash.com/photo-1553484771-371a605b060b?w=800&q=80',
+    img: '/collaborateurs/support-ia.webp',
     probleme: '300+ tickets/semaine, équipe saturée, délai de réponse supérieur à 24 h.',
     solution: 'Collaborateur IA qui répond en < 2 min, traite 80 % des tickets, escalade le reste.',
     resultats: [
@@ -153,7 +153,7 @@ const PROJECTS = [
     cat: 'seo',
     title: 'SEO local — Boutique spécialisée',
     company: 'Greenlab · Lyon',
-    img: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=80',
+    img: '/collaborateurs/seo-ia.webp',
     probleme: 'Invisible sur Google, 100 % du trafic payant, concurrence féroce.',
     solution: 'SEO local + 40 pages optimisées + Google Business + schema markup complet.',
     resultats: [
@@ -200,7 +200,7 @@ const PROJECTS = [
     cat: 'applications',
     title: 'Dashboard analytics unifié',
     company: 'Startup DTC · Nantes',
-    img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
+    img: '/portfolio/ca-tech-manager/home.webp',
     probleme: 'Données dispersées entre Shopify, Meta Ads, GA4 — aucune vue centralisée.',
     solution: 'Dashboard temps réel unifiant toutes les sources + alertes auto + export PDF.',
     resultats: [
@@ -234,7 +234,7 @@ export default function Realisations() {
             cat: r.category ?? 'sites',
             title: r.title,
             company: r.client_name ?? '',
-            img: r.thumbnail_url ?? 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
+            img: r.thumbnail_url ?? '/portfolio/ca-tech-manager/dashboard.webp',
             probleme: r.probleme ?? r.description ?? '',
             solution: r.solution ?? '',
             resultats: Array.isArray(r.resultats) ? r.resultats : [],
@@ -254,45 +254,6 @@ export default function Realisations() {
     [active, projects]
   )
 
-  /* ── Particles (hero canvas) ── */
-  useEffect(() => {
-    const cv = document.getElementById('ccCanvas')
-    if (!cv) return
-    const cx = cv.getContext('2d')
-    let W, H, rafId
-    const pts = []
-    const N = 38, LK = 95
-
-    function resize() { W = cv.width = cv.offsetWidth; H = cv.height = cv.offsetHeight }
-    window.addEventListener('resize', resize, { passive: true }); resize()
-    function r(a, b) { return a + Math.random() * (b - a) }
-    for (let i = 0; i < N; i++) pts.push({ x: r(0, W), y: r(0, H), vx: r(-.14, .14), vy: r(-.14, .14), s: r(.6, 1.4) })
-
-    ;(function frame() {
-      cx.clearRect(0, 0, W, H)
-      pts.forEach(p => {
-        p.x += p.vx; p.y += p.vy
-        if (p.x < 0) p.x = W; if (p.x > W) p.x = 0
-        if (p.y < 0) p.y = H; if (p.y > H) p.y = 0
-        cx.beginPath(); cx.arc(p.x, p.y, p.s, 0, Math.PI * 2)
-        cx.fillStyle = 'rgba(0,102,255,.32)'; cx.fill()
-      })
-      for (let i = 0; i < N; i++) for (let j = i + 1; j < N; j++) {
-        const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y
-        const d = Math.sqrt(dx * dx + dy * dy)
-        if (d < LK) {
-          cx.beginPath(); cx.moveTo(pts[i].x, pts[i].y); cx.lineTo(pts[j].x, pts[j].y)
-          cx.strokeStyle = `rgba(0,102,255,${0.06 * (1 - d / LK)})`; cx.lineWidth = 1; cx.stroke()
-        }
-      }
-      rafId = requestAnimationFrame(frame)
-    })()
-
-    return () => {
-      cancelAnimationFrame(rafId)
-      window.removeEventListener('resize', resize)
-    }
-  }, [])
 
   /* ── Scroll reveal (CTA) ── */
   useEffect(() => {
@@ -307,7 +268,6 @@ export default function Realisations() {
     <>
       {/* ════════════ HERO ════════════ */}
       <section className="cc-hero">
-        <canvas className="cc-canvas" id="ccCanvas" aria-hidden="true"></canvas>
         <div className="cc-grid-bg" aria-hidden="true"></div>
         <div className="cc-halo cc-halo-1" aria-hidden="true"></div>
         <div className="cc-halo cc-halo-2" aria-hidden="true"></div>
