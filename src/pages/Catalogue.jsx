@@ -15,151 +15,226 @@ const CAT_META = {
   autre:        { label: 'Autre',          color: '#6b7280' },
 }
 
-function mapRow(r) {
+const SVC_META = {
+  web:         { label: 'Site vitrine',        color: '#0066FF' },
+  ecommerce:   { label: 'E-commerce',          color: '#7c3aed' },
+  seo:         { label: 'SEO & Référencement', color: '#0891b2' },
+  ia:          { label: 'IA & Automatisation', color: '#059669' },
+  branding:    { label: 'Branding & Design',   color: '#d97706' },
+  application: { label: 'Application métier',  color: '#dc2626' },
+  autre:       { label: 'Autre',               color: '#6b7280' },
+}
+
+function mapIARow(r) {
   const meta = CAT_META[r.categorie] ?? CAT_META.autre
   return {
-    id:      r.id,
-    cat:     meta.label,
-    color:   meta.color,
-    icon:    r.icone || '🤖',
-    name:    r.nom,
-    desc:    r.description,
-    metric:  Array.isArray(r.resultats_attendus) && r.resultats_attendus[0]
-               ? r.resultats_attendus[0]
-               : '',
-    price:   String(r.prix),
-    popular: r.prix_barre != null,
+    id:         r.id,
+    cat:        meta.label,
+    color:      meta.color,
+    icon:       r.icone || '🤖',
+    name:       r.nom,
+    desc:       r.description,
+    metric:     Array.isArray(r.resultats_attendus) && r.resultats_attendus[0]
+                  ? r.resultats_attendus[0] : '',
+    price:      String(r.prix),
+    priceLabel: '/mois',
+    popular:    r.prix_barre != null,
+  }
+}
+
+function mapSvcRow(r) {
+  const meta = SVC_META[r.categorie] ?? SVC_META.autre
+  return {
+    id:         r.id,
+    cat:        meta.label,
+    color:      meta.color,
+    icon:       r.icone || '💻',
+    name:       r.nom,
+    desc:       r.description,
+    metric:     '',
+    price:      String(r.prix),
+    priceLabel: '/projet',
+    popular:    r.prix_barre != null,
   }
 }
 
 /* ══════════════════════════════════════════════════════════
-   Données de secours (affichées si la DB est vide)
+   Fallback — Collaborateurs IA
 ══════════════════════════════════════════════════════════ */
-const SOLUTIONS_FALLBACK = [
+const IA_FALLBACK = [
   { id:1,  cat:'Assistant IA',   color:'#0066FF', icon:'💼', name:'Loïc Commercial',
     desc:"Qualification de leads, scoring IA, propositions personnalisées et relances automatiques.",
-    metric:'−12h/semaine sur la prospection', price:'490', popular:true },
+    metric:'−12h/semaine sur la prospection', price:'490', priceLabel:'/mois', popular:true },
   { id:2,  cat:'Assistant IA',   color:'#0066FF', icon:'📧', name:'Séquences de relance',
     desc:"Emails de relance personnalisés envoyés automatiquement selon le comportement du prospect.",
-    metric:'+38 % de taux de réponse', price:'190' },
+    metric:'+38 % de taux de réponse', price:'190', priceLabel:'/mois' },
   { id:3,  cat:'Assistant IA',   color:'#0066FF', icon:'📊', name:'Scoring de leads',
     desc:"Évaluation automatique de chaque lead entrant avec un score de 0 à 100 et recommandation d'action.",
-    metric:'×2 sur le taux de conversion', price:'190' },
+    metric:'×2 sur le taux de conversion', price:'190', priceLabel:'/mois' },
   { id:4,  cat:'Assistant IA',   color:'#0066FF', icon:'🤝', name:'CRM IA',
     desc:"Enrichissement automatique des contacts, synchronisation multi-sources et alertes d'opportunités.",
-    metric:'100 % des contacts enrichis', price:'290' },
+    metric:'100 % des contacts enrichis', price:'290', priceLabel:'/mois' },
   { id:5,  cat:'Agent autonome', color:'#7c3aed', icon:'🎧', name:'Loïc Support',
     desc:"Répond aux questions fréquentes 24h/24, classe les tickets et escalade les cas critiques.",
-    metric:'−60 % de tickets traités manuellement', price:'390', popular:true },
+    metric:'−60 % de tickets traités manuellement', price:'390', priceLabel:'/mois', popular:true },
   { id:6,  cat:'Agent autonome', color:'#7c3aed', icon:'💬', name:'Chatbot multicanal',
     desc:"Présent sur votre site, WhatsApp Business et email — réponses instantanées à toute heure.",
-    metric:'Répond en moins de 2 secondes', price:'290' },
+    metric:'Répond en moins de 2 secondes', price:'290', priceLabel:'/mois' },
   { id:7,  cat:'Agent autonome', color:'#7c3aed', icon:'🎫', name:'Gestion de tickets',
     desc:"Priorisation intelligente des demandes entrantes et routage automatique vers le bon agent.",
-    metric:'−45 % de temps de traitement', price:'190' },
+    metric:'−45 % de temps de traitement', price:'190', priceLabel:'/mois' },
   { id:8,  cat:'Agent autonome', color:'#7c3aed', icon:'⭐', name:'Satisfaction client',
     desc:"Enquêtes NPS automatisées après chaque interaction avec analyse des verbatims.",
-    metric:'+22 points NPS en moyenne', price:'90' },
+    metric:'+22 points NPS en moyenne', price:'90', priceLabel:'/mois' },
   { id:9,  cat:'Analyste IA',    color:'#0891b2', icon:'👥', name:'Loïc RH',
     desc:"Gère les congés, trie les CVs, automatise l'onboarding et répond aux questions des équipes.",
-    metric:'−8h/semaine de tâches administratives', price:'390', popular:true },
+    metric:'−8h/semaine de tâches administratives', price:'390', priceLabel:'/mois', popular:true },
   { id:10, cat:'Analyste IA',    color:'#0891b2', icon:'📋', name:'Tri de CVs',
     desc:"Analyse automatique des candidatures selon vos critères avec rapport de présélection.",
-    metric:'100 CVs traités en 10 minutes', price:'190' },
+    metric:'100 CVs traités en 10 minutes', price:'190', priceLabel:'/mois' },
   { id:11, cat:'Analyste IA',    color:'#0891b2', icon:'🚀', name:'Onboarding IA',
     desc:"Parcours d'intégration automatisé : documents, accès, planning et suivi J+1 à J+30.",
-    metric:'100 % des arrivées suivies', price:'190' },
+    metric:'100 % des arrivées suivies', price:'190', priceLabel:'/mois' },
   { id:12, cat:'Analyste IA',    color:'#0891b2', icon:'📅', name:'Gestion des congés',
     desc:"Demandes en ligne, vérification automatique des soldes et validation selon vos règles.",
-    metric:'Zéro email RH pour les congés', price:'90' },
+    metric:'Zéro email RH pour les congés', price:'90', priceLabel:'/mois' },
   { id:13, cat:'Créateur IA',    color:'#059669', icon:'✍️', name:'Rédaction SEO',
     desc:"Articles de blog, fiches produits et pages de vente optimisés pour Google chaque semaine.",
-    metric:'Score SEO moyen : 91/100', price:'290' },
+    metric:'Score SEO moyen : 91/100', price:'290', priceLabel:'/mois' },
   { id:14, cat:'Créateur IA',    color:'#059669', icon:'📱', name:'Social media auto',
     desc:"Publication automatique sur LinkedIn, Instagram et Facebook avec calendrier éditorial IA.",
-    metric:'×3 publications mensuelles', price:'190' },
+    metric:'×3 publications mensuelles', price:'190', priceLabel:'/mois' },
   { id:15, cat:'Créateur IA',    color:'#059669', icon:'📨', name:'Newsletter intelligente',
     desc:"Segmentation automatique de vos abonnés et personnalisation du contenu par profil.",
-    metric:"+45 % de taux d'ouverture", price:'190' },
+    metric:"+45 % de taux d'ouverture", price:'190', priceLabel:'/mois' },
   { id:16, cat:'Créateur IA',    color:'#059669', icon:'🔍', name:'Veille sectorielle',
     desc:"Monitoring automatique de votre secteur, de vos concurrents et des tendances clés.",
-    metric:'Rapport hebdomadaire en 1 clic', price:'90' },
-  { id:17, cat:'Analyste IA',    color:'#dc2626', icon:'🧾', name:'Facturation IA',
+    metric:'Rapport hebdomadaire en 1 clic', price:'90', priceLabel:'/mois' },
+  { id:17, cat:'Analyste IA',    color:'#0891b2', icon:'🧾', name:'Facturation IA',
     desc:"Génération et envoi automatique de vos factures dès la validation de la prestation.",
-    metric:"Facture envoyée en moins d'1 minute", price:'190' },
-  { id:18, cat:'Analyste IA',    color:'#dc2626', icon:'📩', name:'Relances impayés',
+    metric:"Facture envoyée en moins d'1 minute", price:'190', priceLabel:'/mois' },
+  { id:18, cat:'Analyste IA',    color:'#0891b2', icon:'📩', name:'Relances impayés',
     desc:"Séquences de recouvrement automatisées : rappels amiables, mise en demeure, suivi.",
-    metric:"−35 % d'impayés après 90 jours", price:'90' },
-  { id:19, cat:'Analyste IA',    color:'#dc2626', icon:'📈', name:'Reporting financier',
+    metric:"−35 % d'impayés après 90 jours", price:'90', priceLabel:'/mois' },
+  { id:19, cat:'Analyste IA',    color:'#0891b2', icon:'📈', name:'Reporting financier',
     desc:"Tableaux de bord mensuels générés automatiquement depuis vos données comptables.",
-    metric:'Vision 360° en moins de 5 minutes', price:'190' },
-  { id:20, cat:'Analyste IA',    color:'#dc2626', icon:'🔮', name:'Prévisions trésorerie',
+    metric:'Vision 360° en moins de 5 minutes', price:'190', priceLabel:'/mois' },
+  { id:20, cat:'Analyste IA',    color:'#0891b2', icon:'🔮', name:'Prévisions trésorerie',
     desc:"IA prédictive sur vos données historiques pour anticiper vos besoins de trésorerie.",
-    metric:'Précision à ±8 % sur 90 jours', price:'290' },
+    metric:'Précision à ±8 % sur 90 jours', price:'290', priceLabel:'/mois' },
   { id:21, cat:'Automatiseur',   color:'#d97706', icon:'🔗', name:'Connecteur multi-outils',
     desc:"Synchronisation de Google Workspace, Slack, HubSpot, Notion et 40+ autres outils.",
-    metric:'50+ intégrations disponibles', price:'290' },
+    metric:'50+ intégrations disponibles', price:'290', priceLabel:'/mois' },
   { id:22, cat:'Automatiseur',   color:'#d97706', icon:'⚙️', name:'Workflows sur mesure',
     desc:"Automatisations 100 % personnalisées entre vos applications métier, sans code.",
-    metric:'+3h récupérées par workflow', price:'390' },
+    metric:'+3h récupérées par workflow', price:'390', priceLabel:'/mois' },
   { id:23, cat:'Automatiseur',   color:'#d97706', icon:'📊', name:'Rapports automatiques',
     desc:"Centralisation hebdomadaire de vos données clés depuis toutes vos sources.",
-    metric:'Un seul rapport pour tout piloter', price:'90' },
+    metric:'Un seul rapport pour tout piloter', price:'90', priceLabel:'/mois' },
   { id:24, cat:'Automatiseur',   color:'#d97706', icon:'🔔', name:'Alertes intelligentes',
     desc:"Notifications en temps réel sur vos métriques clés, seuils critiques et anomalies.",
-    metric:'Alertes en moins de 30 secondes', price:'90' },
+    metric:'Alertes en moins de 30 secondes', price:'90', priceLabel:'/mois' },
+]
+
+/* ══════════════════════════════════════════════════════════
+   Fallback — Services Web
+══════════════════════════════════════════════════════════ */
+const SVC_FALLBACK = [
+  { id:'s1', cat:'Site vitrine',        color:'#0066FF', icon:'🌐', name:'Site vitrine premium',
+    desc:"Design moderne, responsive et SEO-ready. Livré en 2 semaines avec hébergement inclus 1 an.",
+    metric:'Score PageSpeed ≥ 90', price:'990', priceLabel:'/projet', popular:true },
+  { id:'s2', cat:'Site vitrine',        color:'#0066FF', icon:'🚀', name:'Landing page',
+    desc:"Page de conversion haute performance pour vos campagnes publicitaires et générateurs de leads.",
+    metric:'Taux de conversion optimisé', price:'490', priceLabel:'/projet' },
+  { id:'s3', cat:'Site vitrine',        color:'#0066FF', icon:'🔄', name:'Refonte de site',
+    desc:"Modernisation complète de votre site existant : design, performance, SEO et accessibilité.",
+    metric:'Performance ×3 garantie', price:'1 290', priceLabel:'/projet' },
+  { id:'s4', cat:'E-commerce',          color:'#7c3aed', icon:'🛒', name:'Boutique en ligne',
+    desc:"Catalogue produits, paiement sécurisé, gestion des commandes et tableau de bord vendeur.",
+    metric:"Jusqu'à 10 000 produits", price:'1 990', priceLabel:'/projet', popular:true },
+  { id:'s5', cat:'SEO & Référencement', color:'#0891b2', icon:'🔍', name:'Audit SEO complet',
+    desc:"Analyse technique, contenu, backlinks et plan d'action priorisé pour dominer Google.",
+    metric:'Rapport 60+ critères analysés', price:'390', priceLabel:'/audit', popular:true },
+  { id:'s6', cat:'SEO & Référencement', color:'#0891b2', icon:'📈', name:'SEO mensuel',
+    desc:"Optimisation continue, création de contenus, link building et suivi de positions chaque mois.",
+    metric:'+68 % de trafic organique en 6 mois', price:'490', priceLabel:'/mois' },
+  { id:'s7', cat:'Branding & Design',   color:'#d97706', icon:'🎨', name:'Logo & Charte graphique',
+    desc:"Identité visuelle professionnelle : logo, palette couleurs, typographies et guide d'utilisation.",
+    metric:'5 concepts proposés', price:'690', priceLabel:'/projet' },
+  { id:'s8', cat:'Branding & Design',   color:'#d97706', icon:'✨', name:'Identité visuelle complète',
+    desc:"Logo, charte, carte de visite, en-tête email, réseaux sociaux et tous les formats print.",
+    metric:'20+ déclinaisons livrées', price:'990', priceLabel:'/projet', popular:true },
+  { id:'s9', cat:'Branding & Design',   color:'#d97706', icon:'📱', name:'Pack réseaux sociaux',
+    desc:"Visuels, stories, bannières et templates pour LinkedIn, Instagram et Facebook.",
+    metric:'Pack 30 visuels livrés', price:'290', priceLabel:'/mois' },
+  { id:'s10', cat:'Application métier', color:'#dc2626', icon:'⚙️', name:'Application sur mesure',
+    desc:"Développement d'outils internes, CRM, dashboards et applications métier adaptées à votre secteur.",
+    metric:'Devis selon cahier des charges', price:'2 990', priceLabel:'/projet' },
 ]
 
 /* ══════════════════════════════════════════════════════════
    PAGE
 ══════════════════════════════════════════════════════════ */
 export default function Catalogue() {
-  const [active,        setActive]        = useState('Tous')
-  const [liveSolutions, setLiveSolutions] = useState(null) // null = chargement
+  const [tab,          setTab]          = useState('ia')
+  const [activeIA,     setActiveIA]     = useState('Tous')
+  const [activeSvc,    setActiveSvc]    = useState('Tous')
+  const [liveIA,       setLiveIA]       = useState(null)  // null = chargement
+  const [liveServices, setLiveServices] = useState(null)  // null = chargement
 
+  /* Fetch IA */
   useEffect(() => {
     supabase
       .from('catalogue_collaborateurs')
       .select('id, nom, description, categorie, icone, prix, prix_barre, resultats_attendus, ordre')
       .eq('visible', true)
       .order('ordre', { ascending: true })
-      .then(({ data }) => {
-        if (data && data.length > 0) {
-          setLiveSolutions(data.map(mapRow))
-        } else {
-          setLiveSolutions([]) // DB vide → fallback
-        }
-      })
-      .catch(() => setLiveSolutions([]))
+      .then(({ data }) => setLiveIA(data && data.length > 0 ? data.map(mapIARow) : []))
+      .catch(() => setLiveIA([]))
   }, [])
 
-  const solutions = liveSolutions && liveSolutions.length > 0
-    ? liveSolutions
-    : SOLUTIONS_FALLBACK
-
-  const isLive = !!(liveSolutions && liveSolutions.length > 0)
-
-  /* Catégories dynamiques selon les données */
-  const cats = useMemo(() => {
-    const unique = [...new Set(solutions.map(s => s.cat))]
-    return ['Tous', ...unique]
-  }, [solutions])
-
-  const count = solutions.length
-
+  /* Fetch services */
   useEffect(() => {
-    document.title = `Catalogue — ${count} solutions IA & Automatisations · CA-TECH`
-  }, [count])
+    supabase
+      .from('catalogue_services')
+      .select('id, nom, description, categorie, icone, prix, prix_barre, ordre')
+      .eq('visible', true)
+      .order('ordre', { ascending: true })
+      .then(({ data }) => setLiveServices(data && data.length > 0 ? data.map(mapSvcRow) : []))
+      .catch(() => setLiveServices([]))
+  }, [])
 
-  /* Reset filtre si la catégorie active n'existe plus dans les nouvelles données */
+  const iaData  = liveIA       && liveIA.length       > 0 ? liveIA       : IA_FALLBACK
+  const svcData = liveServices && liveServices.length > 0 ? liveServices : SVC_FALLBACK
+
+  const iaCats  = useMemo(() => ['Tous', ...new Set(iaData.map(s => s.cat))],  [iaData])
+  const svcCats = useMemo(() => ['Tous', ...new Set(svcData.map(s => s.cat))], [svcData])
+
+  /* Reset filtres si catégorie disparaît */
   useEffect(() => {
-    if (active !== 'Tous' && !cats.includes(active)) setActive('Tous')
-  }, [cats, active])
+    if (activeIA  !== 'Tous' && !iaCats.includes(activeIA))   setActiveIA('Tous')
+  }, [iaCats,  activeIA])
+  useEffect(() => {
+    if (activeSvc !== 'Tous' && !svcCats.includes(activeSvc)) setActiveSvc('Tous')
+  }, [svcCats, activeSvc])
 
-  const visible = useMemo(
-    () => active === 'Tous' ? solutions : solutions.filter(s => s.cat === active),
-    [active, solutions]
+  const visibleIA  = useMemo(
+    () => activeIA  === 'Tous' ? iaData  : iaData.filter(s => s.cat === activeIA),
+    [activeIA, iaData]
   )
+  const visibleSvc = useMemo(
+    () => activeSvc === 'Tous' ? svcData : svcData.filter(s => s.cat === activeSvc),
+    [activeSvc, svcData]
+  )
+
+  const currentCats    = tab === 'ia' ? iaCats    : svcCats
+  const currentActive  = tab === 'ia' ? activeIA  : activeSvc
+  const currentVisible = tab === 'ia' ? visibleIA : visibleSvc
+  const isLoading      = tab === 'ia' ? liveIA === null : liveServices === null
+
+  useEffect(() => {
+    document.title = `Catalogue — ${iaData.length + svcData.length} solutions · CA-TECH`
+  }, [iaData.length, svcData.length])
 
   return (
     <>
@@ -172,16 +247,16 @@ export default function Catalogue() {
           <p className="cat-kicker">
             <span />Catalogue de solutions · CA-TECH
           </p>
-          <h1 className="cat-h1">Choisissez votre <em>solution IA.</em></h1>
+          <h1 className="cat-h1">Choisissez votre <em>solution.</em></h1>
           <p className="cat-sub">
-            {count} solutions prêtes à déployer dans votre entreprise en 48h. Chacune est opérationnelle, mesurable et accompagnée pendant 30 jours.
+            Solutions IA et services web prêts à déployer dans votre entreprise. Chacun est opérationnel, mesurable et accompagné pendant 30 jours.
           </p>
           <div className="cat-hero-stats">
             {[
-              { val: String(count),          lbl: 'Solutions' },
-              { val: String(cats.length - 1), lbl: 'Catégories' },
-              { val: '48h',                   lbl: 'Déploiement' },
-              { val: '30j',                   lbl: 'Accompagnement' },
+              { val: String(iaData.length),  lbl: 'Solutions IA' },
+              { val: String(svcData.length), lbl: 'Services Web' },
+              { val: '48h',                  lbl: 'Déploiement' },
+              { val: '30j',                  lbl: 'Accompagnement' },
             ].map(({ val, lbl }) => (
               <div key={lbl} className="cat-hs-item">
                 <span className="cat-hs-val">{val}</span>
@@ -194,18 +269,39 @@ export default function Catalogue() {
 
       {/* ════════════════════════════════════════ FILTERS */}
       <div className="cat-filters">
+        {/* Onglets principaux */}
+        <div className="cat-tab-row">
+          <div className="cat-tab-inner">
+            <button
+              className={`cat-tab${tab === 'ia' ? ' cat-tab--active' : ''}`}
+              onClick={() => setTab('ia')}
+            >
+              🤖 Collaborateurs IA
+              <span className="cat-tab-badge">{iaData.length}</span>
+            </button>
+            <button
+              className={`cat-tab${tab === 'services' ? ' cat-tab--active' : ''}`}
+              onClick={() => setTab('services')}
+            >
+              💻 Services Web
+              <span className="cat-tab-badge">{svcData.length}</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Filtres par sous-catégorie */}
         <div className="cat-filters-inner">
-          {cats.map(c => (
+          {currentCats.map(c => (
             <button
               key={c}
-              className={`cat-filter-btn${active === c ? ' cat-filter-btn--active' : ''}`}
-              onClick={() => setActive(c)}
+              className={`cat-filter-btn${currentActive === c ? ' cat-filter-btn--active' : ''}`}
+              onClick={() => tab === 'ia' ? setActiveIA(c) : setActiveSvc(c)}
             >
               {c}
             </button>
           ))}
           <span className="cat-count">
-            {visible.length} solution{visible.length > 1 ? 's' : ''}
+            {currentVisible.length} solution{currentVisible.length > 1 ? 's' : ''}
           </span>
         </div>
       </div>
@@ -213,8 +309,7 @@ export default function Catalogue() {
       {/* ════════════════════════════════════════ GRID */}
       <section className="cat-section">
         <div className="cat-section-inner">
-          {liveSolutions === null ? (
-            /* Skeleton de chargement */
+          {isLoading ? (
             <div className="cat-grid">
               {Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="cat-card cat-card--skeleton" aria-hidden="true">
@@ -228,7 +323,7 @@ export default function Catalogue() {
             </div>
           ) : (
             <div className="cat-grid">
-              {visible.map(s => (
+              {currentVisible.map(s => (
                 <div
                   key={s.id}
                   className={`cat-card${s.popular ? ' cat-card--popular' : ''}`}
@@ -261,7 +356,7 @@ export default function Catalogue() {
                     <div className="cat-card-price">
                       <span className="cat-price-from">À partir de</span>
                       <span className="cat-price-val">
-                        {s.price} €<small>/mois</small>
+                        {s.price} €<small>{s.priceLabel ?? '/mois'}</small>
                       </span>
                     </div>
                     <Link
