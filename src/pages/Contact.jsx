@@ -50,6 +50,9 @@ export default function Contact() {
   return (
     <>
       <section className="ct-hero">
+        <div className="ct-grid-bg" aria-hidden="true"></div>
+        <div className="ct-halo ct-halo-1" aria-hidden="true"></div>
+        <div className="ct-halo ct-halo-2" aria-hidden="true"></div>
         <div className="ct-hero-inner">
           <p className="ct-kicker"><span></span>Parlons de votre projet<span></span></p>
           <h1>Contactez-<em>nous</em></h1>
