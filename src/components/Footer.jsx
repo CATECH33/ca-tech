@@ -44,7 +44,7 @@ export default function Footer() {
             <div className="f-zones-lbl">Zones d'intervention</div>
             <div className="f-zones-cities">
               {['Paris', 'Lyon', 'Dijon', 'Troyes', 'Marseille', 'Bordeaux'].map(c => (
-                <a key={c} href={`/agence-web-${c.toLowerCase()}`}>{c}</a>
+                <a key={c} href="/contact">{c}</a>
               ))}
             </div>
           </div>
@@ -111,8 +111,8 @@ export default function Footer() {
       <div className="f-bottom">
         <span>© 2026 CA-TECH — Tous droits réservés</span>
         <div style={{ display: 'flex', gap: '1.5rem' }}>
-          <a href="/mentions-legales" style={{ color: 'rgba(255,255,255,.35)', textDecoration: 'none', fontSize: '.72rem' }}>Mentions légales</a>
-          <a href="/politique-de-confidentialite" style={{ color: 'rgba(255,255,255,.35)', textDecoration: 'none', fontSize: '.72rem' }}>Confidentialité</a>
+          <a href="/contact" style={{ color: 'rgba(255,255,255,.35)', textDecoration: 'none', fontSize: '.72rem' }}>Mentions légales</a>
+          <a href="/contact" style={{ color: 'rgba(255,255,255,.35)', textDecoration: 'none', fontSize: '.72rem' }}>Confidentialité</a>
           <a href="/tarifs" style={{ color: 'rgba(255,255,255,.35)', textDecoration: 'none', fontSize: '.72rem' }}>CGV</a>
         </div>
       </div>

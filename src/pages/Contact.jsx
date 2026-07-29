@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './Contact.css'
 
-const EDGE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/contact-form`
+const EDGE_URL = 'https://jhcyooksjeivajdjicka.supabase.co/functions/v1/contact-form'
 
 export default function Contact() {
   useEffect(() => {
@@ -116,7 +116,7 @@ export default function Contact() {
             <div className="ct-devis-box">
               <p className="ct-devis-title">Besoin d'un devis complet ?</p>
               <p className="ct-devis-sub">Remplissez notre configurateur en 8 étapes pour recevoir une proposition détaillée avec les prix exacts.</p>
-              <a href="/devis" className="btn-primary" style={{ textDecoration: 'none', display: 'inline-flex' }}>Configurer mon projet →</a>
+              <a href="/tarifs" className="btn-primary" style={{ textDecoration: 'none', display: 'inline-flex' }}>Voir les tarifs →</a>
             </div>
           </div>
 
