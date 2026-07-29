@@ -397,4 +397,7 @@
   .cat-cta { padding: 72px 6%; }
   .cat-filter-btn { padding: 12px 14px; font-size: .79rem; }
   .cat-hero-stats { max-width: 100%; }
+  .cat-tab-inner { overflow-x: auto; scrollbar-width: none; padding: 0 4%; -ms-overflow-style: none; }
+  .cat-tab-inner::-webkit-scrollbar { display: none; }
+  .cat-tab { padding: 11px 14px; font-size: .8rem; }
 }
