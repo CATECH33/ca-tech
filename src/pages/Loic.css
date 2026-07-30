@@ -484,4 +484,6 @@
   .ldemo-chat { min-height: 460px; }
   .ldemo-messages { padding: 14px; gap: 14px; }
   .ldemo-msg-body { max-width: 90%; }
+  .ldemo-chat-header { flex-wrap: wrap; padding: 12px 16px; gap: 8px; }
+  .ldemo-badge-demo { margin-left: auto; }
 }
