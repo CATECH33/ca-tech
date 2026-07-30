@@ -22,8 +22,8 @@ const COLLABORATEURS = [
       'Suit les clients existants',
     ],
     resultats: [
-      { val: '−12h', lbl: '/semaine sur la prospection' },
-      { val: '+38 %', lbl: 'de taux de réponse' },
+      { val: '+42 %', lbl: 'de conversion prospects' },
+      { val: '+25 %', lbl: 'de chiffre d\'affaires potentiel' },
     ],
     fonctionnalites: [
       'Scoring de leads de 0 à 100',
@@ -75,8 +75,8 @@ const COLLABORATEURS = [
       'Envoie les enquêtes de satisfaction',
     ],
     resultats: [
-      { val: '−60 %', lbl: 'de tickets traités manuellement' },
-      { val: '< 2 s', lbl: 'de temps de réponse moyen' },
+      { val: '98 %', lbl: 'des demandes traitées automatiquement' },
+      { val: '< 10 s', lbl: 'de réponse client garantie' },
     ],
     fonctionnalites: [
       'Réponse instantanée < 2 secondes',
@@ -128,8 +128,8 @@ const COLLABORATEURS = [
       'Suit les périodes d\'essai',
     ],
     resultats: [
-      { val: '−8h', lbl: '/semaine de tâches administratives' },
-      { val: '100 CVs', lbl: 'traités en 10 minutes' },
+      { val: '−18h', lbl: 'de travail économisées chaque semaine' },
+      { val: '+35 %', lbl: 'de candidats qualifiés' },
     ],
     fonctionnalites: [
       'Tri et scoring automatique des CVs',
@@ -181,8 +181,8 @@ const COLLABORATEURS = [
       'Alerte en cas de risque contractuel',
     ],
     resultats: [
-      { val: '−80 %', lbl: 'de coûts juridiques courants' },
-      { val: '< 5 min', lbl: 'pour un contrat complet' },
+      { val: '−80 %', lbl: 'de coûts juridiques évités' },
+      { val: '100 %', lbl: 'de contrats conformes RGPD' },
     ],
     fonctionnalites: [
       'Rédaction de contrats sur mesure en < 5 min',
@@ -234,8 +234,8 @@ const COLLABORATEURS = [
       'Alerte en cas de baisse de trafic',
     ],
     resultats: [
-      { val: '91/100', lbl: 'score SEO moyen obtenu' },
       { val: '×3', lbl: 'de trafic organique en 6 mois' },
+      { val: '+58 %', lbl: 'de prospects entrants' },
     ],
     fonctionnalites: [
       'Articles SEO publiés chaque semaine',
@@ -288,7 +288,7 @@ const COLLABORATEURS = [
     ],
     resultats: [
       { val: '−35 %', lbl: 'd\'impayés après 90 jours' },
-      { val: '< 1 min', lbl: 'pour générer une facture' },
+      { val: '+12 j', lbl: 'de trésorerie récupérés / mois' },
     ],
     fonctionnalites: [
       'Génération et envoi automatique des factures',
@@ -419,9 +419,9 @@ function CollaborateurPanel({ collab, onClose }) {
           </div>
         </div>
 
-        {/* Gains */}
+        {/* Résultats business */}
         <div className="dd-section">
-          <p className="dd-section-title">Gains estimés</p>
+          <p className="dd-section-title">Résultats business</p>
           <div className="dd-metrics">
             {collab.resultats.map(r => (
               <div key={r.lbl} className="dd-metric">
