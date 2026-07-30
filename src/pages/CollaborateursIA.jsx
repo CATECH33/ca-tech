@@ -14,10 +14,12 @@ const COLLABORATEURS = [
     img: '/collaborateurs/commercial-ia.webp',
     desc: 'Votre meilleur commercial — sans pause café, sans jours fériés. Il qualifie chaque lead entrant, relance automatiquement et personnalise chaque proposition pour maximiser vos conversions.',
     missions: [
-      'Qualification automatique des leads entrants',
-      'Séquences de relance personnalisées',
-      'Scoring de leads de 0 à 100',
-      'Propositions commerciales sur mesure',
+      'Répond aux demandes entrantes',
+      'Qualifie les prospects',
+      'Relance automatiquement les devis',
+      'Prépare les propositions commerciales',
+      'Planifie les rendez-vous',
+      'Suit les clients existants',
     ],
     resultats: [
       { val: '−12h', lbl: '/semaine sur la prospection' },
@@ -65,10 +67,12 @@ const COLLABORATEURS = [
     img: '/collaborateurs/support-ia.webp',
     desc: 'Disponible 24h/24, 7j/7, sans jamais perdre patience. Il répond, classe et résout les demandes clients instantanément pendant que vos équipes se concentrent sur les cas complexes.',
     missions: [
-      'Réponse aux questions fréquentes 24/7',
-      'Classement et priorisation des tickets',
-      'Escalade automatique des cas critiques',
-      'Enquêtes de satisfaction post-interaction',
+      'Répond aux clients 24h/24',
+      'Résout les questions fréquentes',
+      'Ouvre automatiquement les tickets',
+      'Escalade les cas urgents à votre équipe',
+      'Relance les clients en attente',
+      'Envoie les enquêtes de satisfaction',
     ],
     resultats: [
       { val: '−60 %', lbl: 'de tickets traités manuellement' },
@@ -116,10 +120,12 @@ const COLLABORATEURS = [
     img: '/collaborateurs/rh-ia.webp',
     desc: 'Recrutement, onboarding, congés, réponses aux équipes — votre RH IA prend en charge tout l\'administratif pour que vous vous consacriez au développement des talents.',
     missions: [
-      'Analyse automatique des candidatures',
-      'Parcours d\'onboarding J+1 à J+30',
-      'Gestion des demandes de congés',
-      'Réponses aux questions courantes des équipes',
+      'Trie et note les CVs reçus',
+      'Répond aux candidats',
+      'Prépare les entretiens de recrutement',
+      'Onboarde les nouveaux collaborateurs',
+      'Gère les demandes de congés',
+      'Suit les périodes d\'essai',
     ],
     resultats: [
       { val: '−8h', lbl: '/semaine de tâches administratives' },
@@ -167,10 +173,12 @@ const COLLABORATEURS = [
     img: '/collaborateurs/juridique-ia.webp',
     desc: 'Contrats, CGV, clauses spécifiques — rédigés et analysés en quelques secondes. Signez en confiance sans attendre un avocat ni payer 500 €/heure.',
     missions: [
-      'Rédaction de contrats sur mesure',
-      'Analyse des risques contractuels',
-      'Mise en conformité RGPD',
-      'Veille juridique sectorielle automatisée',
+      'Rédige les contrats sur mesure',
+      'Analyse les documents reçus des partenaires',
+      'Vérifie la conformité RGPD',
+      'Met à jour les CGV et mentions légales',
+      'Surveille les évolutions juridiques',
+      'Alerte en cas de risque contractuel',
     ],
     resultats: [
       { val: '−80 %', lbl: 'de coûts juridiques courants' },
@@ -218,10 +226,12 @@ const COLLABORATEURS = [
     img: '/collaborateurs/seo-ia.webp',
     desc: 'Articles de blog, pages et fiches optimisés pour Google chaque semaine. Vos clients vous trouvent avant vos concurrents — sans que vous écriviez une seule ligne.',
     missions: [
-      'Rédaction d\'articles de blog SEO-optimisés',
-      'Optimisation des pages existantes',
-      'Recherche de mots-clés et opportunités',
-      'Reporting de positionnement hebdomadaire',
+      'Rédige les articles de blog chaque semaine',
+      'Optimise les fiches produits et pages de service',
+      'Trouve les mots-clés porteurs',
+      'Améliore le maillage interne du site',
+      'Suit le positionnement Google',
+      'Alerte en cas de baisse de trafic',
     ],
     resultats: [
       { val: '91/100', lbl: 'score SEO moyen obtenu' },
@@ -269,10 +279,12 @@ const COLLABORATEURS = [
     img: '/collaborateurs/collaborateur-ia-hero.webp',
     desc: 'Factures, rapprochements bancaires, relances impayés, déclarations — gérés en temps réel. Vos fins de mois cessent d\'être chaotiques.',
     missions: [
-      'Génération et envoi automatique des factures',
-      'Rapprochement bancaire automatisé',
-      'Relances impayés par séquences',
-      'Tableaux de bord financiers mensuels',
+      'Émet les factures automatiquement',
+      'Envoie les relances impayés',
+      'Réconcilie les comptes bancaires',
+      'Prépare les déclarations TVA',
+      'Suit la trésorerie en temps réel',
+      'Alerte sur les anomalies financières',
     ],
     resultats: [
       { val: '−35 %', lbl: 'd\'impayés après 90 jours' },
@@ -374,9 +386,9 @@ function CollaborateurPanel({ collab, onClose }) {
           <p className="dd-lead">{collab.desc}</p>
         </div>
 
-        {/* Missions */}
+        {/* Ce qu'il réalise pour vous */}
         <div className="dd-section">
-          <p className="dd-section-title">Missions</p>
+          <p className="dd-section-title">Ce qu'il réalise pour vous</p>
           <ul className="dd-list">
             {collab.missions.map(m => (
               <li key={m}>
@@ -679,8 +691,8 @@ export default function CollaborateursIA() {
                 <h3 className="cai-col-name">{c.name}</h3>
                 <p className="cai-col-desc">{c.desc}</p>
 
-                {/* Missions */}
-                <p className="cai-col-missions-label">Missions</p>
+                {/* Ce qu'il réalise pour vous */}
+                <p className="cai-col-missions-label">Ce qu'il réalise pour vous</p>
                 <ul className="cai-col-missions">
                   {c.missions.map(m => (
                     <li key={m}>
