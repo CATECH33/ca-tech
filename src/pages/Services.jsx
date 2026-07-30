@@ -382,7 +382,7 @@ export default function Services() {
             <p className="srv2-header-desc">SEO, Google Business, optimisation des performances, stratégie digitale. On s'assure que vos clients vous trouvent avant vos concurrents — et qu'ils restent.</p>
           </header>
           <div className="srv2-cover">
-            <img src={U_W('1432888498266-38ffec3eaf0a')} alt="Analyse SEO et graphiques de croissance" loading="lazy" />
+            <img src={U_W('1551288049-bebda4e38f71')} alt="Analyse SEO et graphiques de croissance" loading="lazy" />
             <div className="srv2-cover-overlay" />
             <div className="srv2-cover-caption">
               <span className="srv2-cover-tag" style={{ color: '#fcd34d' }}>Marketing Digital</span>
