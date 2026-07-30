@@ -712,15 +712,21 @@
   font-size: .72rem; color: #6b7280; line-height: 1.3;
 }
 
-/* CTA */
+/* CTAs — stack */
+.cai-col-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+}
 .cai-col-cta {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 11px 20px;
   font-size: .88rem; font-weight: 600; font-family: inherit;
   border-radius: 9px; text-decoration: none;
   width: 100%; justify-content: center;
-  margin-top: auto; cursor: pointer;
-  transition: opacity .2s, transform .2s, background .2s;
+  cursor: pointer;
+  transition: opacity .2s, transform .2s, background .2s, box-shadow .2s;
 }
 .cai-col-cta svg { width: 14px; height: 14px; transition: transform .2s; }
 .cai-col-cta:hover svg { transform: translateX(3px); }
@@ -728,11 +734,11 @@
 .cai-col-cta--primary {
   background: var(--col-color, #0066FF);
   color: #fff;
-  box-shadow: 0 2px 16px rgba(0,102,255,.3);
+  box-shadow: 0 2px 16px rgba(0,102,255,.28);
 }
 .cai-col-cta--primary:hover {
-  opacity: .9; transform: translateY(-1px);
-  box-shadow: 0 6px 24px rgba(0,102,255,.4);
+  opacity: .92; transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(0,102,255,.38);
 }
 
 .cai-col-cta--outline {
@@ -745,6 +751,19 @@
   color: #fff;
   transform: translateY(-1px);
 }
+
+.cai-col-cta-link {
+  background: none; border: none;
+  color: #6b7280;
+  font-size: .82rem; font-weight: 500;
+  font-family: inherit;
+  padding: 4px 0 0; margin: 0;
+  cursor: pointer;
+  text-align: center;
+  transition: color .2s;
+  align-self: center;
+}
+.cai-col-cta-link:hover { color: var(--col-color, #0066FF); }
 
 /* ══════════════════════════════════════════════════════════ */
 /*  RESPONSIVE                                                 */

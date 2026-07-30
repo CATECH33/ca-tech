@@ -1,18 +1,51 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import './Contact.css'
 
 const EDGE_URL = 'https://jhcyooksjeivajdjicka.supabase.co/functions/v1/contact-form'
+
+const COLLABORATEURS_MAP = {
+  commercial: { name: 'Commercial IA',  color: '#0066FF' },
+  support:    { name: 'Support IA',     color: '#7c3aed' },
+  rh:         { name: 'RH IA',          color: '#0891b2' },
+  juridique:  { name: 'Juridique IA',   color: '#6d28d9' },
+  seo:        { name: 'SEO IA',         color: '#059669' },
+  comptable:  { name: 'Comptable IA',   color: '#d97706' },
+}
 
 export default function Contact() {
   useEffect(() => {
     document.title = 'Contact — Devis gratuit sous 24h · CA-TECH'
   }, [])
 
+  const [params, setParams] = useSearchParams()
+  const collabId = params.get('collaborateur')
+  const isDemo = params.get('demo') === '1'
+  const selectedCollab = collabId ? COLLABORATEURS_MAP[collabId] : null
+
   const [form, setForm] = useState({ name: '', company: '', email: '', phone: '', subject: '', message: '' })
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+
+  useEffect(() => {
+    if (!selectedCollab) return
+    const subject = isDemo
+      ? `Démonstration — ${selectedCollab.name}`
+      : `Demande — ${selectedCollab.name}`
+    const message = isDemo
+      ? `Bonjour,\n\nJe souhaite voir une démonstration du ${selectedCollab.name} appliqué à mon activité.\n\nMerci de me recontacter pour organiser un rendez-vous.`
+      : `Bonjour,\n\nJe souhaite mettre en place le ${selectedCollab.name} dans mon entreprise.\n\nMerci de me recontacter pour discuter des modalités et organiser une démonstration.`
+    setForm(f => ({ ...f, subject, message }))
+  }, [collabId, isDemo])
+
+  function clearCollab() {
+    const next = new URLSearchParams(params)
+    next.delete('collaborateur')
+    next.delete('demo')
+    setParams(next, { replace: true })
+    setForm(f => ({ ...f, subject: '', message: '' }))
+  }
 
   function set(field) {
     return e => setForm(f => ({ ...f, [field]: e.target.value }))
@@ -129,6 +162,23 @@ export default function Contact() {
               </div>
             ) : (
               <form className="ct-form" onSubmit={handleSubmit}>
+                {selectedCollab && (
+                  <div className="ct-collab-banner" style={{ '--collab-color': selectedCollab.color }}>
+                    <div className="ct-collab-info">
+                      <span className="ct-collab-badge">
+                        <span className="ct-collab-dot" />
+                        Collaborateur sélectionné
+                      </span>
+                      <span className="ct-collab-name">{selectedCollab.name}</span>
+                    </div>
+                    <button
+                      type="button"
+                      className="ct-collab-close"
+                      onClick={clearCollab}
+                      aria-label="Retirer la sélection"
+                    >×</button>
+                  </div>
+                )}
                 <div className="ct-form-row">
                   <div className="ct-field">
                     <label htmlFor="ct-name">Nom &amp; Prénom *</label>

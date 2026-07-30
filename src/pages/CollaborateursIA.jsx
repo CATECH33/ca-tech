@@ -714,17 +714,31 @@ export default function CollaborateursIA() {
                   ))}
                 </div>
 
-                {/* CTA — ouvre le drawer */}
-                <button
-                  className="cai-col-cta cai-col-cta--outline"
-                  onClick={() => openDrawer(c)}
-                  aria-label={`Voir la fiche complète — ${c.name}`}
-                >
-                  Voir la fiche complète
-                  <svg viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                    <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
+                {/* CTAs */}
+                <div className="cai-col-actions" style={{ '--col-color': c.color }}>
+                  <Link
+                    to={`/contact?collaborateur=${c.id}`}
+                    className="cai-col-cta cai-col-cta--primary"
+                    aria-label={`Demander ${c.name}`}
+                  >
+                    Demander ce Collaborateur IA
+                  </Link>
+                  <Link
+                    to={`/contact?collaborateur=${c.id}&demo=1`}
+                    className="cai-col-cta cai-col-cta--outline"
+                    aria-label={`Voir une démonstration — ${c.name}`}
+                  >
+                    Voir une démonstration
+                  </Link>
+                  <button
+                    type="button"
+                    className="cai-col-cta-link"
+                    onClick={() => openDrawer(c)}
+                    aria-label={`Voir la fiche complète — ${c.name}`}
+                  >
+                    Voir la fiche complète →
+                  </button>
+                </div>
               </div>
             </article>
           ))}
