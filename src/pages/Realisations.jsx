@@ -2,6 +2,8 @@ import { useState, useMemo, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import './Realisations.css'
+import { usePageMeta } from '../lib/seo'
+import { useJsonLd, breadcrumbSchema } from '../lib/schema'
 
 const CATEGORIES = [
   { key: 'tous', label: 'Tous les projets' },
@@ -213,9 +215,16 @@ const PROJECTS = [
 ]
 
 export default function Realisations() {
-  useEffect(() => {
-    document.title = 'Réalisations — Portfolio de projets IA, Web & Automatisations · CA-TECH'
-  }, [])
+  usePageMeta({
+    title: 'Réalisations — Études de cas Web, IA & Automatisations · CA-TECH',
+    description: "Portfolio CA-TECH : sites vitrines, e-commerce, applications métier, CRM, agents IA et automatisations livrés pour PME françaises. Résultats chiffrés, avant/après et ROI mesuré sur chaque projet.",
+    keywords: 'portfolio agence web, études de cas IA, réalisations développement web, projets CRM sur mesure, exemples sites vitrines, cas clients automatisation, projets IA PME France',
+    path: '/realisations',
+  })
+  useJsonLd('breadcrumb', breadcrumbSchema([
+    { name: 'Accueil', path: '/' },
+    { name: 'Réalisations', path: '/realisations' },
+  ]))
 
   const [active, setActive] = useState('tous')
   const [liveProjects, setLiveProjects] = useState(null) // null = loading, [] = empty

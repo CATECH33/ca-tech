@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './Services.css'
+import { usePageMeta } from '../lib/seo'
+import { useJsonLd, serviceSchema, breadcrumbSchema } from '../lib/schema'
 
 const U_W = id => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1400&h=520&q=85`
 
@@ -9,6 +11,7 @@ const NAV_ITEMS = [
   { id: 'apps-metier',  label: 'Applications Métier' },
   { id: 'solutions-ia', label: 'Solutions IA' },
   { id: 'marketing',    label: 'Marketing Digital' },
+  { id: 'support',      label: 'Support & Conseil' },
 ]
 
 function scrollTo(id) {
@@ -227,10 +230,51 @@ function ServiceCard({ card, badge, badgeColor }) {
 }
 
 export default function Services() {
-  useEffect(() => {
-    document.title = 'Services — Sites web, Applications métier, IA & Marketing · CA-TECH'
-  }, [])
-
+  usePageMeta({
+    title: 'Services — Sites, CRM, SaaS, Automatisations & IA · CA-TECH',
+    description: "Services web et IA de CA-TECH : sites vitrines, e-commerce, applications métier, CRM sur mesure, SaaS, automatisations, agents IA, SEO, maintenance, hébergement, audit digital et conseil IA. Devis sous 24h.",
+    keywords: 'agence développement web, création site internet, e-commerce, application métier, CRM sur mesure, développement SaaS, automatisation entreprise, agents IA, SEO, maintenance site web, hébergement web, audit digital, conseil IA',
+    path: '/services',
+  })
+  useJsonLd('breadcrumb', breadcrumbSchema([
+    { name: 'Accueil', path: '/' },
+    { name: 'Services', path: '/services' },
+  ]))
+  useJsonLd('service-dev-web', serviceSchema({
+    name: 'Développement web — Sites vitrines, e-commerce, landing pages',
+    description: 'Sites vitrines premium, boutiques e-commerce Stripe, landing pages haute conversion et refontes SEO-safe. Livrés en 1 à 6 semaines.',
+    path: '/services#dev-web',
+    serviceType: 'Web Development',
+    priceRange: '€€',
+  }))
+  useJsonLd('service-apps-metier', serviceSchema({
+    name: 'Applications métier, CRM sur mesure & SaaS',
+    description: 'Outils métier internes, CRM sur mesure, plateformes SaaS multi-tenants, back-offices et portails clients adaptés à vos processus.',
+    path: '/services#apps-metier',
+    serviceType: 'Custom Software Development',
+    priceRange: '€€€',
+  }))
+  useJsonLd('service-ia', serviceSchema({
+    name: 'Solutions IA — Agents IA & Collaborateurs IA',
+    description: 'Agents IA conversationnels et collaborateurs IA autonomes (Commercial, Support, RH, Juridique, SEO, Comptable). Déployés en 48h avec ROI mesurable.',
+    path: '/services#solutions-ia',
+    serviceType: 'AI Consulting',
+    priceRange: '€€€',
+  }))
+  useJsonLd('service-marketing', serviceSchema({
+    name: 'SEO & Marketing digital',
+    description: 'Audit SEO, optimisation on-page, contenu, Google Business, suivi de positionnement. Trafic organique multiplié en 6 mois.',
+    path: '/services#marketing',
+    serviceType: 'SEO',
+    priceRange: '€€',
+  }))
+  useJsonLd('service-support', serviceSchema({
+    name: 'Maintenance, hébergement, audit digital & conseil IA',
+    description: 'Maintenance corrective et évolutive, hébergement managé, audit digital complet (SEO, performance, sécurité, opportunités IA) et conseil IA stratégique.',
+    path: '/services#support',
+    serviceType: 'IT Support & Consulting',
+    priceRange: '€',
+  }))
   useEffect(() => {
     /* ── Scroll reveal ── */
     const obs = new IntersectionObserver(entries => {
@@ -259,8 +303,8 @@ export default function Services() {
         <div className="sol-halo sol-halo-2" aria-hidden="true" />
         <div className="sol-hero-inner">
           <p className="sol-kicker"><span />Nos services · CA-TECH<span /></p>
-          <h1 className="sol-h1">Des solutions digitales<br /><em>pour chaque défi.</em></h1>
-          <p className="sol-sub">Sites web, applications métier, intelligence artificielle, marketing digital — CA-TECH conçoit et déploie les outils qui accélèrent votre croissance.</p>
+          <h1 className="sol-h1">Sites, applications &amp; IA —<br /><em>13 services pour votre croissance.</em></h1>
+          <p className="sol-sub">Développement web, e-commerce, applications métier, CRM sur mesure, SaaS, automatisations, agents IA, SEO, maintenance, hébergement, audit digital et conseil IA. CA-TECH conçoit, déploie et maintient les outils qui accélèrent votre entreprise.</p>
           <div className="sol-hero-btns">
             <button className="sol-btn-main" onClick={() => scrollTo('dev-web')}>
               Explorer nos services
@@ -393,6 +437,44 @@ export default function Services() {
             {MARKETING.map((card, i) => (
               <li key={i}>
                 <ServiceCard card={card} badge="Marketing Digital" badgeColor="#F59E0B" />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* ── 05 · SUPPORT & CONSEIL ─────────────────────────────────── */}
+      <section className="srv2-section srv2-section--alt" id="support" data-srv>
+        <div className="srv2-inner">
+          <header className="srv2-header">
+            <div className="srv2-header-left">
+              <span className="srv2-pre">05 — Support &amp; Conseil</span>
+              <h2 className="srv2-h2">Vos outils protégés,<br />optimisés et améliorés</h2>
+            </div>
+            <p className="srv2-header-desc">Maintenance, hébergement managé, audit digital complet et conseil IA stratégique. Vos plateformes restent rapides, sécurisées et alignées sur votre business — sans que vous ayez à y penser.</p>
+          </header>
+          <ul className="srv2-grid" role="list">
+            {[
+              { id: 'maintenance', title: 'Maintenance web', desc: 'Mises à jour de sécurité, correctifs, sauvegardes automatiques, monitoring 24/7. Votre site reste rapide, protégé et à jour — vous ne pensez plus à rien.', bullets: ['Sauvegardes chiffrées quotidiennes', 'Mises à jour CMS & plugins', 'Monitoring uptime & alertes'], price: 'À partir de 49 €/mois', cta: 'Souscrire' },
+              { id: 'hebergement', title: 'Hébergement managé', desc: 'Infrastructure haute performance en France, SSL inclus, CDN mondial, uptime 99,9 % garanti. Hébergement optimisé pour Google et pensé pour la vitesse.', bullets: ['Serveurs en France (RGPD)', 'CDN & cache global', 'Certificat SSL & HTTP/3'], price: 'À partir de 19 €/mois', cta: 'Découvrir' },
+              { id: 'audit', title: 'Audit digital complet', desc: 'Analyse SEO, performance, UX, sécurité et opportunités IA de votre site. Vous recevez un rapport actionnable avec les 10 priorités classées par impact et effort.', bullets: ['Audit SEO on-page & technique', 'Diagnostic performance Core Web Vitals', 'Recommandations IA sur mesure'], price: 'À partir de 390 €', cta: 'Commander' },
+              { id: 'conseil-ia', title: 'Conseil IA stratégique', desc: "Roadmap d'adoption IA, sélection d'outils, formation équipes, cadrage projets. On identifie où l'IA fait vraiment gagner du temps et de l'argent dans votre activité.", bullets: ['Cartographie des opportunités IA', 'Roadmap 6-12 mois priorisée', 'Formation & accompagnement équipes'], price: 'À partir de 590 € (½ journée)', cta: 'Réserver' },
+            ].map(c => (
+              <li key={c.id}>
+                <article className="srv2-card" id={c.id}>
+                  <div className="srv2-card-body">
+                    <span className="srv2-card-badge" style={{ color: '#6366F1' }}>Support &amp; Conseil</span>
+                    <h3 className="srv2-card-title">{c.title}</h3>
+                    <p className="srv2-card-desc">{c.desc}</p>
+                    <ul className="srv2-card-benefits">
+                      {c.bullets.map(b => <li key={b}>{b}</li>)}
+                    </ul>
+                    <p className="srv2-card-price">{c.price}</p>
+                    <Link to={`/contact?service=${c.id}`} className="srv2-card-link" aria-label={`${c.cta} — ${c.title}`}>
+                      {c.cta} →
+                    </Link>
+                  </div>
+                </article>
               </li>
             ))}
           </ul>

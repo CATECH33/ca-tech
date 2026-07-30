@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import './Contact.css'
+import { usePageMeta, SITE_URL } from '../lib/seo'
+import { useJsonLd, breadcrumbSchema } from '../lib/schema'
 
 const EDGE_URL = 'https://jhcyooksjeivajdjicka.supabase.co/functions/v1/contact-form'
 
@@ -14,9 +16,35 @@ const COLLABORATEURS_MAP = {
 }
 
 export default function Contact() {
-  useEffect(() => {
-    document.title = 'Contact — Devis gratuit sous 24h · CA-TECH'
-  }, [])
+  usePageMeta({
+    title: 'Contact CA-TECH — Devis gratuit sous 24h · Paris, Lyon, Dijon',
+    description: "Contactez CA-TECH pour un devis site web, e-commerce, application métier, CRM sur mesure, SaaS, agent IA ou automatisation. Réponse sous 24h. Diagnostic gratuit et sans engagement.",
+    keywords: 'devis site internet gratuit, contact agence web, demander devis agent IA, contact développeur web Paris, devis CRM sur mesure, contact automatisation entreprise',
+    path: '/contact',
+  })
+  useJsonLd('breadcrumb', breadcrumbSchema([
+    { name: 'Accueil', path: '/' },
+    { name: 'Contact', path: '/contact' },
+  ]))
+  useJsonLd('contactpoint', {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    '@id': `${SITE_URL}/contact#contact`,
+    name: 'Contact CA-TECH',
+    url: `${SITE_URL}/contact`,
+    mainEntity: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}/#organization`,
+      contactPoint: [{
+        '@type': 'ContactPoint',
+        contactType: 'sales',
+        telephone: '+33-7-75-66-49-75',
+        email: 'contact@ca-tech.fr',
+        availableLanguage: ['French', 'English'],
+        areaServed: 'FR',
+      }],
+    },
+  })
 
   const [params, setParams] = useSearchParams()
   const collabId = params.get('collaborateur')

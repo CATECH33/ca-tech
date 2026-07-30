@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import DetailDrawer from '../components/DetailDrawer'
 import './CollaborateursIA.css'
+import { usePageMeta } from '../lib/seo'
+import { useJsonLd, breadcrumbSchema, faqSchema, itemListSchema } from '../lib/schema'
 
 /* ══════════════════════════════════════════════════
    DONNÉES COLLABORATEURS
@@ -491,9 +493,22 @@ function CollaborateurPanel({ collab, onClose }) {
 export default function CollaborateursIA() {
   const [selected, setSelected] = useState(null)
 
-  useEffect(() => {
-    document.title = 'Collaborateurs IA — Agents disponibles 24h/7j · CA-TECH'
-  }, [])
+  usePageMeta({
+    title: 'Collaborateurs IA — 6 agents autonomes 24/7 pour PME · CA-TECH',
+    description: "6 collaborateurs IA autonomes qui travaillent pour vous 24h/24 : Commercial, Support, RH, Juridique, SEO et Comptable. Déployés en 48h. ROI dès le premier mois. Résultats mesurables garantis.",
+    keywords: 'collaborateur IA, agent IA autonome, IA commercial, IA support client 24/7, IA RH recrutement, IA juridique contrats, IA SEO, IA comptable, automatisation PME, assistant virtuel entreprise',
+    path: '/collaborateurs-ia',
+  })
+  useJsonLd('breadcrumb', breadcrumbSchema([
+    { name: 'Accueil', path: '/' },
+    { name: 'Collaborateurs IA', path: '/collaborateurs-ia' },
+  ]))
+  useJsonLd('collab-list', itemListSchema(
+    COLLABORATEURS.map(c => ({ name: c.name, path: `/collaborateurs-ia#${c.id}` }))
+  ))
+  useJsonLd('collab-faq', faqSchema(
+    COLLABORATEURS.flatMap(c => c.faq.map(f => ({ q: `${c.name} — ${f.q}`, a: f.a })))
+  ))
 
   useEffect(() => {
     /* ── Canvas particle network ── */

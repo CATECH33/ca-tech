@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './Tarifs.css'
+import { usePageMeta } from '../lib/seo'
+import { useJsonLd, breadcrumbSchema, faqSchema } from '../lib/schema'
 
 const FAQS = [
   {
@@ -78,9 +80,17 @@ function FaqItem({ q, a }) {
 }
 
 export default function Tarifs() {
-  useEffect(() => {
-    document.title = 'Tarifs — Sites web, Logo, E-commerce, Maintenance · CA-TECH'
-  }, [])
+  usePageMeta({
+    title: 'Tarifs — Prix site web, e-commerce, CRM, IA & maintenance · CA-TECH',
+    description: "Grille tarifaire transparente CA-TECH : site vitrine dès 590 €, landing page 270 €, e-commerce 1 090 €, application métier, CRM sur mesure, agents IA, maintenance 49 €/mois. Devis gratuit sous 24h.",
+    keywords: 'tarif site vitrine, prix site internet, tarif e-commerce, prix application métier, tarif CRM sur mesure, prix agent IA, tarif maintenance site web, prix hébergement, tarif SEO, devis développement web',
+    path: '/tarifs',
+  })
+  useJsonLd('breadcrumb', breadcrumbSchema([
+    { name: 'Accueil', path: '/' },
+    { name: 'Tarifs', path: '/tarifs' },
+  ]))
+  useJsonLd('tarifs-faq', faqSchema(FAQS))
 
   return (
     <>

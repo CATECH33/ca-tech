@@ -2,6 +2,8 @@ import { useState, useMemo, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import './Catalogue.css'
+import { usePageMeta } from '../lib/seo'
+import { useJsonLd, breadcrumbSchema } from '../lib/schema'
 
 const U = id => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=900&q=80`
 
@@ -352,9 +354,16 @@ export default function Catalogue() {
   const currentVisible = tab === 'ia' ? visibleIA : visibleSvc
   const isLoading      = tab === 'ia' ? liveIA === null : liveServices === null
 
-  useEffect(() => {
-    document.title = `Catalogue — ${iaData.length + svcData.length} solutions · CA-TECH`
-  }, [iaData.length, svcData.length])
+  usePageMeta({
+    title: `Catalogue de solutions IA & Web — ${iaData.length + svcData.length} services · CA-TECH`,
+    description: `Explorez ${iaData.length + svcData.length} solutions clés en main : agents IA, automatisations, sites web, applications métier, CRM, SaaS. Filtrez par catégorie ou par gain business. Prix affichés, livraison rapide.`,
+    keywords: 'catalogue solutions IA, solutions clés en main, agents IA prêts à déployer, catalogue services web, offres IA PME, solutions automatisation',
+    path: '/catalogue',
+  })
+  useJsonLd('breadcrumb', breadcrumbSchema([
+    { name: 'Accueil', path: '/' },
+    { name: 'Catalogue', path: '/catalogue' },
+  ]))
 
   return (
     <>

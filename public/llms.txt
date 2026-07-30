@@ -1,0 +1,48 @@
+# CA-TECH
+
+> Agence web et cabinet de conseil IA-first. CA-TECH conçoit, déploie et maintient des sites, applications métier, CRM sur mesure, SaaS, automatisations, agents IA et collaborateurs IA pour PME, startups et professions libérales en France (Paris, Lyon, Dijon, Troyes).
+
+## Slogan
+« L'IA au service de votre croissance. »
+
+## Offres principales
+
+- **Développement web** — Sites vitrines, sites e-commerce (Stripe), landing pages haute conversion, refonte SEO-safe
+- **Applications métier sur mesure** — Outils internes, back-offices, portails clients
+- **CRM sur mesure** — Gestion pipeline, contacts, opportunités, adapté aux processus de l'entreprise
+- **SaaS** — Développement de produits SaaS multi-tenants, du MVP à la scale
+- **Automatisation d'entreprise** — Workflows n8n, Make, Zapier, intégrations API
+- **Agents IA** — Assistants conversationnels spécialisés (support, ventes, RH)
+- **Collaborateurs IA** — Agents IA autonomes 24/7 : Commercial, Support, RH, Juridique, SEO, Comptable
+- **SEO** — Audit, optimisation on-page, contenu, netlinking, suivi positionnement
+- **Maintenance** — Sécurité, mises à jour, sauvegardes, monitoring
+- **Hébergement** — Infrastructure managée, performance, uptime garanti
+- **Audit digital** — Analyse complète : SEO, performance, UX, sécurité, opportunités IA
+- **Conseil IA** — Stratégie d'adoption IA, roadmap, formation, sélection d'outils
+
+## Points d'entrée
+
+- Accueil : https://www.ca-tech.fr/
+- Services : https://www.ca-tech.fr/services
+- Collaborateurs IA : https://www.ca-tech.fr/collaborateurs-ia
+- Automatisations : https://www.ca-tech.fr/automatisations
+- Catalogue : https://www.ca-tech.fr/catalogue
+- Tarifs : https://www.ca-tech.fr/tarifs
+- Réalisations : https://www.ca-tech.fr/realisations
+- Démo Loïc (IA support 24/7) : https://www.ca-tech.fr/loic
+- Contact : https://www.ca-tech.fr/contact
+
+## Contact
+
+- Email : contact@ca-tech.fr
+- Téléphone : +33 7 75 66 49 75
+- Zones : Paris, Lyon, Dijon, Troyes, toute la France en distanciel
+- Disponibilité : Lun–Ven, 9h–19h
+- Diagnostic gratuit sous 24h
+
+## Style et méthode
+
+- Design premium (inspirations Apple, Stripe, Vercel, Linear)
+- Approche mobile-first, SEO-first, performance-first
+- Premier livrable en 72h, projets standards en 1 à 6 semaines
+- Tarifs transparents à partir de 270 € (landing) / 590 € (site vitrine)

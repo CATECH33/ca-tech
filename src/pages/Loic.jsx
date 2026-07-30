@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import './Loic.css'
+import { usePageMeta, SITE_URL } from '../lib/seo'
+import { useJsonLd, breadcrumbSchema } from '../lib/schema'
 
 /* ── Simulated response database ── */
 const RESPONSES = [
@@ -128,9 +130,28 @@ export default function Loic() {
   const scrollRef = useRef(null)
   const inputRef = useRef(null)
 
-  useEffect(() => {
-    document.title = 'Loïc — Démonstrateur IA CA-TECH · Testez notre IA en live'
-  }, [])
+  usePageMeta({
+    title: 'Loïc — Démo Agent IA support client en live · CA-TECH',
+    description: "Testez Loïc en direct : un agent IA de support client conversationnel signé CA-TECH. Il répond en français, comprend le contexte et transfère les demandes complexes à un humain. Démo gratuite sans compte.",
+    keywords: 'démo agent IA, tester chatbot IA gratuit, agent IA support client, IA conversationnelle française, démonstration chatbot entreprise, tester assistant IA en ligne',
+    path: '/loic',
+  })
+  useJsonLd('breadcrumb', breadcrumbSchema([
+    { name: 'Accueil', path: '/' },
+    { name: 'Loïc — Démo IA', path: '/loic' },
+  ]))
+  useJsonLd('loic-app', {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    '@id': `${SITE_URL}/loic#app`,
+    name: 'Loïc — Agent IA de support',
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'Web',
+    url: `${SITE_URL}/loic`,
+    description: "Agent IA conversationnel de démonstration : support client en français, gestion du contexte, escalade vers un humain sur les cas complexes.",
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR', availability: 'https://schema.org/InStock' },
+    creator: { '@id': `${SITE_URL}/#organization` },
+  })
 
   useEffect(() => {
     if (scrollRef.current) {

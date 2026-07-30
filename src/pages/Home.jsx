@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import '../../css/main.css'
+import { usePageMeta } from '../lib/seo'
+import { useJsonLd, organizationSchema, websiteSchema, itemListSchema } from '../lib/schema'
 
 /* ── Carte expertise réutilisable ───────────────────────────────────────── */
 function ExpertiseCard({ img, alt, badge, badgeColor, title, desc, benefits, href, className }) {
@@ -123,9 +125,28 @@ const EXPERTISES = [
 ]
 
 export default function Home() {
-  useEffect(() => {
-    document.title = 'CA-TECH — Cabinet de Développement Digital · Sites Internet, Applications Web, CRM, SaaS'
-  }, [])
+  usePageMeta({
+    title: 'CA-TECH — Agence Web & IA · Sites, CRM, SaaS, Agents IA à Paris',
+    description: "Agence web et cabinet de conseil IA à Paris, Lyon, Dijon. Sites vitrines, e-commerce, applications métier, CRM sur mesure, SaaS, automatisations et agents IA pour PME. Diagnostic gratuit sous 24h.",
+    keywords: 'agence web, agence IA, développement site internet, site vitrine, e-commerce, application métier, CRM sur mesure, SaaS, automatisation entreprise, agents IA, collaborateurs IA, SEO, conseil IA, Paris, Lyon, Dijon',
+    path: '/',
+  })
+  useJsonLd('organization', organizationSchema)
+  useJsonLd('website', websiteSchema)
+  useJsonLd('home-services', itemListSchema([
+    { name: 'Sites vitrines',            path: '/services#dev-web' },
+    { name: 'Sites e-commerce',          path: '/services#dev-web' },
+    { name: 'Applications métier',       path: '/services#apps-metier' },
+    { name: 'CRM sur mesure',            path: '/services#apps-metier' },
+    { name: 'Développement SaaS',        path: '/services#apps-metier' },
+    { name: 'Automatisation entreprise', path: '/automatisations' },
+    { name: 'Agents IA',                 path: '/services#solutions-ia' },
+    { name: 'Collaborateurs IA',         path: '/collaborateurs-ia' },
+    { name: 'SEO',                       path: '/services#marketing' },
+    { name: 'Maintenance & Hébergement', path: '/services#maintenance' },
+    { name: 'Audit digital',             path: '/services#audit' },
+    { name: 'Conseil IA',                path: '/services#conseil-ia' },
+  ]))
 
   useEffect(() => {
     /* ── HERO ENTRANCE ANIMATION ─────────────────────────────────────── */
@@ -249,16 +270,16 @@ export default function Home() {
           <div className="hero-inner">
             <div className="hero-content">
               <div className="hero-pill">
-                <span className="pill pill-dark">✦ Cabinet de Développement Digital</span>
+                <span className="pill pill-dark">✦ Agence Web &amp; Cabinet IA</span>
               </div>
               <h1 className="hero-h1" id="hero-h1" style={{ opacity: 0, transform: 'translateY(16px)' }}>
-                Nous développons les outils qui font grandir votre entreprise.
+                Agence Web &amp; IA — les outils qui font grandir votre entreprise.
               </h1>
               <p className="hero-subtitle" id="hero-sub" style={{ opacity: 0, transform: 'translateY(12px)' }}>
-                Sites Internet • Applications Web • CRM • Plateformes SaaS • Intelligence Artificielle • Automatisations • SEO
+                Sites vitrines • E-commerce • Applications métier • CRM sur mesure • SaaS • Automatisations • Agents IA • SEO • Maintenance
               </p>
               <p className="hero-desc" id="hero-desc" style={{ opacity: 0, transform: 'translateY(8px)', color: 'rgba(255,255,255,.65)', fontSize: '1rem', lineHeight: 1.65, maxWidth: '520px', marginBottom: '2rem' }}>
-                CA-TECH conçoit des solutions digitales sur mesure pour automatiser votre activité, attirer plus de clients et accompagner votre croissance.
+                CA-TECH conçoit, déploie et maintient les solutions digitales et IA qui automatisent votre activité, attirent plus de clients et accompagnent votre croissance. À Paris, Lyon, Dijon &amp; Troyes.
               </p>
               <div className="hero-ctas" id="hero-ctas" style={{ opacity: 0, transform: 'translateY(8px)' }}>
                 <a href="/devis" className="btn btn-white btn-xl" aria-label="Créer mon projet">Créer mon projet →</a>

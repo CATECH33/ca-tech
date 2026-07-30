@@ -1,6 +1,8 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './Automatisations.css'
+import { usePageMeta } from '../lib/seo'
+import { useJsonLd, breadcrumbSchema, serviceSchema } from '../lib/schema'
 
 /* ══════════════════════════════════════════════════════════
    URLs Unsplash — photos business premium
@@ -243,9 +245,23 @@ const TECHS = [
 export default function Automatisations() {
   const [active, setActive] = useState('tous')
 
-  useEffect(() => {
-    document.title = 'Automatisations — Résultats concrets, pas des outils · CA-TECH'
-  }, [])
+  usePageMeta({
+    title: "Automatisation d'entreprise — Récupérez 15h/semaine · CA-TECH",
+    description: "Automatisations sur mesure pour PME : workflows n8n, Make, Zapier, intégrations API, synchronisations CRM. Récupérez 15 heures par semaine dès la première semaine. Déployé en 48h.",
+    keywords: 'automatisation entreprise, automatisation processus métier, workflow n8n, Make, Zapier, intégration API, synchronisation CRM, RPA PME, gagner du temps, automatiser tâches répétitives',
+    path: '/automatisations',
+  })
+  useJsonLd('breadcrumb', breadcrumbSchema([
+    { name: 'Accueil', path: '/' },
+    { name: 'Automatisations', path: '/automatisations' },
+  ]))
+  useJsonLd('service-auto', serviceSchema({
+    name: "Automatisation d'entreprise",
+    description: "Automatisation de workflows métier pour PME : intégrations, synchronisations, orchestration n8n / Make / Zapier. Résultats mesurables : 15 heures récupérées par semaine.",
+    path: '/automatisations',
+    serviceType: 'Business Process Automation',
+    priceRange: '€€',
+  }))
 
   const visible = useMemo(
     () => active === 'tous' ? SERVICES : SERVICES.filter(s => s.cat === active),
