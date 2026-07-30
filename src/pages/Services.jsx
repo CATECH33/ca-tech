@@ -2,6 +2,8 @@ import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './Services.css'
 
+const U_W = id => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1400&h=520&q=85`
+
 const NAV_ITEMS = [
   { id: 'dev-web',      label: 'Développement Web' },
   { id: 'apps-metier',  label: 'Applications Métier' },
@@ -295,6 +297,14 @@ export default function Services() {
             </div>
             <p className="srv2-header-desc">Sites vitrines, boutiques en ligne, landing pages et refontes. Chaque projet est pensé pour attirer, convaincre et fidéliser vos clients — livrés en 1 à 6 semaines.</p>
           </header>
+          <div className="srv2-cover">
+            <img src={U_W('1498050108023-c5249f4df085')} alt="Développeur travaillant sur un site web moderne" loading="lazy" />
+            <div className="srv2-cover-overlay" />
+            <div className="srv2-cover-caption">
+              <span className="srv2-cover-tag">Développement Web</span>
+              <p className="srv2-cover-line">Sites & boutiques livrés en 1 à 6 semaines</p>
+            </div>
+          </div>
           <ul className="srv2-grid" role="list">
             {DEV_WEB.map((card, i) => (
               <li key={i}>
@@ -315,6 +325,14 @@ export default function Services() {
             </div>
             <p className="srv2-header-desc">CRM, ERP, portails clients, extranets, dashboards. Des logiciels conçus pour vos processus, pas pour un usage générique. Évolutions et maintenance incluses.</p>
           </header>
+          <div className="srv2-cover">
+            <img src={U_W('1460925895917-afdab827c52f')} alt="Dashboard professionnel sur plusieurs écrans" loading="lazy" />
+            <div className="srv2-cover-overlay" />
+            <div className="srv2-cover-caption">
+              <span className="srv2-cover-tag" style={{ color: '#a5b4fc' }}>Applications Métier</span>
+              <p className="srv2-cover-line">CRM, ERP, portails — adaptés à vos processus</p>
+            </div>
+          </div>
           <ul className="srv2-grid" role="list">
             {APPS_METIER.map((card, i) => (
               <li key={i}>
@@ -335,6 +353,14 @@ export default function Services() {
             </div>
             <p className="srv2-header-desc srv2-header-desc--dark">Collaborateurs IA, automatisations, analyse documentaire, qualification de prospects — des solutions déployées en 48h avec un ROI mesurable dès le premier mois.</p>
           </header>
+          <div className="srv2-cover">
+            <img src={U_W('1600880292203-757bb62b4baf')} alt="Équipe professionnelle utilisant des outils numériques" loading="lazy" />
+            <div className="srv2-cover-overlay" />
+            <div className="srv2-cover-caption">
+              <span className="srv2-cover-tag" style={{ color: '#93c5fd' }}>Solutions IA</span>
+              <p className="srv2-cover-line">Collaborateurs IA &amp; automatisations — ROI dès le 1er mois</p>
+            </div>
+          </div>
           <ul className="srv2-grid" role="list">
             {SOLUTIONS_IA.map((card, i) => (
               <li key={i}>
@@ -355,6 +381,14 @@ export default function Services() {
             </div>
             <p className="srv2-header-desc">SEO, Google Business, optimisation des performances, stratégie digitale. On s'assure que vos clients vous trouvent avant vos concurrents — et qu'ils restent.</p>
           </header>
+          <div className="srv2-cover">
+            <img src={U_W('1504868584819-f8e8b4b6d7e3')} alt="Analyse SEO et graphiques de croissance" loading="lazy" />
+            <div className="srv2-cover-overlay" />
+            <div className="srv2-cover-caption">
+              <span className="srv2-cover-tag" style={{ color: '#fcd34d' }}>Marketing Digital</span>
+              <p className="srv2-cover-line">SEO, Google Business — trafic organique ×3.4 en 6 mois</p>
+            </div>
+          </div>
           <ul className="srv2-grid" role="list">
             {MARKETING.map((card, i) => (
               <li key={i}>
