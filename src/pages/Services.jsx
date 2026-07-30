@@ -2,7 +2,30 @@ import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './Services.css'
 import { usePageMeta } from '../lib/seo'
-import { useJsonLd, serviceSchema, breadcrumbSchema } from '../lib/schema'
+import { useJsonLd, serviceSchema, breadcrumbSchema, faqSchema } from '../lib/schema'
+import { SeoSection, SeoProse, SeoAdvice, SeoFaq } from '../components/SeoContent'
+
+const SERVICES_ADVICE = [
+  { title: 'Commencez par le problème, pas par la solution',   desc: "Un CRM ne sert à rien si vos commerciaux ne veulent pas l'utiliser. Un site premium n'attire personne s'il n'a pas de plan de trafic. Nommez d'abord le problème business — le bon outil suit." },
+  { title: "Ne cherchez pas le service le moins cher, cherchez celui qui s'amortit le plus vite", desc: "Un site à 590 € qui génère 3 clients en 6 mois est infiniment plus rentable qu'un site à 2 900 € qui reste vitrine. Mesurez le ROI attendu avant de comparer les devis." },
+  { title: 'Priorisez ce que vous ne pouvez pas déléguer plus tard', desc: "Un site vitrine se refait. Un CRM mal cadré vous colle à la peau 5 ans. Investissez le temps de réflexion là où les décisions structurantes sont difficiles à défaire." },
+  { title: "Choisissez l'intégration plutôt que la brique isolée", desc: "Un agent IA qui ne parle pas à votre CRM ni à votre boîte mail perd 80 % de sa valeur. Vérifiez toujours l'écosystème d'intégrations avant de valider un projet." },
+  { title: 'Exigez un plan de maintenance dès le devis initial', desc: "80 % du coût réel d'un projet digital arrive après la livraison. Un devis sans plan de maintenance chiffré est un devis incomplet — quel que soit le prestataire." },
+  { title: 'Testez le contact avant de tester le produit', desc: "Un prestataire qui répond en 24 h avant contrat répondra en 24 h après. Un qui répond en 4 jours en avant-vente répondra en 15 jours en production. Le premier échange prédit la relation entière." },
+]
+
+const SERVICES_FAQ = [
+  { q: 'Quelle différence entre un site vitrine et une landing page ?', a: "Un site vitrine présente l'ensemble de votre activité (services, équipe, réalisations, blog) et sert votre référencement long terme. Une landing page est mono-message : elle convertit un trafic déjà qualifié (Google Ads, LinkedIn, campagne email) sur une seule action précise. Les deux sont complémentaires : la landing page transforme, le site vitrine rassure." },
+  { q: 'CRM sur mesure ou SaaS du marché (HubSpot, Pipedrive, Salesforce) ?', a: "Un SaaS du marché convient à 80 % des PME jusqu'à 20 commerciaux — installation en 2 jours, tarif prévisible. Un CRM sur mesure devient rentable quand vos processus sont trop spécifiques (BTP, immobilier, santé) ou quand vous dépassez 15 000 € /an de licences. On vous aide à trancher pendant le diagnostic gratuit." },
+  { q: 'Un agent IA remplace-t-il vraiment un salarié ?', a: "Non — il absorbe les tâches répétitives qui empêchent vos équipes de faire un vrai travail à valeur. Un agent IA de support ne remplace pas votre responsable client, il lui libère 60 à 80 % du temps consacré aux questions récurrentes pour qu'elle traite les cas complexes correctement." },
+  { q: 'Combien de temps prend un audit SEO ?', a: "Entre 5 et 10 jours ouvrés pour un site de moins de 200 pages. Vous recevez un rapport écrit de 15 à 25 pages avec les 10 priorités classées par impact et effort, un plan d'action sur 90 jours et une session de restitution d'une heure. Prix à partir de 390 €." },
+  { q: 'Vous hébergez chez qui ? Puis-je choisir mon hébergeur ?', a: "Notre hébergement managé tourne sur infrastructure française (OVH, Scaleway, Vercel selon les cas), avec sauvegardes chiffrées quotidiennes et monitoring 24 / 7. Si vous préférez conserver votre hébergeur actuel, aucun problème : le code vous appartient à 100 %, on installe où vous voulez." },
+  { q: 'Que se passe-t-il si mon projet évolue en cours de route ?', a: "Chaque projet a un cadrage écrit avec périmètre validé. Les demandes hors-scope sont estimées séparément — vous décidez si vous les intégrez, les reportez ou les abandonnez. Aucune décision n'est cachée dans une facture surprise." },
+  { q: 'Pouvez-vous reprendre un projet démarré par un autre prestataire ?', a: "Oui, on le fait régulièrement. On commence par un audit de code (400 €) qui identifie ce qui est réutilisable, ce qui doit être réécrit et les risques de sécurité éventuels. On vous fournit ensuite un plan de reprise chiffré, sans obligation de nous confier la suite." },
+  { q: 'Quelle est la durée de garantie après livraison ?', a: "3 mois de garantie fonctionnelle sur tout projet : les bugs sont corrigés gratuitement. La maintenance évolutive (nouvelles fonctionnalités, adaptations) est facturée séparément à partir du 4e mois, soit à l'unité, soit en forfait mensuel." },
+  { q: 'Travaillez-vous avec des freelances ou en équipe intégrée ?', a: "Notre équipe interne prend en charge le développement, la stratégie et la relation client. Pour des expertises spécifiques (photo produit, motion design, traduction), nous mobilisons un réseau de freelances de confiance — vous restez informé et validez chaque intervenant." },
+  { q: 'Est-ce que je peux payer en plusieurs fois ?', a: "Oui, la plupart de nos clients paient en 3 fois : 30 % au démarrage, 40 % à mi-parcours, 30 % à la livraison. Pour les projets supérieurs à 5 000 €, un échelonnement personnalisé est possible sans frais supplémentaires." },
+]
 
 const U_W = id => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1400&h=520&q=85`
 
@@ -275,6 +298,7 @@ export default function Services() {
     serviceType: 'IT Support & Consulting',
     priceRange: '€',
   }))
+  useJsonLd('services-faq', faqSchema(SERVICES_FAQ))
   useEffect(() => {
     /* ── Scroll reveal ── */
     const obs = new IntersectionObserver(entries => {
@@ -480,6 +504,48 @@ export default function Services() {
           </ul>
         </div>
       </section>
+
+      {/* ── SEO · CONSEILS ────────────────────────────────────────── */}
+      <SeoSection
+        variant="gray"
+        eyebrow="Comment choisir"
+        title="6 conseils pour choisir le bon service digital (et éviter les erreurs qui coûtent cher)"
+        intro="Ces principes sont issus de 120 projets menés pour des PME françaises. Ils ne remplacent pas un diagnostic, mais ils évitent les erreurs les plus courantes."
+      >
+        <SeoAdvice items={SERVICES_ADVICE} />
+      </SeoSection>
+
+      {/* ── SEO · CONVICTIONS ─────────────────────────────────────── */}
+      <SeoSection
+        variant="tint"
+        eyebrow="Notre méthode"
+        title="Nos convictions méthodologiques, en trois principes"
+      >
+        <SeoProse columns={2}>
+          <h3>Le cadrage vaut plus que le code</h3>
+          <p>
+            Un projet réussi tient à 70 % à la clarté du cadrage initial. Nous investissons du temps à comprendre votre modèle économique, vos processus, vos contraintes réglementaires, avant d'écrire quoi que ce soit. Ce diagnostic évite les projets qui dérivent, les cahiers des charges qui gonflent, les livraisons qui déçoivent. <strong>Il est gratuit et n'engage à rien.</strong>
+          </p>
+          <h3>Le mieux est l'ennemi du livré</h3>
+          <p>
+            Nous préférons livrer une V1 solide en 3 semaines et itérer, plutôt qu'une V2 parfaite en 6 mois. Chaque semaine de retard, c'est une semaine sans retour utilisateur, sans revenu généré, sans apprentissage. Nous appliquons cette règle à nos propres projets — c'est pour cela que nous refusons systématiquement les scopes qui explosent en cours de route.
+          </p>
+          <h3>Ce qui compte, c'est ce qui reste après nous</h3>
+          <p>
+            Nous écrivons du code que d'autres pourront lire, maintenir, adapter. Documentation, tests automatisés, dépendances stables, choix technologiques mainstream. Le jour où vous voudrez reprendre le projet en interne ou changer de prestataire, aucun blocage. <strong>La technologie ne doit jamais vous retenir prisonnier.</strong>
+          </p>
+        </SeoProse>
+      </SeoSection>
+
+      {/* ── SEO · FAQ SERVICES ────────────────────────────────────── */}
+      <SeoSection
+        variant="light"
+        eyebrow="Questions fréquentes"
+        title="Les 10 questions qui reviennent le plus sur nos services"
+        intro="Sites, CRM, agents IA, audit, maintenance — voici les réponses aux interrogations récurrentes en avant-vente. Cliquez pour dérouler."
+      >
+        <SeoFaq items={SERVICES_FAQ} />
+      </SeoSection>
 
       {/* ── CTA ─────────────────────────────────────────────────────── */}
       <section className="sol-cta">

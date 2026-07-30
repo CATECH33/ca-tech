@@ -3,6 +3,34 @@ import { Link } from 'react-router-dom'
 import './Tarifs.css'
 import { usePageMeta } from '../lib/seo'
 import { useJsonLd, breadcrumbSchema, faqSchema } from '../lib/schema'
+import { SeoSection, SeoProse, SeoAdvice, SeoComparison } from '../components/SeoContent'
+
+const TARIFS_ADVICE = [
+  { title: 'Alignez le budget sur le retour attendu',   desc: "Un site à 590 € qui capte 2 clients par mois s'amortit en un trimestre. Un site à 3 000 € qui reste vitrine ne s'amortit jamais. Chiffrez d'abord ce qu'un client vous rapporte, ensuite arbitrez." },
+  { title: 'Distinguez one-shot et récurrent',           desc: "Un développement se paie une fois ; la maintenance, l'hébergement et l'agent IA se paient chaque mois. Un budget projet réaliste inclut toujours 15 à 20 % du coût initial en récurrent annuel." },
+  { title: 'N\'achetez pas ce dont vous n\'êtes pas sûr', desc: "Commencez par le service minimum viable — landing page plutôt que site complet, un seul collaborateur IA plutôt que six. Vous ajusterez en 3 mois avec des vraies données d'usage." },
+  { title: 'Négociez la portée, pas le prix',            desc: "Un devis 30 % moins cher pour un scope 30 % réduit est souvent un excellent deal. Un devis 30 % moins cher au même scope cache généralement une qualité ou un accompagnement au rabais." },
+  { title: 'Inclure la formation dans le calcul',        desc: "Un outil que personne n'utilise coûte plus cher qu'un outil bien formé. Prévoyez 1 à 3 sessions de formation pour vos équipes — c'est l'investissement à plus fort ROI de toute solution digitale." },
+  { title: 'Gardez 20 % de budget pour la phase 2',      desc: "Aucun projet digital ne se termine à la livraison. Réservez 20 % de votre enveloppe totale pour les 90 premiers jours d'ajustements — c'est là que se joue la vraie adoption." },
+]
+
+const TARIFS_COMPARE_COLS = [
+  { label: 'Landing / Vitrine',     sub: 'À partir de 270 €' },
+  { label: 'Site complet',           sub: 'À partir de 590 €', highlight: true },
+  { label: 'Sur mesure',             sub: 'À partir de 2 500 €' },
+]
+const TARIFS_COMPARE_ROWS = [
+  { label: 'Nombre de pages',                       values: ['1 à 3',                       '5 à 12',                        '10+ et espace client'] },
+  { label: 'Design personnalisé',                   values: ['Template premium adapté',     'Design sur mesure',              'Design sur mesure + prototype'] },
+  { label: 'Formulaire de contact / prise de RDV',  values: [true,                           true,                             true] },
+  { label: 'SEO on-page inclus',                    values: [true,                           true,                             true] },
+  { label: 'CMS pour éditer vous-même',             values: [false,                          true,                             true] },
+  { label: 'Blog / actualités',                     values: [false,                          true,                             true] },
+  { label: 'E-commerce Stripe / Shopify',           values: [false,                          '+ 500 €',                        'Inclus'] },
+  { label: 'Espace client / connexion',             values: [false,                          '+ 490 €',                        true] },
+  { label: 'Maintenance 3 mois offerte',            values: [true,                           true,                             true] },
+  { label: 'Délai de livraison',                    values: ['5 à 7 jours',                 '2 à 3 semaines',                 '4 à 8 semaines'] },
+]
 
 const FAQS = [
   {
@@ -361,6 +389,52 @@ export default function Tarifs() {
           {FAQS.map(({ q, a }) => <FaqItem key={q} q={q} a={a} />)}
         </div>
       </section>
+
+      {/* ── SEO · GUIDE D'ACHAT ────────────────────────────────── */}
+      <SeoSection
+        variant="gray"
+        eyebrow="Guide d'achat"
+        title="6 principes pour dimensionner correctement votre budget digital"
+        intro="Ces règles empiriques sortent de 120 projets menés pour des PME françaises. Elles ne remplacent pas un chiffrage précis, mais elles évitent les mauvaises surprises budgétaires."
+      >
+        <SeoAdvice items={TARIFS_ADVICE} />
+      </SeoSection>
+
+      {/* ── SEO · COMPARATIF ───────────────────────────────────── */}
+      <SeoSection
+        variant="light"
+        eyebrow="Comparatif"
+        title="Landing, site complet ou sur mesure : que couvre chaque offre ?"
+        intro="La différence entre nos trois formules ne tient pas au design (toujours premium) mais au périmètre fonctionnel et à la complexité technique. Voici la comparaison ligne à ligne."
+      >
+        <SeoComparison columns={TARIFS_COMPARE_COLS} rows={TARIFS_COMPARE_ROWS} />
+      </SeoSection>
+
+      {/* ── SEO · CE QUE COUVRE UN TARIF ───────────────────────── */}
+      <SeoSection
+        variant="tint"
+        eyebrow="Transparence"
+        title="Ce qu'inclut réellement un tarif chez CA-TECH"
+      >
+        <SeoProse columns={2}>
+          <h3>Le chiffrage, pas le devis</h3>
+          <p>
+            Nos tarifs affichés sont des <strong>chiffrages initiaux</strong>, basés sur des scopes standardisés. Le devis final tient compte de vos spécificités : contenus à intégrer, connecteurs tiers, exigences de performance, environnements à gérer. Il est envoyé sous 24 h après un diagnostic gratuit de 30 minutes, sans engagement.
+          </p>
+          <h3>La bande passante humaine incluse</h3>
+          <p>
+            Chaque forfait inclut le temps de cadrage, la revue de contenu, la formation à l'usage et 3 mois de maintenance corrective. Vous ne payez pas seulement du code — vous payez un accompagnement qui garantit que la solution atterrit dans votre organisation.
+          </p>
+          <h3>Ce qui n'est jamais inclus (sauf mention contraire)</h3>
+          <p>
+            <strong>Le contenu rédactionnel</strong> (nous pouvons l'écrire, à partir de 90 € /page). <strong>La photographie professionnelle</strong> (partenariat photographe à partir de 450 €). <strong>Les licences tierces</strong> (Google Workspace, Stripe, hébergement long terme). <strong>Les campagnes publicitaires</strong> (Google Ads, Meta). Chacun de ces éléments est chiffré séparément — vous décidez ce que vous confiez à CA-TECH et ce que vous gérez en interne.
+          </p>
+          <h3>La sortie propre, garantie</h3>
+          <p>
+            Aucun frais de sortie, aucune clause d'exclusivité, aucun contrat de durée minimale. Le code vous appartient à 100 %. Si vous décidez de reprendre le projet en interne ou de changer de prestataire, nous fournissons la documentation technique, les accès et une session de passation d'une heure — <strong>inclus dans le forfait initial.</strong>
+          </p>
+        </SeoProse>
+      </SeoSection>
 
       {/* ═══════════════════════════════════ CTA */}
       <section className="tar-cta">

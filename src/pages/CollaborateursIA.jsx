@@ -4,6 +4,36 @@ import DetailDrawer from '../components/DetailDrawer'
 import './CollaborateursIA.css'
 import { usePageMeta } from '../lib/seo'
 import { useJsonLd, breadcrumbSchema, faqSchema, itemListSchema } from '../lib/schema'
+import { SeoSection, SeoProse, SeoComparison, SeoFaq } from '../components/SeoContent'
+
+const CAI_COMPARE_COLS = [
+  { label: 'Employé traditionnel',    sub: 'Temps plein' },
+  { label: 'Collaborateur IA',        sub: 'Agent autonome CA-TECH', highlight: true },
+  { label: 'Freelance ponctuel',      sub: 'Externalisation' },
+]
+const CAI_COMPARE_ROWS = [
+  { label: 'Disponibilité',                    values: ['35 h/semaine',                    '24 h /24, 7 j /7',                'Sur créneaux réservés'] },
+  { label: 'Coût mensuel (charges comprises)', values: ['2 500 – 4 500 €',                 'À partir de 290 €',               '400 – 1 200 €'] },
+  { label: 'Temps de mise en route',           values: ['4 à 8 semaines',                  '48 heures',                       '1 à 2 semaines'] },
+  { label: 'Capacité en parallèle',            values: ['1 à 3 dossiers simultanés',       'Illimité',                        '1 dossier à la fois'] },
+  { label: 'Gestion des congés / arrêts',      values: [true,                              false,                             false] },
+  { label: 'Traçabilité des actions',          values: ['CRM manuel',                      'Logs complets automatiques',      'Rapports ponctuels'] },
+  { label: 'Escalade humaine sur cas complexe', values: [true,                             true,                              true] },
+  { label: 'Turnover / dépendance',            values: ['Risque élevé',                    'Nul (algorithme)',                'Moyen (indépendance)'] },
+]
+
+const CAI_FAQ = [
+  { q: 'Un collaborateur IA remplace-t-il un employé ?', a: "Non — il absorbe les tâches répétitives à faible valeur ajoutée pour libérer vos équipes sur ce qui compte : décisions complexes, relations clés, créativité. Un collaborateur IA de support ne remplace pas votre responsable client, il lui rend 60 à 80 % de son temps." },
+  { q: 'Combien de temps pour déployer un collaborateur IA ?', a: "48 heures pour la mise en service initiale (configuration, connexions aux outils, tests). 2 à 4 semaines pour atteindre son plein rendement une fois qu'il a assimilé vos processus et votre base documentaire." },
+  { q: 'Comment gère-t-il les cas complexes qu\'il ne sait pas résoudre ?', a: "Chaque collaborateur IA a une règle d'escalade configurée : dès qu'il détecte un cas hors périmètre, il transfère la conversation à un humain avec un résumé complet du contexte. Vous ne perdez jamais un client sur une question qui dépasse l'IA." },
+  { q: "L'IA se trompe : comment gérez-vous les erreurs ?", a: "Trois filets de sécurité : (1) chaque action est loggée et auditable en temps réel, (2) les décisions à impact (envoi de contrat, remboursement, promesse commerciale) exigent une validation humaine, (3) un tableau de bord hebdomadaire vous alerte sur les patterns d'erreur détectés." },
+  { q: 'Mes données sont-elles utilisées pour entraîner votre IA ?', a: "Non, jamais. Les données de vos clients restent votre propriété exclusive et ne servent qu'à faire fonctionner votre collaborateur IA. Aucun échange avec d'autres clients, aucune réutilisation pour entraîner des modèles. Hébergement en France (RGPD)." },
+  { q: 'Est-ce compatible RGPD et confidentialité ?', a: "Oui. Consentement client explicite, données chiffrées AES-256 en transit et au repos, durée de conservation paramétrable, droit à l'oubli automatisé, registre des traitements fourni. Nos collaborateurs IA sont utilisés par des cabinets d'avocats et des professions de santé." },
+  { q: 'Combien coûte un collaborateur IA par mois ?', a: "À partir de 290 € /mois pour un collaborateur avec périmètre standard (support 24/7 ou qualification de leads jusqu'à 500 interactions). Les usages intensifs (5 000+ interactions, IA sur mesure) sont chiffrés après diagnostic. Sans engagement de durée." },
+  { q: "Puis-je tester un collaborateur IA avant de m'engager ?", a: "Oui. Loïc, notre agent de démonstration, est accessible librement sur /loic — vous discutez en 30 secondes, sans inscription. Pour un test sur votre activité réelle, un pilote de 15 jours est possible sur périmètre restreint (2 500 €, déductibles du contrat annuel)." },
+  { q: 'Fonctionne-t-il en plusieurs langues ?', a: "Oui — français, anglais et 20+ langues nativement. Il détecte la langue du client à la première interaction et répond dans la même langue sans configuration supplémentaire. Idéal pour les activités e-commerce ou export." },
+  { q: 'Que se passe-t-il si je veux arrêter ?', a: "Un préavis d'un mois, aucun frais de sortie. Vous récupérez l'intégralité des logs et de la base de connaissance construite pendant le contrat. Aucun blocage technique ou contractuel — nous préférons vous garder par choix, pas par obligation." },
+]
 
 /* ══════════════════════════════════════════════════
    DONNÉES COLLABORATEURS
@@ -509,6 +539,7 @@ export default function CollaborateursIA() {
   useJsonLd('collab-faq', faqSchema(
     COLLABORATEURS.flatMap(c => c.faq.map(f => ({ q: `${c.name} — ${f.q}`, a: f.a })))
   ))
+  useJsonLd('cai-faq-general', faqSchema(CAI_FAQ))
 
   useEffect(() => {
     /* ── Canvas particle network ── */
@@ -759,6 +790,52 @@ export default function CollaborateursIA() {
           ))}
         </div>
       </section>
+
+      {/* ── SEO · COMPARATIF ─────────────────────────────────────── */}
+      <SeoSection
+        variant="gray"
+        eyebrow="Comparatif"
+        title="Collaborateur IA, employé traditionnel ou freelance : que choisir ?"
+        intro="Chaque option a ses usages. Un collaborateur IA est imbattable sur les tâches répétitives à volume élevé ; un employé reste indispensable pour les décisions structurantes ; un freelance est optimal pour des expertises ponctuelles. Voici comment les positionner."
+      >
+        <SeoComparison columns={CAI_COMPARE_COLS} rows={CAI_COMPARE_ROWS} />
+      </SeoSection>
+
+      {/* ── SEO · SECTEURS ───────────────────────────────────────── */}
+      <SeoSection
+        variant="tint"
+        eyebrow="Dans quels secteurs"
+        title="Où un collaborateur IA fait vraiment la différence"
+      >
+        <SeoProse columns={2}>
+          <h3>Services B2B, cabinets et conseils</h3>
+          <p>
+            Cabinets d'expertise, conseil, coaching, agences : le volume de demandes entrantes explose avec la croissance mais l'équipe ne suit pas. Un collaborateur IA de qualification traite les 60 % de leads qui ne rentrent pas dans votre cible avant qu'ils n'arrivent chez vous — et enrichit les 40 % qui restent avec les bonnes informations pour votre premier appel.
+          </p>
+          <h3>E-commerce et retail</h3>
+          <p>
+            80 % des questions clients concernent le suivi de commande, la politique de retour et les tailles / dimensions. Un support IA absorbe ces demandes en moins de 10 secondes, 24 / 7, en français et en anglais. Votre équipe humaine se concentre sur les réclamations complexes — celles qui, mal traitées, coûtent des avis 1 étoile.
+          </p>
+          <h3>Professions libérales et santé</h3>
+          <p>
+            Médecins, avocats, notaires, architectes : la première prise de contact est chronophage et rarement rentable. Un collaborateur IA gère la prise de rendez-vous, la collecte des documents préalables, l'envoi des devis et la relance des impayés — dans le respect strict du RGPD et du secret professionnel.
+          </p>
+          <h3>Startups et PME en croissance</h3>
+          <p>
+            Recruter un commercial coûte 60 000 € /an et prend 3 mois à former. Un collaborateur IA commercial qualifie les leads entrants, envoie les propositions et relance les prospects dès 290 € /mois — le temps que votre première embauche soit rentable. C'est le classique « faire tourner avant d'embaucher ».
+          </p>
+        </SeoProse>
+      </SeoSection>
+
+      {/* ── SEO · FAQ ────────────────────────────────────────────── */}
+      <SeoSection
+        variant="light"
+        eyebrow="Questions fréquentes"
+        title="10 questions récurrentes sur les collaborateurs IA"
+        intro="Sécurité, RGPD, tarifs, escalade humaine, réversibilité : les réponses aux questions que se posent tous nos clients avant de démarrer."
+      >
+        <SeoFaq items={CAI_FAQ} />
+      </SeoSection>
 
       {/* ════════════════════════════ CTA */}
       <section className="cai-cta">

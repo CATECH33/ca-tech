@@ -2,7 +2,42 @@ import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import '../../css/main.css'
 import { usePageMeta } from '../lib/seo'
-import { useJsonLd, organizationSchema, websiteSchema, itemListSchema } from '../lib/schema'
+import { useJsonLd, organizationSchema, websiteSchema, itemListSchema, faqSchema } from '../lib/schema'
+import { SeoSection, SeoProse, SeoMethod, SeoComparison, SeoFaq } from '../components/SeoContent'
+
+const HOME_METHOD = [
+  { title: 'Diagnostic',   desc: "On analyse votre activité, vos processus et vos données. On identifie les 3 leviers digitaux avec le meilleur ratio impact/effort." },
+  { title: 'Cadrage',      desc: "On construit une roadmap chiffrée avec objectifs, indicateurs et jalons. Vous validez avant qu'une seule ligne de code soit écrite." },
+  { title: 'Livraison',    desc: "Premier livrable en 72h, itérations hebdomadaires, tests en continu. Vous voyez le projet avancer, pas une facture arriver." },
+  { title: 'Optimisation', desc: "Une fois en production, on mesure, on ajuste, on optimise. Le vrai travail commence quand les utilisateurs arrivent." },
+]
+
+const HOME_COMPARE_COLS = [
+  { label: 'Agence classique',   sub: 'Modèle traditionnel' },
+  { label: 'CA-TECH',            sub: 'Agence IA-first', highlight: true },
+  { label: 'Freelance',          sub: 'Ressource seule' },
+]
+const HOME_COMPARE_ROWS = [
+  { label: 'Premier livrable',                  values: ['4 à 8 semaines',            '72 heures',                     '2 à 4 semaines'] },
+  { label: 'Automatisations & IA intégrées',    values: [false,                       true,                            false] },
+  { label: 'Roadmap chiffrée avant devis',      values: [false,                       true,                            false] },
+  { label: 'Maintenance & optimisation',        values: ['Contrat séparé',            'Inclus 3 mois',                 'Non couvert'] },
+  { label: "Interlocuteur unique",              values: ['Chef de projet + équipe',   'Consultant senior dédié',       'Freelance direct'] },
+  { label: 'Tarifs annoncés publiquement',      values: [false,                       true,                            'Variable'] },
+]
+
+const HOME_FAQ = [
+  { q: 'Qu\'est-ce qu\'une agence IA-first et en quoi est-ce différent ?', a: "Une agence IA-first conçoit chaque solution en intégrant l'intelligence artificielle dès le cadrage — automatisations, agents conversationnels, analyse de données. Une agence classique développe d'abord, puis ajoute éventuellement de l'IA. Résultat : nos projets démarrent 40 % plus vite et coûtent en moyenne 30 % moins cher à opérer." },
+  { q: 'Quels services propose CA-TECH exactement ?', a: "13 services répartis en 5 pôles : développement web (sites vitrines, e-commerce, landing pages), applications métier (CRM sur mesure, SaaS, outils internes), solutions IA (agents et collaborateurs IA autonomes), marketing digital (SEO, Google Business) et support & conseil (maintenance, hébergement, audit digital, conseil IA)." },
+  { q: 'Combien coûte un site vitrine chez CA-TECH ?', a: "Un site vitrine premium démarre à 590 €, une landing page à 270 €, un e-commerce à 1 090 €. Les applications métier et solutions IA sont tarifées sur devis après diagnostic. Tous les tarifs sont publiés sur la page Tarifs — pas de surprise." },
+  { q: 'Quel est le délai de livraison moyen ?', a: "Le premier livrable arrive en 72 heures. Une landing page est livrée en 5 à 7 jours, un site vitrine en 1 à 3 semaines, un e-commerce en 4 à 6 semaines. Les projets sur mesure sont cadrés pendant le diagnostic gratuit." },
+  { q: 'Est-ce que je peux commencer par un audit ou un diagnostic ?', a: "Oui, le diagnostic initial est gratuit et dure 30 minutes. On analyse votre situation, on identifie 3 opportunités concrètes et on vous envoie un compte-rendu écrit. Sans engagement d'achat." },
+  { q: 'Comment un collaborateur IA se compare à un employé traditionnel ?', a: "Un collaborateur IA fonctionne 24/7 sans pause, traite plusieurs demandes en parallèle et coûte 5 à 10 fois moins qu'un temps plein. Il ne remplace pas les décisions humaines complexes, mais absorbe 60 à 90 % des tâches répétitives : qualification de leads, réponses aux FAQ, tri de CV, génération de contrats." },
+  { q: 'Travaillez-vous avec des clients hors Paris/Lyon/Dijon ?', a: "Oui, 70 % de nos projets sont menés en distanciel avec des clients partout en France (et occasionnellement en Belgique et Suisse). Les ateliers se font en visio, les livraisons sur environnement de test partagé." },
+  { q: 'Comment garantissez-vous la qualité et la sécurité ?', a: "Sur chaque projet : revue de code, tests automatisés, audit sécurité (OWASP), hébergement en France (RGPD), sauvegardes chiffrées quotidiennes. Sur les projets IA : logs auditables, escalade humaine sur les cas complexes, données jamais réutilisées pour entraîner des modèles." },
+  { q: "Que se passe-t-il après la mise en ligne ?", a: "Les 3 premiers mois de maintenance et d'optimisation sont inclus dans le forfait initial. Ensuite, vous pouvez souscrire à un contrat de maintenance à partir de 49 €/mois, ou reprendre la main en interne — le code vous appartient à 100 %." },
+  { q: "Puis-je tester avant d'acheter ?", a: "Oui. Notre agent Loïc est accessible en démonstration libre sur /loic — vous discutez avec un vrai collaborateur IA en 30 secondes, sans inscription. Pour les autres services, une maquette ou un prototype est réalisé pendant le cadrage." },
+]
 
 /* ── Carte expertise réutilisable ───────────────────────────────────────── */
 function ExpertiseCard({ img, alt, badge, badgeColor, title, desc, benefits, href, className }) {
@@ -133,6 +168,7 @@ export default function Home() {
   })
   useJsonLd('organization', organizationSchema)
   useJsonLd('website', websiteSchema)
+  useJsonLd('home-faq', faqSchema(HOME_FAQ))
   useJsonLd('home-services', itemListSchema([
     { name: 'Sites vitrines',            path: '/services#dev-web' },
     { name: 'Sites e-commerce',          path: '/services#dev-web' },
@@ -552,6 +588,62 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ── SEO · MÉTHODE ────────────────────────────────────────────────── */}
+      <SeoSection
+        variant="gray"
+        eyebrow="Notre méthode"
+        title="Une méthode conçue pour livrer vite, sans casser ce qui marche"
+        intro="Nous avons construit un process en 4 étapes qui protège votre temps, votre budget et votre existant. Chaque phase a un livrable clair et une porte de sortie sans engagement."
+      >
+        <SeoMethod steps={HOME_METHOD} />
+      </SeoSection>
+
+      {/* ── SEO · COMPARATIF ─────────────────────────────────────────────── */}
+      <SeoSection
+        variant="light"
+        eyebrow="Pourquoi CA-TECH"
+        title="Ce qui nous distingue d'une agence classique ou d'un freelance"
+        intro="Nous croyons qu'une agence moderne doit combiner la rigueur d'une équipe structurée, la vitesse d'un freelance senior et la puissance des outils IA — le tout à un tarif transparent."
+      >
+        <SeoComparison columns={HOME_COMPARE_COLS} rows={HOME_COMPARE_ROWS} />
+      </SeoSection>
+
+      {/* ── SEO · PROSE (IA-FIRST) ───────────────────────────────────────── */}
+      <SeoSection
+        variant="tint"
+        eyebrow="Notre conviction"
+        title="Pourquoi une agence IA-first change vraiment votre équation économique"
+      >
+        <SeoProse columns={2}>
+          <h3>L'IA n'est plus une couche optionnelle</h3>
+          <p>
+            Un site sans automatisation, en 2026, c'est un employé sans ordinateur. Chaque formulaire, chaque devis, chaque relance qui reste manuel est un coût invisible qui grignote vos marges. Nos projets intègrent l'IA <strong>dès la conception</strong> : qualification automatique des leads, réponses aux emails récurrents, génération de contrats, extraction de données depuis vos PDFs. Le gain n'est plus « un peu de temps » mais 12 à 20 heures récupérées chaque semaine.
+          </p>
+          <h3>Le vrai coût, ce n'est pas le développement</h3>
+          <p>
+            80 % du coût total d'une solution digitale se joue <strong>après</strong> la livraison : maintenance, adaptations, débogages, formation des équipes. Une agence classique vous vend un livrable ; nous vous vendons un système qui vit. Les 3 premiers mois d'optimisation sont inclus dans le forfait initial et notre code est écrit pour être maintenu — commenté, testé, versionné, documenté.
+          </p>
+          <h3>Vitesse vs qualité : un faux dilemme</h3>
+          <p>
+            On nous demande souvent comment on peut livrer en 72 heures sans sacrifier la qualité. La réponse tient en trois principes : nous partons de composants déjà éprouvés en production, nous automatisons tout ce qui peut l'être (tests, déploiements, revues) et nous refusons les demandes qui ne rentrent pas dans le cadrage validé. Ni patch, ni bricolage, ni « on fera mieux plus tard ».
+          </p>
+          <h3>La transparence comme méthode commerciale</h3>
+          <p>
+            Les tarifs sont publics. Les délais sont écrits. Le code appartient au client. Aucune clause d'exclusivité, aucun frais de sortie, aucun abonnement caché. Cette transparence a un effet inattendu : les projets démarrent plus vite parce qu'il n'y a pas de négociation, et les clients restent parce qu'ils choisissent, pas parce qu'ils sont retenus.
+          </p>
+        </SeoProse>
+      </SeoSection>
+
+      {/* ── SEO · FAQ ────────────────────────────────────────────────────── */}
+      <SeoSection
+        variant="light"
+        eyebrow="Questions fréquentes"
+        title="Ce que nos clients nous demandent avant de démarrer"
+        intro="Dix questions récurrentes sur nos services, nos tarifs, nos délais et notre méthodologie. Si vous avez une question qui n'est pas ici, la réponse est probablement « oui, on peut en discuter »."
+      >
+        <SeoFaq items={HOME_FAQ} />
+      </SeoSection>
 
       {/* ── 6. CTA FINAL ─────────────────────────────────────────────────────── */}
       <section id="cta-final" aria-labelledby="cta-final-title">
