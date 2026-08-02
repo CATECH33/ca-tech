@@ -62,17 +62,6 @@ const CRITERIA_CONFIG = [
 
 type CriteriaKey = typeof CRITERIA_CONFIG[number]['key']
 
-const EMPTY_QUAL: Omit<ProspectQualification, 'score' | 'qualified_at' | 'qualified_by'> = {
-  version: 1,
-  website_url: '',
-  has_https:           { value: null, source: 'manual' },
-  is_responsive:       { value: null, source: 'manual' },
-  has_form:            { value: null, source: 'manual' },
-  has_google_business: { value: null, source: 'manual' },
-  ai_comment: '',
-  commercial_opportunity: '',
-}
-
 /* ─── STAR RATING ─────────────────────────────────────────────────────────── */
 
 function StarRating({ score, size = 'md' }: { score: number; size?: 'sm' | 'md' | 'lg' }) {

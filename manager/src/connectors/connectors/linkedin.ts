@@ -55,7 +55,7 @@ export class LinkedInConnector implements IConnector<LinkedInConfig> {
     }
   }
 
-  async import(opts?: ImportOptions): Promise<ImportResult> {
+  async import(_opts?: ImportOptions): Promise<ImportResult> {
     if (!this.isConfigured()) throw new ConnectorNotConfiguredError('linkedin')
 
     // FUTURE implementation (requires backend proxy or Apify actor):

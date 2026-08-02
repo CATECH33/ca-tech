@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   Plus, Search, X, LayoutGrid, List, Download, ExternalLink,
@@ -28,7 +28,7 @@ import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { Modal } from '@/components/ui/Modal'
 import { Table, Thead, Tbody, Tr, Th, Td, EmptyRow } from '@/components/ui/Table'
-import { cn, formatDate, statusColor, statusLabel } from '@/lib/utils'
+import { cn, formatDate, statusLabel } from '@/lib/utils'
 import { useQueryClient } from '@tanstack/react-query'
 import {
   useProspects, useCreateProspect, useUpdateProspect, useDeleteProspect,
@@ -793,7 +793,6 @@ function ProspectFiche({
     onClose()
   }
 
-  const lastAct = getLastActivity(prospect)
   const recentActivities = [...prospect.activities]
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
     .slice(0, 5)

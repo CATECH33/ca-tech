@@ -14,7 +14,7 @@ function str(v: unknown): string {
 
 function parseCompanyName(title: string): string {
   // Strip common suffixes after separators: "Agence Web | Paris" → "Agence Web"
-  return title.split(/[|–—\-]/).map(s => s.trim()).find(Boolean) ?? title.trim()
+  return title.split(/[|–—-]/).map(s => s.trim()).find(Boolean) ?? title.trim()
 }
 
 function normalizeDomain(raw: string): string | undefined {

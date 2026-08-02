@@ -156,9 +156,9 @@ function detectGoogleMapsEmbed(html: string): boolean {
 }
 
 function detectEmail(html: string): { found: boolean; email?: string } {
-  const mailtoMatch = html.match(/mailto:([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})/)
+  const mailtoMatch = html.match(/mailto:([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/)
   if (mailtoMatch) return { found: true, email: mailtoMatch[1] }
-  const rawMatch = html.match(/\b([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})\b/)
+  const rawMatch = html.match(/\b([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})\b/)
   if (rawMatch && !rawMatch[1].endsWith('.png') && !rawMatch[1].endsWith('.jpg')) {
     return { found: true, email: rawMatch[1] }
   }

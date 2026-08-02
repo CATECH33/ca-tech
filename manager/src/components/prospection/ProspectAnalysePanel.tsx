@@ -2,8 +2,8 @@ import { useState, useCallback } from 'react'
 import {
   Globe, ShieldCheck, ShieldOff, Smartphone, SmartphoneNfc,
   FileText, FileX, MapPin, MapPinOff, Mail, MailX,
-  Phone, PhoneOff, ExternalLink, Sparkles, Check, X,
-  Share2, Wand2, AlertCircle, Save, RotateCcw, Loader2,
+  Phone, PhoneOff, ExternalLink, Sparkles, Check,
+  Share2, Wand2, Save, RotateCcw, Loader2,
   Zap, TriangleAlert, Tag, AlignLeft, Network, Bot,
   MessageCircle, Map, Clock, Layers,
 } from 'lucide-react'

@@ -54,7 +54,7 @@ export class GoogleSheetsConnector implements IConnector<GoogleSheetsConfig> {
     }
   }
 
-  async import(opts?: ImportOptions): Promise<ImportResult> {
+  async import(_opts?: ImportOptions): Promise<ImportResult> {
     if (!this.isConfigured()) throw new ConnectorNotConfiguredError('google-sheets')
 
     // FUTURE implementation:
@@ -69,7 +69,7 @@ export class GoogleSheetsConnector implements IConnector<GoogleSheetsConfig> {
     return { total: 0, imported: 0, skipped: 0, errors: [], prospects: [] }
   }
 
-  async sync(opts?: SyncOptions): Promise<SyncResult> {
+  async sync(_opts?: SyncOptions): Promise<SyncResult> {
     if (!this.isConfigured()) throw new ConnectorNotConfiguredError('google-sheets')
 
     // FUTURE: bidirectional sync

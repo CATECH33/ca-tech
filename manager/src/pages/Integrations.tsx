@@ -14,7 +14,6 @@ import {
   type ServiceId, type IntegrationLog, type SheetsSyncLog,
 } from '@/hooks/useIntegrations'
 import { useGoogleIntegration } from '@/hooks/useGoogleIntegration'
-import { hasSheetsScope } from '@/lib/googleOAuth'
 import { useApifyConnection, useApifyRun } from '@/hooks/useApify'
 import { ApifyClient, TERMINAL_STATUSES, type ApifyRun } from '@/connectors/connectors/apify-client'
 
@@ -245,7 +244,6 @@ function ServiceCard({
   const lastOk = log ? log.status === 'success' : null
   const displayOk = hasScope ? lastOk : false
   const lastErr = log?.error_message ?? (!hasScope ? `Scope ${svc.label} manquant` : null)
-  const needsReconnect = log?.details && (log.details as Record<string, unknown>).needs_reconnect === true
   const apiDisabled = log?.details && (log.details as Record<string, unknown>).api_disabled === true
 
   const details = log?.details as Record<string, unknown> | null
@@ -754,7 +752,7 @@ function ApifySection() {
 
 export function Integrations() {
   const { data: status, isLoading } = useIntegrationStatus()
-  const { integration, isConnected, connect } = useGoogleIntegration()
+  const { integration, connect } = useGoogleIntegration()
   const testMutation = useTestConnections()
   const fixMutation = useAutoFix()
 

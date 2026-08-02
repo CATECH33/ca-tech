@@ -58,7 +58,7 @@ export class GoogleMapsConnector implements IConnector<GoogleMapsConfig> {
     }
   }
 
-  async import(opts?: ImportOptions): Promise<ImportResult> {
+  async import(_opts?: ImportOptions): Promise<ImportResult> {
     if (!this.isConfigured()) throw new ConnectorNotConfiguredError('google-maps')
 
     // FUTURE implementation:
@@ -77,7 +77,7 @@ export class GoogleMapsConnector implements IConnector<GoogleMapsConfig> {
     return { total: 0, imported: 0, skipped: 0, errors: [], prospects: [] }
   }
 
-  async sync(opts?: SyncOptions): Promise<SyncResult> {
+  async sync(_opts?: SyncOptions): Promise<SyncResult> {
     if (!this.isConfigured()) throw new ConnectorNotConfiguredError('google-maps')
 
     // FUTURE: re-run the import and compare against existing DB prospects

@@ -58,7 +58,7 @@ export class XConnector implements IConnector<XConfig> {
     }
   }
 
-  async import(opts?: ImportOptions): Promise<ImportResult> {
+  async import(_opts?: ImportOptions): Promise<ImportResult> {
     if (!this.isConfigured()) throw new ConnectorNotConfiguredError('x')
 
     // FUTURE implementation:
@@ -80,7 +80,7 @@ export class XConnector implements IConnector<XConfig> {
     return { total: 0, imported: 0, skipped: 0, errors: [], prospects: [] }
   }
 
-  async sync(opts?: SyncOptions): Promise<SyncResult> {
+  async sync(_opts?: SyncOptions): Promise<SyncResult> {
     if (!this.isConfigured()) throw new ConnectorNotConfiguredError('x')
 
     // FUTURE: incremental sync using since_id from previous run

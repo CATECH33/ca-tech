@@ -60,7 +60,7 @@ export class ExcelConnector implements IConnector<ExcelConfig> {
     return { ok: true, message: `Fichier prêt : ${this._file.name} (${(this._file.size / 1024).toFixed(1)} Ko)` }
   }
 
-  async import(opts?: ImportOptions): Promise<ImportResult> {
+  async import(_opts?: ImportOptions): Promise<ImportResult> {
     if (!this._file) {
       return { total: 0, imported: 0, skipped: 0, errors: [{ code: 'NO_FILE', message: 'Aucun fichier sélectionné.', at: new Date().toISOString(), retryable: false, row: 0 }], prospects: [] }
     }

@@ -1,21 +1,21 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { formatDistanceToNow, format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import {
   ArrowLeft, Building2, Globe, Phone, Mail, MapPin, ExternalLink,
-  Star, Sparkles, Tag, Plus, Send, BellRing, Paperclip, FileText, Link2,
-  CheckCircle2, XCircle, Calendar, Clock, BarChart2, User, MessageSquare,
-  Zap, Edit3, Check, Plug, RefreshCw, Loader2, ChevronDown, Trash2,
-  AlertCircle, Info,
+  Star, Plus, Send, BellRing, Paperclip, FileText, Link2,
+  CheckCircle2, Calendar, Clock, BarChart2, User, MessageSquare,
+  Zap, Edit3, Check, Plug, RefreshCw, Loader2, Trash2,
+  AlertCircle,
 } from 'lucide-react'
 import { Layout } from '@/components/layout/Layout'
 import { Badge } from '@/components/ui/Badge'
-import { cn, statusLabel, statusColor } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import {
   useProspects, useUpdateProspect, useAddActivity, useSaveNotes, useSaveRelances,
   getNotes, getRelances, getAnalyse,
-  type ProspectRow, type ProspectActivity, type Relance, type RelanceType,
+  type ProspectRow, type Relance, type RelanceType,
 } from '@/hooks/useProspects'
 import { getAudit } from '@/hooks/useAudit'
 import { getRecommendations } from '@/hooks/useRecommendations'

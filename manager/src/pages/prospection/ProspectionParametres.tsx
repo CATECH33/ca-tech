@@ -7,7 +7,6 @@ import {
 import { Layout } from '@/components/layout/Layout'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
-import { Badge } from '@/components/ui/Badge'
 import { cn, formatDate } from '@/lib/utils'
 import { useSyncStatus, useSyncNow, type SyncAction, type SyncLog } from '@/hooks/useSheetsSync'
 import { useGoogleIntegration } from '@/hooks/useGoogleIntegration'

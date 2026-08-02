@@ -14,7 +14,7 @@ import {
   useDuplicateCampaign, useCreateStep, useUpdateStep, useDeleteStep,
   useEnrollProspect, useRemoveProspect,
   type CampaignRow, type CampaignStatus, type CampaignType,
-  type CampaignStep, type CampaignBase,
+  type CampaignBase,
 } from '@/hooks/useCampagnes'
 import { useProspectsForDraft } from '@/hooks/useEmailDrafts'
 import type { EmailDraftTone } from '@/types'
@@ -480,8 +480,6 @@ function CampaignDetail({ campaign, onEdit }: { campaign: CampaignRow; onEdit: (
     const cur = campaign[field]
     updateCampaign.mutate({ id: campaign.id, [field]: Math.max(0, cur + delta) })
   }
-
-  const TypeIcon = TYPE_CFG[campaign.type].icon
 
   return (
     <div className="flex flex-col h-full overflow-y-auto">

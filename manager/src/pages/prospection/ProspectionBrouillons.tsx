@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import {
   FilePen, Plus, Search, X, RefreshCw, Send,
   Mail, CheckCircle2, Clock, AlertCircle, Trash2, Pencil,
-  ChevronRight, Eye, Wand2, Building2,
+  Eye, Wand2, Building2,
   User, Hash, Palette, ExternalLink, History,
   Globe, ShoppingBag, Layers, Wrench,
 } from 'lucide-react'

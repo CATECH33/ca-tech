@@ -10,6 +10,8 @@ import Realisations from './pages/Realisations.jsx'
 import Contact from './pages/Contact.jsx'
 import Catalogue from './pages/Catalogue.jsx'
 import Tarifs from './pages/Tarifs.jsx'
+import SeoPage from './pages/SeoPage.jsx'
+import { SEO_PAGES } from './data/seoPages.js'
 
 function Layout() {
   return (
@@ -48,6 +50,9 @@ export default function App() {
           <Route path="/contact"           element={<Contact />} />
           <Route path="/catalogue"         element={<Catalogue />} />
           <Route path="/tarifs"            element={<Tarifs />} />
+          {Object.values(SEO_PAGES).map(page => (
+            <Route key={page.path} path={page.path} element={<SeoPage page={page} />} />
+          ))}
           <Route path="*"                  element={<NotFound />} />
         </Route>
       </Routes>

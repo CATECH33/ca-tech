@@ -63,6 +63,7 @@ export function useGoogleIntegration() {
       `width=520,height=650,popup=yes,left=${left},top=${top}`,
     )
 
+    // eslint-disable-next-line prefer-const -- assigned after handleMessage closure captures the reference
     let closeCheck: ReturnType<typeof setInterval>
 
     const handleMessage = async (event: MessageEvent) => {

@@ -151,20 +151,6 @@ function KpiCard({ label, value, sub, change, changeLabel, icon, iconBg, iconCol
   return to ? <Link to={to}>{inner}</Link> : inner
 }
 
-/* ─── MINI STAT PILL ─────────────────────────────────────────────────────── */
-
-function MiniStat({ icon, label, count, color, to }: {
-  icon: React.ReactNode; label: string; count: number; color: string; to: string
-}) {
-  return (
-    <Link to={to} className={cn('flex items-center gap-2 px-3 py-2 rounded-xl border transition hover:shadow-sm', color)}>
-      <span>{icon}</span>
-      <span className="text-xs font-bold">{count}</span>
-      <span className="text-[11px] font-medium hidden sm:inline">{label}</span>
-    </Link>
-  )
-}
-
 /* ─── DASHBOARD ──────────────────────────────────────────────────────────── */
 
 export function Dashboard() {

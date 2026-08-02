@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
-  ResponsiveContainer, AreaChart, Area, BarChart, Bar,
+  ResponsiveContainer, AreaChart, Area,
   XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, Cell,
 } from 'recharts'
 import {
@@ -279,7 +279,6 @@ export function ProspectionCommercialDashboard() {
 
     const d7   = ago(7)
     const d14  = ago(14)
-    const d30  = ago(30)
 
     // ── Core KPI values ────────────────────────────────────────────────────
     const activeProspects = prospects.filter(p => p.status !== 'disqualified').length

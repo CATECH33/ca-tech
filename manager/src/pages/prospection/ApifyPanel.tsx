@@ -13,7 +13,6 @@ import {
 import type { ApifyRun } from '@/hooks/useApify'
 import { CURATED_ACTORS, CATEGORY_LABEL } from '../../connectors/connectors/apify-actors'
 import type { CuratedActor } from '../../connectors/connectors/apify-actors'
-import { TERMINAL_STATUSES } from '../../connectors/connectors/apify-client'
 import { bulkImportProspects } from '@/lib/prospect-importer'
 import { runAutoAnalyse } from '@/lib/auto-analyse'
 import { useQueryClient } from '@tanstack/react-query'
@@ -45,7 +44,6 @@ function runStatusLabel(status: ApifyRun['status']): string {
 }
 
 function RunStatusBadge({ status }: { status: ApifyRun['status'] }) {
-  const isTerminal = TERMINAL_STATUSES.includes(status)
   const isSuccess  = status === 'SUCCEEDED'
   const isError    = ['FAILED', 'TIMED-OUT', 'ABORTED'].includes(status)
   const isRunning  = ['READY', 'RUNNING'].includes(status)
