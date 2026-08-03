@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Pages principales SPA -->
   <url>
     <loc>https://www.ca-tech.fr/</loc>
     <changefreq>weekly</changefreq>
@@ -45,4 +47,174 @@
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
+
+  <!-- Landing pages géo-ciblées — Agence web -->
+  <url>
+    <loc>https://www.ca-tech.fr/agence-web-paris</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/agence-web-lyon</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/agence-web-dijon</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/agence-web-troyes</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <!-- Landing pages géo-ciblées — Site internet -->
+  <url>
+    <loc>https://www.ca-tech.fr/site-internet-paris</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/site-internet-lyon</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/site-internet-dijon</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/site-internet-troyes</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.88</priority>
+  </url>
+
+  <!-- Landing pages géo-ciblées — E-commerce -->
+  <url>
+    <loc>https://www.ca-tech.fr/site-ecommerce-paris</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/site-ecommerce-lyon</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/site-ecommerce-dijon</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/site-ecommerce-troyes</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.88</priority>
+  </url>
+
+  <!-- Landing pages géo-ciblées — Logo -->
+  <url>
+    <loc>https://www.ca-tech.fr/logo-paris</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/logo-lyon</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/logo-dijon</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/logo-troyes</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Pages de services -->
+  <url>
+    <loc>https://www.ca-tech.fr/creation-site-vitrine</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/creation-site-ecommerce</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/creation-logo</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/identite-visuelle</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/creation-flyer</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/creation-landing-page</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/maintenance-site-web</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/refonte-site-internet</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- Réalisations -->
+  <url>
+    <loc>https://www.ca-tech.fr/realisation-ca-tech-manager</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/realisation-cv-magic</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/realisation-pasmal</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/realisation-pemous-money</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <!-- Autres pages utiles -->
+  <url>
+    <loc>https://www.ca-tech.fr/faq</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/solutions</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/cas-clients</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
 </urlset>
