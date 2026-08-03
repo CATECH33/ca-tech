@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import './Tarifs.css'
 import { usePageMeta } from '../lib/seo'
-import { useJsonLd, breadcrumbSchema, faqSchema } from '../lib/schema'
-import { SeoSection, SeoProse, SeoAdvice, SeoComparison } from '../components/SeoContent'
+import { useJsonLd, webPageSchema, serviceSchema, offerSchema, breadcrumbSchema, faqSchema } from '../lib/schema'
+import { SeoSection, SeoProse, SeoAdvice, SeoComparison, SeoRelated } from '../components/SeoContent'
 
 const TARIFS_ADVICE = [
   { title: 'Alignez le budget sur le retour attendu',   desc: "Un site à 590 € qui capte 2 clients par mois s'amortit en un trimestre. Un site à 3 000 € qui reste vitrine ne s'amortit jamais. Chiffrez d'abord ce qu'un client vous rapporte, ensuite arbitrez." },
@@ -12,6 +12,15 @@ const TARIFS_ADVICE = [
   { title: 'Négociez la portée, pas le prix',            desc: "Un devis 30 % moins cher pour un scope 30 % réduit est souvent un excellent deal. Un devis 30 % moins cher au même scope cache généralement une qualité ou un accompagnement au rabais." },
   { title: 'Inclure la formation dans le calcul',        desc: "Un outil que personne n'utilise coûte plus cher qu'un outil bien formé. Prévoyez 1 à 3 sessions de formation pour vos équipes — c'est l'investissement à plus fort ROI de toute solution digitale." },
   { title: 'Gardez 20 % de budget pour la phase 2',      desc: "Aucun projet digital ne se termine à la livraison. Réservez 20 % de votre enveloppe totale pour les 90 premiers jours d'ajustements — c'est là que se joue la vraie adoption." },
+]
+
+const TARIFS_RELATED = [
+  { href: '/services',          label: 'Tous nos services',      icon: '✨', desc: '13 services web & IA' },
+  { href: '/realisations',      label: 'Nos réalisations',       icon: '🏆', desc: 'Résultats clients mesurés' },
+  { href: '/catalogue',         label: 'Catalogue de solutions', icon: '📋', desc: 'Parcourez toutes nos offres' },
+  { href: '/collaborateurs-ia', label: 'Collaborateurs IA',      icon: '🤖', desc: 'À partir de 290 €/mois' },
+  { href: '/automatisations',   label: 'Automatisations',        icon: '⚙️', desc: 'ROI ×4 en 3 mois' },
+  { href: '/loic',              label: "Tester avant d'acheter", icon: '💬', desc: 'Démo gratuite en 30 secondes' },
 ]
 
 const TARIFS_COMPARE_COLS = [
@@ -109,15 +118,36 @@ function FaqItem({ q, a }) {
 
 export default function Tarifs() {
   usePageMeta({
-    title: 'Tarifs — Prix site web, e-commerce, CRM, IA & maintenance · CA-TECH',
-    description: "Grille tarifaire transparente CA-TECH : site vitrine dès 590 €, landing page 270 €, e-commerce 1 090 €, application métier, CRM sur mesure, agents IA, maintenance 49 €/mois. Devis gratuit sous 24h.",
+    title: 'Prix & Tarifs — Site web, E-commerce, Agents IA | CA-TECH',
+    description: "Tarifs transparents CA-TECH : site vitrine dès 590 €, landing page 270 €, e-commerce 1 090 €, agents IA et maintenance 49 €/mois. Devis gratuit sous 24h.",
     keywords: 'tarif site vitrine, prix site internet, tarif e-commerce, prix application métier, tarif CRM sur mesure, prix agent IA, tarif maintenance site web, prix hébergement, tarif SEO, devis développement web',
     path: '/tarifs',
   })
+  useJsonLd('tarifs-page', webPageSchema({
+    name: 'Prix & Tarifs — Site web, E-commerce, Agents IA | CA-TECH',
+    description: "Tarifs transparents CA-TECH : site vitrine dès 590 €, landing page 270 €, e-commerce 1 090 €, agents IA et maintenance 49 €/mois. Devis gratuit sous 24h.",
+    path: '/tarifs',
+    speakableCssSelectors: ['h1', '.tar-sub'],
+  }))
   useJsonLd('breadcrumb', breadcrumbSchema([
     { name: 'Accueil', path: '/' },
     { name: 'Tarifs', path: '/tarifs' },
   ]))
+  useJsonLd('tarifs-service', serviceSchema({
+    name: 'Services web et IA — CA-TECH',
+    description: "Agence web IA-first : sites vitrines, e-commerce, CRM sur mesure, agents IA et automatisations pour PME françaises. Tarifs publics, sans surprise.",
+    path: '/tarifs',
+    serviceType: 'Web Design & Development',
+    offers: [
+      offerSchema({ name: 'Logo professionnel',         description: '3 propositions créatives, formats PNG/JPG/SVG, livraison rapide.',                           price: '180',    path: '/tarifs' }),
+      offerSchema({ name: 'Flyer professionnel',        description: 'Design professionnel, format impression HD, version numérique incluse.',                      price: '139',    path: '/tarifs' }),
+      offerSchema({ name: 'Landing page',               description: 'Page haute conversion, responsive, formulaire de contact, SEO de base, livraison 7 jours.',   price: '270',    path: '/tarifs' }),
+      offerSchema({ name: 'Site vitrine',               description: 'Design sur mesure, mobile first, SEO intégré, formulaire de contact, livraison 2-3 semaines.',price: '590',    path: '/tarifs' }),
+      offerSchema({ name: 'Site e-commerce',            description: 'Boutique en ligne, paiement Stripe sécurisé, gestion des stocks, formation incluse.',         price: '1090',   path: '/tarifs' }),
+      offerSchema({ name: 'Maintenance Premium',        description: 'Mises à jour, sauvegardes, monitoring, corrections de bugs, support prioritaire.',            price: '89.99',  path: '/tarifs', billingPeriod: 'MON' }),
+      offerSchema({ name: 'Maintenance E-commerce',     description: 'Maintenance dédiée boutique en ligne, ajout de produits, sécurité renforcée, support.',       price: '120',    path: '/tarifs', billingPeriod: 'MON' }),
+    ],
+  }))
   useJsonLd('tarifs-faq', faqSchema(FAQS))
 
   return (
@@ -126,7 +156,7 @@ export default function Tarifs() {
       <section className="tar-hero">
         <div className="tar-hero-inner">
           <span className="tar-kicker">Tarifs CA-TECH</span>
-          <h1 className="tar-h1">Tarifs simples.<br /><em>Résultats professionnels.</em></h1>
+          <h1 className="tar-h1">Prix & Tarifs Web & IA.<br /><em>Clairs, sans surprise.</em></h1>
           <p className="tar-sub">
             Des sites internet et identités visuelles conçus pour développer votre activité et renforcer votre image de marque.
           </p>
@@ -435,6 +465,12 @@ export default function Tarifs() {
           </p>
         </SeoProse>
       </SeoSection>
+
+      <SeoRelated
+        eyebrow="Aller plus loin"
+        title="Comparer avec nos offres"
+        links={TARIFS_RELATED}
+      />
 
       {/* ═══════════════════════════════════ CTA */}
       <section className="tar-cta">

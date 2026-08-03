@@ -95,7 +95,7 @@ export const SEO_PAGES = {
     categoryBg: '#EEF4FF',
     meta: {
       title: 'Création site internet Lyon — CA-TECH | Agence web & digital',
-      description: 'Agence web à Lyon : sites vitrines, e-commerce et landing pages pour PME lyonnaises. Design premium, SEO intégré, livraison en 1 à 3 semaines. Devis gratuit.',
+      description: 'Agence web Lyon : sites vitrines, e-commerce, landing pages pour PME. Design premium, SEO intégré, livraison en 1-3 semaines. Devis gratuit.',
       keywords: 'création site internet Lyon, agence web Lyon, site vitrine Lyon, e-commerce Lyon, développement web Lyon',
     },
     h1: 'Création site internet à Lyon — agence web pour PME lyonnaises',
@@ -344,7 +344,7 @@ export const SEO_PAGES = {
     categoryBg: '#EEF2FF',
     meta: {
       title: 'Agence IA Lyon — CA-TECH | Conseil, agents IA & automatisation',
-      description: 'Agence IA à Lyon : stratégie IA, déploiement d\'agents autonomes et automatisation de processus pour entreprises lyonnaises. Résultats mesurables dès le 1er mois.',
+      description: 'Agence IA Lyon : stratégie IA, agents autonomes et automatisation de processus pour entreprises lyonnaises. Résultats mesurables dès le 1er mois.',
       keywords: 'agence IA Lyon, intelligence artificielle Lyon, automatisation Lyon, agents IA Lyon, conseil IA Lyon',
     },
     h1: 'Agence IA à Lyon — conseil IA et automatisation pour entreprises lyonnaises',
@@ -510,7 +510,7 @@ export const SEO_PAGES = {
     categoryBg: '#FFFBEB',
     meta: {
       title: 'Maintenance informatique PME — CA-TECH | Support réactif & hébergement',
-      description: 'Maintenance web et informatique pour PME : uptime 99.9%, sauvegardes quotidiennes, mises à jour sécurité, support réactif. À partir de 49€/mois. Sans engagement long terme.',
+      description: 'Maintenance web pour PME : uptime 99,9 %, sauvegardes quotidiennes, mises à jour sécurité, support réactif. À partir de 49 €/mois sans engagement.',
       keywords: 'maintenance informatique PME, maintenance web PME, hébergement PME, support informatique, maintenance site internet',
     },
     h1: 'Maintenance informatique PME — support réactif et hébergement sécurisé',

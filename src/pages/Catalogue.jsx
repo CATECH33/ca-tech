@@ -3,13 +3,23 @@ import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import './Catalogue.css'
 import { usePageMeta } from '../lib/seo'
-import { useJsonLd, breadcrumbSchema } from '../lib/schema'
+import { useJsonLd, webPageSchema, breadcrumbSchema } from '../lib/schema'
+import { SeoRelated } from '../components/SeoContent'
 
 const U = id => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=900&q=80`
 
 /* ══════════════════════════════════════════════════════════
    Images par catégorie — fallback Supabase
 ══════════════════════════════════════════════════════════ */
+const CATALOGUE_RELATED = [
+  { href: '/tarifs',            label: 'Grille tarifaire',    icon: '💰', desc: 'Tous les prix en transparence' },
+  { href: '/realisations',      label: 'Nos réalisations',    icon: '🏆', desc: 'Études de cas réelles' },
+  { href: '/services',          label: 'Nos services',        icon: '✨', desc: 'Vue complète de notre offre' },
+  { href: '/collaborateurs-ia', label: 'Collaborateurs IA',   icon: '🤖', desc: '6 agents autonomes 24h/24' },
+  { href: '/automatisations',   label: 'Automatisations',     icon: '⚙️', desc: 'Workflows sur mesure' },
+  { href: '/contact',           label: 'Diagnostic gratuit',  icon: '→',  desc: 'Recommandations personnalisées' },
+]
+
 const CAT_IA_IMAGE = {
   assistant:    '/collaborateurs/commercial-ia.webp',
   agent:        '/collaborateurs/support-ia.webp',
@@ -355,11 +365,19 @@ export default function Catalogue() {
   const isLoading      = tab === 'ia' ? liveIA === null : liveServices === null
 
   usePageMeta({
-    title: `Catalogue de solutions IA & Web — ${iaData.length + svcData.length} services · CA-TECH`,
-    description: `Explorez ${iaData.length + svcData.length} solutions clés en main : agents IA, automatisations, sites web, applications métier, CRM, SaaS. Filtrez par catégorie ou par gain business. Prix affichés, livraison rapide.`,
+    title: 'Catalogue IA & Web — Solutions Clés en Main | CA-TECH',
+    description: 'Explorez nos solutions clés en main : agents IA, automatisations, sites web, CRM sur mesure, SaaS. Filtrez par catégorie. Prix affichés, livraison rapide.',
     keywords: 'catalogue solutions IA, solutions clés en main, agents IA prêts à déployer, catalogue services web, offres IA PME, solutions automatisation',
     path: '/catalogue',
   })
+  useJsonLd('catalogue-page', webPageSchema({
+    name: 'Catalogue IA & Web — Solutions Clés en Main | CA-TECH',
+    description: 'Explorez nos solutions clés en main : agents IA, automatisations, sites web, CRM sur mesure, SaaS. Filtrez par catégorie. Prix affichés, livraison rapide.',
+    path: '/catalogue',
+    pageType: 'CollectionPage',
+    image: '/collaborateurs/collaborateur-ia-hero.webp',
+    speakableCssSelectors: ['h1', '.cat-sub'],
+  }))
   useJsonLd('breadcrumb', breadcrumbSchema([
     { name: 'Accueil', path: '/' },
     { name: 'Catalogue', path: '/catalogue' },
@@ -376,7 +394,7 @@ export default function Catalogue() {
           <p className="cat-kicker">
             <span />Catalogue de solutions · CA-TECH
           </p>
-          <h1 className="cat-h1">Choisissez votre <em>solution.</em></h1>
+          <h1 className="cat-h1">Catalogue IA & Web —<br /><em>Solutions clés en main pour PME.</em></h1>
           <p className="cat-sub">
             Solutions IA et services web prêts à déployer dans votre entreprise. Chacun est opérationnel, mesurable et accompagné pendant 30 jours.
           </p>
@@ -514,6 +532,12 @@ export default function Catalogue() {
       </section>
 
       {/* ════════════════════════════════════════ CTA */}
+      <SeoRelated
+        eyebrow="Aller plus loin"
+        title="Explorer nos ressources"
+        links={CATALOGUE_RELATED}
+      />
+
       <section className="cat-cta">
         <div className="cat-cta-inner">
           <p className="cat-cta-label">Pas sûr de la solution ?</p>

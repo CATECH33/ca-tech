@@ -2,8 +2,8 @@ import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './Services.css'
 import { usePageMeta } from '../lib/seo'
-import { useJsonLd, serviceSchema, breadcrumbSchema, faqSchema } from '../lib/schema'
-import { SeoSection, SeoProse, SeoAdvice, SeoFaq } from '../components/SeoContent'
+import { useJsonLd, webPageSchema, serviceSchema, breadcrumbSchema, faqSchema } from '../lib/schema'
+import { SeoSection, SeoProse, SeoAdvice, SeoFaq, SeoRelated } from '../components/SeoContent'
 
 const SERVICES_ADVICE = [
   { title: 'Commencez par le problème, pas par la solution',   desc: "Un CRM ne sert à rien si vos commerciaux ne veulent pas l'utiliser. Un site premium n'attire personne s'il n'a pas de plan de trafic. Nommez d'abord le problème business — le bon outil suit." },
@@ -25,6 +25,15 @@ const SERVICES_FAQ = [
   { q: 'Quelle est la durée de garantie après livraison ?', a: "3 mois de garantie fonctionnelle sur tout projet : les bugs sont corrigés gratuitement. La maintenance évolutive (nouvelles fonctionnalités, adaptations) est facturée séparément à partir du 4e mois, soit à l'unité, soit en forfait mensuel." },
   { q: 'Travaillez-vous avec des freelances ou en équipe intégrée ?', a: "Notre équipe interne prend en charge le développement, la stratégie et la relation client. Pour des expertises spécifiques (photo produit, motion design, traduction), nous mobilisons un réseau de freelances de confiance — vous restez informé et validez chaque intervenant." },
   { q: 'Est-ce que je peux payer en plusieurs fois ?', a: "Oui, la plupart de nos clients paient en 3 fois : 30 % au démarrage, 40 % à mi-parcours, 30 % à la livraison. Pour les projets supérieurs à 5 000 €, un échelonnement personnalisé est possible sans frais supplémentaires." },
+]
+
+const SERVICES_RELATED = [
+  { href: '/tarifs',            label: 'Nos tarifs',           icon: '💰', desc: 'Devis à partir de 270 €' },
+  { href: '/realisations',      label: 'Nos réalisations',     icon: '🏆', desc: 'Études de cas avec ROI mesuré' },
+  { href: '/collaborateurs-ia', label: 'Collaborateurs IA',    icon: '🤖', desc: '6 agents autonomes 24h/24' },
+  { href: '/automatisations',   label: 'Automatisations',      icon: '⚙️', desc: 'N8N · Make · Zapier' },
+  { href: '/loic',              label: 'Tester Loïc',          icon: '💬', desc: 'Démo agent IA gratuite' },
+  { href: '/catalogue',         label: 'Catalogue complet',    icon: '📋', desc: 'Toutes nos solutions' },
 ]
 
 const U_W = id => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1400&h=520&q=85`
@@ -255,10 +264,17 @@ function ServiceCard({ card, badge, badgeColor }) {
 export default function Services() {
   usePageMeta({
     title: 'Services — Sites, CRM, SaaS, Automatisations & IA · CA-TECH',
-    description: "Services web et IA de CA-TECH : sites vitrines, e-commerce, applications métier, CRM sur mesure, SaaS, automatisations, agents IA, SEO, maintenance, hébergement, audit digital et conseil IA. Devis sous 24h.",
+    description: "13 services web et IA : sites vitrines, e-commerce, CRM sur mesure, agents IA et automatisations pour PME. Devis gratuit sous 24h, livraison express.",
     keywords: 'agence développement web, création site internet, e-commerce, application métier, CRM sur mesure, développement SaaS, automatisation entreprise, agents IA, SEO, maintenance site web, hébergement web, audit digital, conseil IA',
     path: '/services',
   })
+  useJsonLd('services-page', webPageSchema({
+    name: 'Services — Sites, CRM, SaaS, Automatisations & IA · CA-TECH',
+    description: "13 services web et IA : sites vitrines, e-commerce, CRM sur mesure, agents IA et automatisations pour PME. Devis gratuit sous 24h, livraison express.",
+    path: '/services',
+    image: '/services/site-vitrine.webp',
+    speakableCssSelectors: ['h1', '.sol-sub'],
+  }))
   useJsonLd('breadcrumb', breadcrumbSchema([
     { name: 'Accueil', path: '/' },
     { name: 'Services', path: '/services' },
@@ -269,6 +285,11 @@ export default function Services() {
     path: '/services#dev-web',
     serviceType: 'Web Development',
     priceRange: '€€',
+    offers: [
+      { '@type': 'Offer', name: 'Landing page',  price: '270',  priceCurrency: 'EUR', availability: 'https://schema.org/InStock', url: `https://www.ca-tech.fr/tarifs` },
+      { '@type': 'Offer', name: 'Site vitrine',  price: '590',  priceCurrency: 'EUR', availability: 'https://schema.org/InStock', url: `https://www.ca-tech.fr/tarifs` },
+      { '@type': 'Offer', name: 'Site e-commerce', price: '1090', priceCurrency: 'EUR', availability: 'https://schema.org/InStock', url: `https://www.ca-tech.fr/tarifs` },
+    ],
   }))
   useJsonLd('service-apps-metier', serviceSchema({
     name: 'Applications métier, CRM sur mesure & SaaS',
@@ -546,6 +567,12 @@ export default function Services() {
       >
         <SeoFaq items={SERVICES_FAQ} />
       </SeoSection>
+
+      <SeoRelated
+        eyebrow="Aller plus loin"
+        title="Nos services associés"
+        links={SERVICES_RELATED}
+      />
 
       {/* ── CTA ─────────────────────────────────────────────────────── */}
       <section className="sol-cta">

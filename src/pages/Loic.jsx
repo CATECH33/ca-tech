@@ -2,7 +2,8 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import './Loic.css'
 import { usePageMeta, SITE_URL } from '../lib/seo'
-import { useJsonLd, breadcrumbSchema } from '../lib/schema'
+import { useJsonLd, webPageSchema, breadcrumbSchema } from '../lib/schema'
+import { SeoRelated } from '../components/SeoContent'
 
 /* ── Simulated response database ── */
 const RESPONSES = [
@@ -121,6 +122,15 @@ function findResponse(input) {
   return FALLBACK
 }
 
+const LOIC_RELATED = [
+  { href: '/collaborateurs-ia', label: '6 Collaborateurs IA',      icon: '🤖', desc: 'Voir tous les agents disponibles' },
+  { href: '/tarifs',            label: 'Tarifs & Pricing',          icon: '💰', desc: 'À partir de 290 €/mois' },
+  { href: '/realisations',      label: 'Études de cas',             icon: '🏆', desc: 'ROI mesuré sur missions réelles' },
+  { href: '/services',          label: 'Nos services',              icon: '✨', desc: 'Web, IA, automatisations' },
+  { href: '/automatisations',   label: 'Automatisations',           icon: '⚙️', desc: 'Complémentaires à vos agents IA' },
+  { href: '/contact',           label: 'Demander un déploiement',   icon: '→',  desc: 'Opérationnel en 48h' },
+]
+
 export default function Loic() {
   const [messages, setMessages] = useState([
     { role: 'bot', text: 'Bonjour ! Je suis Loïc, votre démonstrateur IA CA-TECH.\n\nJe peux traiter vos leads, rédiger vos emails, gérer votre support client et bien plus encore. Posez-moi une question ou choisissez un exemple à gauche.', time: getTime() },
@@ -132,10 +142,17 @@ export default function Loic() {
 
   usePageMeta({
     title: 'Loïc — Démo Agent IA support client en live · CA-TECH',
-    description: "Testez Loïc en direct : un agent IA de support client conversationnel signé CA-TECH. Il répond en français, comprend le contexte et transfère les demandes complexes à un humain. Démo gratuite sans compte.",
+    description: "Testez Loïc, notre agent IA conversationnel : qualifie vos leads, répond au support client, rédige vos emails. Démo gratuite sans compte, sans inscription.",
     keywords: 'démo agent IA, tester chatbot IA gratuit, agent IA support client, IA conversationnelle française, démonstration chatbot entreprise, tester assistant IA en ligne',
     path: '/loic',
   })
+  useJsonLd('loic-page', webPageSchema({
+    name: 'Loïc — Démo Agent IA support client en live · CA-TECH',
+    description: "Testez Loïc, notre agent IA conversationnel : qualifie vos leads, répond au support client, rédige vos emails. Démo gratuite sans compte, sans inscription.",
+    path: '/loic',
+    image: '/collaborateurs/commercial-ia.webp',
+    speakableCssSelectors: ['h1', '.ldemo-tagline'],
+  }))
   useJsonLd('breadcrumb', breadcrumbSchema([
     { name: 'Accueil', path: '/' },
     { name: 'Loïc — Démo IA', path: '/loic' },
@@ -144,13 +161,28 @@ export default function Loic() {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
     '@id': `${SITE_URL}/loic#app`,
-    name: 'Loïc — Agent IA de support',
+    name: 'Loïc — Agent IA conversationnel',
     applicationCategory: 'BusinessApplication',
-    operatingSystem: 'Web',
+    applicationSubCategory: 'CRM & Sales Automation',
+    operatingSystem: 'All',
     url: `${SITE_URL}/loic`,
-    description: "Agent IA conversationnel de démonstration : support client en français, gestion du contexte, escalade vers un humain sur les cas complexes.",
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR', availability: 'https://schema.org/InStock' },
-    creator: { '@id': `${SITE_URL}/#organization` },
+    description: "Agent IA conversationnel : qualifie les leads, gère le support client, rédige des emails. Démo gratuite sans inscription — opérationnel en 30 secondes.",
+    featureList: [
+      'Qualification de leads en temps réel',
+      'Support client 24h/24 multicanal',
+      'Rédaction automatique d\'emails',
+      'Intégration CRM native',
+      'Escalade vers un humain sur cas complexes',
+    ],
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'EUR',
+      description: 'Démo gratuite sans inscription ni carte bancaire',
+      availability: 'https://schema.org/InStock',
+    },
+    author: { '@id': `${SITE_URL}/#organization` },
+    provider: { '@id': `${SITE_URL}/#organization` },
   })
 
   useEffect(() => {
@@ -339,6 +371,12 @@ export default function Loic() {
       {/* ════════════════════════════════════════
           CTA
       ════════════════════════════════════════ */}
+      <SeoRelated
+        eyebrow="Aller plus loin"
+        title="Déployer au-delà de la démo"
+        links={LOIC_RELATED}
+      />
+
       <section className="ldemo-cta">
         <div className="ldemo-cta-inner">
           <p className="ldemo-cta-label">Prêt à passer en production ?</p>

@@ -2,9 +2,19 @@ import { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import './Contact.css'
 import { usePageMeta, SITE_URL } from '../lib/seo'
-import { useJsonLd, breadcrumbSchema } from '../lib/schema'
+import { useJsonLd, webPageSchema, breadcrumbSchema } from '../lib/schema'
+import { SeoRelated } from '../components/SeoContent'
 
 const EDGE_URL = 'https://jhcyooksjeivajdjicka.supabase.co/functions/v1/contact-form'
+
+const CONTACT_RELATED = [
+  { href: '/tarifs',            label: 'Voir les tarifs',     icon: '💰', desc: 'Estimez votre budget' },
+  { href: '/realisations',      label: 'Nos réalisations',    icon: '🏆', desc: 'Exemples de projets livrés' },
+  { href: '/loic',              label: 'Tester Loïc',         icon: '💬', desc: 'Démo agent IA en 30 secondes' },
+  { href: '/services',          label: 'Nos services',        icon: '✨', desc: '13 services web & IA' },
+  { href: '/catalogue',         label: 'Catalogue',           icon: '📋', desc: 'Toutes nos solutions' },
+  { href: '/collaborateurs-ia', label: 'Collaborateurs IA',   icon: '🤖', desc: '6 agents autonomes 24h/24' },
+]
 
 const COLLABORATEURS_MAP = {
   commercial: { name: 'Commercial IA',  color: '#0066FF' },
@@ -18,10 +28,17 @@ const COLLABORATEURS_MAP = {
 export default function Contact() {
   usePageMeta({
     title: 'Contact CA-TECH — Devis gratuit sous 24h · Paris, Lyon, Dijon',
-    description: "Contactez CA-TECH pour un devis site web, e-commerce, application métier, CRM sur mesure, SaaS, agent IA ou automatisation. Réponse sous 24h. Diagnostic gratuit et sans engagement.",
+    description: "Contactez CA-TECH pour un devis site web, e-commerce, CRM, agent IA ou automatisation. Réponse garantie sous 24h. Diagnostic gratuit, sans engagement.",
     keywords: 'devis site internet gratuit, contact agence web, demander devis agent IA, contact développeur web Paris, devis CRM sur mesure, contact automatisation entreprise',
     path: '/contact',
   })
+  useJsonLd('contact-page', webPageSchema({
+    name: 'Contact CA-TECH — Devis gratuit sous 24h · Paris, Lyon, Dijon',
+    description: "Contactez CA-TECH pour un devis site web, e-commerce, CRM, agent IA ou automatisation. Réponse garantie sous 24h. Diagnostic gratuit, sans engagement.",
+    path: '/contact',
+    pageType: 'ContactPage',
+    speakableCssSelectors: ['h1', '.ct-sub'],
+  }))
   useJsonLd('breadcrumb', breadcrumbSchema([
     { name: 'Accueil', path: '/' },
     { name: 'Contact', path: '/contact' },
@@ -116,7 +133,7 @@ export default function Contact() {
         <div className="ct-halo ct-halo-2" aria-hidden="true"></div>
         <div className="ct-hero-inner">
           <p className="ct-kicker"><span></span>Parlons de votre projet<span></span></p>
-          <h1>Contactez-<em>nous</em></h1>
+          <h1>Devis gratuit —<br /><em>réponse sous 24h.</em></h1>
           <p className="ct-sub">Une question, un projet, une démonstration ? Notre équipe répond sous 24h. Le diagnostic initial est gratuit et sans engagement.</p>
         </div>
       </section>
@@ -250,6 +267,12 @@ export default function Contact() {
         </div>
       </section>
       </div>
+
+      <SeoRelated
+        eyebrow="Pendant que vous y êtes"
+        title="À découvrir aussi"
+        links={CONTACT_RELATED}
+      />
     </>
   )
 }

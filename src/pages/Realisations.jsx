@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import './Realisations.css'
 import { usePageMeta } from '../lib/seo'
-import { useJsonLd, breadcrumbSchema } from '../lib/schema'
+import { useJsonLd, webPageSchema, breadcrumbSchema, itemListSchema } from '../lib/schema'
+import { SeoRelated } from '../components/SeoContent'
 
 const CATEGORIES = [
   { key: 'tous', label: 'Tous les projets' },
@@ -21,6 +22,15 @@ const CAT_COLORS = {
   seo:            { bg: 'rgba(245,158,11,.14)', color: '#d97706', dot: '#d97706' },
   applications:   { bg: 'rgba(239,68,68,.12)',  color: '#dc2626', dot: '#dc2626' },
 }
+
+const REALISATIONS_RELATED = [
+  { href: '/services',          label: 'Nos services',        icon: '✨', desc: '13 services web & IA' },
+  { href: '/tarifs',            label: 'Nos tarifs',          icon: '💰', desc: 'Devis à partir de 270 €' },
+  { href: '/collaborateurs-ia', label: 'Collaborateurs IA',   icon: '🤖', desc: 'Agents autonomes 24h/24' },
+  { href: '/automatisations',   label: 'Automatisations',     icon: '⚙️', desc: 'Récupérez 14h/semaine' },
+  { href: '/catalogue',         label: 'Catalogue',           icon: '📋', desc: 'Toutes nos solutions' },
+  { href: '/contact',           label: 'Demander un devis',   icon: '→',  desc: 'Réponse sous 24h' },
+]
 
 const PROJECTS = [
   /* ── Sites web ── */
@@ -217,14 +227,25 @@ const PROJECTS = [
 export default function Realisations() {
   usePageMeta({
     title: 'Réalisations — Études de cas Web, IA & Automatisations · CA-TECH',
-    description: "Portfolio CA-TECH : sites vitrines, e-commerce, applications métier, CRM, agents IA et automatisations livrés pour PME françaises. Résultats chiffrés, avant/après et ROI mesuré sur chaque projet.",
+    description: "Portfolio CA-TECH : sites vitrines, e-commerce, CRM, agents IA et automatisations pour PME. Résultats chiffrés, ROI mesuré. Études de cas réelles.",
     keywords: 'portfolio agence web, études de cas IA, réalisations développement web, projets CRM sur mesure, exemples sites vitrines, cas clients automatisation, projets IA PME France',
     path: '/realisations',
   })
+  useJsonLd('realisations-page', webPageSchema({
+    name: 'Réalisations — Études de cas Web, IA & Automatisations · CA-TECH',
+    description: "Portfolio CA-TECH : sites vitrines, e-commerce, CRM, agents IA et automatisations pour PME. Résultats chiffrés, ROI mesuré. Études de cas réelles.",
+    path: '/realisations',
+    pageType: 'CollectionPage',
+    image: '/portfolio/ca-tech-manager/dashboard.webp',
+    speakableCssSelectors: ['h1', '.cc-sub'],
+  }))
   useJsonLd('breadcrumb', breadcrumbSchema([
     { name: 'Accueil', path: '/' },
     { name: 'Réalisations', path: '/realisations' },
   ]))
+  useJsonLd('portfolio-list', itemListSchema(
+    PROJECTS.slice(0, 10).map(p => ({ name: p.title, path: `/realisations#${p.id}` }))
+  ))
 
   const [active, setActive] = useState('tous')
   const [liveProjects, setLiveProjects] = useState(null) // null = loading, [] = empty
@@ -283,7 +304,7 @@ export default function Realisations() {
 
         <div className="cc-hero-inner">
           <p className="cc-eyebrow"><span></span>Portfolio · Résultats réels<span></span></p>
-          <h1 className="cc-h1">Des projets qui parlent<br /><em>d'eux-mêmes</em></h1>
+          <h1 className="cc-h1">Nos réalisations —<br /><em>Sites Web, IA et Automatisations pour PME</em></h1>
           <p className="cc-sub">Résultats mesurables, délais tenus, clients satisfaits. Voici ce que nous construisons ensemble, secteur par secteur.</p>
 
           <div className="cc-hband">
@@ -401,6 +422,12 @@ export default function Realisations() {
           })}
         </div>
       </section>
+
+      <SeoRelated
+        eyebrow="Aller plus loin"
+        title="Découvrir nos solutions"
+        links={REALISATIONS_RELATED}
+      />
 
       {/* ════════════ CTA ════════════ */}
       <section className="cc-cta">

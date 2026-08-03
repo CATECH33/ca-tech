@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { usePageMeta } from '../lib/seo'
-import { useJsonLd, breadcrumbSchema, serviceSchema, faqSchema } from '../lib/schema'
+import { useJsonLd, webPageSchema, breadcrumbSchema, serviceSchema, faqSchema } from '../lib/schema'
 import { SeoSection, SeoProse, SeoMethod, SeoFaq } from '../components/SeoContent'
 
 export default function SeoPage({ page }) {
@@ -12,6 +12,13 @@ export default function SeoPage({ page }) {
     path: page.path,
   })
 
+  useJsonLd('seo-page', webPageSchema({
+    name: page.meta.title,
+    description: page.meta.description,
+    path: page.path,
+    image: page.image,
+    speakableCssSelectors: ['h1'],
+  }))
   useJsonLd('breadcrumb', breadcrumbSchema([
     { name: 'Accueil', path: '/' },
     { name: page.breadcrumb, path: page.path },

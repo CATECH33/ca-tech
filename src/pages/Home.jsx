@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import '../../css/main.css'
 import { usePageMeta } from '../lib/seo'
-import { useJsonLd, organizationSchema, websiteSchema, itemListSchema, faqSchema } from '../lib/schema'
+import { useJsonLd, organizationSchema, websiteSchema, webPageSchema, itemListSchema, faqSchema } from '../lib/schema'
 import { SeoSection, SeoProse, SeoMethod, SeoComparison, SeoFaq } from '../components/SeoContent'
 
 const HOME_METHOD = [
@@ -162,12 +162,19 @@ const EXPERTISES = [
 export default function Home() {
   usePageMeta({
     title: 'CA-TECH — Agence Web & IA · Sites, CRM, SaaS, Agents IA à Paris',
-    description: "Agence web et cabinet de conseil IA à Paris, Lyon, Dijon. Sites vitrines, e-commerce, applications métier, CRM sur mesure, SaaS, automatisations et agents IA pour PME. Diagnostic gratuit sous 24h.",
+    description: "Agence web IA-first : sites vitrines, e-commerce, CRM sur mesure, agents IA et automatisations pour PME. Paris · Lyon · Dijon. Premier livrable en 72h.",
     keywords: 'agence web, agence IA, développement site internet, site vitrine, e-commerce, application métier, CRM sur mesure, SaaS, automatisation entreprise, agents IA, collaborateurs IA, SEO, conseil IA, Paris, Lyon, Dijon',
     path: '/',
   })
   useJsonLd('organization', organizationSchema)
   useJsonLd('website', websiteSchema)
+  useJsonLd('home-page', webPageSchema({
+    name: 'CA-TECH — Agence Web & IA · Sites, CRM, SaaS, Agents IA à Paris',
+    description: "Agence web IA-first : sites vitrines, e-commerce, CRM sur mesure, agents IA et automatisations pour PME. Paris · Lyon · Dijon. Premier livrable en 72h.",
+    path: '/',
+    image: '/android-chrome-512x512.webp',
+    speakableCssSelectors: ['h1', '.hero-sub', '.hero-ctas'],
+  }))
   useJsonLd('home-faq', faqSchema(HOME_FAQ))
   useJsonLd('home-services', itemListSchema([
     { name: 'Sites vitrines',            path: '/services#dev-web' },

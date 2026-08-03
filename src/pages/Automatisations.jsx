@@ -2,7 +2,8 @@ import { useState, useMemo, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './Automatisations.css'
 import { usePageMeta } from '../lib/seo'
-import { useJsonLd, breadcrumbSchema, serviceSchema } from '../lib/schema'
+import { useJsonLd, webPageSchema, breadcrumbSchema, serviceSchema } from '../lib/schema'
+import { SeoRelated } from '../components/SeoContent'
 
 /* ══════════════════════════════════════════════════════════
    URLs Unsplash — photos business premium
@@ -12,6 +13,15 @@ const U = id => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=
 /* ══════════════════════════════════════════════════════════
    14 SERVICES MÉTIER
 ══════════════════════════════════════════════════════════ */
+const AUTO_RELATED = [
+  { href: '/collaborateurs-ia', label: 'Collaborateurs IA',    icon: '🤖', desc: '6 agents autonomes 24h/24' },
+  { href: '/realisations',      label: 'Études de cas',        icon: '🏆', desc: 'ROI ×4 mesuré sur missions réelles' },
+  { href: '/tarifs',            label: 'Tarifs',               icon: '💰', desc: 'À partir de 800 €' },
+  { href: '/services',          label: 'Tous nos services',    icon: '✨', desc: 'Web, IA, CRM, SEO...' },
+  { href: '/automatisation-pme',label: 'Automatisation PME',   icon: '🏭', desc: 'Guide complet pour PME' },
+  { href: '/contact',           label: 'Diagnostic gratuit',   icon: '→',  desc: 'Identifiez vos 3 processus clés' },
+]
+
 const SERVICES = [
   {
     id: 'devis-auto',
@@ -246,21 +256,31 @@ export default function Automatisations() {
   const [active, setActive] = useState('tous')
 
   usePageMeta({
-    title: "Automatisation d'entreprise — Récupérez 15h/semaine · CA-TECH",
-    description: "Automatisations sur mesure pour PME : workflows n8n, Make, Zapier, intégrations API, synchronisations CRM. Récupérez 15 heures par semaine dès la première semaine. Déployé en 48h.",
+    title: "Automatisation d'entreprise — Récupérez 14h/semaine · CA-TECH",
+    description: "Automatisations N8N, Make, Zapier pour PME. Workflows, intégrations API, synchro CRM. 14h récupérées par semaine dès le 1er mois. Déployé en 48h.",
     keywords: 'automatisation entreprise, automatisation processus métier, workflow n8n, Make, Zapier, intégration API, synchronisation CRM, RPA PME, gagner du temps, automatiser tâches répétitives',
     path: '/automatisations',
   })
+  useJsonLd('auto-page', webPageSchema({
+    name: "Automatisations N8N, Make, Zapier pour PME — CA-TECH",
+    description: "Automatisations N8N, Make, Zapier pour PME. Workflows, intégrations API, synchro CRM. 14h récupérées par semaine dès le 1er mois. Déployé en 48h.",
+    path: '/automatisations',
+    image: '/automatisations/automatisation-hero.webp',
+    speakableCssSelectors: ['h1', '.aut-hero-sub'],
+  }))
   useJsonLd('breadcrumb', breadcrumbSchema([
     { name: 'Accueil', path: '/' },
     { name: 'Automatisations', path: '/automatisations' },
   ]))
   useJsonLd('service-auto', serviceSchema({
-    name: "Automatisation d'entreprise",
-    description: "Automatisation de workflows métier pour PME : intégrations, synchronisations, orchestration n8n / Make / Zapier. Résultats mesurables : 15 heures récupérées par semaine.",
+    name: "Automatisation d'entreprise — N8N, Make, Zapier",
+    description: "Automatisation de workflows métier pour PME : intégrations, synchronisations, orchestration n8n / Make / Zapier. Résultats mesurables : 14 heures récupérées par semaine.",
     path: '/automatisations',
     serviceType: 'Business Process Automation',
     priceRange: '€€',
+    offers: [
+      { '@type': 'Offer', name: 'Automatisation sur mesure', price: '800', priceCurrency: 'EUR', availability: 'https://schema.org/InStock', url: 'https://www.ca-tech.fr/automatisations' },
+    ],
   }))
 
   const visible = useMemo(
@@ -327,7 +347,7 @@ export default function Automatisations() {
         <div className="at-hero-inner">
           <p className="at-kicker at-a0"><span />Automatisations métier · CA-TECH<span /></p>
           <h1 className="at-a1">
-            Vos processus en <em>pilote automatique.</em>
+            Automatisez vos processus —<br /><em>N8N, Make, Zapier : 14h récupérées/semaine.</em>
           </h1>
           <p className="at-hero-sub at-a2">
             14 services d'automatisation prêts à déployer. Chaque heure récupérée, chaque lead traité, chaque facture envoyée — sans que vous leviez le petit doigt.
@@ -473,7 +493,7 @@ export default function Automatisations() {
               {
                 icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>,
                 title: 'Rentable dès le 1er mois',
-                desc: '15 heures récupérées par semaine. Des relances automatiques. Des factures envoyées seules. Visible avant la fin du mois.',
+                desc: '14 heures récupérées par semaine. Des relances automatiques. Des factures envoyées seules. Visible avant la fin du mois.',
               },
             ].map(({ icon, title, desc }) => (
               <div key={title} className="at-why-card at-reveal">
@@ -502,11 +522,17 @@ export default function Automatisations() {
         </div>
       </section>
 
+      <SeoRelated
+        eyebrow="Aller plus loin"
+        title="Solutions complémentaires"
+        links={AUTO_RELATED}
+      />
+
       {/* ════════ CTA ════════ */}
       <section className="at-cta">
         <div className="at-cta-inner at-reveal">
           <p className="at-cta-kicker">Passez à l'action</p>
-          <h2>Récupérez <strong>15 heures cette semaine.</strong></h2>
+          <h2>Récupérez <strong>14 heures cette semaine.</strong></h2>
           <p>Dites-nous quel problème vous coûte le plus de temps. On l'automatise — opérationnel en 48h, résultats visibles ce mois-ci.</p>
           <div className="at-cta-btns">
             <Link to="/contact" className="btn-cta-white">Demander une démonstration gratuite →</Link>

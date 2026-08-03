@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import DetailDrawer from '../components/DetailDrawer'
 import './CollaborateursIA.css'
 import { usePageMeta } from '../lib/seo'
-import { useJsonLd, breadcrumbSchema, faqSchema, itemListSchema } from '../lib/schema'
-import { SeoSection, SeoProse, SeoComparison, SeoFaq } from '../components/SeoContent'
+import { useJsonLd, webPageSchema, serviceSchema, breadcrumbSchema, faqSchema, itemListSchema } from '../lib/schema'
+import { SeoSection, SeoProse, SeoComparison, SeoFaq, SeoRelated } from '../components/SeoContent'
 
 const CAI_COMPARE_COLS = [
   { label: 'Employé traditionnel',    sub: 'Temps plein' },
@@ -33,6 +33,15 @@ const CAI_FAQ = [
   { q: "Puis-je tester un collaborateur IA avant de m'engager ?", a: "Oui. Loïc, notre agent de démonstration, est accessible librement sur /loic — vous discutez en 30 secondes, sans inscription. Pour un test sur votre activité réelle, un pilote de 15 jours est possible sur périmètre restreint (2 500 €, déductibles du contrat annuel)." },
   { q: 'Fonctionne-t-il en plusieurs langues ?', a: "Oui — français, anglais et 20+ langues nativement. Il détecte la langue du client à la première interaction et répond dans la même langue sans configuration supplémentaire. Idéal pour les activités e-commerce ou export." },
   { q: 'Que se passe-t-il si je veux arrêter ?', a: "Un préavis d'un mois, aucun frais de sortie. Vous récupérez l'intégralité des logs et de la base de connaissance construite pendant le contrat. Aucun blocage technique ou contractuel — nous préférons vous garder par choix, pas par obligation." },
+]
+
+const CAI_RELATED = [
+  { href: '/loic',              label: 'Tester Loïc maintenant',  icon: '💬', desc: 'Démo gratuite en 30 secondes' },
+  { href: '/automatisations',   label: 'Automatisations',         icon: '⚙️', desc: 'N8N · Make · Zapier' },
+  { href: '/realisations',      label: 'Études de cas IA',        icon: '🏆', desc: 'ROI mesuré sur nos missions' },
+  { href: '/tarifs',            label: 'Tarifs collaborateurs IA', icon: '💰', desc: 'À partir de 290 €/mois' },
+  { href: '/services',          label: 'Tous nos services',       icon: '✨', desc: 'Web, IA, automatisations' },
+  { href: '/agence-ia-dijon',   label: 'Agence IA Dijon',         icon: '📍', desc: 'Solutions IA locales' },
 ]
 
 /* ══════════════════════════════════════════════════
@@ -525,14 +534,37 @@ export default function CollaborateursIA() {
 
   usePageMeta({
     title: 'Collaborateurs IA — 6 agents autonomes 24/7 pour PME · CA-TECH',
-    description: "6 collaborateurs IA autonomes qui travaillent pour vous 24h/24 : Commercial, Support, RH, Juridique, SEO et Comptable. Déployés en 48h. ROI dès le premier mois. Résultats mesurables garantis.",
+    description: "6 agents IA autonomes — Commercial, Support, RH, Juridique, SEO, Comptable. Disponibles 24h/24, déployés en 48h. ROI mesurable dès le 1er mois.",
     keywords: 'collaborateur IA, agent IA autonome, IA commercial, IA support client 24/7, IA RH recrutement, IA juridique contrats, IA SEO, IA comptable, automatisation PME, assistant virtuel entreprise',
     path: '/collaborateurs-ia',
   })
+  useJsonLd('cai-page', webPageSchema({
+    name: 'Collaborateurs IA — 6 agents autonomes 24/7 pour PME · CA-TECH',
+    description: "6 agents IA autonomes — Commercial, Support, RH, Juridique, SEO, Comptable. Disponibles 24h/24, déployés en 48h. ROI mesurable dès le 1er mois.",
+    path: '/collaborateurs-ia',
+    image: '/collaborateurs/collaborateur-ia-hero.webp',
+    speakableCssSelectors: ['h1', '.cai-hero-sub'],
+  }))
   useJsonLd('breadcrumb', breadcrumbSchema([
     { name: 'Accueil', path: '/' },
     { name: 'Collaborateurs IA', path: '/collaborateurs-ia' },
   ]))
+  useJsonLd('cai-service', serviceSchema({
+    name: 'Collaborateurs IA — Agents autonomes 24h/24',
+    description: "6 agents IA spécialisés (Commercial, Support, RH, Juridique, SEO, Comptable). Déployés en 48h, opérationnels 24h/24 sans pause ni congé.",
+    path: '/collaborateurs-ia',
+    serviceType: 'AI Agent',
+    priceRange: '€€',
+    offers: COLLABORATEURS.map(c => ({
+      '@type': 'Offer',
+      name: c.name,
+      description: c.desc,
+      price: '290',
+      priceCurrency: 'EUR',
+      availability: 'https://schema.org/InStock',
+      url: `https://www.ca-tech.fr/collaborateurs-ia#${c.id}`,
+    })),
+  }))
   useJsonLd('collab-list', itemListSchema(
     COLLABORATEURS.map(c => ({ name: c.name, path: `/collaborateurs-ia#${c.id}` }))
   ))
@@ -665,8 +697,8 @@ export default function CollaborateursIA() {
               <span />Vos nouvelles recrues · Toujours disponibles<span />
             </p>
             <h1 className="cai-anim-1">
-              Arrêtez de faire<br />
-              <em>ce que l'IA peut faire.</em>
+              Vos nouveaux collaborateurs IA —<br />
+              <em>disponibles 24h/24, déployés en 48h.</em>
             </h1>
             <p className="cai-hero-sub cai-anim-2">
               Vos relances, vos réponses, vos contrats, vos factures. Nos collaborateurs IA s'en chargent. Vous vous concentrez sur ce qui fait vraiment avancer votre entreprise.
@@ -836,6 +868,12 @@ export default function CollaborateursIA() {
       >
         <SeoFaq items={CAI_FAQ} />
       </SeoSection>
+
+      <SeoRelated
+        eyebrow="Aller plus loin"
+        title="Solutions complémentaires"
+        links={CAI_RELATED}
+      />
 
       {/* ════════════════════════════ CTA */}
       <section className="cai-cta">

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import './SeoContent.css'
 
 /* ══════════════════════════════════════════════════
@@ -141,5 +142,39 @@ export function SeoFaq({ items }) {
     <div className="seo-faq">
       {items.map((it, i) => <FaqItem key={i} {...it} />)}
     </div>
+  )
+}
+
+/* ══════════════════════════════════════════════════
+   Related — grille de liens internes (maillage SEO)
+══════════════════════════════════════════════════ */
+export function SeoRelated({ links, title = 'À découvrir aussi', eyebrow = 'Navigation' }) {
+  return (
+    <section style={{ padding: '72px 0', borderTop: '1px solid #f3f4f6' }}>
+      <div className="container">
+        <div className="section-header centered reveal" style={{ marginBottom: '40px' }}>
+          <span className="section-pre">{eyebrow}</span>
+          <h2 className="section-h2">{title}</h2>
+        </div>
+        <ul style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(min(100%,220px),1fr))', gap: '14px', listStyle: 'none', padding: 0, margin: '0 auto', maxWidth: '960px' }}>
+          {links.map((link, i) => (
+            <li key={i} className={`reveal${i % 3 === 1 ? ' d1' : i % 3 === 2 ? ' d2' : ''}`}>
+              <Link
+                to={link.href}
+                style={{ display: 'flex', flexDirection: 'column', gap: '6px', padding: '16px 18px', background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', textDecoration: 'none', color: '#0A2540', transition: 'border-color 200ms ease, box-shadow 200ms ease' }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = '#0066FF'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,102,255,.12)' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = '#e5e7eb'; e.currentTarget.style.boxShadow = 'none' }}
+              >
+                <span style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, fontSize: '.9rem' }}>
+                  <span aria-hidden="true">{link.icon}</span>
+                  {link.label}
+                </span>
+                {link.desc && <span style={{ fontSize: '.78rem', color: '#6b7280', lineHeight: 1.4 }}>{link.desc}</span>}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
   )
 }
