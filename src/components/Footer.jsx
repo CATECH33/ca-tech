@@ -31,7 +31,10 @@ export default function Footer() {
       <div className="f-top">
         <div className="f-col">
           <Link to="/" className="f-brand">
-            <img src="/assets/logos/logo-ca-tech.png" alt="CA-TECH" width="36" height="36" style={{ borderRadius: '8px' }} />
+            <picture>
+              <source srcSet="/assets/logos/logo-ca-tech.webp" type="image/webp" />
+              <img src="/assets/logos/logo-ca-tech.png" alt="Logo CA-TECH — Agence Web &amp; IA" width="36" height="36" style={{ borderRadius: '8px' }} decoding="async" loading="lazy" />
+            </picture>
             <div>
               <div className="f-brand-name">CA-TECH</div>
               <div className="f-brand-tag">Agence Web &amp; IA</div>

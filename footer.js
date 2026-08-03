@@ -73,7 +73,10 @@
     /* ── Col 1 : Brand ── */
     + '<div class="f-col">'
     +   '<a href="/index.html" class="f-brand">'
-    +     '<img src="/assets/logos/logo-ca-tech.png" alt="CA-TECH" width="36" height="36" style="border-radius:8px"/>'
+    +     '<picture>'
+    +     '<source srcset="/assets/logos/logo-ca-tech.webp" type="image/webp"/>'
+    +     '<img src="/assets/logos/logo-ca-tech.png" alt="Logo CA-TECH — Agence Web &amp; IA" width="36" height="36" style="border-radius:8px" decoding="async" loading="lazy"/>'
+    +     '</picture>'
     +     '<div><div class="f-brand-name">CA-TECH</div>'
     +          '<div class="f-brand-tag">Agence Web &amp; IA</div></div>'
     +   '</a>'
@@ -148,7 +151,10 @@
     + '<div class="f-bottom">'
     +   '<span>© 2026 CA-TECH — Agence Web &amp; IA · Tous droits réservés.</span>'
     +   '<div class="f-bottom-logo">'
-    +     '<img src="/assets/logos/logo-ca-tech.png" alt="CA-TECH"/>'
+    +     '<picture>'
+    +     '<source srcset="/assets/logos/logo-ca-tech.webp" type="image/webp"/>'
+    +     '<img src="/assets/logos/logo-ca-tech.png" alt="Logo CA-TECH" decoding="async" loading="lazy"/>'
+    +     '</picture>'
     +     '<span>CA-TECH</span>'
     +   '</div>'
     + '</div>';

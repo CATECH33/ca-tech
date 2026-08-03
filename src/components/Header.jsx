@@ -92,7 +92,10 @@ export default function Header() {
     <>
       <nav className={scrolled ? 'scrolled' : ''}>
         <NavLink to="/" className="logo" onClick={closeMenu} aria-label="CA-TECH — Retour à l'accueil">
-          <img src="/assets/logos/logo-ca-tech.png" alt="CA-TECH" width="36" height="36" />
+          <picture>
+            <source srcSet="/assets/logos/logo-ca-tech.webp" type="image/webp" />
+            <img src="/assets/logos/logo-ca-tech.png" alt="Logo CA-TECH — Agence Web &amp; IA" width="36" height="36" decoding="async" fetchPriority="high" />
+          </picture>
           <div>
             <span className="logo-name">CA-TECH</span>
             <span className="logo-sub">Agence Web &amp; Design</span>

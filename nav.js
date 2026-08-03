@@ -30,7 +30,10 @@
   /* ── Desktop nav ───────────────────────────────────────────── */
   nav.innerHTML =
     '<a href="/" class="logo" aria-label="CA-TECH — Retour à l\'accueil">'
-  + '<img src="/assets/logos/logo-ca-tech.png" alt="CA-TECH" width="36" height="36"/>'
+  + '<picture>'
+  + '<source srcset="/assets/logos/logo-ca-tech.webp" type="image/webp"/>'
+  + '<img src="/assets/logos/logo-ca-tech.png" alt="Logo CA-TECH — Agence Web &amp; IA" width="36" height="36" decoding="sync" fetchpriority="high"/>'
+  + '</picture>'
   + '<div><span class="logo-name">CA-TECH</span><span class="logo-sub">Agence Web &amp; Design</span></div>'
   + '</a>'
   + '<ul class="nav-links">'

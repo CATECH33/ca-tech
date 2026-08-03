@@ -452,7 +452,7 @@ export default function Home() {
             >
               {/* Image avec texte overlay */}
               <div style={{ position: 'relative', aspectRatio: '16/8', overflow: 'hidden' }}>
-                <img data-zoom="1" src="/collaborateurs/collaborateur-ia-hero.webp" alt="Collaborateurs IA" loading="lazy" decoding="async" width="960" height="480"
+                <img data-zoom="1" src="/collaborateurs/collaborateur-ia-hero.webp" alt="Collaborateurs IA CA-TECH — agents intelligents spécialisés travaillant 24h/24 pour les PME" loading="lazy" decoding="async" width="960" height="480"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 600ms cubic-bezier(.16,1,.3,1)' }} />
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,.1) 0%, rgba(5,15,40,.82) 100%)' }} />
                 <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '28px 32px' }}>
@@ -497,7 +497,7 @@ export default function Home() {
             >
               {/* Image avec texte overlay */}
               <div style={{ position: 'relative', aspectRatio: '16/8', overflow: 'hidden' }}>
-                <img data-zoom="1" src="/automatisations/automatisation-hero.webp" alt="Automatisations" loading="lazy" decoding="async" width="960" height="480"
+                <img data-zoom="1" src="/automatisations/automatisation-hero.webp" alt="Automatisations CA-TECH — workflows n8n, Make et Zapier pour économiser 14h par semaine" loading="lazy" decoding="async" width="960" height="480"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 600ms cubic-bezier(.16,1,.3,1)' }} />
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,.1) 0%, rgba(3,30,20,.82) 100%)' }} />
                 <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '28px 32px' }}>
