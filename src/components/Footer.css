@@ -29,13 +29,13 @@ footer {
 
 .f-brand-tag {
   font-size: .7rem;
-  color: rgba(255,255,255,.35);
+  color: rgba(255,255,255,.55);
   letter-spacing: .5px;
 }
 
 .f-col-desc {
   font-size: .8rem;
-  color: rgba(255,255,255,.38);
+  color: rgba(255,255,255,.55);
   line-height: 1.85;
   margin-bottom: 1.2rem;
   max-width: 280px;
@@ -46,7 +46,7 @@ footer {
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: rgba(255,255,255,.2);
+  color: rgba(255,255,255,.55);
   margin-bottom: .7rem;
 }
 
@@ -59,10 +59,10 @@ footer {
 
 .f-zones-cities a {
   font-size: .75rem;
-  color: rgba(255,255,255,.3);
+  color: rgba(255,255,255,.55);
   text-decoration: none;
   padding: 3px 10px;
-  border: 1px solid rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
   border-radius: 20px;
   transition: color .2s, border-color .2s;
 }
@@ -93,7 +93,7 @@ footer {
 }
 
 .f-col ul a {
-  color: rgba(255,255,255,.38);
+  color: rgba(255,255,255,.55);
   text-decoration: none;
   font-size: .82rem;
   transition: color .22s, padding-left .22s;
@@ -127,7 +127,7 @@ footer {
 .f-contact-icon svg {
   width: 13px;
   height: 13px;
-  stroke: rgba(255,255,255,.4);
+  stroke: rgba(255,255,255,.55);
   fill: none;
   stroke-width: 1.8;
   stroke-linecap: round;
@@ -136,7 +136,7 @@ footer {
 
 .f-contact-txt {
   font-size: .8rem;
-  color: rgba(255,255,255,.38);
+  color: rgba(255,255,255,.55);
 }
 
 .f-contact-txt a {
@@ -161,7 +161,7 @@ footer {
   justify-content: space-between;
   padding: 22px 0;
   font-size: .72rem;
-  color: rgba(255,255,255,.22);
+  color: rgba(255,255,255,.45);
   flex-wrap: wrap;
   gap: .8rem;
 }
