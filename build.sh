@@ -27,3 +27,9 @@ cp manager/dist/index.html manager/index.html
 for dir in collaborateurs services portfolio automatisations; do
   [ -d "dist/$dir" ] && cp -r "dist/$dir" . || true
 done
+
+# PWA — expose les fichiers nécessaires à la racine (scope /)
+cp dist/site.webmanifest site.webmanifest
+cp dist/apple-touch-icon.png apple-touch-icon.png
+cp -r dist/icons/ icons/
+cp -r dist/logos/ logos/
