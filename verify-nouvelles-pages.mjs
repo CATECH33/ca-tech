@@ -45,7 +45,12 @@ for (const p of PAGES) {
 
     // JSON-LD
     const jsonLd = await page.$$eval('script[type="application/ld+json"]', els =>
-      els.map(el => { try { return JSON.parse(el.textContent)['@type'] } catch { return null } }).filter(Boolean)
+      els.flatMap(el => {
+        try {
+          const d = JSON.parse(el.textContent)
+          return (d['@graph'] || [d]).map(n => n['@type']).filter(Boolean)
+        } catch { return [] }
+      })
     )
 
     const ok = status === 200 ? '✅' : '❌'
