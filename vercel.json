@@ -33,8 +33,6 @@
   ],
   "redirects": [
     { "source": "/index",            "destination": "/",             "permanent": true },
-    { "source": "/blog",             "destination": "/",             "permanent": true },
-    { "source": "/blog/(.*)",        "destination": "/",             "permanent": true },
     { "source": "/diagnostic-ia",    "destination": "/contact",      "permanent": true },
     { "source": "/nos-realisations", "destination": "/realisations", "permanent": true },
     { "source": "/loic-ia",         "destination": "/loic",          "permanent": true }
