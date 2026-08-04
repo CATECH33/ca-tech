@@ -1,24 +1,28 @@
+import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Outlet, Link } from 'react-router-dom'
 import Header from './components/layout/Header'
 import Footer from './components/Footer.jsx'
 import PwaInstallBanner from './components/PwaInstallBanner'
 import Home from './pages/Home.jsx'
-import Services from './pages/Services.jsx'
-import Loic from './pages/Loic.jsx'
-import CollaborateursIA from './pages/CollaborateursIA.jsx'
-import Automatisations from './pages/Automatisations.jsx'
-import Realisations from './pages/Realisations.jsx'
-import Contact from './pages/Contact.jsx'
-import Catalogue from './pages/Catalogue.jsx'
-import Tarifs from './pages/Tarifs.jsx'
-import SeoPage from './pages/SeoPage.jsx'
 import { SEO_PAGES } from './data/seoPages.js'
+
+const Services       = lazy(() => import('./pages/Services.jsx'))
+const Loic           = lazy(() => import('./pages/Loic.jsx'))
+const CollaborateursIA = lazy(() => import('./pages/CollaborateursIA.jsx'))
+const Automatisations  = lazy(() => import('./pages/Automatisations.jsx'))
+const Realisations   = lazy(() => import('./pages/Realisations.jsx'))
+const Contact        = lazy(() => import('./pages/Contact.jsx'))
+const Catalogue      = lazy(() => import('./pages/Catalogue.jsx'))
+const Tarifs         = lazy(() => import('./pages/Tarifs.jsx'))
+const SeoPage        = lazy(() => import('./pages/SeoPage.jsx'))
 
 function Layout() {
   return (
     <>
       <Header />
-      <Outlet />
+      <Suspense fallback={null}>
+        <Outlet />
+      </Suspense>
       <Footer />
       <PwaInstallBanner />
     </>

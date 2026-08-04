@@ -315,7 +315,7 @@ export default function Home() {
               <div className="hero-pill">
                 <span className="pill pill-dark">✦ Agence Web &amp; Cabinet IA</span>
               </div>
-              <h1 className="hero-h1" id="hero-h1" style={{ opacity: 0, transform: 'translateY(16px)' }}>
+              <h1 className="hero-h1" id="hero-h1">
                 Agence Web &amp; IA — les outils qui font grandir votre entreprise.
               </h1>
               <p className="hero-subtitle" id="hero-sub" style={{ opacity: 0, transform: 'translateY(12px)' }}>
