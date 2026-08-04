@@ -6,24 +6,30 @@ const SOLUTIONS = [
   { label: 'Création de site Web', href: '/creation-site-vitrine' },
   { label: 'Applications Métier',  href: '/services#apps' },
   { label: 'CRM sur mesure',       href: '/services#apps' },
-  { label: 'SEO',                  href: '/services#seo' },
+  { label: 'SEO & Visibilité',     href: '/services#seo' },
   { label: 'Maintenance',          href: '/maintenance-site-web' },
 ]
 
-const NAV = [
+const IA_ITEMS = [
   { label: 'Collaborateurs IA', to: '/collaborateurs-ia' },
   { label: 'Automatisations',   to: '/automatisations' },
-  { label: 'Réalisations',      to: '/realisations' },
-  { label: 'Blog',              href: '/blog' },
-  { label: 'Tarifs',            to: '/tarifs' },
-  { label: 'À propos',          to: '/loic' },
-  { label: 'Contact',           to: '/contact' },
+  { label: 'Loïc IA',          to: '/loic' },
+]
+
+const NAV = [
+  { label: 'Réalisations', to: '/realisations' },
+  { label: 'Méthodologie', href: '/methodologie' },
+  { label: 'Blog',         href: '/blog' },
+  { label: 'Tarifs',       to: '/tarifs' },
+  { label: 'À propos',     href: '/a-propos' },
+  { label: 'Contact',      to: '/contact' },
 ] as const
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [solOpen, setSolOpen] = useState(false)
+  const [iaOpen, setIaOpen] = useState(false)
 
   useEffect(() => {
     let ticking = false
@@ -43,6 +49,7 @@ export default function Header() {
   const closeMenu = useCallback(() => {
     setMenuOpen(false)
     setSolOpen(false)
+    setIaOpen(false)
   }, [])
 
   const active = ({ isActive }: { isActive: boolean }) =>
@@ -56,7 +63,10 @@ export default function Header() {
         {/* Logo */}
         <NavLink to="/" className="logo" onClick={closeMenu} aria-label="CA-TECH — Retour à l'accueil">
           <picture>
-            <source srcSet="/assets/logos/logo-ca-tech.webp" type="image/webp" />
+            {/* Mobile & tablette : SVG compact — net sur Retina, léger */}
+            <source media="(max-width: 1024px)" srcSet="/logos/logo-ca-tech-icon.svg" type="image/svg+xml" />
+            {/* Desktop : logo complet WebP */}
+            <source media="(min-width: 1025px)" srcSet="/assets/logos/logo-ca-tech.webp" type="image/webp" />
             <img
               src="/assets/logos/logo-ca-tech.png"
               alt="Logo CA-TECH — Agence Web & IA"
@@ -87,6 +97,20 @@ export default function Header() {
                 <a key={label} href={href} className="nav-sol-link" role="menuitem" onClick={closeMenu}>
                   {label}
                 </a>
+              ))}
+            </div>
+          </li>
+
+          {/* IA dropdown */}
+          <li className="nav-dropdown">
+            <button className="nav-dd-trigger" aria-haspopup="true">
+              IA <span className="nav-caret" aria-hidden="true">▾</span>
+            </button>
+            <div className="nav-sol-panel" role="menu">
+              {IA_ITEMS.map(({ label, to }) => (
+                <NavLink key={label} to={to} className="nav-sol-link" role="menuitem" onClick={closeMenu}>
+                  {label}
+                </NavLink>
               ))}
             </div>
           </li>
@@ -133,6 +157,18 @@ export default function Header() {
         </button>
         {solOpen && SOLUTIONS.map(({ label, href }) => (
           <a key={label} href={href} className="mob-dd-item" onClick={closeMenu}>{label}</a>
+        ))}
+
+        {/* IA mobile toggle */}
+        <button
+          className={`mob-sol-hd${iaOpen ? ' open' : ''}`}
+          onClick={() => setIaOpen(o => !o)}
+          aria-expanded={iaOpen}
+        >
+          IA <span className="nav-caret" aria-hidden="true">▾</span>
+        </button>
+        {iaOpen && IA_ITEMS.map(({ label, to }) => (
+          <NavLink key={label} to={to} className="mob-dd-item" onClick={closeMenu}>{label}</NavLink>
         ))}
 
         {NAV.map(item => (

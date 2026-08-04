@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-label="CA-TECH">
+  <!-- Réseau hexagonal — 6 nœuds à r=22 du centre (32,32) -->
+  <!-- N:32,10 · NE:51,21 · SE:51,43 · S:32,54 · SO:13,43 · NO:13,21 -->
+
+  <!-- Hexagone extérieur -->
+  <polygon points="32,10 51,21 51,43 32,54 13,43 13,21"
+    stroke="white" stroke-width="0.75" stroke-opacity="0.22" fill="none"/>
+
+  <!-- Rayons vers le centre -->
+  <line x1="32" y1="10" x2="32" y2="32" stroke="white" stroke-width="0.6" stroke-opacity="0.13"/>
+  <line x1="51" y1="21" x2="32" y2="32" stroke="white" stroke-width="0.6" stroke-opacity="0.13"/>
+  <line x1="51" y1="43" x2="32" y2="32" stroke="white" stroke-width="0.6" stroke-opacity="0.13"/>
+  <line x1="32" y1="54" x2="32" y2="32" stroke="white" stroke-width="0.6" stroke-opacity="0.13"/>
+  <line x1="13" y1="43" x2="32" y2="32" stroke="white" stroke-width="0.6" stroke-opacity="0.13"/>
+  <line x1="13" y1="21" x2="32" y2="32" stroke="white" stroke-width="0.6" stroke-opacity="0.13"/>
+
+  <!-- Nœuds extérieurs -->
+  <circle cx="32" cy="10" r="1.8" fill="white" fill-opacity="0.5"/>
+  <circle cx="51" cy="21" r="1.8" fill="white" fill-opacity="0.5"/>
+  <circle cx="51" cy="43" r="1.8" fill="white" fill-opacity="0.5"/>
+  <circle cx="32" cy="54" r="1.8" fill="white" fill-opacity="0.5"/>
+  <circle cx="13" cy="43" r="1.8" fill="white" fill-opacity="0.5"/>
+  <circle cx="13" cy="21" r="1.8" fill="white" fill-opacity="0.5"/>
+
+  <!-- Halo cyan central (derrière le texte) -->
+  <circle cx="32" cy="32" r="16" fill="#00D4FF" fill-opacity="0.05"/>
+  <circle cx="32" cy="32" r="8"  fill="#00D4FF" fill-opacity="0.09"/>
+
+  <!-- Bracket gauche < -->
+  <polyline points="20,23 13,32 20,41"
+    stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Bracket droit > -->
+  <polyline points="44,23 51,32 44,41"
+    stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Lettres CA -->
+  <text
+    x="32" y="32"
+    text-anchor="middle"
+    dominant-baseline="central"
+    font-family="'Arial Black','Helvetica Neue',Arial,sans-serif"
+    font-weight="900"
+    font-size="18"
+    letter-spacing="2"
+    fill="white">CA</text>
+
+  <!-- Point cyan — accent de connexion -->
+  <circle cx="32" cy="32" r="2.2" fill="#00D4FF"/>
+  <circle cx="32" cy="32" r="3.8" fill="#00D4FF" fill-opacity="0.25"/>
+</svg>
