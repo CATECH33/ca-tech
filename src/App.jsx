@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Outlet, Link } from 'react-router-dom'
 import Header from './components/layout/Header'
 import Footer from './components/Footer.jsx'
 import PwaInstallBanner from './components/PwaInstallBanner'
+import CookieBanner from './components/CookieBanner'
 import Home from './pages/Home.jsx'
 import { SEO_PAGES } from './data/seoPages.js'
 
@@ -24,6 +25,7 @@ function Layout() {
         <Outlet />
       </Suspense>
       <Footer />
+      <CookieBanner />
       <PwaInstallBanner />
     </>
   )
