@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Technologies Maîtrisées — Stack IA, Web &amp; Automatisation | CA-TECH</title>
+  <meta name="description" content="Découvrez la stack technologique de CA-TECH : IA générative (GPT-4, Claude, Gemini), développement web (React, Next.js), automatisation (N8N, Make), bases de données, hébergement et design."/>
+  <link rel="canonical" href="https://www.ca-tech.fr/technologies"/>
+  <meta property="og:title" content="Technologies Maîtrisées | CA-TECH"/>
+  <meta property="og:description" content="Stack complète IA, Web, Automatisation, Design — les outils que CA-TECH maîtrise pour livrer des projets de référence."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://www.ca-tech.fr/technologies"/>
+  <meta property="og:locale" content="fr_FR"/>
+  <meta property="og:site_name" content="CA-TECH"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/local-seo.css"/>
+  <link rel="icon" type="image/x-icon" href="/public/favicon.ico"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png"/>
+  <meta name="theme-color" content="#0066FF"/>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Technologies maîtrisées — CA-TECH",
+    "description": "Stack technologique complète de CA-TECH : IA, développement web, automatisation, design.",
+    "url": "https://www.ca-tech.fr/technologies",
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type":"ListItem","position":1,"name":"Accueil","item":"https://www.ca-tech.fr/"},
+        {"@type":"ListItem","position":2,"name":"Technologies","item":"https://www.ca-tech.fr/technologies"}
+      ]
+    }
+  }
+  </script>
+  <style>
+body{background:#060b12;color:#fff}
+/* HERO */
+.tech-hero{position:relative;min-height:70vh;display:flex;align-items:center;padding:calc(var(--nav-h)+80px) 5% 90px;overflow:hidden;background:linear-gradient(160deg,#020b18 0%,#050d1a 55%,#060f20 100%)}
+.tech-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(0,102,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,102,255,.025) 1px,transparent 1px);background-size:64px 64px;pointer-events:none;z-index:1;-webkit-mask-image:radial-gradient(ellipse 85% 85% at 50% 40%,black 20%,transparent 100%);mask-image:radial-gradient(ellipse 85% 85% at 50% 40%,black 20%,transparent 100%)}
+.tech-halo{position:absolute;border-radius:50%;pointer-events:none;z-index:1}
+.tech-halo-1{width:700px;height:700px;top:-200px;right:-100px;background:radial-gradient(circle,rgba(0,102,255,.18) 0%,transparent 70%);filter:blur(55px)}
+.tech-halo-2{width:500px;height:500px;bottom:-100px;left:-80px;background:radial-gradient(circle,rgba(110,55,255,.10) 0%,transparent 65%);filter:blur(70px)}
+.tech-hero-inner{position:relative;z-index:2;max-width:880px;margin:0 auto;text-align:center}
+.tech-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(0,212,255,.8);margin-bottom:1.5rem}
+.tech-eyebrow::before,.tech-eyebrow::after{content:'';display:block;width:24px;height:2px;background:linear-gradient(90deg,#0066ff,#00d4ff);border-radius:2px}
+.tech-h1{font-size:clamp(2.4rem,5vw,4rem);font-weight:900;line-height:1.06;letter-spacing:-.035em;color:#fff;margin-bottom:1.2rem}
+.tech-h1 em{font-style:normal;background:linear-gradient(135deg,#0066ff,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.tech-sub{font-size:1rem;color:rgba(255,255,255,.58);line-height:1.75;max-width:620px;margin:0 auto 3rem}
+/* Stat band */
+.tech-stats{display:flex;justify-content:center;gap:0;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:16px;overflow:hidden;flex-wrap:wrap;max-width:680px;margin:0 auto}
+.tech-stat{flex:1;min-width:140px;padding:1.4rem 1rem;text-align:center;border-right:1px solid rgba(255,255,255,.06)}
+.tech-stat:last-child{border-right:none}
+.tech-stat-n{font-family:'Rajdhani',sans-serif;font-size:2rem;font-weight:700;color:#fff;line-height:1;margin-bottom:.3rem}
+.tech-stat-n em{color:#0066ff;font-style:normal}
+.tech-stat-l{font-size:.66rem;color:rgba(255,255,255,.38);letter-spacing:.04em}
+/* SECTION GENERIC */
+.tech-section{padding:90px 5%;position:relative}
+.tech-section.alt{background:#070d1a}
+.tech-wrap{max-width:1200px;margin:0 auto}
+.tech-sec-label{font-size:.65rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#00d4ff;display:inline-flex;align-items:center;gap:10px;margin-bottom:.9rem}
+.tech-sec-label::before{content:'';width:20px;height:2px;background:linear-gradient(90deg,#0066ff,#00d4ff);border-radius:2px}
+.tech-sec-h{font-size:clamp(1.7rem,2.8vw,2.4rem);font-weight:900;color:#fff;letter-spacing:-.025em;line-height:1.1;margin-bottom:.8rem}
+.tech-sec-h em{font-style:normal;background:linear-gradient(135deg,#fff 30%,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.tech-sec-desc{font-size:.92rem;color:rgba(255,255,255,.5);line-height:1.8;max-width:580px;margin-bottom:3rem}
+/* TECH GRID */
+.tech-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.tech-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1.5rem;transition:border-color .3s,background .3s,transform .3s;position:relative;overflow:hidden}
+.tech-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08) 50%,transparent)}
+.tech-card:hover{border-color:rgba(0,102,255,.35);background:rgba(0,102,255,.05);transform:translateY(-3px)}
+.tech-card-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:1.1rem;font-size:1.4rem;flex-shrink:0}
+.tech-card-name{font-size:.95rem;font-weight:800;color:#fff;margin-bottom:.35rem}
+.tech-card-desc{font-size:.79rem;color:rgba(255,255,255,.45);line-height:1.6}
+.tech-card-level{display:flex;align-items:center;gap:.5rem;margin-top:.9rem}
+.tech-card-bar{flex:1;height:3px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden}
+.tech-card-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,#0066ff,#00d4ff)}
+.tech-card-pct{font-size:.65rem;color:rgba(255,255,255,.3);font-weight:700}
+/* BENTO GRID for certifications */
+.tech-cert-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+.tech-cert-card{background:linear-gradient(145deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.07) 100%);border:1px solid rgba(255,255,255,.16);border-radius:20px;padding:2rem 1.5rem;position:relative;overflow:hidden;backdrop-filter:blur(8px);box-shadow:0 4px 20px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.14)}
+.tech-cert-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12) 50%,transparent)}
+.tech-cert-icon{font-size:2.2rem;margin-bottom:1rem}
+.tech-cert-name{font-size:1.05rem;font-weight:800;color:#fff;margin-bottom:.4rem}
+.tech-cert-org{font-size:.72rem;color:rgba(255,255,255,.38);font-weight:600;letter-spacing:.04em;margin-bottom:.9rem}
+.tech-cert-desc{font-size:.82rem;color:rgba(255,255,255,.5);line-height:1.65}
+.tech-cert-badge{position:absolute;top:1rem;right:1rem;background:rgba(0,102,255,.2);border:1px solid rgba(0,102,255,.35);border-radius:20px;font-size:.6rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 10px;color:#60a5fa}
+/* Category tabs */
+.tech-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2.5rem}
+.tech-tab{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:50px;color:rgba(255,255,255,.5);font-size:.76rem;font-weight:600;padding:8px 18px;cursor:pointer;transition:all .2s}
+.tech-tab:hover{background:rgba(255,255,255,.08);color:#fff}
+.tech-tab.active{background:#0066ff;border-color:#0066ff;color:#fff;box-shadow:0 0 16px rgba(0,102,255,.3)}
+/* Reveal */
+.tech-reveal{opacity:0;transform:translateY(20px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
+.tech-reveal.visible{opacity:1;transform:translateY(0)}
+/* CTA */
+.tech-cta{padding:110px 5%;background:linear-gradient(115deg,#0a0f1e 0%,#08224d 45%,#0043b8 78%,#0066ff 100%);position:relative;overflow:hidden;text-align:center}
+.tech-cta::after{content:'';position:absolute;top:-20%;right:-10%;width:600px;height:600px;background:radial-gradient(circle,rgba(0,212,255,.15) 0%,transparent 60%);filter:blur(60px);pointer-events:none}
+.tech-cta-inner{position:relative;z-index:2;max-width:700px;margin:0 auto}
+.tech-cta-kicker{font-size:.7rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#00d4ff;margin-bottom:1rem}
+.tech-cta h2{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:900;color:#fff;margin-bottom:1rem;letter-spacing:-.025em;line-height:1.1}
+.tech-cta p{font-size:.95rem;color:rgba(255,255,255,.65);line-height:1.75;margin-bottom:2.5rem}
+.tech-cta-btns{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}
+.tc-btn-w{display:inline-flex;align-items:center;gap:8px;background:#fff;color:#0a2540;padding:16px 36px;border-radius:10px;font-size:.88rem;font-weight:800;text-decoration:none;box-shadow:0 10px 40px rgba(0,0,0,.25);transition:all .3s}
+.tc-btn-w:hover{transform:translateY(-3px);box-shadow:0 18px 50px rgba(0,0,0,.3)}
+.tc-btn-g{display:inline-flex;align-items:center;gap:8px;background:transparent;color:#fff;padding:16px 36px;border-radius:10px;font-size:.88rem;font-weight:700;text-decoration:none;border:2px solid rgba(255,255,255,.25);transition:all .3s}
+.tc-btn-g:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+@media(max-width:1024px){.tech-grid{grid-template-columns:repeat(3,1fr)}.tech-cert-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.tech-grid{grid-template-columns:repeat(2,1fr)}.tech-cert-grid{grid-template-columns:1fr}.tech-stats{gap:0}}
+@media(max-width:480px){.tech-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="/" class="logo"><picture><source srcset="/assets/logos/logo-ca-tech.webp" type="image/webp"/><img src="/assets/logos/logo-ca-tech.png" alt="Logo CA-TECH" width="36" height="36" decoding="async" fetchpriority="high"/></picture><div><span class="logo-name">CA-TECH</span><span class="logo-sub">Agence Web &amp; Design</span></div></a>
+  <ul class="nav-links">
+    <li><a href="/">Accueil</a></li>
+    <li><a href="/services">Services</a></li>
+    <li><a href="/collaborateurs-ia">Collaborateurs IA</a></li>
+    <li><a href="/automatisations">Automatisations</a></li>
+    <li><a href="/technologies" class="nav-active">Technologies</a></li>
+    <li><a href="/cas-clients">Cas clients</a></li>
+    <li><a href="/methodologie">Méthodologie</a></li>
+    <li><a href="/tarifs">Tarifs</a></li>
+    <li><a href="/contact" class="btn-nav">Devis gratuit</a></li>
+  </ul>
+  <button class="ham" id="ham"><span></span><span></span><span></span></button>
+</nav>
+<div class="mob-menu" id="mob">
+  <a href="/" onclick="closeMob()">Accueil</a>
+  <a href="/services" onclick="closeMob()">Services</a>
+  <a href="/collaborateurs-ia" onclick="closeMob()">Collaborateurs IA</a>
+  <a href="/automatisations" onclick="closeMob()">Automatisations</a>
+  <a href="/technologies" onclick="closeMob()">Technologies</a>
+  <a href="/cas-clients" onclick="closeMob()">Cas clients</a>
+  <a href="/methodologie" onclick="closeMob()">Méthodologie</a>
+  <a href="/tarifs" onclick="closeMob()">Tarifs</a>
+  <a href="/contact" class="btn-mob" onclick="closeMob()">Demander un devis</a>
+</div>
+
+<!-- HERO -->
+<section class="tech-hero">
+  <div class="tech-grid-bg" aria-hidden="true"></div>
+  <div class="tech-halo tech-halo-1" aria-hidden="true"></div>
+  <div class="tech-halo tech-halo-2" aria-hidden="true"></div>
+  <div class="tech-hero-inner">
+    <p class="tech-eyebrow">Notre arsenal · Technologies 2025</p>
+    <h1 class="tech-h1">La stack qui délivre<br/><em>des résultats réels</em></h1>
+    <p class="tech-sub">Chaque outil de notre stack a été sélectionné pour sa fiabilité, sa performance et sa capacité à générer un retour sur investissement mesurable pour nos clients.</p>
+    <div class="tech-stats">
+      <div class="tech-stat">
+        <div class="tech-stat-n"><em>60</em>+</div>
+        <div class="tech-stat-l">Technologies maîtrisées</div>
+      </div>
+      <div class="tech-stat">
+        <div class="tech-stat-n"><em>8</em></div>
+        <div class="tech-stat-l">Domaines d'expertise</div>
+      </div>
+      <div class="tech-stat">
+        <div class="tech-stat-n"><em>200</em>+</div>
+        <div class="tech-stat-l">Intégrations disponibles</div>
+      </div>
+      <div class="tech-stat">
+        <div class="tech-stat-n"><em>48</em>h</div>
+        <div class="tech-stat-l">Déploiement moyen</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IA & LLM -->
+<section class="tech-section alt">
+  <div class="tech-wrap">
+    <div class="tech-reveal">
+      <p class="tech-sec-label">Intelligence Artificielle</p>
+      <h2 class="tech-sec-h">IA générative &amp; <em>modèles de langage</em></h2>
+      <p class="tech-sec-desc">Nous travaillons avec les meilleurs LLMs du marché et construisons des systèmes RAG, des agents autonomes et des pipelines IA sur mesure.</p>
+    </div>
+    <div class="tech-grid tech-reveal">
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(16,163,127,.12);border:1px solid rgba(16,163,127,.2)">🤖</div>
+        <div class="tech-card-name">GPT-4o / GPT-4 Turbo</div>
+        <div class="tech-card-desc">Raisonnement avancé, génération de contenu, agents autonomes, analyse de documents.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:96%"></div></div><span class="tech-card-pct">Expert</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(204,120,92,.12);border:1px solid rgba(204,120,92,.2)">🧠</div>
+        <div class="tech-card-name">Claude 3.5 / Claude 4</div>
+        <div class="tech-card-desc">Analyse longue portée, rédaction, code, raisonnement structuré pour cas complexes.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:98%"></div></div><span class="tech-card-pct">Expert</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(66,133,244,.12);border:1px solid rgba(66,133,244,.2)">💎</div>
+        <div class="tech-card-name">Gemini Pro / Ultra</div>
+        <div class="tech-card-desc">Multimodal, intégration Google Workspace, traitement d'images et de documents.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:85%"></div></div><span class="tech-card-pct">Avancé</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.2)">🌟</div>
+        <div class="tech-card-name">Mistral Large / Mixtral</div>
+        <div class="tech-card-desc">LLM open source européen, hébergement privé, conformité RGPD, coûts réduits.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:88%"></div></div><span class="tech-card-pct">Avancé</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(0,102,255,.12);border:1px solid rgba(0,102,255,.2)">🔗</div>
+        <div class="tech-card-name">LangChain / LangGraph</div>
+        <div class="tech-card-desc">Orchestration d'agents, chaînes de traitement, mémoire persistante, tools calling.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:92%"></div></div><span class="tech-card-pct">Expert</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(0,212,255,.12);border:1px solid rgba(0,212,255,.2)">📚</div>
+        <div class="tech-card-name">RAG &amp; Vector Search</div>
+        <div class="tech-card-desc">Retrieval Augmented Generation, Pinecone, Chroma, Weaviate — IA qui connaît votre métier.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:94%"></div></div><span class="tech-card-pct">Expert</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.2)">✨</div>
+        <div class="tech-card-name">Fine-tuning &amp; RLHF</div>
+        <div class="tech-card-desc">Entraînement sur vos données propriétaires, modèles spécialisés sur votre secteur.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:80%"></div></div><span class="tech-card-pct">Avancé</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.2)">🎯</div>
+        <div class="tech-card-name">Prompt Engineering</div>
+        <div class="tech-card-desc">Architecture de prompts systèmes, few-shot learning, chain-of-thought, structured output.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:99%"></div></div><span class="tech-card-pct">Expert</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DÉVELOPPEMENT WEB -->
+<section class="tech-section">
+  <div class="tech-wrap">
+    <div class="tech-reveal">
+      <p class="tech-sec-label">Développement Web</p>
+      <h2 class="tech-sec-h">Frontend, backend &amp; <em>full-stack moderne</em></h2>
+      <p class="tech-sec-desc">Sites vitrine ultra-rapides, applications web complexes, e-commerce performants — construits avec les frameworks les plus fiables du marché.</p>
+    </div>
+    <div class="tech-grid tech-reveal">
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(97,218,251,.12);border:1px solid rgba(97,218,251,.2)">⚛️</div>
+        <div class="tech-card-name">React / Next.js</div>
+        <div class="tech-card-desc">SPA, SSR, SSG, App Router — applications web ultra-performantes et SEO-friendly.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:98%"></div></div><span class="tech-card-pct">Expert</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(65,184,131,.12);border:1px solid rgba(65,184,131,.2)">💚</div>
+        <div class="tech-card-name">Vue.js / Nuxt</div>
+        <div class="tech-card-desc">Framework progressif, composants réutilisables, rendu serveur et génération statique.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:85%"></div></div><span class="tech-card-pct">Avancé</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(49,120,198,.12);border:1px solid rgba(49,120,198,.2)">🔷</div>
+        <div class="tech-card-name">TypeScript</div>
+        <div class="tech-card-desc">Typage fort, détection d'erreurs en développement, code maintenable sur le long terme.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:95%"></div></div><span class="tech-card-pct">Expert</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(0,171,255,.12);border:1px solid rgba(0,171,255,.2)">🎨</div>
+        <div class="tech-card-name">Tailwind CSS</div>
+        <div class="tech-card-desc">Utility-first CSS, design system cohérent, interfaces responsive pixel-perfect.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:96%"></div></div><span class="tech-card-pct">Expert</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(51,51,51,.3);border:1px solid rgba(255,255,255,.15)">⚡</div>
+        <div class="tech-card-name">Node.js / Express</div>
+        <div class="tech-card-desc">API REST, WebSockets, microservices, backend temps réel pour applications complexes.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:92%"></div></div><span class="tech-card-pct">Expert</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(204,122,76,.12);border:1px solid rgba(204,122,76,.2)">🐍</div>
+        <div class="tech-card-name">Python / FastAPI</div>
+        <div class="tech-card-desc">Backend IA, traitement de données, scripts d'automatisation, ML pipelines.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:88%"></div></div><span class="tech-card-pct">Avancé</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.2)">🛒</div>
+        <div class="tech-card-name">Shopify / WooCommerce</div>
+        <div class="tech-card-desc">E-commerce clé en main, thèmes sur mesure, paiements, gestion stocks automatisée.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:90%"></div></div><span class="tech-card-pct">Expert</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(33,140,99,.12);border:1px solid rgba(33,140,99,.2)">📱</div>
+        <div class="tech-card-name">WordPress / Webflow</div>
+        <div class="tech-card-desc">CMS flexibles, sites vitrines performants, édition sans développeur, plugins IA.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:93%"></div></div><span class="tech-card-pct">Expert</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AUTOMATISATION -->
+<section class="tech-section alt">
+  <div class="tech-wrap">
+    <div class="tech-reveal">
+      <p class="tech-sec-label">Automatisation &amp; Intégrations</p>
+      <h2 class="tech-sec-h">Workflows intelligents &amp; <em>intégrations sans limites</em></h2>
+      <p class="tech-sec-desc">Nos automatisations connectent vos outils métier et éliminent les tâches répétitives. Plus de 200 applications intégrées, déployées en 48h.</p>
+    </div>
+    <div class="tech-grid tech-reveal">
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(234,88,12,.12);border:1px solid rgba(234,88,12,.2)">🔶</div>
+        <div class="tech-card-name">N8N</div>
+        <div class="tech-card-desc">Automatisation open source, hébergement privé, workflows avancés avec IA intégrée. Notre outil de référence.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:99%"></div></div><span class="tech-card-pct">Expert</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(105,67,193,.12);border:1px solid rgba(105,67,193,.2)">🔮</div>
+        <div class="tech-card-name">Make (Integromat)</div>
+        <div class="tech-card-desc">Scénarios visuels complexes, connecteurs natifs, idéal pour les flux non-techniques.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:95%"></div></div><span class="tech-card-pct">Expert</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(255,79,0,.12);border:1px solid rgba(255,79,0,.2)">⚡</div>
+        <div class="tech-card-name">Zapier</div>
+        <div class="tech-card-desc">5000+ apps connectées, flux simples à déployer rapidement, intégrations SaaS standard.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:88%"></div></div><span class="tech-card-pct">Avancé</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(0,102,255,.12);border:1px solid rgba(0,102,255,.2)">🔌</div>
+        <div class="tech-card-name">API REST &amp; GraphQL</div>
+        <div class="tech-card-desc">Intégrations custom sur mesure, authentification OAuth, webhooks, rate limiting.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:97%"></div></div><span class="tech-card-pct">Expert</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(0,168,132,.12);border:1px solid rgba(0,168,132,.2)">💚</div>
+        <div class="tech-card-name">WhatsApp Business API</div>
+        <div class="tech-card-desc">Chatbots WhatsApp, relances automatiques, support client 24/7 sur le canal préféré.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:90%"></div></div><span class="tech-card-pct">Avancé</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(74,21,75,.3);border:1px solid rgba(130,78,130,.3)">💜</div>
+        <div class="tech-card-name">Slack / Teams / Discord</div>
+        <div class="tech-card-desc">Notifications intelligentes, bots de reporting, alertes critiques, intégrations CRM.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:92%"></div></div><span class="tech-card-pct">Expert</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(234,67,53,.12);border:1px solid rgba(234,67,53,.2)">📧</div>
+        <div class="tech-card-name">Gmail / Outlook</div>
+        <div class="tech-card-desc">Automatisation email, relances intelligentes, classification, réponses auto personnalisées.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:96%"></div></div><span class="tech-card-pct">Expert</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(88,101,242,.12);border:1px solid rgba(88,101,242,.2)">📊</div>
+        <div class="tech-card-name">Google Sheets / Airtable</div>
+        <div class="tech-card-desc">Base de données légère, reporting automatique, tableaux de bord connectés en temps réel.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:94%"></div></div><span class="tech-card-pct">Expert</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CRM & BUSINESS -->
+<section class="tech-section">
+  <div class="tech-wrap">
+    <div class="tech-reveal">
+      <p class="tech-sec-label">CRM &amp; Outils Business</p>
+      <h2 class="tech-sec-h">L'écosystème qui <em>propulse votre croissance</em></h2>
+      <p class="tech-sec-desc">HubSpot, Stripe, Pipedrive — nous intégrons et automatisons les outils qui pilotent votre activité commerciale et financière.</p>
+    </div>
+    <div class="tech-grid tech-reveal" style="grid-template-columns:repeat(4,1fr)">
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(255,122,0,.12);border:1px solid rgba(255,122,0,.2)">🏆</div>
+        <div class="tech-card-name">HubSpot CRM</div>
+        <div class="tech-card-desc">Automation marketing, pipeline ventes, sequences email, reporting commercial complet.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:92%"></div></div><span class="tech-card-pct">Expert</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(0,101,214,.12);border:1px solid rgba(0,101,214,.2)">💼</div>
+        <div class="tech-card-name">Pipedrive / Salesforce</div>
+        <div class="tech-card-desc">Gestion pipeline commercial, prévisions de ventes, automatisation des suivis clients.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:85%"></div></div><span class="tech-card-pct">Avancé</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(99,91,255,.12);border:1px solid rgba(99,91,255,.2)">💳</div>
+        <div class="tech-card-name">Stripe</div>
+        <div class="tech-card-desc">Paiements en ligne, abonnements, factures automatiques, prévention de fraude.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:95%"></div></div><span class="tech-card-pct">Expert</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(105,189,123,.12);border:1px solid rgba(105,189,123,.2)">📋</div>
+        <div class="tech-card-name">Notion / Airtable</div>
+        <div class="tech-card-desc">Base de connaissance, gestion de projets, wiki interne connecté à vos automatisations.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:90%"></div></div><span class="tech-card-pct">Avancé</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DATA & HÉBERGEMENT -->
+<section class="tech-section alt">
+  <div class="tech-wrap">
+    <div class="tech-reveal">
+      <p class="tech-sec-label">Données &amp; Infrastructure</p>
+      <h2 class="tech-sec-h">Performance, fiabilité &amp; <em>sécurité enterprise</em></h2>
+      <p class="tech-sec-desc">Nos infrastructures sont conçues pour scaler sans limite et résister aux pics de charge. Données hébergées en Europe pour la conformité RGPD.</p>
+    </div>
+    <div class="tech-grid tech-reveal">
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(51,154,240,.12);border:1px solid rgba(51,154,240,.2)">🐘</div>
+        <div class="tech-card-name">PostgreSQL / Supabase</div>
+        <div class="tech-card-desc">Base relationnelle open source, Row Level Security, temps réel, stockage de fichiers.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:94%"></div></div><span class="tech-card-pct">Expert</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(71,149,84,.12);border:1px solid rgba(71,149,84,.2)">🍃</div>
+        <div class="tech-card-name">MongoDB</div>
+        <div class="tech-card-desc">Base NoSQL flexible, documents JSON, idéal pour les données non-structurées et IA.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:85%"></div></div><span class="tech-card-pct">Avancé</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.2)">⚡</div>
+        <div class="tech-card-name">Redis</div>
+        <div class="tech-card-desc">Cache ultra-rapide, sessions, files d'attente, pub/sub pour applications temps réel.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:88%"></div></div><span class="tech-card-pct">Avancé</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.14)">▲</div>
+        <div class="tech-card-name">Vercel</div>
+        <div class="tech-card-desc">Déploiement continu, CDN global, Edge Functions, analytics, domaines et SSL automatiques.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:97%"></div></div><span class="tech-card-pct">Expert</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(255,153,0,.12);border:1px solid rgba(255,153,0,.2)">☁️</div>
+        <div class="tech-card-name">AWS / OVH Cloud</div>
+        <div class="tech-card-desc">Hébergement RGPD Europe, scalabilité auto, sauvegardes quotidiennes, haute disponibilité.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:88%"></div></div><span class="tech-card-pct">Avancé</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(255,102,0,.12);border:1px solid rgba(255,102,0,.2)">🛡️</div>
+        <div class="tech-card-name">Cloudflare</div>
+        <div class="tech-card-desc">WAF, protection DDoS, CDN mondial, cache intelligent, optimisation des performances.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:90%"></div></div><span class="tech-card-pct">Avancé</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(30,64,175,.12);border:1px solid rgba(30,64,175,.2)">🐳</div>
+        <div class="tech-card-name">Docker / GitHub Actions</div>
+        <div class="tech-card-desc">Conteneurisation, CI/CD automatisé, déploiements zero-downtime, tests automatiques.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:87%"></div></div><span class="tech-card-pct">Avancé</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.2)">🔮</div>
+        <div class="tech-card-name">Pinecone / Chroma</div>
+        <div class="tech-card-desc">Bases vectorielles pour la recherche sémantique, RAG, systèmes de recommandation IA.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:91%"></div></div><span class="tech-card-pct">Expert</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DESIGN -->
+<section class="tech-section">
+  <div class="tech-wrap">
+    <div class="tech-reveal">
+      <p class="tech-sec-label">Design &amp; Création Visuelle</p>
+      <h2 class="tech-sec-h">Des interfaces qui <em>convertissent et inspirent</em></h2>
+      <p class="tech-sec-desc">Figma, Adobe Suite, Framer — chaque pixel est conçu pour maximiser l'impact visuel et l'expérience utilisateur.</p>
+    </div>
+    <div class="tech-grid tech-reveal" style="grid-template-columns:repeat(4,1fr)">
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(162,89,255,.12);border:1px solid rgba(162,89,255,.2)">🎨</div>
+        <div class="tech-card-name">Figma</div>
+        <div class="tech-card-desc">Prototypage interactif, design system, collaboration temps réel, handoff développeurs.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:96%"></div></div><span class="tech-card-pct">Expert</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(255,0,0,.12);border:1px solid rgba(255,0,0,.2)">🅰️</div>
+        <div class="tech-card-name">Adobe Suite</div>
+        <div class="tech-card-desc">Illustrator, Photoshop, InDesign — logos, identité visuelle, print, motion design.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:92%"></div></div><span class="tech-card-pct">Expert</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(5,88,249,.12);border:1px solid rgba(5,88,249,.2)">🖥️</div>
+        <div class="tech-card-name">Framer</div>
+        <div class="tech-card-desc">Sites web interactifs no-code premium, animations avancées, prototypes haute fidélité.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:85%"></div></div><span class="tech-card-pct">Avancé</span></div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background:rgba(0,166,255,.12);border:1px solid rgba(0,166,255,.2)">🎬</div>
+        <div class="tech-card-name">After Effects / Lottie</div>
+        <div class="tech-card-desc">Animations web légères, micro-interactions, illustrations animées, onboarding visuel.</div>
+        <div class="tech-card-level"><div class="tech-card-bar"><div class="tech-card-fill" style="width:80%"></div></div><span class="tech-card-pct">Avancé</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section class="tech-section alt">
+  <div class="tech-wrap">
+    <div class="tech-reveal">
+      <p class="tech-sec-label">Certifications &amp; Partenariats</p>
+      <h2 class="tech-sec-h">Une expertise <em>reconnue et certifiée</em></h2>
+      <p class="tech-sec-desc">Nos compétences sont validées par les éditeurs eux-mêmes. Pas des auto-proclamations — des certifications officielles.</p>
+    </div>
+    <div class="tech-cert-grid tech-reveal">
+      <div class="tech-cert-card">
+        <div class="tech-cert-badge">Partenaire officiel</div>
+        <div class="tech-cert-icon">🔶</div>
+        <div class="tech-cert-name">N8N Certified Partner</div>
+        <div class="tech-cert-org">N8N — Automatisation open source</div>
+        <div class="tech-cert-desc">Certification officielle N8N pour la création et le déploiement de workflows d'automatisation complexes avec intégration IA.</div>
+      </div>
+      <div class="tech-cert-card">
+        <div class="tech-cert-badge">Partenaire certifié</div>
+        <div class="tech-cert-icon">🔮</div>
+        <div class="tech-cert-name">Make Certified Partner</div>
+        <div class="tech-cert-org">Make (ex-Integromat)</div>
+        <div class="tech-cert-desc">Maîtrise avancée de Make pour la construction de scénarios d'automatisation multi-étapes et l'intégration de centaines d'applications.</div>
+      </div>
+      <div class="tech-cert-card">
+        <div class="tech-cert-badge">Formation avancée</div>
+        <div class="tech-cert-icon">🤖</div>
+        <div class="tech-cert-name">OpenAI API Practitioner</div>
+        <div class="tech-cert-org">OpenAI</div>
+        <div class="tech-cert-desc">Certification avancée pour l'utilisation de l'API OpenAI : fine-tuning, Assistants API, RAG, function calling et agents autonomes.</div>
+      </div>
+      <div class="tech-cert-card">
+        <div class="tech-cert-badge">Google Partner</div>
+        <div class="tech-cert-icon">🔍</div>
+        <div class="tech-cert-name">Google Workspace Admin</div>
+        <div class="tech-cert-org">Google Cloud</div>
+        <div class="tech-cert-desc">Administration avancée Google Workspace, intégration Gemini, automatisation via Google Apps Script et Cloud Functions.</div>
+      </div>
+      <div class="tech-cert-card">
+        <div class="tech-cert-badge">Certification</div>
+        <div class="tech-cert-icon">🎨</div>
+        <div class="tech-cert-name">Meta Blueprint — Ads</div>
+        <div class="tech-cert-org">Meta Platforms</div>
+        <div class="tech-cert-desc">Expertise publicité Meta (Facebook, Instagram), campagnes performance, retargeting, automatisation des créas et reporting.</div>
+      </div>
+      <div class="tech-cert-card">
+        <div class="tech-cert-badge">AWS Certified</div>
+        <div class="tech-cert-icon">☁️</div>
+        <div class="tech-cert-name">AWS Cloud Practitioner</div>
+        <div class="tech-cert-org">Amazon Web Services</div>
+        <div class="tech-cert-desc">Certification AWS pour l'architecture cloud, le déploiement d'applications et la gestion d'infrastructures scalables et sécurisées.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="tech-cta">
+  <div class="tech-cta-inner tech-reveal">
+    <p class="tech-cta-kicker">Votre projet</p>
+    <h2>La technologie au service<br/>de votre croissance</h2>
+    <p>Chaque outil de notre stack existe pour livrer des résultats mesurables. On vous dit exactement ce qu'on va utiliser — et pourquoi — avant de commencer.</p>
+    <div class="tech-cta-btns">
+      <a href="/contact" class="tc-btn-w">Discuter de votre projet →</a>
+      <a href="/methodologie" class="tc-btn-g">Notre méthodologie</a>
+    </div>
+  </div>
+</section>
+
+<!-- MAILLAGE -->
+<section class="lp-section" style="background:#060b12;padding:60px 5%">
+  <div class="container">
+    <p class="lp-label" style="color:rgba(0,212,255,.7)">Explorez également</p>
+    <div class="lp-links-grid">
+      <a href="/methodologie" class="lp-link-card"><span class="lp-link-cat">Process</span><span class="lp-link-title">Notre méthodologie</span><span class="lp-link-arr">→</span></a>
+      <a href="/cas-clients" class="lp-link-card"><span class="lp-link-cat">Résultats</span><span class="lp-link-title">Cas clients &amp; études de cas</span><span class="lp-link-arr">→</span></a>
+      <a href="/automatisations" class="lp-link-card"><span class="lp-link-cat">Service</span><span class="lp-link-title">Nos automatisations</span><span class="lp-link-arr">→</span></a>
+      <a href="/collaborateurs-ia" class="lp-link-card"><span class="lp-link-cat">Service</span><span class="lp-link-title">Collaborateurs IA</span><span class="lp-link-arr">→</span></a>
+      <a href="/tarifs" class="lp-link-card"><span class="lp-link-cat">Transparence</span><span class="lp-link-title">Nos tarifs</span><span class="lp-link-arr">→</span></a>
+      <a href="/contact" class="lp-link-card"><span class="lp-link-cat">Démarrer</span><span class="lp-link-title">Demander un devis gratuit</span><span class="lp-link-arr">→</span></a>
+    </div>
+  </div>
+</section>
+<footer></footer>
+
+<script>
+window.addEventListener('scroll',function(){
+  var st=document.documentElement.scrollTop,dh=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+  document.getElementById('prog').style.width=(st/dh*100)+'%';
+  document.getElementById('nav').classList.toggle('scrolled',st>80);
+},{passive:true});
+function closeMob(){document.getElementById('mob').classList.remove('open');document.getElementById('ham').classList.remove('open')}
+document.getElementById('ham').addEventListener('click',function(){this.classList.toggle('open');document.getElementById('mob').classList.toggle('open')});
+var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.tech-reveal').forEach(function(el){obs.observe(el)});
+</script>
+<script src="/loic-widget.js" defer></script>
+<script src="/nav.js" defer></script>
+<script src="/footer.js" defer></script>
+</body>
+</html>
