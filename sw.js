@@ -1,15 +1,12 @@
-const CACHE_VERSION = 'v1'
+const CACHE_VERSION = 'v2'
 const STATIC_CACHE  = `ca-tech-static-${CACHE_VERSION}`
 const DYNAMIC_CACHE = `ca-tech-dynamic-${CACHE_VERSION}`
 
+// Uniquement des ressources garanties accessibles à la racine Vercel
 const STATIC_ASSETS = [
-  '/',
   '/offline.html',
-  '/site.webmanifest',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
-  '/assets/logos/logo-ca-tech.webp',
-  '/logos/logo-ca-tech-icon.svg',
 ]
 
 // ── Install : pré-cache des ressources essentielles ──

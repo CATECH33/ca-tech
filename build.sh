@@ -18,6 +18,9 @@ for f in \
   creation-site-internet-paris.html agence-ia-dijon.html agence-ia-lyon.html \
   automatisation-pme.html maintenance-informatique-pme.html; do
   cp dist/index.html $f
+  # Vite transforme href="/site.webmanifest" en href="/dist/site.webmanifest" à cause du base:/dist/
+  # Chrome Android utilise ce chemin pour vérifier l'installabilité — il doit pointer à la racine
+  sed -i 's|href="/dist/site.webmanifest"|href="/site.webmanifest"|g' $f
 done
 
 # Copie index.html du manager pour le fallback
