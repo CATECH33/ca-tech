@@ -21,8 +21,5 @@ jobs:
       - name: Installer les dépendances
         run: npm ci
 
-      - name: Installer Chromium (Playwright)
-        run: npx playwright install chromium --with-deps
-
-      - name: Lancer les tests
-        run: npm test
+      - name: Lancer les tests unitaires
+        run: node test-all.js
