@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Outlet, Link } from 'react-router-dom'
 import Header from './components/layout/Header'
 import Footer from './components/Footer.jsx'
+import PwaInstallBanner from './components/PwaInstallBanner'
 import Home from './pages/Home.jsx'
 import Services from './pages/Services.jsx'
 import Loic from './pages/Loic.jsx'
@@ -19,6 +20,7 @@ function Layout() {
       <Header />
       <Outlet />
       <Footer />
+      <PwaInstallBanner />
     </>
   )
 }
