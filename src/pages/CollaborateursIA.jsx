@@ -36,12 +36,14 @@ const CAI_FAQ = [
 ]
 
 const CAI_RELATED = [
-  { href: '/loic',              label: 'Tester Loïc maintenant',  icon: '💬', desc: 'Démo gratuite en 30 secondes' },
-  { href: '/automatisations',   label: 'Automatisations',         icon: '⚙️', desc: 'N8N · Make · Zapier' },
-  { href: '/realisations',      label: 'Études de cas IA',        icon: '🏆', desc: 'ROI mesuré sur nos missions' },
-  { href: '/tarifs',            label: 'Tarifs collaborateurs IA', icon: '💰', desc: 'À partir de 290 €/mois' },
-  { href: '/services',          label: 'Tous nos services',       icon: '✨', desc: 'Web, IA, automatisations' },
-  { href: '/agence-ia-dijon',   label: 'Agence IA Dijon',         icon: '📍', desc: 'Solutions IA locales' },
+  { href: '/loic',                    label: 'Tester Loïc maintenant',     icon: '💬', desc: 'Démo gratuite en 30 secondes' },
+  { href: '/automatisations',         label: 'Automatisations',            icon: '⚙️', desc: 'N8N · Make · Zapier' },
+  { href: '/realisations',            label: 'Études de cas IA',           icon: '🏆', desc: 'ROI mesuré sur nos missions' },
+  { href: '/tarifs',                  label: 'Tarifs collaborateurs IA',   icon: '💰', desc: 'À partir de 290 €/mois' },
+  { href: '/creation-site-vitrine',   label: 'Création de site vitrine',   icon: '🌐', desc: 'Site pro livré en 3 semaines' },
+  { href: '/creation-site-ecommerce', label: 'Boutique e-commerce',        icon: '🛒', desc: 'Vente en ligne clé en main' },
+  { href: '/maintenance-site-web',    label: 'Maintenance de site web',    icon: '🔧', desc: 'À partir de 49 €/mois' },
+  { href: '/agence-ia-dijon',         label: 'Agence IA Dijon',            icon: '📍', desc: 'Solutions IA locales' },
 ]
 
 /* ══════════════════════════════════════════════════

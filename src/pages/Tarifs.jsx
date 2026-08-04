@@ -15,12 +15,14 @@ const TARIFS_ADVICE = [
 ]
 
 const TARIFS_RELATED = [
-  { href: '/services',          label: 'Tous nos services',      icon: '✨', desc: '13 services web & IA' },
-  { href: '/realisations',      label: 'Nos réalisations',       icon: '🏆', desc: 'Résultats clients mesurés' },
-  { href: '/catalogue',         label: 'Catalogue de solutions', icon: '📋', desc: 'Parcourez toutes nos offres' },
-  { href: '/collaborateurs-ia', label: 'Collaborateurs IA',      icon: '🤖', desc: 'À partir de 290 €/mois' },
-  { href: '/automatisations',   label: 'Automatisations',        icon: '⚙️', desc: 'ROI ×4 en 3 mois' },
-  { href: '/loic',              label: "Tester avant d'acheter", icon: '💬', desc: 'Démo gratuite en 30 secondes' },
+  { href: '/creation-site-vitrine',   label: 'Création de site vitrine',   icon: '🌐', desc: 'Site pro livré en 3 semaines' },
+  { href: '/creation-site-ecommerce', label: 'Boutique e-commerce',        icon: '🛒', desc: 'Vente en ligne clé en main' },
+  { href: '/collaborateurs-ia',       label: 'Collaborateurs IA',          icon: '🤖', desc: 'À partir de 290 €/mois' },
+  { href: '/automatisations',         label: 'Automatisations',            icon: '⚙️', desc: 'ROI ×4 en 3 mois' },
+  { href: '/maintenance-site-web',    label: 'Maintenance de site web',    icon: '🔧', desc: 'À partir de 49 €/mois' },
+  { href: '/realisations',            label: 'Nos réalisations',           icon: '🏆', desc: 'Résultats clients mesurés' },
+  { href: '/catalogue',               label: 'Catalogue de solutions',     icon: '📋', desc: 'Parcourez toutes nos offres' },
+  { href: '/loic',                    label: "Tester avant d'acheter",     icon: '💬', desc: 'Démo gratuite en 30 secondes' },
 ]
 
 const TARIFS_COMPARE_COLS = [

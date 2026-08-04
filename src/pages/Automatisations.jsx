@@ -14,12 +14,14 @@ const U = id => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=
    14 SERVICES MÉTIER
 ══════════════════════════════════════════════════════════ */
 const AUTO_RELATED = [
-  { href: '/collaborateurs-ia', label: 'Collaborateurs IA',    icon: '🤖', desc: '6 agents autonomes 24h/24' },
-  { href: '/realisations',      label: 'Études de cas',        icon: '🏆', desc: 'ROI ×4 mesuré sur missions réelles' },
-  { href: '/tarifs',            label: 'Tarifs',               icon: '💰', desc: 'À partir de 800 €' },
-  { href: '/services',          label: 'Tous nos services',    icon: '✨', desc: 'Web, IA, CRM, SEO...' },
-  { href: '/automatisation-pme',label: 'Automatisation PME',   icon: '🏭', desc: 'Guide complet pour PME' },
-  { href: '/contact',           label: 'Diagnostic gratuit',   icon: '→',  desc: 'Identifiez vos 3 processus clés' },
+  { href: '/collaborateurs-ia',       label: 'Collaborateurs IA',          icon: '🤖', desc: '6 agents autonomes 24h/24' },
+  { href: '/realisations',            label: 'Études de cas',              icon: '🏆', desc: 'ROI ×4 mesuré sur missions réelles' },
+  { href: '/tarifs',                  label: 'Tarifs',                     icon: '💰', desc: 'À partir de 800 €' },
+  { href: '/creation-site-vitrine',   label: 'Création de site vitrine',   icon: '🌐', desc: 'Site pro livré en 3 semaines' },
+  { href: '/creation-site-ecommerce', label: 'Boutique e-commerce',        icon: '🛒', desc: 'Vente en ligne clé en main' },
+  { href: '/maintenance-site-web',    label: 'Maintenance de site web',    icon: '🔧', desc: 'À partir de 49 €/mois' },
+  { href: '/automatisation-pme',      label: 'Automatisation PME',         icon: '🏭', desc: 'Guide complet pour PME' },
+  { href: '/contact',                 label: 'Diagnostic gratuit',         icon: '→',  desc: 'Identifiez vos 3 processus clés' },
 ]
 
 const SERVICES = [
