@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════
-   COOKIE BANNER — CA-TECH Premium RGPD
+   COOKIE BANNER — CA-TECH Premium RGPD v2
    ══════════════════════════════════════════ */
 
 /* ── Bannière principale ── */
@@ -23,9 +23,7 @@
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border-top: 1px solid rgba(0, 102, 255, 0.2);
-  box-shadow:
-    0 -8px 40px rgba(0, 0, 0, 0.35),
-    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
   display: flex;
   align-items: center;
   gap: 32px;
@@ -33,10 +31,7 @@
   flex-wrap: wrap;
 }
 
-.ck-text {
-  flex: 1;
-  min-width: 260px;
-}
+.ck-text  { flex: 1; min-width: 260px; }
 
 .ck-title {
   font-size: 15px;
@@ -79,23 +74,19 @@
 .ck-btn:hover  { filter: brightness(1.08); transform: translateY(-1px); }
 .ck-btn:active { transform: translateY(0); filter: brightness(0.95); }
 
-/* Tout accepter — bleu primaire */
 .ck-btn-primary {
   background: linear-gradient(135deg, #0066FF, #0052cc);
   color: #fff;
   box-shadow: 0 2px 12px rgba(0, 102, 255, 0.35);
 }
 
-/* Tout refuser — même poids visuel, fond clair neutre */
 .ck-btn-secondary {
   background: rgba(255, 255, 255, 0.12);
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.18);
 }
-
 .ck-btn-secondary:hover { background: rgba(255, 255, 255, 0.2); filter: none; }
 
-/* Personnaliser — ghost discret */
 .ck-btn-ghost {
   background: transparent;
   color: rgba(255, 255, 255, 0.45);
@@ -103,10 +94,9 @@
   font-size: 13px;
   font-weight: 500;
 }
-
 .ck-btn-ghost:hover { color: rgba(255, 255, 255, 0.75); filter: none; transform: none; }
 
-/* ── Modal préférences ── */
+/* ── Modal overlay ── */
 .ck-modal-overlay {
   position: fixed;
   inset: 0;
@@ -126,10 +116,13 @@
   to   { opacity: 1; }
 }
 
+/* ── Modal ── */
 .ck-modal {
   position: relative;
   width: 100%;
-  max-width: 540px;
+  max-width: 580px;
+  max-height: 85vh;
+  overflow-y: auto;
   background: rgba(10, 37, 64, 0.97);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
@@ -137,11 +130,15 @@
   border-bottom: none;
   border-radius: 20px 20px 0 0;
   padding: 32px 28px 28px;
-  box-shadow:
-    0 -16px 64px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  box-shadow: 0 -16px 64px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
   animation: ck-modal-up 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 102, 255, 0.4) transparent;
 }
+
+.ck-modal::-webkit-scrollbar { width: 4px; }
+.ck-modal::-webkit-scrollbar-track { background: transparent; }
+.ck-modal::-webkit-scrollbar-thumb { background: rgba(0, 102, 255, 0.4); border-radius: 2px; }
 
 @keyframes ck-modal-up {
   from { opacity: 0; transform: translateY(40px); }
@@ -153,8 +150,6 @@
   .ck-modal {
     border-radius: 20px;
     border: 1px solid rgba(0, 102, 255, 0.2);
-    max-height: 90vh;
-    overflow-y: auto;
   }
 }
 
@@ -196,7 +191,7 @@
 .ck-cats {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   margin-bottom: 24px;
 }
 
@@ -204,15 +199,23 @@
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 12px;
-  padding: 14px 16px;
+  padding: 14px 16px 10px;
+  transition: border-color 0.2s;
+}
+
+.ck-cat--open {
+  border-color: rgba(0, 102, 255, 0.25);
+  background: rgba(0, 102, 255, 0.04);
 }
 
 .ck-cat-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 16px;
   justify-content: space-between;
 }
+
+.ck-cat-info { flex: 1; }
 
 .ck-cat-label {
   font-size: 13.5px;
@@ -228,6 +231,49 @@
   line-height: 1.5;
 }
 
+/* ── Expand button ── */
+.ck-cat-expand-btn {
+  background: none;
+  border: none;
+  color: rgba(0, 102, 255, 0.7);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 6px 0 0;
+  letter-spacing: 0.01em;
+  transition: color 0.15s;
+  display: block;
+}
+.ck-cat-expand-btn:hover { color: #0066FF; }
+
+/* ── Détails accordéon ── */
+.ck-cat-details {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.ck-detail-row {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.ck-detail-key {
+  flex-shrink: 0;
+  width: 80px;
+  color: rgba(255, 255, 255, 0.35);
+  font-weight: 500;
+}
+
+.ck-detail-val {
+  color: rgba(255, 255, 255, 0.6);
+}
+
 /* ── Toggle switch ── */
 .ck-toggle {
   flex-shrink: 0;
@@ -240,6 +286,7 @@
   position: relative;
   transition: background 0.2s, border-color 0.2s;
   padding: 0;
+  margin-top: 2px;
 }
 
 .ck-toggle.on {
@@ -247,10 +294,7 @@
   border-color: #0066FF;
 }
 
-.ck-toggle.required {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+.ck-toggle.required { opacity: 0.5; cursor: not-allowed; }
 
 .ck-toggle-thumb {
   position: absolute;
@@ -264,19 +308,44 @@
   box-shadow: 0 1px 4px rgba(0,0,0,0.3);
 }
 
-.ck-toggle.on .ck-toggle-thumb {
-  transform: translateX(20px);
-}
+.ck-toggle.on .ck-toggle-thumb { transform: translateX(20px); }
 
 /* ── Actions modal ── */
 .ck-modal-actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
-.ck-modal-actions .ck-btn-primary {
-  flex: 1;
+.ck-modal-actions .ck-btn-primary { flex: 1; min-width: 180px; }
+
+/* ── Bouton flottant ── */
+.ck-float-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 9990;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(10, 37, 64, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 102, 255, 0.25);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+  padding: 0;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+}
+
+.ck-float-btn:hover {
+  transform: scale(1.12);
+  box-shadow: 0 6px 28px rgba(0, 102, 255, 0.35);
 }
 
 /* ── Responsive mobile ── */
@@ -296,10 +365,10 @@
     gap: 8px;
   }
 
-  .ck-btn-ghost {
-    grid-column: 1 / -1;
-    text-align: center;
-  }
+  .ck-btn-ghost { grid-column: 1 / -1; text-align: center; }
 
-  .ck-modal { padding: 24px 20px 24px; }
+  .ck-modal { padding: 24px 16px 24px; }
+
+  .ck-modal-actions { flex-direction: column; }
+  .ck-modal-actions .ck-btn-primary { min-width: unset; }
 }
