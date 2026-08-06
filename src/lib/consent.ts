@@ -87,11 +87,51 @@ function injectAds() {
   document.head.appendChild(s)
 }
 
+// ── Activation des scripts déclaratifs bloqués ────────────────────────────────
+//
+// Usage dans index.html :
+//   <script type="text/plain" data-consent="statistics" data-src="https://..."></script>
+//   <script type="text/plain" data-consent="marketing">/* inline code */</script>
+//
+// Le navigateur ignore les scripts type="text/plain".
+// Cette fonction les clone en vrais <script> après consentement.
+
+function activateConsentScripts(choices: ConsentChoices): void {
+  const granted = new Set<string>([
+    ...(choices.statistics      ? ['statistics']      : []),
+    ...(choices.marketing       ? ['marketing']       : []),
+    ...(choices.personalization ? ['personalization'] : []),
+    ...(choices.functional      ? ['functional']      : []),
+  ])
+
+  document
+    .querySelectorAll<HTMLScriptElement>('script[type="text/plain"][data-consent]')
+    .forEach(blocked => {
+      if (blocked.dataset.activated === 'true') return
+      const cat = blocked.getAttribute('data-consent')
+      if (!cat || !granted.has(cat)) return
+
+      const live = document.createElement('script')
+      Array.from(blocked.attributes).forEach(attr => {
+        if (!['type', 'data-consent', 'data-src'].includes(attr.name)) {
+          live.setAttribute(attr.name, attr.value)
+        }
+      })
+      const src = blocked.getAttribute('data-src')
+      if (src) live.src = src
+      else live.textContent = blocked.textContent
+
+      blocked.dataset.activated = 'true'
+      blocked.parentNode?.insertBefore(live, blocked.nextSibling)
+    })
+}
+
 // ── API publique ──────────────────────────────────────────────────────────────
 
 /**
- * Applique les signaux Consent Mode v2 et charge les scripts si consentement
- * donné. Appelé à chaque choix utilisateur (acceptAll / refuseAll / saveCustom).
+ * Applique les signaux Consent Mode v2, charge les scripts Google et active
+ * tous les scripts déclaratifs bloqués correspondant aux catégories accordées.
+ * Appelé à chaque choix utilisateur (acceptAll / refuseAll / saveCustom).
  */
 export function applyConsent(choices: ConsentChoices) {
   const signals = toSignals(choices)
@@ -99,6 +139,7 @@ export function applyConsent(choices: ConsentChoices) {
 
   if (choices.statistics) injectGA4()
   if (choices.marketing)  injectAds()
+  activateConsentScripts(choices)
 }
 
 /**

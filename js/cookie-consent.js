@@ -65,7 +65,46 @@
     };
   }
 
-  // ── 4. Application des signaux ──
+  // ── 4. Activation des scripts déclaratifs bloqués ──
+  //
+  // Usage dans les pages HTML :
+  //   <script type="text/plain" data-consent="statistics" data-src="https://..."></script>
+  //   <script type="text/plain" data-consent="marketing">/* inline code */</script>
+  //
+  // Le navigateur ignore type="text/plain".
+  // Cette fonction clone les scripts bloqués en vrais <script> après consentement.
+
+  function activateConsentScripts(prefs) {
+    var granted = [];
+    if (prefs.statistics)      granted.push('statistics');
+    if (prefs.marketing)       granted.push('marketing');
+    if (prefs.personalization) granted.push('personalization');
+    if (prefs.functional)      granted.push('functional');
+
+    var blocked = document.querySelectorAll('script[type="text/plain"][data-consent]');
+    for (var i = 0; i < blocked.length; i++) {
+      var s = blocked[i];
+      if (s.getAttribute('data-activated') === 'true') continue;
+      var cat = s.getAttribute('data-consent');
+      if (granted.indexOf(cat) === -1) continue;
+
+      var live = document.createElement('script');
+      for (var j = 0; j < s.attributes.length; j++) {
+        var a = s.attributes[j];
+        if (a.name !== 'type' && a.name !== 'data-consent' && a.name !== 'data-src') {
+          live.setAttribute(a.name, a.value);
+        }
+      }
+      var src = s.getAttribute('data-src');
+      if (src) live.src = src;
+      else live.textContent = s.textContent;
+
+      s.setAttribute('data-activated', 'true');
+      s.parentNode.insertBefore(live, s.nextSibling);
+    }
+  }
+
+  // ── 5. Application des signaux ──
 
   function applyConsent(prefs) {
     gtag('consent', 'update', {
@@ -75,9 +114,12 @@
       ad_personalization: prefs.personalization  ? 'granted' : 'denied',
     });
     if (prefs.statistics) injectGA4();
+    // Active les scripts déclaratifs — seulement si le DOM est prêt
+    if (document.readyState !== 'loading') activateConsentScripts(prefs);
   }
 
-  // ── 5. Application immédiate si consentement déjà stocké ──
+  // ── 6. Application immédiate si consentement déjà stocké ──
+  // (GA4 s'injecte ici ; activateConsentScripts attend DOMContentLoaded via init())
 
   var _stored = loadStored();
   if (_stored) applyConsent(_stored);
@@ -368,7 +410,7 @@
     hideBanner(); closeModal(); showFloat();
   }
 
-  // ── 8. Init après DOM ready ──
+  // ── 9. Init après DOM ready ──
 
   function init() {
     injectStyles();
@@ -377,6 +419,7 @@
       showBanner();
     } else {
       _prefs = { statistics: !!s.statistics, marketing: !!s.marketing, personalization: !!s.personalization, functional: !!s.functional };
+      activateConsentScripts(_prefs);  // DOM prêt ici — active les scripts bloqués
       showFloat();
     }
 
