@@ -161,55 +161,68 @@
   ];
 
   var CSS = `
-/* ── Cookie Consent CA-TECH ── */
-.ck-banner{position:fixed;bottom:0;left:0;right:0;z-index:9998;padding:0 0 env(safe-area-inset-bottom,0);animation:ck-slide-up .45s cubic-bezier(.16,1,.3,1) both}
-@keyframes ck-slide-up{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
-.ck-inner{background:rgba(10,37,64,.92);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-top:1px solid rgba(0,102,255,.2);box-shadow:0 -8px 40px rgba(0,0,0,.35),0 0 0 1px rgba(255,255,255,.04) inset;display:flex;align-items:center;gap:32px;padding:20px 32px;flex-wrap:wrap}
-.ck-text{flex:1;min-width:260px}
-.ck-title{font-size:15px;font-weight:700;color:#fff;margin:0 0 6px;letter-spacing:-.01em}
-.ck-body{font-size:13px;color:rgba(255,255,255,.6);margin:0;line-height:1.55;max-width:640px}
-.ck-actions{display:flex;gap:10px;flex-shrink:0;align-items:center;flex-wrap:wrap}
-.ck-btn{border:none;border-radius:10px;font-size:13.5px;font-weight:600;cursor:pointer;padding:9px 20px;white-space:nowrap;transition:filter .15s,transform .1s,background .15s;letter-spacing:-.01em;font-family:inherit}
-.ck-btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
-.ck-btn:active{transform:translateY(0);filter:brightness(.95)}
-.ck-btn-primary{background:linear-gradient(135deg,#0066FF,#0052cc);color:#fff;box-shadow:0 2px 12px rgba(0,102,255,.35)}
-.ck-btn-secondary{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.18)}
-.ck-btn-secondary:hover{background:rgba(255,255,255,.2);filter:none}
-.ck-btn-ghost{background:transparent;color:rgba(255,255,255,.45);padding:9px 12px;font-size:13px;font-weight:500}
-.ck-btn-ghost:hover{color:rgba(255,255,255,.75);filter:none;transform:none}
-.ck-modal-overlay{position:fixed;inset:0;z-index:9999;background:rgba(5,13,26,.75);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center;padding:0 0 env(safe-area-inset-bottom,0);animation:ck-fade-in .25s ease both}
-@keyframes ck-fade-in{from{opacity:0}to{opacity:1}}
-.ck-modal{position:relative;width:100%;max-width:580px;max-height:85vh;overflow-y:auto;background:rgba(10,37,64,.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(0,102,255,.2);border-bottom:none;border-radius:20px 20px 0 0;padding:32px 28px 28px;box-shadow:0 -16px 64px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.04) inset;animation:ck-modal-up .38s cubic-bezier(.16,1,.3,1) both;scrollbar-width:thin;scrollbar-color:rgba(0,102,255,.4) transparent}
-.ck-modal::-webkit-scrollbar{width:4px}.ck-modal::-webkit-scrollbar-track{background:transparent}.ck-modal::-webkit-scrollbar-thumb{background:rgba(0,102,255,.4);border-radius:2px}
-@keyframes ck-modal-up{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
-@media(min-width:640px){.ck-modal-overlay{align-items:center;padding:24px}.ck-modal{border-radius:20px;border:1px solid rgba(0,102,255,.2)}}
-.ck-modal-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:50%;width:30px;height:30px;color:rgba(255,255,255,.5);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,color .15s;padding:0;font-family:inherit}
-.ck-modal-close:hover{background:rgba(255,255,255,.14);color:#fff}
-.ck-modal-title{font-size:17px;font-weight:700;color:#fff;margin:0 0 6px;letter-spacing:-.01em}
-.ck-modal-sub{font-size:13px;color:rgba(255,255,255,.5);margin:0 0 24px;line-height:1.5}
-.ck-cats{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
-.ck-cat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:14px 16px 10px;transition:border-color .2s}
-.ck-cat--open{border-color:rgba(0,102,255,.25);background:rgba(0,102,255,.04)}
-.ck-cat-header{display:flex;align-items:flex-start;gap:16px;justify-content:space-between}
+/* ── Cookie Consent CA-TECH v3 ── */
+.ck-banner{position:fixed;bottom:24px;left:24px;z-index:9998;max-width:360px;width:calc(100% - 48px);animation:ck-appear .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes ck-appear{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){.ck-banner,.ck-modal-overlay,.ck-modal,.ck-float-btn{animation:none!important;transition:none!important}}
+.ck-inner{background:rgba(5,13,26,.96);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(255,255,255,.08);border-top:1px solid rgba(0,102,255,.22);border-radius:16px;box-shadow:0 0 0 1px rgba(255,255,255,.03) inset,0 8px 32px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.3);padding:18px 18px 14px;display:flex;flex-direction:column;gap:12px}
+.ck-header{display:flex;align-items:center;gap:9px}
+.ck-icon{flex-shrink:0;width:28px;height:28px;border-radius:8px;background:rgba(0,102,255,.15);border:1px solid rgba(0,102,255,.2);display:flex;align-items:center;justify-content:center;color:#4d9fff}
+.ck-icon svg{width:13px;height:13px}
+.ck-title{font-size:13px;font-weight:700;color:#fff;margin:0;letter-spacing:-.01em;line-height:1.3}
+.ck-body{font-size:12px;color:rgba(255,255,255,.52);margin:0;line-height:1.65}
+.ck-body a{color:rgba(255,255,255,.65);text-decoration:underline;text-decoration-color:rgba(255,255,255,.2);text-underline-offset:2px;transition:color .15s}
+.ck-body a:hover{color:#fff;text-decoration-color:rgba(255,255,255,.5)}
+.ck-actions{display:flex;flex-direction:column;gap:7px}
+.ck-actions-row{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.ck-btn{border:none;border-radius:9px;font-size:12.5px;font-weight:600;cursor:pointer;padding:8px 14px;white-space:nowrap;transition:filter .15s,transform .1s;letter-spacing:-.01em;line-height:1.3;font-family:inherit}
+.ck-btn:focus-visible{outline:2px solid #0066ff;outline-offset:2px}
+.ck-btn:hover{filter:brightness(1.1)}
+.ck-btn:active{transform:scale(.97);filter:brightness(.95)}
+.ck-btn-primary{background:linear-gradient(135deg,#1a7aff,#0052cc);color:#fff;box-shadow:0 1px 8px rgba(0,102,255,.4),0 0 0 1px rgba(255,255,255,.08) inset}
+.ck-btn-secondary{background:rgba(255,255,255,.07);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.1)}
+.ck-btn-secondary:hover{background:rgba(255,255,255,.12);filter:none}
+.ck-btn-link{background:none;border:none;color:rgba(255,255,255,.35);font-size:11.5px;font-weight:500;cursor:pointer;padding:4px 0;text-align:center;transition:color .15s;letter-spacing:0;font-family:inherit;display:block;width:100%}
+.ck-btn-link:hover{color:rgba(255,255,255,.65);filter:none;transform:none}
+.ck-modal-overlay{position:fixed;inset:0;z-index:9999;background:rgba(2,8,18,.7);backdrop-filter:blur(8px) saturate(140%);-webkit-backdrop-filter:blur(8px) saturate(140%);display:flex;align-items:flex-end;justify-content:center;padding-bottom:env(safe-area-inset-bottom,0);animation:ck-fade .22s ease both}
+@keyframes ck-fade{from{opacity:0}to{opacity:1}}
+@media(min-width:640px){.ck-modal-overlay{align-items:center;padding:20px}}
+.ck-modal{position:relative;width:100%;max-width:520px;max-height:88vh;overflow-y:auto;background:#06111f;border:1px solid rgba(255,255,255,.07);border-bottom:none;border-radius:20px 20px 0 0;padding:28px 24px 24px;box-shadow:0 -20px 60px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.03) inset;animation:ck-modal-up .4s cubic-bezier(.16,1,.3,1) both;scrollbar-width:thin;scrollbar-color:rgba(0,102,255,.35) transparent}
+.ck-modal::-webkit-scrollbar{width:3px}.ck-modal::-webkit-scrollbar-track{background:transparent}.ck-modal::-webkit-scrollbar-thumb{background:rgba(0,102,255,.35);border-radius:2px}
+@keyframes ck-modal-up{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
+@media(min-width:640px){.ck-modal{border-radius:20px;border:1px solid rgba(255,255,255,.08);border-top:1px solid rgba(0,102,255,.18)}}
+.ck-modal-close{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:50%;width:28px;height:28px;color:rgba(255,255,255,.45);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,color .15s;padding:0;font-family:inherit}
+.ck-modal-close:hover{background:rgba(255,255,255,.12);color:#fff}
+.ck-modal-close:focus-visible{outline:2px solid #0066ff;outline-offset:2px}
+.ck-modal-title{font-size:16px;font-weight:700;color:#fff;margin:0 0 5px;letter-spacing:-.02em}
+.ck-modal-sub{font-size:12.5px;color:rgba(255,255,255,.42);margin:0 0 20px;line-height:1.6}
+.ck-cats{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.ck-cat{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:13px 14px 9px;transition:border-color .2s,background .2s}
+.ck-cat--open{border-color:rgba(0,102,255,.22);background:rgba(0,102,255,.03)}
+.ck-cat-header{display:flex;align-items:flex-start;gap:14px;justify-content:space-between}
 .ck-cat-info{flex:1}
-.ck-cat-label{font-size:13.5px;font-weight:600;color:#fff;margin:0 0 3px}
-.ck-cat-desc{font-size:12px;color:rgba(255,255,255,.45);margin:0;line-height:1.5}
-.ck-cat-expand-btn{background:none;border:none;color:rgba(0,102,255,.7);font-size:11px;font-weight:500;cursor:pointer;padding:6px 0 0;letter-spacing:.01em;transition:color .15s;display:block;font-family:inherit}
-.ck-cat-expand-btn:hover{color:#0066FF}
-.ck-cat-details{margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;gap:7px}
-.ck-detail-row{display:flex;gap:12px;font-size:12px;line-height:1.5}
-.ck-detail-key{flex-shrink:0;width:80px;color:rgba(255,255,255,.35);font-weight:500}
-.ck-detail-val{color:rgba(255,255,255,.6)}
-.ck-toggle{flex-shrink:0;width:44px;height:24px;border-radius:12px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15);cursor:pointer;position:relative;transition:background .2s,border-color .2s;padding:0;margin-top:2px}
-.ck-toggle.on{background:linear-gradient(135deg,#0066FF,#0052cc);border-color:#0066FF}
-.ck-toggle.required{opacity:.5;cursor:not-allowed}
-.ck-toggle-thumb{position:absolute;top:2px;left:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:transform .2s cubic-bezier(.16,1,.3,1);box-shadow:0 1px 4px rgba(0,0,0,.3);pointer-events:none}
-.ck-toggle.on .ck-toggle-thumb{transform:translateX(20px)}
-.ck-modal-actions{display:flex;gap:8px;flex-wrap:wrap}
-.ck-modal-actions .ck-btn-primary{flex:1;min-width:180px}
-.ck-float-btn{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:20px;z-index:9990;width:40px;height:40px;border-radius:50%;background:rgba(10,37,64,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(0,102,255,.25);box-shadow:0 4px 20px rgba(0,0,0,.3);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:transform .2s,box-shadow .2s;padding:0}
-.ck-float-btn:hover{transform:scale(1.12);box-shadow:0 6px 28px rgba(0,102,255,.35)}
-@media(max-width:640px){.ck-inner{padding:16px 20px 20px;gap:16px;flex-direction:column;align-items:stretch}.ck-text{min-width:unset}.ck-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.ck-btn-ghost{grid-column:1/-1;text-align:center}.ck-modal{padding:24px 16px 24px}.ck-modal-actions{flex-direction:column}.ck-modal-actions .ck-btn-primary{min-width:unset}}
+.ck-cat-label{font-size:13px;font-weight:600;color:#fff;margin:0 0 3px;letter-spacing:-.01em}
+.ck-cat-desc{font-size:11.5px;color:rgba(255,255,255,.4);margin:0;line-height:1.55}
+.ck-cat-expand-btn{background:none;border:none;color:rgba(0,102,255,.65);font-size:11px;font-weight:500;cursor:pointer;padding:5px 0 0;transition:color .15s;display:block;font-family:inherit}
+.ck-cat-expand-btn:hover{color:#4d9fff}
+.ck-cat-details{margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.05);display:flex;flex-direction:column;gap:6px}
+.ck-detail-row{display:flex;gap:10px;font-size:11.5px;line-height:1.5}
+.ck-detail-key{flex-shrink:0;width:72px;color:rgba(255,255,255,.28);font-weight:500}
+.ck-detail-val{color:rgba(255,255,255,.55)}
+.ck-toggle{flex-shrink:0;width:40px;height:22px;border-radius:11px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);cursor:pointer;position:relative;transition:background .22s,border-color .22s;padding:0;margin-top:1px}
+.ck-toggle.on{background:#0066FF;border-color:#0066FF}
+.ck-toggle.required{opacity:.45;cursor:not-allowed}
+.ck-toggle:focus-visible{outline:2px solid #4d9fff;outline-offset:3px}
+.ck-toggle-thumb{position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .22s cubic-bezier(.16,1,.3,1);box-shadow:0 1px 3px rgba(0,0,0,.35)}
+.ck-toggle.on .ck-toggle-thumb{transform:translateX(18px)}
+.ck-modal-actions{display:flex;flex-direction:column;gap:7px}
+.ck-modal-actions .ck-btn-primary{padding:10px 14px;font-size:13px}
+.ck-modal-actions-row{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.ck-float-btn{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:20px;z-index:9990;display:flex;align-items:center;gap:7px;height:36px;padding:0 12px 0 10px;border-radius:18px;background:rgba(5,13,26,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.09);box-shadow:0 2px 12px rgba(0,0,0,.35);cursor:pointer;color:rgba(255,255,255,.5);font-size:11.5px;font-weight:500;transition:border-color .2s,box-shadow .2s,color .2s;font-family:inherit}
+.ck-float-btn:hover{border-color:rgba(0,102,255,.35);box-shadow:0 4px 20px rgba(0,102,255,.2);color:rgba(255,255,255,.8)}
+.ck-float-btn:focus-visible{outline:2px solid #0066ff;outline-offset:2px}
+.ck-float-icon{width:14px;height:14px;color:rgba(0,102,255,.7);flex-shrink:0}
+@media(max-width:520px){.ck-banner{bottom:0;left:0;right:0;max-width:none;width:100%;animation:ck-appear-mobile .45s cubic-bezier(.16,1,.3,1) both}@keyframes ck-appear-mobile{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}.ck-inner{border-radius:16px 16px 0 0;border-bottom:none;padding:16px 16px calc(12px + env(safe-area-inset-bottom,0px))}.ck-modal{padding:22px 16px 20px}}
 `;
 
   function injectStyles() {
@@ -231,20 +244,25 @@
   var _modalEl  = null;
   var _floatEl  = null;
 
+  var SHIELD_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>';
+
   function buildBanner() {
     var el = document.createElement('div');
     el.className = 'ck-banner';
     el.setAttribute('role', 'region');
     el.setAttribute('aria-label', 'Gestion des cookies');
     el.innerHTML = '<div class="ck-inner">'
-      + '<div class="ck-text">'
-      + '<p class="ck-title">🍪 Respect de votre vie privée</p>'
-      + '<p class="ck-body">CA-TECH utilise des cookies pour améliorer votre expérience, mesurer l\'audience, personnaliser certains contenus et optimiser nos services. Vous gardez le contrôle de vos choix. <a href="/politique-de-confidentialite" style="color:inherit;text-decoration:underline">En savoir plus</a></p>'
+      + '<div class="ck-header">'
+      + '<div class="ck-icon" aria-hidden="true">' + SHIELD_SVG + '</div>'
+      + '<p class="ck-title">Respect de votre vie privée</p>'
       + '</div>'
+      + '<p class="ck-body">CA-TECH utilise des cookies pour améliorer votre expérience, mesurer l\'audience, personnaliser certains contenus et optimiser nos services. Vous gardez le contrôle de vos choix. <a href="/politique-de-confidentialite">En savoir plus</a></p>'
       + '<div class="ck-actions">'
+      + '<div class="ck-actions-row">'
       + '<button class="ck-btn ck-btn-primary" id="ck-accept-all">Tout accepter</button>'
       + '<button class="ck-btn ck-btn-secondary" id="ck-refuse-all">Tout refuser</button>'
-      + '<button class="ck-btn ck-btn-ghost" id="ck-customize">Personnaliser</button>'
+      + '</div>'
+      + '<button class="ck-btn-link" id="ck-customize">Personnaliser mes choix</button>'
       + '</div>'
       + '</div>';
     return el;
@@ -283,8 +301,10 @@
       + '<div class="ck-cats">' + catsHTML + '</div>'
       + '<div class="ck-modal-actions">'
       + '<button class="ck-btn ck-btn-primary" id="ck-save-custom">Enregistrer mes préférences</button>'
+      + '<div class="ck-modal-actions-row">'
       + '<button class="ck-btn ck-btn-secondary" id="ck-modal-refuse">Tout refuser</button>'
-      + '<button class="ck-btn ck-btn-ghost" id="ck-modal-accept">Tout accepter</button>'
+      + '<button class="ck-btn ck-btn-secondary" id="ck-modal-accept">Tout accepter</button>'
+      + '</div>'
       + '</div>'
       + '</div>';
     return el;
@@ -295,7 +315,7 @@
     el.className = 'ck-float-btn';
     el.setAttribute('aria-label', 'Gérer mes préférences cookies');
     el.title = 'Gérer mes cookies';
-    el.textContent = '🍪';
+    el.innerHTML = '<svg class="ck-float-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Cookies';
     return el;
   }
 

@@ -189,8 +189,10 @@ export default function CookieBanner() {
 
             <div className="ck-modal-actions">
               <button className="ck-btn ck-btn-primary" onClick={saveCustom}>Enregistrer mes préférences</button>
-              <button className="ck-btn ck-btn-secondary" onClick={() => refuseAll('modal')}>Tout refuser</button>
-              <button className="ck-btn ck-btn-ghost" onClick={() => acceptAll('modal')}>Tout accepter</button>
+              <div className="ck-modal-actions-row">
+                <button className="ck-btn ck-btn-secondary" onClick={() => refuseAll('modal')}>Tout refuser</button>
+                <button className="ck-btn ck-btn-secondary" onClick={() => acceptAll('modal')}>Tout accepter</button>
+              </div>
             </div>
           </div>
         </div>
@@ -200,18 +202,25 @@ export default function CookieBanner() {
       {visible && (
         <div className="ck-banner" role="region" aria-label="Gestion des cookies">
           <div className="ck-inner">
-            <div className="ck-text">
-              <p className="ck-title">🍪 Respect de votre vie privée</p>
-              <p className="ck-body">
-                CA-TECH utilise des cookies pour améliorer votre expérience, mesurer l'audience,
-                personnaliser certains contenus et optimiser nos services. Vous gardez le contrôle de vos choix.{' '}
-                <a href="/politique-de-confidentialite" style={{ color: 'inherit', textDecoration: 'underline' }}>En savoir plus</a>
-              </p>
+            <div className="ck-header">
+              <div className="ck-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+              </div>
+              <p className="ck-title">Respect de votre vie privée</p>
             </div>
+            <p className="ck-body">
+              CA-TECH utilise des cookies pour améliorer votre expérience, mesurer l'audience,
+              personnaliser certains contenus et optimiser nos services. Vous gardez le contrôle de vos choix.{' '}
+              <a href="/politique-de-confidentialite">En savoir plus</a>
+            </p>
             <div className="ck-actions">
-              <button className="ck-btn ck-btn-primary"   onClick={acceptAll}>Tout accepter</button>
-              <button className="ck-btn ck-btn-secondary" onClick={refuseAll}>Tout refuser</button>
-              <button className="ck-btn ck-btn-ghost"     onClick={() => setShowPrefs(true)}>Personnaliser</button>
+              <div className="ck-actions-row">
+                <button className="ck-btn ck-btn-primary"   onClick={() => acceptAll('banner')}>Tout accepter</button>
+                <button className="ck-btn ck-btn-secondary" onClick={() => refuseAll('banner')}>Tout refuser</button>
+              </div>
+              <button className="ck-btn-link" onClick={() => setShowPrefs(true)}>Personnaliser mes choix</button>
             </div>
           </div>
         </div>
@@ -225,7 +234,10 @@ export default function CookieBanner() {
           aria-label="Gérer mes préférences cookies"
           title="Gérer mes cookies"
         >
-          🍪
+          <svg className="ck-float-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          Cookies
         </button>
       )}
     </>
