@@ -143,6 +143,7 @@
     +     '<li><a href="/faq.html">FAQ</a></li>'
     +     '<li><a href="/mentions-legales.html">Mentions légales</a></li>'
     +     '<li><a href="/politique-de-confidentialite.html">Confidentialité</a></li>'
+    +     '<li><a href="/gestion-des-cookies.html">Gestion des cookies</a></li>'
     +   '</ul>'
     + '</div>'
 

@@ -114,8 +114,9 @@ export default function Footer() {
       <div className="f-bottom">
         <span>© 2026 CA-TECH — Tous droits réservés</span>
         <div style={{ display: 'flex', gap: '1.5rem' }}>
-          <a href="/contact" style={{ color: 'rgba(255,255,255,.35)', textDecoration: 'none', fontSize: '.72rem' }}>Mentions légales</a>
-          <a href="/contact" style={{ color: 'rgba(255,255,255,.35)', textDecoration: 'none', fontSize: '.72rem' }}>Confidentialité</a>
+          <a href="/mentions-legales" style={{ color: 'rgba(255,255,255,.35)', textDecoration: 'none', fontSize: '.72rem' }}>Mentions légales</a>
+          <a href="/politique-de-confidentialite" style={{ color: 'rgba(255,255,255,.35)', textDecoration: 'none', fontSize: '.72rem' }}>Confidentialité</a>
+          <a href="/gestion-des-cookies" style={{ color: 'rgba(255,255,255,.35)', textDecoration: 'none', fontSize: '.72rem' }}>Gestion des cookies</a>
           <a href="/tarifs" style={{ color: 'rgba(255,255,255,.35)', textDecoration: 'none', fontSize: '.72rem' }}>CGV</a>
         </div>
       </div>

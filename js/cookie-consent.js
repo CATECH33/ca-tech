@@ -413,17 +413,19 @@
   // ── 9. Init après DOM ready ──
 
   function init() {
+    // Sur la page dédiée /gestion-des-cookies, ne pas afficher la bannière ni le float
+    var noUi = document.body && document.body.hasAttribute('data-no-cookie-banner');
+
     injectStyles();
     var s = loadStored();
     if (!s) {
-      showBanner();
+      if (!noUi) showBanner();
     } else {
       _prefs = { statistics: !!s.statistics, marketing: !!s.marketing, personalization: !!s.personalization, functional: !!s.functional };
-      activateConsentScripts(_prefs);  // DOM prêt ici — active les scripts bloqués
-      showFloat();
+      activateConsentScripts(_prefs);
+      if (!noUi) showFloat();
     }
 
-    // Écoute l'événement custom (bouton flottant footer, etc.)
     window.addEventListener('ca-tech:open-cookie-prefs', function () { openModal(); });
   }
 
@@ -432,4 +434,15 @@
   } else {
     init();
   }
+
+  // ── 10. API publique (utilisée par /gestion-des-cookies) ──
+
+  window.CATechConsent = {
+    apply:     applyConsent,
+    save:      saveConsent,
+    load:      loadStored,
+    acceptAll: acceptAll,
+    refuseAll: refuseAll,
+  };
+
 })();

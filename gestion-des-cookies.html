@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <script src="/js/cookie-consent.js"></script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestion des cookies | CA-TECH</title>
+  <meta name="description" content="Gérez vos préférences de cookies sur CA-TECH. Acceptez, refusez ou personnalisez chaque catégorie. Vos choix sont appliqués immédiatement."/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="canonical" href="https://www.ca-tech.fr/gestion-des-cookies"/>
+  <meta property="og:title" content="Gestion des cookies | CA-TECH"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://www.ca-tech.fr/gestion-des-cookies"/>
+  <meta property="og:site_name" content="CA-TECH"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
+  <style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --blue:#0066FF;--blue-dk:#0A2540;--cyan:#00D4FF;
+    --white:#fff;--dark:#050d1a;--dark2:#0a1628;
+    --text2:rgba(255,255,255,.7);--text3:rgba(255,255,255,.45);
+    --border:rgba(255,255,255,.08);--nav-h:72px;
+  }
+  html{scroll-behavior:smooth;overflow-x:hidden}
+  body{font-family:'Inter',-apple-system,sans-serif;background:#f4f6fb;color:#1a2540;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+  /* ── NAV ── */
+  nav{position:fixed;inset:0 0 auto 0;z-index:1000;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(5,13,26,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+  .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .logo img{height:36px;width:auto}
+  .logo-name{font-family:'Rajdhani',sans-serif;font-size:1.25rem;font-weight:700;letter-spacing:2px;color:#fff}
+  .logo-sub{font-size:.48rem;color:var(--cyan);letter-spacing:2.5px;text-transform:uppercase;display:block}
+  .nav-links{display:flex;align-items:center;list-style:none;gap:.1rem}
+  .nav-links a{color:var(--text2);text-decoration:none;padding:6px 12px;font-size:.78rem;font-weight:500;border-radius:6px;transition:color .25s,background .25s}
+  .nav-links a:hover{color:var(--cyan);background:rgba(0,212,255,.08)}
+  .btn-nav{background:var(--blue)!important;color:#fff!important;border-radius:8px!important;padding:10px 22px!important;font-weight:700!important;font-size:.78rem!important;border:none!important;cursor:pointer}
+  .ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+  .ham span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:transform .3s,opacity .3s}
+  .ham.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .ham.open span:nth-child(2){opacity:0}
+  .ham.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .mob-menu{display:none;position:fixed;top:var(--nav-h);left:0;right:0;z-index:999;background:rgba(5,13,26,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:1.5rem 5%;flex-direction:column;gap:.7rem;opacity:0;transform:translateY(-12px);transition:opacity .3s,transform .3s}
+  .mob-menu.open{display:flex;opacity:1;transform:translateY(0)}
+  .mob-menu a{color:var(--text2);text-decoration:none;font-size:.88rem;padding:.7rem 0;border-bottom:1px solid var(--border)}
+
+  /* ── HERO ── */
+  .gc-hero{padding:calc(var(--nav-h) + 64px) 5% 56px;background:linear-gradient(135deg,var(--blue-dk) 0%,#0d2f5c 100%);text-align:center}
+  .gc-kicker{display:inline-flex;align-items:center;gap:8px;font-size:.7rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);border-radius:20px;padding:6px 16px;margin-bottom:1.5rem}
+  .gc-hero h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;color:#fff;letter-spacing:-.5px;margin-bottom:.9rem}
+  .gc-hero p{font-size:.9rem;color:rgba(255,255,255,.55);max-width:480px;margin:0 auto;line-height:1.7}
+
+  /* ── CONTENT ── */
+  .gc-content{padding:48px 5% 80px}
+  .gc-container{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:24px}
+
+  /* ── STATUS BAR ── */
+  .gc-status{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:16px 20px;font-size:.83rem;color:#4a5568;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  .gc-status.ok{border-color:rgba(0,200,100,.25);background:rgba(0,200,100,.04)}
+  .gc-status.neutral{border-color:rgba(0,102,255,.2);background:rgba(0,102,255,.03)}
+  .gc-status-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+  .gc-status.ok .gc-status-dot{background:#10b981}
+  .gc-status.neutral .gc-status-dot{background:#94a3b8}
+  .gc-status strong{color:#1a2540}
+
+  /* ── CATÉGORIES ── */
+  .gc-cats{display:flex;flex-direction:column;gap:12px}
+
+  .gc-cat{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:20px 22px;transition:border-color .2s,box-shadow .2s}
+  .gc-cat:hover{border-color:rgba(0,102,255,.2);box-shadow:0 2px 16px rgba(0,102,255,.08)}
+  .gc-cat.required{background:#fafbff;border-color:rgba(0,102,255,.12)}
+
+  .gc-cat-row{display:flex;align-items:flex-start;gap:16px;justify-content:space-between}
+  .gc-cat-icon{font-size:1.4rem;flex-shrink:0;margin-top:2px}
+  .gc-cat-info{flex:1;min-width:0}
+  .gc-cat-label{font-size:.9rem;font-weight:700;color:#1a2540;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+  .gc-cat-badge{font-size:.6rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;background:rgba(0,102,255,.1);color:#0066FF;border:1px solid rgba(0,102,255,.2);border-radius:4px;padding:2px 7px}
+  .gc-cat-desc{font-size:.8rem;color:#64748b;line-height:1.55}
+  .gc-cat-meta{display:flex;gap:16px;margin-top:8px;font-size:.72rem;color:#94a3b8}
+  .gc-cat-meta span{display:flex;align-items:center;gap:4px}
+
+  /* ── TOGGLE ── */
+  .gc-toggle{flex-shrink:0;width:44px;height:24px;border-radius:12px;background:#e2e8f0;border:none;cursor:pointer;position:relative;transition:background .2s;padding:0;margin-top:4px}
+  .gc-toggle.on{background:linear-gradient(135deg,#0066FF,#0052cc)}
+  .gc-toggle.required-toggle{opacity:.5;cursor:not-allowed}
+  .gc-toggle-thumb{position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:transform .2s cubic-bezier(.16,1,.3,1);box-shadow:0 1px 4px rgba(0,0,0,.2);pointer-events:none}
+  .gc-toggle.on .gc-toggle-thumb{transform:translateX(20px)}
+
+  /* ── ACTIONS ── */
+  .gc-actions{display:flex;gap:10px;flex-wrap:wrap}
+  .gc-btn{border:none;border-radius:10px;font-size:.85rem;font-weight:600;cursor:pointer;padding:11px 22px;transition:filter .15s,transform .1s;font-family:inherit;letter-spacing:-.01em;white-space:nowrap}
+  .gc-btn:hover{filter:brightness(1.07);transform:translateY(-1px)}
+  .gc-btn:active{transform:translateY(0);filter:brightness(.95)}
+  .gc-btn-primary{background:linear-gradient(135deg,#0066FF,#0052cc);color:#fff;box-shadow:0 2px 12px rgba(0,102,255,.3)}
+  .gc-btn-secondary{background:#f1f5f9;color:#475569;border:1px solid #e2e8f0}
+  .gc-btn-secondary:hover{background:#e2e8f0;filter:none}
+  .gc-btn-save{background:#0A2540;color:#fff;flex:1}
+  .gc-btn-save:hover{background:#0d2f5c;filter:none}
+
+  /* ── SUCCÈS ── */
+  .gc-success{display:none;align-items:center;gap:12px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.25);border-radius:12px;padding:14px 18px;font-size:.84rem;color:#065f46;font-weight:500;animation:gc-fade-in .3s ease}
+  @keyframes gc-fade-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+  .gc-success-icon{font-size:1.1rem;flex-shrink:0}
+
+  /* ── INFO BOX ── */
+  .gc-info{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:20px 22px;font-size:.8rem;color:#64748b;line-height:1.7}
+  .gc-info h3{font-size:.82rem;font-weight:700;color:#1a2540;margin-bottom:.5rem}
+  .gc-info a{color:#0066FF;text-decoration:none}
+  .gc-info a:hover{text-decoration:underline}
+
+  @media(max-width:640px){
+    .gc-actions{flex-direction:column}
+    .gc-btn-save{flex:none}
+    .gc-cat-meta{flex-wrap:wrap;gap:8px}
+  }
+  @media(max-width:768px){
+    .nav-links,.btn-nav{display:none}
+    .ham{display:flex}
+  }
+  </style>
+</head>
+<body data-no-cookie-banner>
+
+  <!-- Nav injectée par nav.js -->
+
+  <!-- ── HERO ──────────────────────────────────────────────── -->
+  <section class="gc-hero">
+    <div class="gc-kicker">🍪 RGPD &amp; Confidentialité</div>
+    <h1>Gestion de vos cookies</h1>
+    <p>Consultez et modifiez vos préférences à tout moment. Vos choix sont appliqués immédiatement sur l'ensemble du site.</p>
+  </section>
+
+  <!-- ── CONTENU ───────────────────────────────────────────── -->
+  <section class="gc-content">
+    <div class="gc-container">
+
+      <!-- Statut actuel -->
+      <div id="gc-status" class="gc-status neutral">
+        <span class="gc-status-dot"></span>
+        <span id="gc-status-text">Chargement de vos préférences…</span>
+      </div>
+
+      <!-- Catégories -->
+      <div class="gc-cats">
+
+        <!-- Nécessaires -->
+        <div class="gc-cat required">
+          <div class="gc-cat-row">
+            <span class="gc-cat-icon">🔒</span>
+            <div class="gc-cat-info">
+              <div class="gc-cat-label">Cookies strictement nécessaires <span class="gc-cat-badge">Toujours actif</span></div>
+              <div class="gc-cat-desc">Indispensables au fonctionnement du site. Ne peuvent pas être désactivés.</div>
+              <div class="gc-cat-meta">
+                <span>📅 Session ou 1 an</span>
+                <span>🏢 CA-TECH (interne)</span>
+              </div>
+            </div>
+            <button class="gc-toggle on required-toggle" disabled aria-checked="true" aria-label="Cookies nécessaires">
+              <span class="gc-toggle-thumb"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Statistiques -->
+        <div class="gc-cat" id="gc-cat-statistics">
+          <div class="gc-cat-row">
+            <span class="gc-cat-icon">📊</span>
+            <div class="gc-cat-info">
+              <div class="gc-cat-label">Cookies statistiques</div>
+              <div class="gc-cat-desc">Mesure d'audience anonymisée pour comprendre comment le site est utilisé et améliorer nos contenus.</div>
+              <div class="gc-cat-meta">
+                <span>📅 13 mois</span>
+                <span>🏢 Google Analytics 4</span>
+              </div>
+            </div>
+            <button class="gc-toggle" id="gc-toggle-statistics" role="switch" aria-checked="false" aria-label="Cookies statistiques">
+              <span class="gc-toggle-thumb"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Marketing -->
+        <div class="gc-cat" id="gc-cat-marketing">
+          <div class="gc-cat-row">
+            <span class="gc-cat-icon">📢</span>
+            <div class="gc-cat-info">
+              <div class="gc-cat-label">Cookies marketing</div>
+              <div class="gc-cat-desc">Suivi publicitaire pour mesurer l'efficacité des campagnes et proposer des annonces pertinentes.</div>
+              <div class="gc-cat-meta">
+                <span>📅 13 mois</span>
+                <span>🏢 Google Ads · Meta Pixel</span>
+              </div>
+            </div>
+            <button class="gc-toggle" id="gc-toggle-marketing" role="switch" aria-checked="false" aria-label="Cookies marketing">
+              <span class="gc-toggle-thumb"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Personnalisation -->
+        <div class="gc-cat" id="gc-cat-personalization">
+          <div class="gc-cat-row">
+            <span class="gc-cat-icon">🎨</span>
+            <div class="gc-cat-info">
+              <div class="gc-cat-label">Cookies de personnalisation</div>
+              <div class="gc-cat-desc">Mémorisation de vos préférences et adaptation des contenus selon votre parcours.</div>
+              <div class="gc-cat-meta">
+                <span>📅 6 mois</span>
+                <span>🏢 CA-TECH (interne)</span>
+              </div>
+            </div>
+            <button class="gc-toggle" id="gc-toggle-personalization" role="switch" aria-checked="false" aria-label="Cookies de personnalisation">
+              <span class="gc-toggle-thumb"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Fonctionnels -->
+        <div class="gc-cat" id="gc-cat-functional">
+          <div class="gc-cat-row">
+            <span class="gc-cat-icon">⚙️</span>
+            <div class="gc-cat-info">
+              <div class="gc-cat-label">Cookies fonctionnels</div>
+              <div class="gc-cat-desc">Fonctionnalités enrichies : vidéos intégrées, chat support, partage sur les réseaux sociaux.</div>
+              <div class="gc-cat-meta">
+                <span>📅 12 mois</span>
+                <span>🏢 YouTube · LinkedIn</span>
+              </div>
+            </div>
+            <button class="gc-toggle" id="gc-toggle-functional" role="switch" aria-checked="false" aria-label="Cookies fonctionnels">
+              <span class="gc-toggle-thumb"></span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Message succès -->
+      <div id="gc-success" class="gc-success" role="status" aria-live="polite">
+        <span class="gc-success-icon">✅</span>
+        <span>Vos préférences ont été enregistrées et appliquées immédiatement.</span>
+      </div>
+
+      <!-- Boutons d'action -->
+      <div class="gc-actions">
+        <button id="gc-accept-all" class="gc-btn gc-btn-primary">Tout accepter</button>
+        <button id="gc-refuse-all" class="gc-btn gc-btn-secondary">Tout refuser</button>
+        <button id="gc-save" class="gc-btn gc-btn-save">Enregistrer mes préférences</button>
+      </div>
+
+      <!-- Info légale -->
+      <div class="gc-info">
+        <h3>Vos droits</h3>
+        Conformément au RGPD et à la directive ePrivacy, vous avez le droit de retirer votre consentement à tout moment.
+        Vos préférences sont stockées localement sur votre appareil pendant 180 jours.
+        Pour plus d'informations, consultez notre <a href="/politique-de-confidentialite">Politique de confidentialité</a>
+        et nos <a href="/mentions-legales">Mentions légales</a>.
+      </div>
+
+    </div>
+  </section>
+
+  <footer></footer>
+
+  <script src="/nav.js" defer></script>
+  <script src="/footer.js" defer></script>
+
+  <script>
+  (function () {
+    'use strict';
+
+    var STORAGE_KEY = 'ca-tech-cookies-consent';
+    var SCHEMA_V    = 2;
+    var DAYS        = 180;
+    var CATS        = ['statistics', 'marketing', 'personalization', 'functional'];
+
+    var prefs = { statistics: false, marketing: false, personalization: false, functional: false };
+
+    function loadStored() {
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return null;
+        var s = JSON.parse(raw);
+        if ((s.v || 0) < SCHEMA_V) return null;
+        if ((Date.now() - s.ts) / 86400000 > DAYS) return null;
+        return s;
+      } catch (e) { return null; }
+    }
+
+    function updateToggleUI(cat, isOn) {
+      var btn = document.getElementById('gc-toggle-' + cat);
+      if (!btn) return;
+      btn.setAttribute('aria-checked', String(isOn));
+      if (isOn) btn.classList.add('on');
+      else      btn.classList.remove('on');
+    }
+
+    function updateStatus(stored) {
+      var el   = document.getElementById('gc-status');
+      var text = document.getElementById('gc-status-text');
+      if (!el || !text) return;
+      if (!stored) {
+        el.className = 'gc-status neutral';
+        text.innerHTML = '<strong>Aucun choix enregistré</strong> — définissez vos préférences ci-dessous.';
+      } else {
+        var date   = new Date(stored.ts).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
+        var active = CATS.filter(function (k) { return stored[k]; }).length;
+        el.className = 'gc-status ok';
+        text.innerHTML = '<strong>Préférences enregistrées</strong> · dernière mise à jour le ' + date
+          + ' · ' + active + ' catégorie(s) optionnelle(s) activée(s).';
+      }
+    }
+
+    function saveAndApply() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        v: SCHEMA_V, ts: Date.now(),
+        statistics:      !!prefs.statistics,
+        marketing:       !!prefs.marketing,
+        personalization: !!prefs.personalization,
+        functional:      !!prefs.functional,
+      }));
+
+      if (window.CATechConsent) window.CATechConsent.apply(prefs);
+
+      updateStatus(loadStored());
+
+      var success = document.getElementById('gc-success');
+      if (success) {
+        success.style.display = 'flex';
+        clearTimeout(success._t);
+        success._t = setTimeout(function () { success.style.display = 'none'; }, 5000);
+      }
+    }
+
+    function setAll(val) {
+      CATS.forEach(function (c) { prefs[c] = val; updateToggleUI(c, val); });
+      saveAndApply();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var stored = loadStored();
+      if (stored) {
+        CATS.forEach(function (c) {
+          prefs[c] = !!stored[c];
+          updateToggleUI(c, prefs[c]);
+        });
+      }
+      updateStatus(stored);
+
+      // Toggles individuels
+      CATS.forEach(function (c) {
+        var btn = document.getElementById('gc-toggle-' + c);
+        if (!btn) return;
+        btn.addEventListener('click', function () {
+          prefs[c] = !prefs[c];
+          updateToggleUI(c, prefs[c]);
+        });
+      });
+
+      document.getElementById('gc-accept-all').addEventListener('click', function () { setAll(true); });
+      document.getElementById('gc-refuse-all').addEventListener('click', function () { setAll(false); });
+      document.getElementById('gc-save').addEventListener('click', saveAndApply);
+    });
+  })();
+  </script>
+
+</body>
+</html>
