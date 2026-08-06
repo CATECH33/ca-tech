@@ -1077,6 +1077,15 @@ async function submitForm() {
     state.devis_id     = data.id;
     state.total_ttc    = data.total;
 
+    if (window.gtag) {
+      gtag('event', 'generate_lead', {
+        currency:     'EUR',
+        value:        state.total_ttc || 0,
+        lead_source:  'devis_form',
+        project_type: state.project_type || undefined,
+      });
+    }
+
     showSuccess();
     // Upload des documents joints (non-bloquant)
     uploadPendingFiles();
