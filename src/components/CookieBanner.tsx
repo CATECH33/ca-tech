@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import './CookieBanner.css'
+import { applyConsent, initConsent } from '../lib/consent'
 
 const STORAGE_KEY  = 'ca-tech-cookies-consent'
 const CONSENT_DAYS = 180
@@ -94,7 +95,9 @@ export default function CookieBanner() {
     if (!stored) {
       setVisible(true)
     } else {
-      setPrefs({ statistics: stored.statistics, marketing: stored.marketing, personalization: stored.personalization, functional: stored.functional })
+      const p = { statistics: stored.statistics, marketing: stored.marketing, personalization: stored.personalization, functional: stored.functional }
+      setPrefs(p)
+      initConsent()   // applique les signaux Consent Mode v2 au démarrage
     }
   }, [])
 
@@ -104,9 +107,18 @@ export default function CookieBanner() {
     return () => window.removeEventListener('ca-tech:open-cookie-prefs', handler)
   }, [])
 
-  const acceptAll = () => { setPrefs(ALL_ON);  saveConsent(ALL_ON);  setVisible(false); setShowPrefs(false) }
-  const refuseAll = () => { setPrefs(ALL_OFF); saveConsent(ALL_OFF); setVisible(false); setShowPrefs(false) }
-  const saveCustom = () => { saveConsent(prefs); setVisible(false); setShowPrefs(false) }
+  const acceptAll = () => {
+    setPrefs(ALL_ON); saveConsent(ALL_ON); applyConsent(ALL_ON)
+    setVisible(false); setShowPrefs(false)
+  }
+  const refuseAll = () => {
+    setPrefs(ALL_OFF); saveConsent(ALL_OFF); applyConsent(ALL_OFF)
+    setVisible(false); setShowPrefs(false)
+  }
+  const saveCustom = () => {
+    saveConsent(prefs); applyConsent(prefs)
+    setVisible(false); setShowPrefs(false)
+  }
 
   const toggle = (key: keyof Prefs) => setPrefs(p => ({ ...p, [key]: !p[key] }))
   const toggleExpand = (id: string) => setExpanded(e => e === id ? null : id)

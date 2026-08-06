@@ -2,6 +2,26 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8"/>
+
+  <!-- ══ Google Consent Mode v2 — DOIT précéder tout tag Google ══
+       Pose le statut "denied" par défaut avant toute exécution de script.
+       Les signaux sont mis à jour par src/lib/consent.ts après le choix
+       de l'utilisateur. Aucun script GA/Ads n'est injecté avant consentement.
+  ══════════════════════════════════════════════════════════════════ -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      'ad_storage':          'denied',
+      'analytics_storage':   'denied',
+      'ad_user_data':        'denied',
+      'ad_personalization':  'denied',
+      'wait_for_update':     500,
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough',    true);
+  </script>
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="theme-color" content="#0066FF"/>
   <meta name="author" content="CA-TECH"/>
