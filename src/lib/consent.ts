@@ -9,7 +9,7 @@
  * Pour activer Google Ads : renseigner AW_ID.
  */
 
-const GA_ID = ''   // ex: 'G-ABCDE12345'  ← à renseigner
+const GA_ID = 'G-R526KDMC17'
 const AW_ID = ''   // ex: 'AW-1234567890' ← à renseigner si Google Ads
 
 const STORAGE_KEY = 'ca-tech-cookies-consent'
