@@ -29,8 +29,8 @@ function loadStored(): Stored | null {
   } catch { return null }
 }
 
-function saveConsent(prefs: Prefs) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ v: SCHEMA_V, ts: Date.now(), ...prefs }))
+function saveConsent(prefs: Prefs, source = 'unknown') {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ v: SCHEMA_V, ts: Date.now(), source, ...prefs }))
 }
 
 const ALL_ON:  Prefs = { statistics: true,  marketing: true,  personalization: true,  functional: true  }
@@ -107,16 +107,16 @@ export default function CookieBanner() {
     return () => window.removeEventListener('ca-tech:open-cookie-prefs', handler)
   }, [])
 
-  const acceptAll = () => {
-    setPrefs(ALL_ON); saveConsent(ALL_ON); applyConsent(ALL_ON)
+  const acceptAll = (source = 'banner') => {
+    setPrefs(ALL_ON); saveConsent(ALL_ON, source); applyConsent(ALL_ON)
     setVisible(false); setShowPrefs(false)
   }
-  const refuseAll = () => {
-    setPrefs(ALL_OFF); saveConsent(ALL_OFF); applyConsent(ALL_OFF)
+  const refuseAll = (source = 'banner') => {
+    setPrefs(ALL_OFF); saveConsent(ALL_OFF, source); applyConsent(ALL_OFF)
     setVisible(false); setShowPrefs(false)
   }
   const saveCustom = () => {
-    saveConsent(prefs); applyConsent(prefs)
+    saveConsent(prefs, 'modal-custom'); applyConsent(prefs)
     setVisible(false); setShowPrefs(false)
   }
 
@@ -189,8 +189,8 @@ export default function CookieBanner() {
 
             <div className="ck-modal-actions">
               <button className="ck-btn ck-btn-primary" onClick={saveCustom}>Enregistrer mes préférences</button>
-              <button className="ck-btn ck-btn-secondary" onClick={refuseAll}>Tout refuser</button>
-              <button className="ck-btn ck-btn-ghost" onClick={acceptAll}>Tout accepter</button>
+              <button className="ck-btn ck-btn-secondary" onClick={() => refuseAll('modal')}>Tout refuser</button>
+              <button className="ck-btn ck-btn-ghost" onClick={() => acceptAll('modal')}>Tout accepter</button>
             </div>
           </div>
         </div>
@@ -204,7 +204,8 @@ export default function CookieBanner() {
               <p className="ck-title">🍪 Respect de votre vie privée</p>
               <p className="ck-body">
                 CA-TECH utilise des cookies pour améliorer votre expérience, mesurer l'audience,
-                personnaliser certains contenus et optimiser nos services. Vous gardez le contrôle de vos choix.
+                personnaliser certains contenus et optimiser nos services. Vous gardez le contrôle de vos choix.{' '}
+                <a href="/politique-de-confidentialite" style={{ color: 'inherit', textDecoration: 'underline' }}>En savoir plus</a>
               </p>
             </div>
             <div className="ck-actions">

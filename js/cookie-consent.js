@@ -39,9 +39,10 @@
     } catch (e) { return null; }
   }
 
-  function saveConsent(prefs) {
+  function saveConsent(prefs, source) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
       v: SCHEMA_V, ts: Date.now(),
+      source:          source || 'unknown',
       statistics:      !!prefs.statistics,
       marketing:       !!prefs.marketing,
       personalization: !!prefs.personalization,
@@ -238,7 +239,7 @@
     el.innerHTML = '<div class="ck-inner">'
       + '<div class="ck-text">'
       + '<p class="ck-title">🍪 Respect de votre vie privée</p>'
-      + '<p class="ck-body">CA-TECH utilise des cookies pour améliorer votre expérience, mesurer l\'audience, personnaliser certains contenus et optimiser nos services. Vous gardez le contrôle de vos choix.</p>'
+      + '<p class="ck-body">CA-TECH utilise des cookies pour améliorer votre expérience, mesurer l\'audience, personnaliser certains contenus et optimiser nos services. Vous gardez le contrôle de vos choix. <a href="/politique-de-confidentialite" style="color:inherit;text-decoration:underline">En savoir plus</a></p>'
       + '</div>'
       + '<div class="ck-actions">'
       + '<button class="ck-btn ck-btn-primary" id="ck-accept-all">Tout accepter</button>'
@@ -365,8 +366,8 @@
     var refuseBtn = document.getElementById('ck-modal-refuse');
     var acceptBtn = document.getElementById('ck-modal-accept');
     if (saveBtn)   saveBtn.addEventListener('click',   saveCustom);
-    if (refuseBtn) refuseBtn.addEventListener('click', refuseAll);
-    if (acceptBtn) acceptBtn.addEventListener('click', acceptAll);
+    if (refuseBtn) refuseBtn.addEventListener('click', function() { refuseAll('modal'); });
+    if (acceptBtn) acceptBtn.addEventListener('click', function() { acceptAll('modal'); });
   }
 
   function closeModal() {
@@ -377,8 +378,8 @@
     if (_bannerEl) return;
     _bannerEl = buildBanner();
     document.body.appendChild(_bannerEl);
-    document.getElementById('ck-accept-all').addEventListener('click',  acceptAll);
-    document.getElementById('ck-refuse-all').addEventListener('click',  refuseAll);
+    document.getElementById('ck-accept-all').addEventListener('click',  function() { acceptAll('banner'); });
+    document.getElementById('ck-refuse-all').addEventListener('click',  function() { refuseAll('banner'); });
     document.getElementById('ck-customize').addEventListener('click',   openModal);
   }
 
@@ -393,20 +394,20 @@
     document.body.appendChild(_floatEl);
   }
 
-  function acceptAll() {
+  function acceptAll(source) {
     _prefs = { statistics: true, marketing: true, personalization: true, functional: true };
-    saveConsent(_prefs); applyConsent(_prefs);
+    saveConsent(_prefs, typeof source === 'string' ? source : 'accept-all'); applyConsent(_prefs);
     hideBanner(); closeModal(); showFloat();
   }
 
-  function refuseAll() {
+  function refuseAll(source) {
     _prefs = { statistics: false, marketing: false, personalization: false, functional: false };
-    saveConsent(_prefs); applyConsent(_prefs);
+    saveConsent(_prefs, typeof source === 'string' ? source : 'refuse-all'); applyConsent(_prefs);
     hideBanner(); closeModal(); showFloat();
   }
 
   function saveCustom() {
-    saveConsent(_prefs); applyConsent(_prefs);
+    saveConsent(_prefs, 'modal-custom'); applyConsent(_prefs);
     hideBanner(); closeModal(); showFloat();
   }
 
