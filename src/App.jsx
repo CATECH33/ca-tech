@@ -12,9 +12,10 @@ const CollaborateursIA = lazy(() => import('./pages/CollaborateursIA.jsx'))
 const Automatisations  = lazy(() => import('./pages/Automatisations.jsx'))
 const Realisations   = lazy(() => import('./pages/Realisations.jsx'))
 const Contact        = lazy(() => import('./pages/Contact.jsx'))
-const Catalogue      = lazy(() => import('./pages/Catalogue.jsx'))
-const Tarifs         = lazy(() => import('./pages/Tarifs.jsx'))
-const SeoPage        = lazy(() => import('./pages/SeoPage.jsx'))
+const Catalogue         = lazy(() => import('./pages/Catalogue.jsx'))
+const Tarifs            = lazy(() => import('./pages/Tarifs.jsx'))
+const SeoPage           = lazy(() => import('./pages/SeoPage.jsx'))
+const PolitiqueCookies  = lazy(() => import('./pages/PolitiqueCookies.jsx'))
 
 function Layout() {
   return (
@@ -55,7 +56,8 @@ export default function App() {
           <Route path="/realisations"      element={<Realisations />} />
           <Route path="/contact"           element={<Contact />} />
           <Route path="/catalogue"         element={<Catalogue />} />
-          <Route path="/tarifs"            element={<Tarifs />} />
+          <Route path="/tarifs"              element={<Tarifs />} />
+          <Route path="/politique-des-cookies" element={<PolitiqueCookies />} />
           {Object.values(SEO_PAGES).map(page => (
             <Route key={page.path} path={page.path} element={<SeoPage page={page} />} />
           ))}

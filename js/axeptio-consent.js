@@ -1,10 +1,11 @@
 /* ══════════════════════════════════════════════════════════════════════
-   CA-TECH — Script Manager v2.0
+   CA-TECH — Script Manager v2.1
    ▸ Chargé en PREMIER, sans defer/async, avant tout script Google
    ▸ Registre centralisé de tous les scripts tiers
    ▸ Blocage automatique jusqu'au consentement Axeptio
    ▸ Chargement dynamique, conditionnel (page, ID configuré)
    ▸ Google Consent Mode v2 — 7 signaux (recommandations 2026)
+   ▸ Centre de préférences : acceptAll / refuseAll / saveChoices
 
    SIGNAUX GCM v2 (tous denied par défaut) :
      analytics_storage      — cookies analytiques      (GA4, Clarity)
@@ -41,8 +42,6 @@
     metaPixel:  { id:  '' },          // ex: '1234567890123456'
     linkedin:   { id:  '' },          // ex: '1234567'
     googleMaps: { key: '' },          // ex: 'AIzaSy...'
-    // Stripe : pas d'ID global — JS chargé sur /devis uniquement
-    // YouTube : pas d'ID — activé par présence de [data-yt-src] dans le DOM
   };
 
   // ══════════════════════════════════════════════════════════════════════
@@ -51,12 +50,15 @@
   //  Chaque entrée = un service tiers. Clé = nom exact dans Axeptio.
   //
   //  Champs :
-  //    label    — nom lisible (pour debug / CATechConsent.getRegistry())
-  //    category — 'analytics' | 'advertising' | 'functional'
-  //    gcm      — signaux GCM v2 à accorder si le service est accepté
-  //    active() — false → service ignoré (ID absent ou condition non remplie)
-  //    page(p)  — (optionnel) false → ignoré hors de la page cible
-  //    load()   — injection du script ; appelée une seule fois max
+  //    label     — nom lisible (affiché dans le centre de préférences)
+  //    category  — 'analytics' | 'advertising' | 'functional'
+  //    purpose   — description de la finalité (RGPD)
+  //    retention — durée de conservation des données
+  //    partner   — URL de la politique de confidentialité du partenaire
+  //    gcm       — signaux GCM v2 à accorder si le service est accepté
+  //    active()  — false → service ignoré (ID absent ou condition non remplie)
+  //    page(p)   — (optionnel) false → ignoré hors de la page cible
+  //    load()    — injection du script ; appelée une seule fois max
   //
   //  Services à créer dans Axeptio (dashboard → Cookies → Ajouter) :
   //    google-analytics  (Analytique)
@@ -74,10 +76,13 @@
     // ── Analytique ───────────────────────────────────────────────────────
 
     'google-analytics': {
-      label:    'Google Analytics 4',
-      category: 'analytics',
-      gcm:      { analytics_storage: 'granted' },
-      active:   function () { return !!CONFIG.ga4.id; },
+      label:     'Google Analytics 4',
+      category:  'analytics',
+      purpose:   "Mesure l'audience, les pages visitées, la durée des sessions et la provenance des visiteurs.",
+      retention: '13 mois',
+      partner:   'https://policies.google.com/privacy',
+      gcm:       { analytics_storage: 'granted' },
+      active:    function () { return !!CONFIG.ga4.id; },
       load: function () {
         _script(
           'https://www.googletagmanager.com/gtag/js?id=' + CONFIG.ga4.id,
@@ -90,10 +95,13 @@
     },
 
     'microsoft-clarity': {
-      label:    'Microsoft Clarity',
-      category: 'analytics',
-      gcm:      { analytics_storage: 'granted' },
-      active:   function () { return !!CONFIG.clarity.id; },
+      label:     'Microsoft Clarity',
+      category:  'analytics',
+      purpose:   'Enregistre les sessions de navigation (mouvements, clics, scrolls) pour identifier les points de friction.',
+      retention: '13 mois',
+      partner:   'https://privacy.microsoft.com/fr-fr/privacystatement',
+      gcm:       { analytics_storage: 'granted' },
+      active:    function () { return !!CONFIG.clarity.id; },
       load: function () {
         (function (c, l, a, r, i, t, y) {
           c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
@@ -107,10 +115,13 @@
     // ── Publicité ────────────────────────────────────────────────────────
 
     'google-ads': {
-      label:    'Google Ads',
-      category: 'advertising',
-      gcm:      { ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted' },
-      active:   function () { return !!CONFIG.googleAds.id; },
+      label:     'Google Ads',
+      category:  'advertising',
+      purpose:   "Mesure l'efficacité des campagnes publicitaires Google et permet le reciblage publicitaire.",
+      retention: '13 mois',
+      partner:   'https://policies.google.com/privacy',
+      gcm:       { ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted' },
+      active:    function () { return !!CONFIG.googleAds.id; },
       load: function () {
         _script(
           'https://www.googletagmanager.com/gtag/js?id=' + CONFIG.googleAds.id,
@@ -120,10 +131,13 @@
     },
 
     'meta-pixel': {
-      label:    'Meta Pixel',
-      category: 'advertising',
-      gcm:      { ad_storage: 'granted', ad_user_data: 'granted' },
-      active:   function () { return !!CONFIG.metaPixel.id; },
+      label:     'Meta Pixel',
+      category:  'advertising',
+      purpose:   'Mesure les conversions des publicités Facebook/Instagram et permet le ciblage publicitaire.',
+      retention: '6 mois',
+      partner:   'https://www.facebook.com/privacy/policy/',
+      gcm:       { ad_storage: 'granted', ad_user_data: 'granted' },
+      active:    function () { return !!CONFIG.metaPixel.id; },
       load: function () {
         !function (f, b, e, v, n, t, s) {
           if (f.fbq) return;
@@ -141,10 +155,13 @@
     },
 
     'linkedin-insight': {
-      label:    'LinkedIn Insight Tag',
-      category: 'advertising',
-      gcm:      { ad_storage: 'granted', ad_user_data: 'granted' },
-      active:   function () { return !!CONFIG.linkedin.id; },
+      label:     'LinkedIn Insight Tag',
+      category:  'advertising',
+      purpose:   'Mesure les conversions des campagnes LinkedIn et permet le reciblage publicitaire B2B.',
+      retention: '7 jours (détaillé) / 90 jours (agrégé)',
+      partner:   'https://www.linkedin.com/legal/privacy-policy',
+      gcm:       { ad_storage: 'granted', ad_user_data: 'granted' },
+      active:    function () { return !!CONFIG.linkedin.id; },
       load: function () {
         window._linkedin_partner_id = CONFIG.linkedin.id;
         window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
@@ -156,28 +173,30 @@
     // ── Fonctionnel ──────────────────────────────────────────────────────
 
     'stripe': {
-      label:    'Stripe',
-      category: 'functional',
-      gcm:      { functionality_storage: 'granted', security_storage: 'granted' },
-      active:   function () { return true; },
-      page:     function (p) { return p === '/devis' || p.indexOf('/devis/') === 0; },
+      label:     'Stripe',
+      category:  'functional',
+      purpose:   'Sécurise les transactions de paiement en ligne et prévient la fraude.',
+      retention: 'Durée de la session',
+      partner:   'https://stripe.com/fr/privacy',
+      gcm:       { functionality_storage: 'granted', security_storage: 'granted' },
+      active:    function () { return true; },
+      page:      function (p) { return p === '/devis' || p.indexOf('/devis/') === 0; },
       load: function () {
         _script('https://js.stripe.com/v3/');
       },
     },
 
     'youtube': {
-      label:    'YouTube',
-      category: 'functional',
-      gcm:      { functionality_storage: 'granted' },
-      // Se déclenche seulement si des placeholders [data-yt-src] existent
-      active:   function () {
-        return !!document.querySelector('[data-yt-src]');
-      },
+      label:     'YouTube',
+      category:  'functional',
+      purpose:   'Permet la lecture de vidéos YouTube intégrées au site.',
+      retention: '6 mois',
+      partner:   'https://policies.google.com/privacy',
+      gcm:       { functionality_storage: 'granted' },
+      active:    function () { return !!document.querySelector('[data-yt-src]'); },
       load: function () {
-        // Remplace chaque placeholder par une vraie iframe YouTube
-        // Usage HTML : <div data-yt-src="https://www.youtube-nocookie.com/embed/VIDEO_ID"
-        //                   data-width="560" data-height="315"></div>
+        // Usage : <div data-yt-src="https://www.youtube-nocookie.com/embed/ID"
+        //              data-width="560" data-height="315"></div>
         document.querySelectorAll('[data-yt-src]').forEach(function (el) {
           var iframe = document.createElement('iframe');
           iframe.src             = el.getAttribute('data-yt-src');
@@ -194,10 +213,13 @@
     },
 
     'google-maps': {
-      label:    'Google Maps',
-      category: 'functional',
-      gcm:      { functionality_storage: 'granted' },
-      active:   function () { return !!CONFIG.googleMaps.key; },
+      label:     'Google Maps',
+      category:  'functional',
+      purpose:   'Affiche des cartes interactives Google Maps sur le site.',
+      retention: '6 mois',
+      partner:   'https://policies.google.com/privacy',
+      gcm:       { functionality_storage: 'granted' },
+      active:    function () { return !!CONFIG.googleMaps.key; },
       load: function () {
         _script(
           'https://maps.googleapis.com/maps/api/js?key=' + CONFIG.googleMaps.key +
@@ -243,6 +265,7 @@
   // ══════════════════════════════════════════════════════════════════════
 
   var _done = {};
+  var _sdk  = null;   // référence au SDK Axeptio (stockée au chargement)
 
   function _script(src, onload) {
     if (_done[src]) return;
@@ -259,10 +282,10 @@
     var path = window.location.pathname;
 
     Object.keys(REGISTRY).forEach(function (vendor) {
-      if (!choices[vendor])         return;   // non consenti par l'utilisateur
+      if (!choices[vendor])            return;   // non consenti
       var svc = REGISTRY[vendor];
-      if (!svc.active())            return;   // ID absent ou condition non remplie
-      if (svc.page && !svc.page(path)) return; // hors de la page cible
+      if (!svc.active())               return;   // ID absent ou condition non remplie
+      if (svc.page && !svc.page(path)) return;   // hors de la page cible
 
       Object.assign(gcmUpdate, svc.gcm);
       svc.load();
@@ -284,6 +307,7 @@
 
   void 0 === window._axcb && (window._axcb = []);
   window._axcb.push(function (sdk) {
+    _sdk = sdk;
     sdk.on('cookies:complete', function (choices) {
       _applyChoices(choices);
     });
@@ -305,12 +329,9 @@
 
   (function () {
     var css = [
-      /* ── Overlay backdrop ─────────────────────────────────────── */
       '#axeptio_overlay {',
       '  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;',
       '}',
-
-      /* ── Widget container ─────────────────────────────────────── */
       '#axeptio_overlay .ax-widget {',
       '  background: rgba(5, 13, 26, 0.97) !important;',
       '  backdrop-filter: blur(24px) saturate(180%) !important;',
@@ -322,110 +343,60 @@
       '  color: #FFFFFF !important;',
       '  overflow: hidden !important;',
       '}',
-
-      /* ── Titres ───────────────────────────────────────────────── */
       '#axeptio_overlay .ax-widget h1,',
       '#axeptio_overlay .ax-widget h2,',
       '#axeptio_overlay .ax-widget h3 {',
-      '  color: #FFFFFF !important;',
-      '  font-weight: 700 !important;',
+      '  color: #FFFFFF !important; font-weight: 700 !important;',
       '}',
-
-      /* ── Texte courant ────────────────────────────────────────── */
       '#axeptio_overlay .ax-widget p,',
       '#axeptio_overlay .ax-widget span,',
       '#axeptio_overlay .ax-widget label,',
-      '#axeptio_overlay .ax-widget a {',
-      '  color: rgba(255, 255, 255, 0.75) !important;',
-      '}',
-      '#axeptio_overlay .ax-widget a:hover {',
-      '  color: #00D4FF !important;',
-      '}',
-
-      /* ── Bouton principal : Tout accepter ─────────────────────── */
+      '#axeptio_overlay .ax-widget a { color: rgba(255,255,255,0.75) !important; }',
+      '#axeptio_overlay .ax-widget a:hover { color: #00D4FF !important; }',
       '#axeptio_overlay .ax-widget button[data-type="accept"],',
       '#axeptio_overlay .ax-widget .ax-accept-all,',
       '#axeptio_overlay .ax-widget [class*="accept"]:not([class*="refuse"]):not([class*="personalize"]) {',
       '  background: linear-gradient(135deg, #0066FF 0%, #0052CC 100%) !important;',
-      '  color: #FFFFFF !important;',
-      '  border: none !important;',
-      '  border-radius: 10px !important;',
-      '  font-weight: 600 !important;',
-      '  font-size: 0.875rem !important;',
-      '  padding: 12px 20px !important;',
-      '  cursor: pointer !important;',
-      '  transition: opacity 0.15s ease, transform 0.15s ease !important;',
-      '  box-shadow: 0 4px 16px rgba(0, 102, 255, 0.35) !important;',
+      '  color: #FFFFFF !important; border: none !important; border-radius: 10px !important;',
+      '  font-weight: 600 !important; font-size: 0.875rem !important; padding: 12px 20px !important;',
+      '  cursor: pointer !important; transition: opacity 0.15s ease, transform 0.15s ease !important;',
+      '  box-shadow: 0 4px 16px rgba(0,102,255,0.35) !important;',
       '}',
       '#axeptio_overlay .ax-widget button[data-type="accept"]:hover,',
       '#axeptio_overlay .ax-widget .ax-accept-all:hover {',
-      '  opacity: 0.88 !important;',
-      '  transform: translateY(-1px) !important;',
+      '  opacity: 0.88 !important; transform: translateY(-1px) !important;',
       '}',
-
-      /* ── Bouton secondaire : Tout refuser ─────────────────────── */
       '#axeptio_overlay .ax-widget button[data-type="refuse"],',
       '#axeptio_overlay .ax-widget .ax-refuse-all,',
       '#axeptio_overlay .ax-widget [class*="refuse"] {',
-      '  background: rgba(255, 255, 255, 0.06) !important;',
-      '  color: rgba(255, 255, 255, 0.80) !important;',
-      '  border: 1px solid rgba(255, 255, 255, 0.15) !important;',
-      '  border-radius: 10px !important;',
-      '  font-weight: 600 !important;',
-      '  font-size: 0.875rem !important;',
-      '  padding: 12px 20px !important;',
-      '  cursor: pointer !important;',
-      '  transition: background 0.15s ease !important;',
+      '  background: rgba(255,255,255,0.06) !important; color: rgba(255,255,255,0.80) !important;',
+      '  border: 1px solid rgba(255,255,255,0.15) !important; border-radius: 10px !important;',
+      '  font-weight: 600 !important; font-size: 0.875rem !important; padding: 12px 20px !important;',
+      '  cursor: pointer !important; transition: background 0.15s ease !important;',
       '}',
       '#axeptio_overlay .ax-widget button[data-type="refuse"]:hover,',
-      '#axeptio_overlay .ax-widget .ax-refuse-all:hover {',
-      '  background: rgba(255, 255, 255, 0.10) !important;',
-      '}',
-
-      /* ── Bouton tertiaire : Personnaliser ─────────────────────── */
+      '#axeptio_overlay .ax-widget .ax-refuse-all:hover { background: rgba(255,255,255,0.10) !important; }',
       '#axeptio_overlay .ax-widget button[data-type="personalize"],',
       '#axeptio_overlay .ax-widget .ax-customize,',
       '#axeptio_overlay .ax-widget [class*="personalize"],',
       '#axeptio_overlay .ax-widget [class*="customize"] {',
-      '  background: transparent !important;',
-      '  color: #00D4FF !important;',
-      '  border: 1px solid rgba(0, 212, 255, 0.30) !important;',
-      '  border-radius: 10px !important;',
-      '  font-weight: 600 !important;',
-      '  font-size: 0.875rem !important;',
-      '  padding: 12px 20px !important;',
-      '  cursor: pointer !important;',
-      '  transition: border-color 0.15s ease, background 0.15s ease !important;',
+      '  background: transparent !important; color: #00D4FF !important;',
+      '  border: 1px solid rgba(0,212,255,0.30) !important; border-radius: 10px !important;',
+      '  font-weight: 600 !important; font-size: 0.875rem !important; padding: 12px 20px !important;',
+      '  cursor: pointer !important; transition: border-color 0.15s ease, background 0.15s ease !important;',
       '}',
       '#axeptio_overlay .ax-widget button[data-type="personalize"]:hover,',
       '#axeptio_overlay .ax-widget .ax-customize:hover {',
-      '  background: rgba(0, 212, 255, 0.08) !important;',
-      '  border-color: rgba(0, 212, 255, 0.55) !important;',
+      '  background: rgba(0,212,255,0.08) !important; border-color: rgba(0,212,255,0.55) !important;',
       '}',
-
-      /* ── Toggles / switches ───────────────────────────────────── */
       '#axeptio_overlay .ax-widget input[type="checkbox"]:checked + *,',
       '#axeptio_overlay .ax-widget [class*="toggle"][class*="active"],',
-      '#axeptio_overlay .ax-widget [class*="switch"][class*="on"] {',
-      '  background: #0066FF !important;',
-      '}',
-
-      /* ── Séparateurs ──────────────────────────────────────────── */
+      '#axeptio_overlay .ax-widget [class*="switch"][class*="on"] { background: #0066FF !important; }',
       '#axeptio_overlay .ax-widget hr,',
       '#axeptio_overlay .ax-widget [class*="divider"],',
-      '#axeptio_overlay .ax-widget [class*="separator"] {',
-      '  border-color: rgba(255, 255, 255, 0.08) !important;',
-      '}',
-
-      /* ── Close / X button ─────────────────────────────────────── */
-      '#axeptio_overlay .ax-widget [class*="close"] {',
-      '  color: rgba(255, 255, 255, 0.45) !important;',
-      '}',
-      '#axeptio_overlay .ax-widget [class*="close"]:hover {',
-      '  color: rgba(255, 255, 255, 0.80) !important;',
-      '}',
-
-      /* ── Animation d'entrée (spring) ──────────────────────────── */
+      '#axeptio_overlay .ax-widget [class*="separator"] { border-color: rgba(255,255,255,0.08) !important; }',
+      '#axeptio_overlay .ax-widget [class*="close"] { color: rgba(255,255,255,0.45) !important; }',
+      '#axeptio_overlay .ax-widget [class*="close"]:hover { color: rgba(255,255,255,0.80) !important; }',
       '@keyframes caTechSlideUp {',
       '  from { opacity: 0; transform: translateY(24px) scale(0.97); }',
       '  to   { opacity: 1; transform: translateY(0)    scale(1);    }',
@@ -433,13 +404,10 @@
       '#axeptio_overlay .ax-widget {',
       '  animation: caTechSlideUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) both !important;',
       '}',
-
-      /* ── Mobile ───────────────────────────────────────────────── */
       '@media (max-width: 520px) {',
       '  #axeptio_overlay .ax-widget {',
-      '    border-radius: 16px 16px 0 0 !important;',
-      '    left: 0 !important; right: 0 !important; bottom: 0 !important;',
-      '    width: 100% !important; max-width: 100% !important; margin: 0 !important;',
+      '    border-radius: 16px 16px 0 0 !important; left: 0 !important; right: 0 !important;',
+      '    bottom: 0 !important; width: 100% !important; max-width: 100% !important; margin: 0 !important;',
       '  }',
       '}',
     ].join('\n');
@@ -459,10 +427,11 @@
   //  openPreferences()         — rouvre le widget Axeptio
   //  getChoices()              — choix courants de l'utilisateur
   //  onReady(cb)               — callback quand le SDK est prêt
-  //  loadService(vendor)       — charge manuellement un service consenti
-  //                              (ex: bouton "Activer YouTube" sur la page)
-  //  getRegistry()             — retourne le registre pour debug
-  //                              (console.table(CATechConsent.getRegistry()))
+  //  acceptAll()               — accepte tous les services + applique GCM
+  //  refuseAll()               — refuse tous les services + applique GCM
+  //  saveChoices(choices)      — sauvegarde un objet {vendor: bool, ...}
+  //  loadService(vendor)       — charge un service manuellement (si consenti)
+  //  getRegistry()             — registre complet (debug / centre de préférences)
   // ══════════════════════════════════════════════════════════════════════
 
   window.CATechConsent = {
@@ -482,14 +451,37 @@
       window._axcb.push(function (sdk) { cb(sdk); });
     },
 
+    acceptAll: function () {
+      var choices = {};
+      Object.keys(REGISTRY).forEach(function (k) { choices[k] = true; });
+      this.saveChoices(choices);
+    },
+
+    refuseAll: function () {
+      var choices = {};
+      Object.keys(REGISTRY).forEach(function (k) { choices[k] = false; });
+      this.saveChoices(choices);
+    },
+
+    saveChoices: function (choices) {
+      // Essaie l'API programmatique Axeptio, sinon ouvre le widget
+      if (_sdk && typeof _sdk.complete === 'function') {
+        _sdk.complete(choices);
+      } else if (_sdk && typeof _sdk.setCookies === 'function') {
+        _sdk.setCookies(choices);
+        _applyChoices(choices);
+      } else {
+        // Fallback : applique localement + ouvre le widget pour confirmation
+        _applyChoices(choices);
+        this.openPreferences();
+      }
+    },
+
     loadService: function (vendor) {
       var svc = REGISTRY[vendor];
       if (!svc) return;
       var choices = this.getChoices();
-      if (!choices[vendor]) {
-        this.openPreferences();
-        return;
-      }
+      if (!choices[vendor]) { this.openPreferences(); return; }
       if (!svc.active()) return;
       svc.load();
     },
@@ -498,7 +490,15 @@
       var out = {};
       Object.keys(REGISTRY).forEach(function (k) {
         var s = REGISTRY[k];
-        out[k] = { label: s.label, category: s.category, active: s.active(), gcm: s.gcm };
+        out[k] = {
+          label:     s.label,
+          category:  s.category,
+          purpose:   s.purpose,
+          retention: s.retention,
+          partner:   s.partner,
+          active:    s.active(),
+          gcm:       s.gcm,
+        };
       });
       return out;
     },

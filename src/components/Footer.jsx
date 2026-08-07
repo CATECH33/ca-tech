@@ -116,8 +116,14 @@ export default function Footer() {
         <div style={{ display: 'flex', gap: '1.5rem' }}>
           <a href="/mentions-legales" style={{ color: 'rgba(255,255,255,.35)', textDecoration: 'none', fontSize: '.72rem' }}>Mentions légales</a>
           <a href="/politique-de-confidentialite" style={{ color: 'rgba(255,255,255,.35)', textDecoration: 'none', fontSize: '.72rem' }}>Confidentialité</a>
-          <a href="/gestion-des-cookies" style={{ color: 'rgba(255,255,255,.35)', textDecoration: 'none', fontSize: '.72rem' }}>Gestion des cookies</a>
+          <a href="/politique-des-cookies" style={{ color: 'rgba(255,255,255,.35)', textDecoration: 'none', fontSize: '.72rem' }}>Politique cookies</a>
           <a href="/tarifs" style={{ color: 'rgba(255,255,255,.35)', textDecoration: 'none', fontSize: '.72rem' }}>CGV</a>
+          <button
+            onClick={() => window.CATechConsent?.openPreferences()}
+            style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,.35)', fontSize: '.72rem', cursor: 'pointer', padding: 0, fontFamily: 'inherit' }}
+          >
+            Gérer mes cookies
+          </button>
         </div>
       </div>
     </footer>
