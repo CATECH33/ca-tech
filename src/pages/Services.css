@@ -9,35 +9,29 @@
   align-items: center;
   padding: calc(var(--nav-h, 72px) + 72px) 5% 88px;
   overflow: hidden;
-  background: linear-gradient(160deg, #020b18 0%, #050d1a 55%, #060f20 100%);
+  /* Dark fallback while video loads */
+  background: #020b18;
 }
-.sol-grid-bg {
+.sol-hero-video {
   position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(0,102,255,.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,102,255,.035) 1px, transparent 1px);
-  background-size: 56px 56px;
-  pointer-events: none; z-index: 1;
-  -webkit-mask-image: radial-gradient(ellipse 90% 90% at 50% 30%, black 20%, transparent 100%);
-  mask-image: radial-gradient(ellipse 90% 90% at 50% 30%, black 20%, transparent 100%);
-}
-.sol-halo {
-  position: absolute; border-radius: 50%; pointer-events: none; z-index: 1;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  z-index: 0;
+  transform: translateZ(0);
   will-change: transform;
+  pointer-events: none;
 }
-.sol-halo-1 {
-  width: 700px; height: 700px;
-  background: radial-gradient(circle, rgba(0,102,255,.12) 0%, transparent 70%);
-  top: -180px; left: -160px;
-  animation: haloPulse 9s ease-in-out infinite;
+.sol-hero-overlay {
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(
+    160deg,
+    rgba(2,11,24,.72) 0%,
+    rgba(5,13,26,.58) 50%,
+    rgba(6,15,32,.48) 100%
+  );
+  pointer-events: none;
 }
-.sol-halo-2 {
-  width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(99,102,241,.09) 0%, transparent 70%);
-  bottom: -80px; right: -60px;
-  animation: haloPulse 12s ease-in-out infinite reverse;
-}
-@keyframes haloPulse { 0%, 100% { transform: scale(1); opacity: .7; } 50% { transform: scale(1.15); opacity: 1; } }
 
 .sol-hero-inner {
   position: relative; z-index: 2;

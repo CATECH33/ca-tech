@@ -343,9 +343,15 @@ export default function Services() {
     <>
       {/* ── HERO ─────────────────────────────────────────────────────── */}
       <section className="sol-hero">
-        <div className="sol-grid-bg" aria-hidden="true" />
-        <div className="sol-halo sol-halo-1" aria-hidden="true" />
-        <div className="sol-halo sol-halo-2" aria-hidden="true" />
+        <video
+          autoPlay muted loop playsInline preload="auto"
+          className="sol-hero-video"
+          aria-hidden="true"
+        >
+          <source src="/videos/hero-solutions.webm" type="video/webm" />
+          <source src="/videos/hero-solutions.mp4" type="video/mp4" />
+        </video>
+        <div className="sol-hero-overlay" aria-hidden="true" />
         <div className="sol-hero-inner">
           <p className="sol-kicker"><span />Nos services · CA-TECH<span /></p>
           <h1 className="sol-h1">Sites, applications &amp; IA —<br /><em>13 services pour votre croissance.</em></h1>
