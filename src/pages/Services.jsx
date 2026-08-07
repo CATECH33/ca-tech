@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import './Services.css'
 import { usePageMeta } from '../lib/seo'
@@ -262,6 +262,9 @@ function ServiceCard({ card, badge, badgeColor }) {
 }
 
 export default function Services() {
+  const solVideoRef = useRef(null)
+  const [solVideoError, setSolVideoError] = useState(false)
+
   usePageMeta({
     title: 'Services — Sites, CRM, SaaS, Automatisations & IA · CA-TECH',
     description: "13 services web et IA : sites vitrines, e-commerce, CRM sur mesure, agents IA et automatisations pour PME. Devis gratuit sous 24h, livraison express.",
@@ -321,6 +324,10 @@ export default function Services() {
   }))
   useJsonLd('services-faq', faqSchema(SERVICES_FAQ))
   useEffect(() => {
+    /* ── Hero video fade-in ── */
+    const vw = solVideoRef.current
+    if (vw) requestAnimationFrame(() => requestAnimationFrame(() => { vw.dataset.ready = '1' }))
+
     /* ── Scroll reveal ── */
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('srv-vis'); obs.unobserve(e.target) } })
@@ -343,30 +350,35 @@ export default function Services() {
     <>
       {/* ── HERO ─────────────────────────────────────────────────────── */}
       <section className="sol-hero">
-        <video
-          autoPlay muted loop playsInline preload="auto"
-          className="sol-hero-video"
-          aria-hidden="true"
-        >
-          <source src="/videos/hero-solutions.webm" type="video/webm" />
-          <source src="/videos/hero-solutions.mp4" type="video/mp4" />
-        </video>
-        <div className="sol-hero-overlay" aria-hidden="true" />
         <div className="sol-hero-inner">
-          <p className="sol-kicker"><span />Nos services · CA-TECH<span /></p>
-          <h1 className="sol-h1">Sites, applications &amp; IA —<br /><em>13 services pour votre croissance.</em></h1>
-          <p className="sol-sub">Développement web, e-commerce, applications métier, CRM sur mesure, SaaS, automatisations, agents IA, SEO, maintenance, hébergement, audit digital et conseil IA. CA-TECH conçoit, déploie et maintient les outils qui accélèrent votre entreprise.</p>
-          <div className="sol-hero-btns">
-            <button className="sol-btn-main" onClick={() => scrollTo('dev-web')}>
-              Explorer nos services
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><polyline points="6 9 12 15 18 9" /></svg>
-            </button>
-            <Link to="/contact" className="sol-btn-ghost">Demander un devis gratuit →</Link>
+          <div className="sol-hero-content">
+            <p className="sol-kicker"><span />Nos services · CA-TECH<span /></p>
+            <h1 className="sol-h1">Sites, applications &amp; IA —<br /><em>13 services pour votre croissance.</em></h1>
+            <p className="sol-sub">Développement web, e-commerce, applications métier, CRM sur mesure, SaaS, automatisations, agents IA, SEO, maintenance, hébergement, audit digital et conseil IA. CA-TECH conçoit, déploie et maintient les outils qui accélèrent votre entreprise.</p>
+            <div className="sol-hero-btns">
+              <button className="sol-btn-main" onClick={() => scrollTo('dev-web')}>
+                Explorer nos services
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><polyline points="6 9 12 15 18 9" /></svg>
+              </button>
+              <Link to="/contact" className="sol-btn-ghost">Demander un devis gratuit →</Link>
+            </div>
+            <div className="srv-hero-trust">
+              <span>✓ Devis sous 24h</span>
+              <span>✓ Sans engagement</span>
+              <span>✓ Premier livrable en 72h</span>
+            </div>
           </div>
-          <div className="srv-hero-trust">
-            <span>✓ Devis sous 24h</span>
-            <span>✓ Sans engagement</span>
-            <span>✓ Premier livrable en 72h</span>
+          <div className="sol-hero-video-col" aria-hidden="true">
+            <div className="sol-hv-wrap" ref={solVideoRef}>
+              {solVideoError ? (
+                <img src="/images/hero-fallback.webp" alt="" className="hv-media" decoding="async" />
+              ) : (
+                <video autoPlay muted loop playsInline preload="auto" className="hv-media" onError={() => setSolVideoError(true)}>
+                  <source src="/videos/hero-solutions.webm" type="video/webm" />
+                  <source src="/videos/hero-solutions.mp4" type="video/mp4" />
+                </video>
+              )}
+            </div>
           </div>
         </div>
       </section>
