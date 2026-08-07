@@ -1,12 +1,21 @@
 /* ══════════════════════════════════════════════════════════════════════
-   CA-TECH — Axeptio CMP v1.0
+   CA-TECH — Axeptio CMP v1.1
    ▸ Chargé en PREMIER, sans defer/async, avant tout script Google
    ▸ Compatible : GA4, Google Ads, Clarity, Meta Pixel, LinkedIn, Stripe
-   ▸ Google Consent Mode v2 natif
+   ▸ Google Consent Mode v2 — 7 signaux complets (recommandations 2026)
+
+   SIGNAUX GCM v2 (tous denied par défaut) :
+     analytics_storage      — cookies analytiques (GA4, Clarity)
+     ad_storage             — cookies publicitaires (Ads, Meta, LinkedIn)
+     ad_user_data           — envoi de données utilisateur à Google Ads
+     ad_personalization     — publicités personnalisées
+     functionality_storage  — cookies fonctionnels (Stripe, préférences)
+     personalization_storage— personnalisation de contenu
+     security_storage       — sécurité / anti-fraude (Stripe)
 
    MISE EN PLACE :
    1. Créer un compte sur https://admin.axept.io
-   2. Créer un projet pour ca-tech.fr, ajouter les services listés en §1
+   2. Créer un projet pour ca-tech.fr, ajouter les services listés en §2
    3. Copier le Client ID dans CONFIG.axeptio.clientId ci-dessous
    4. Renseigner les IDs des services tiers activés
    ══════════════════════════════════════════════════════════════════════ */
@@ -50,35 +59,46 @@
   // ══════════════════════════════════════════════════════════════════════
 
   var SERVICES = {
+    //  analytics_storage ────────────────────────────────────────────────
     'google-analytics': {
       gcm:  { analytics_storage: 'granted' },
       init: function () { _loadGA4(); },
     },
-    'google-ads': {
-      gcm:  { ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted' },
-      init: function () { _loadGoogleAds(); },
-    },
     'microsoft-clarity': {
       gcm:  { analytics_storage: 'granted' },
       init: function () { _loadClarity(); },
+    },
+    //  ad_storage + ad_user_data + ad_personalization ───────────────────
+    'google-ads': {
+      gcm:  { ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted' },
+      init: function () { _loadGoogleAds(); },
     },
     'meta-pixel': {
       gcm:  { ad_storage: 'granted', ad_user_data: 'granted' },
       init: function () { _loadMetaPixel(); },
     },
     'linkedin-insight': {
-      gcm:  { ad_storage: 'granted' },
+      gcm:  { ad_storage: 'granted', ad_user_data: 'granted' },
       init: function () { _loadLinkedIn(); },
     },
+    //  functionality_storage + security_storage ─────────────────────────
     'stripe': {
-      gcm:  { functionality_storage: 'granted' },
+      gcm:  { functionality_storage: 'granted', security_storage: 'granted' },
       init: function () { /* chargé à la demande sur /devis */ },
     },
+    //  personalization_storage ──────────────────────────────────────────
+    //  (réservé pour une future fonctionnalité de personnalisation)
+    // 'personalization': { gcm: { personalization_storage: 'granted' }, init: function () {} },
   };
 
   // ══════════════════════════════════════════════════════════════════════
-  // §3 — GOOGLE CONSENT MODE V2 — DÉFAUT DENIED
+  // §3 — GOOGLE CONSENT MODE V2 — DÉFAUT DENIED (7 signaux)
   //      Synchrone — s'exécute avant tout tag Google
+  //      Recommandations Google 2026 :
+  //        • Tous les signaux denied par défaut (RGPD / CNIL strict)
+  //        • wait_for_update : 500 ms max avant que GTM charge en mode dégradé
+  //        • ads_data_redaction : masque les données d'identification côté Google
+  //        • url_passthrough : préserve gclid/fbclid dans l'URL sans cookie
   // ══════════════════════════════════════════════════════════════════════
 
   window.dataLayer = window.dataLayer || [];
@@ -86,14 +106,18 @@
   window.gtag = window.gtag || gtag;
 
   gtag('consent', 'default', {
-    ad_storage:              'denied',
-    analytics_storage:       'denied',
-    ad_user_data:            'denied',
-    ad_personalization:      'denied',
-    functionality_storage:   'denied',
-    personalization_storage: 'denied',
-    wait_for_update:         500,
+    analytics_storage:       'denied',  // GA4, Clarity
+    ad_storage:              'denied',  // Google Ads, Meta, LinkedIn
+    ad_user_data:            'denied',  // envoi données users vers Google Ads
+    ad_personalization:      'denied',  // remarketing / publicité personnalisée
+    functionality_storage:   'denied',  // préférences, Stripe paiement
+    personalization_storage: 'denied',  // personnalisation de contenu
+    security_storage:        'denied',  // anti-fraude Stripe (accordé si Stripe accepté)
+    wait_for_update:         500,       // ms — GTM attend le signal CMP avant de charger
   });
+
+  // Quand ad_storage est denied : redacte les identifiants publicitaires
+  // côté Google et préserve gclid/fbclid via URL (sans cookie tiers)
   gtag('set', 'ads_data_redaction', true);
   gtag('set', 'url_passthrough',    true);
 
