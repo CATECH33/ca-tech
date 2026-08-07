@@ -464,8 +464,7 @@ ul, ol { list-style: none; }
 .hv-media {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
+  height: auto;
   border-radius: 24px;
   transform: translateZ(0);
   will-change: transform;

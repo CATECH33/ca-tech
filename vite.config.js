@@ -15,8 +15,9 @@ function spaRouter() {
     configureServer(server) {
       server.middlewares.use((req, _res, next) => {
         const path = (req.url || '').split('?')[0].replace(/\/$/, '') || '/'
-        if (SPA_ROUTES.includes(path)) {
-          req.url = '/'
+        // Redirect all SPA routes (including root) to the source HTML entry
+        if (path === '/' || SPA_ROUTES.includes(path)) {
+          req.url = '/index-src.html'
         }
         next()
       })

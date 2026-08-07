@@ -25,8 +25,8 @@ for f in \
   sed -i 's|href="/dist/site.webmanifest"|href="/site.webmanifest"|g' $f
 done
 
-# Copie des assets images à la racine pour les chemins /collaborateurs/..., /services/..., etc.
-for dir in collaborateurs services portfolio automatisations; do
+# Copie des assets à la racine pour les chemins sans /dist/ prefix
+for dir in collaborateurs services portfolio automatisations videos images; do
   [ -d "dist/$dir" ] && cp -r "dist/$dir" . || true
 done
 
