@@ -217,7 +217,167 @@
   }(document, 'script'));
 
   // ══════════════════════════════════════════════════════════════════════
-  // §7 — API PUBLIQUE window.CATechConsent
+  // §7 — PERSONNALISATION VISUELLE AXEPTIO
+  //      Injecte un <style> qui surcharge le thème Axeptio par défaut.
+  //      Sélecteurs à partir de #axeptio_overlay (pas d'iframe).
+  // ══════════════════════════════════════════════════════════════════════
+
+  (function () {
+    var css = [
+      /* ── Overlay backdrop ─────────────────────────────────────── */
+      '#axeptio_overlay {',
+      '  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;',
+      '}',
+
+      /* ── Widget container ─────────────────────────────────────── */
+      '#axeptio_overlay .ax-widget {',
+      '  background: rgba(5, 13, 26, 0.97) !important;',
+      '  backdrop-filter: blur(24px) saturate(180%) !important;',
+      '  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;',
+      '  border: 1px solid rgba(0, 102, 255, 0.20) !important;',
+      '  border-top: 2px solid #0066FF !important;',
+      '  border-radius: 16px !important;',
+      '  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.60), 0 0 40px rgba(0, 102, 255, 0.10) !important;',
+      '  color: #FFFFFF !important;',
+      '  overflow: hidden !important;',
+      '}',
+
+      /* ── Titres ───────────────────────────────────────────────── */
+      '#axeptio_overlay .ax-widget h1,',
+      '#axeptio_overlay .ax-widget h2,',
+      '#axeptio_overlay .ax-widget h3 {',
+      '  color: #FFFFFF !important;',
+      '  font-weight: 700 !important;',
+      '}',
+
+      /* ── Texte courant ────────────────────────────────────────── */
+      '#axeptio_overlay .ax-widget p,',
+      '#axeptio_overlay .ax-widget span,',
+      '#axeptio_overlay .ax-widget label,',
+      '#axeptio_overlay .ax-widget a {',
+      '  color: rgba(255, 255, 255, 0.75) !important;',
+      '}',
+      '#axeptio_overlay .ax-widget a:hover {',
+      '  color: #00D4FF !important;',
+      '}',
+
+      /* ── Bouton principal : Tout accepter ─────────────────────── */
+      '#axeptio_overlay .ax-widget button[data-type="accept"],',
+      '#axeptio_overlay .ax-widget .ax-accept-all,',
+      '#axeptio_overlay .ax-widget [class*="accept"]:not([class*="refuse"]):not([class*="personalize"]) {',
+      '  background: linear-gradient(135deg, #0066FF 0%, #0052CC 100%) !important;',
+      '  color: #FFFFFF !important;',
+      '  border: none !important;',
+      '  border-radius: 10px !important;',
+      '  font-weight: 600 !important;',
+      '  font-size: 0.875rem !important;',
+      '  padding: 12px 20px !important;',
+      '  cursor: pointer !important;',
+      '  transition: opacity 0.15s ease, transform 0.15s ease !important;',
+      '  box-shadow: 0 4px 16px rgba(0, 102, 255, 0.35) !important;',
+      '}',
+      '#axeptio_overlay .ax-widget button[data-type="accept"]:hover,',
+      '#axeptio_overlay .ax-widget .ax-accept-all:hover {',
+      '  opacity: 0.88 !important;',
+      '  transform: translateY(-1px) !important;',
+      '}',
+
+      /* ── Bouton secondaire : Tout refuser ─────────────────────── */
+      '#axeptio_overlay .ax-widget button[data-type="refuse"],',
+      '#axeptio_overlay .ax-widget .ax-refuse-all,',
+      '#axeptio_overlay .ax-widget [class*="refuse"] {',
+      '  background: rgba(255, 255, 255, 0.06) !important;',
+      '  color: rgba(255, 255, 255, 0.80) !important;',
+      '  border: 1px solid rgba(255, 255, 255, 0.15) !important;',
+      '  border-radius: 10px !important;',
+      '  font-weight: 600 !important;',
+      '  font-size: 0.875rem !important;',
+      '  padding: 12px 20px !important;',
+      '  cursor: pointer !important;',
+      '  transition: background 0.15s ease !important;',
+      '}',
+      '#axeptio_overlay .ax-widget button[data-type="refuse"]:hover,',
+      '#axeptio_overlay .ax-widget .ax-refuse-all:hover {',
+      '  background: rgba(255, 255, 255, 0.10) !important;',
+      '}',
+
+      /* ── Bouton tertiaire : Personnaliser ─────────────────────── */
+      '#axeptio_overlay .ax-widget button[data-type="personalize"],',
+      '#axeptio_overlay .ax-widget .ax-customize,',
+      '#axeptio_overlay .ax-widget [class*="personalize"],',
+      '#axeptio_overlay .ax-widget [class*="customize"] {',
+      '  background: transparent !important;',
+      '  color: #00D4FF !important;',
+      '  border: 1px solid rgba(0, 212, 255, 0.30) !important;',
+      '  border-radius: 10px !important;',
+      '  font-weight: 600 !important;',
+      '  font-size: 0.875rem !important;',
+      '  padding: 12px 20px !important;',
+      '  cursor: pointer !important;',
+      '  transition: border-color 0.15s ease, background 0.15s ease !important;',
+      '}',
+      '#axeptio_overlay .ax-widget button[data-type="personalize"]:hover,',
+      '#axeptio_overlay .ax-widget .ax-customize:hover {',
+      '  background: rgba(0, 212, 255, 0.08) !important;',
+      '  border-color: rgba(0, 212, 255, 0.55) !important;',
+      '}',
+
+      /* ── Toggles / switches ───────────────────────────────────── */
+      '#axeptio_overlay .ax-widget input[type="checkbox"]:checked + *,',
+      '#axeptio_overlay .ax-widget [class*="toggle"][class*="active"],',
+      '#axeptio_overlay .ax-widget [class*="switch"][class*="on"] {',
+      '  background: #0066FF !important;',
+      '}',
+
+      /* ── Séparateurs / dividers ───────────────────────────────── */
+      '#axeptio_overlay .ax-widget hr,',
+      '#axeptio_overlay .ax-widget [class*="divider"],',
+      '#axeptio_overlay .ax-widget [class*="separator"] {',
+      '  border-color: rgba(255, 255, 255, 0.08) !important;',
+      '}',
+
+      /* ── Close / X button ─────────────────────────────────────── */
+      '#axeptio_overlay .ax-widget [class*="close"] {',
+      '  color: rgba(255, 255, 255, 0.45) !important;',
+      '}',
+      '#axeptio_overlay .ax-widget [class*="close"]:hover {',
+      '  color: rgba(255, 255, 255, 0.80) !important;',
+      '}',
+
+      /* ── Animation d'entrée (spring) ──────────────────────────── */
+      '@keyframes caTechSlideUp {',
+      '  from { opacity: 0; transform: translateY(24px) scale(0.97); }',
+      '  to   { opacity: 1; transform: translateY(0)    scale(1);    }',
+      '}',
+      '#axeptio_overlay .ax-widget {',
+      '  animation: caTechSlideUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) both !important;',
+      '}',
+
+      /* ── Mobile ───────────────────────────────────────────────── */
+      '@media (max-width: 520px) {',
+      '  #axeptio_overlay .ax-widget {',
+      '    border-radius: 16px 16px 0 0 !important;',
+      '    left: 0 !important;',
+      '    right: 0 !important;',
+      '    bottom: 0 !important;',
+      '    width: 100% !important;',
+      '    max-width: 100% !important;',
+      '    margin: 0 !important;',
+      '  }',
+      '}',
+    ].join('\n');
+
+    var style = document.getElementById('ca-axeptio-theme');
+    if (!style) {
+      style = document.createElement('style');
+      style.id = 'ca-axeptio-theme';
+      style.textContent = css;
+      document.head.appendChild(style);
+    }
+  })();
+
+  // ══════════════════════════════════════════════════════════════════════
+  // §8 — API PUBLIQUE window.CATechConsent
   //      Utilisable depuis toutes les pages (bouton "Gérer mes cookies",
   //      /gestion-des-cookies, etc.)
   // ══════════════════════════════════════════════════════════════════════
