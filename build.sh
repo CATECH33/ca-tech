@@ -10,7 +10,7 @@ npm install
 npm run build
 cd ..
 
-# Copie index.html pour le SPA routing du site principal
+# Copie index-src.html (entry Vite) pour le SPA routing du site principal
 for f in \
   index.html services.html loic.html collaborateurs-ia.html \
   automatisations.html realisations.html contact.html catalogue.html tarifs.html \
@@ -19,7 +19,7 @@ for f in \
   creation-site-internet-dijon.html creation-site-internet-lyon.html \
   creation-site-internet-paris.html agence-ia-dijon.html agence-ia-lyon.html \
   automatisation-pme.html maintenance-informatique-pme.html; do
-  cp dist/index.html $f
+  cp dist/index-src.html $f
   # Vite transforme href="/site.webmanifest" en href="/dist/site.webmanifest" à cause du base:/dist/
   # Chrome Android utilise ce chemin pour vérifier l'installabilité — il doit pointer à la racine
   sed -i 's|href="/dist/site.webmanifest"|href="/site.webmanifest"|g' $f
