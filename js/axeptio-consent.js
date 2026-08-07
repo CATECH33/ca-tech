@@ -23,7 +23,7 @@
 
   var CONFIG = {
     axeptio: {
-      clientId:       'VOTRE_CLIENT_ID_AXEPTIO', // ← https://admin.axept.io → Projet → Client ID
+      clientId:       '686e8f86b80b5e7c51a0e5b9',
       cookiesVersion: 'ca-tech-fr',              // ← nom de version dans Axeptio
     },
     ga4:       { id: 'G-R526KDMC17' },
