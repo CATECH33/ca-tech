@@ -16,6 +16,7 @@ const Catalogue         = lazy(() => import('./pages/Catalogue.jsx'))
 const Tarifs            = lazy(() => import('./pages/Tarifs.jsx'))
 const SeoPage           = lazy(() => import('./pages/SeoPage.jsx'))
 const PolitiqueCookies  = lazy(() => import('./pages/PolitiqueCookies.jsx'))
+const CookiePolicy      = lazy(() => import('./pages/CookiePolicy.jsx'))
 
 function Layout() {
   return (
@@ -58,6 +59,7 @@ export default function App() {
           <Route path="/catalogue"         element={<Catalogue />} />
           <Route path="/tarifs"              element={<Tarifs />} />
           <Route path="/politique-des-cookies" element={<PolitiqueCookies />} />
+          <Route path="/politique-cookies"     element={<CookiePolicy />} />
           {Object.values(SEO_PAGES).map(page => (
             <Route key={page.path} path={page.path} element={<SeoPage page={page} />} />
           ))}

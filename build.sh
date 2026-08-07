@@ -15,6 +15,7 @@ for f in \
   index.html services.html loic.html collaborateurs-ia.html \
   automatisations.html realisations.html contact.html catalogue.html tarifs.html \
   politique-des-cookies.html \
+  politique-cookies.html \
   creation-site-internet-dijon.html creation-site-internet-lyon.html \
   creation-site-internet-paris.html agence-ia-dijon.html agence-ia-lyon.html \
   automatisation-pme.html maintenance-informatique-pme.html; do
