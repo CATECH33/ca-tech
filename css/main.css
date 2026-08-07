@@ -442,101 +442,35 @@ ul, ol { list-style: none; }
 .hero-micro {
   font-size: var(--text-sm); color: rgba(255,255,255,.55);
 }
-/* Chat demo */
+/* Hero Video */
 .hero-demo { position: relative; z-index: 1; }
-.chat-frame {
-  background: rgba(255,255,255,.07);
-  border: 1px solid rgba(255,255,255,.14);
-  border-radius: var(--radius-xl);
-  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 24px 64px rgba(0,0,0,.30);
+
+.hv-wrap {
+  border-radius: 24px;
   overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(37,99,235,.22),
+    0 24px 64px rgba(0,0,0,.45),
+    0 0 56px rgba(37,99,235,.16);
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 700ms cubic-bezier(.16,1,.3,1), transform 700ms cubic-bezier(.16,1,.3,1);
+  will-change: transform, opacity;
 }
-.chat-bar {
-  background: rgba(255,255,255,.06);
-  padding: 14px 18px;
-  display: flex; align-items: center; gap: 12px;
-  border-bottom: 1px solid rgba(255,255,255,.08);
+.hv-wrap[data-ready='1'] {
+  opacity: 1;
+  transform: translateY(0);
 }
-.chat-dots { display: flex; gap: 6px; }
-.chat-dots span {
-  width: 10px; height: 10px; border-radius: 50%;
-  background: rgba(255,255,255,.25);
-}
-.chat-bar-title {
-  font-size: var(--text-sm); font-weight: 600; color: rgba(255,255,255,.85);
-  margin-left: 4px;
-}
-.chat-bar-status {
-  font-size: 11px; color: rgba(255,255,255,.50); margin-left: auto;
-  display: flex; align-items: center; gap: 5px;
-}
-.chat-bar-status::before {
-  content: ''; width: 7px; height: 7px; border-radius: 50%;
-  background: var(--color-success); display: block;
-}
-.chat-messages {
-  padding: 20px 18px; min-height: 240px;
-  display: flex; flex-direction: column; gap: 12px;
-}
-.chat-bubble {
-  max-width: 85%; padding: 12px 15px;
-  border-radius: 16px; font-size: var(--text-sm);
-  line-height: 1.5; opacity: 0; transform: translateY(8px) scale(.95);
-  transition: opacity 250ms var(--ease-spring), transform 250ms var(--ease-spring);
-}
-.chat-bubble.show { opacity: 1; transform: translateY(0) scale(1); }
-.chat-bubble.loic {
-  background: rgba(255,255,255,.12); color: rgba(255,255,255,.90);
-  border-bottom-left-radius: 4px;
-  align-self: flex-start;
-}
-.chat-bubble.user {
-  background: var(--color-primary); color: #fff;
-  border-bottom-right-radius: 4px;
-  align-self: flex-end;
-}
-.chat-typing {
-  display: flex; gap: 5px; align-items: center;
-  padding: 12px 15px; max-width: 60px;
-  background: rgba(255,255,255,.10); border-radius: 16px;
-  border-bottom-left-radius: 4px;
-  opacity: 0; transition: opacity 200ms;
-  align-self: flex-start;
-}
-.chat-typing.show { opacity: 1; }
-.chat-typing span {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: rgba(255,255,255,.60);
-  animation: typing-dot .6s ease-in-out infinite;
-}
-.chat-typing span:nth-child(2) { animation-delay: .2s; }
-.chat-typing span:nth-child(3) { animation-delay: .4s; }
-@keyframes typing-dot {
-  0%, 100% { transform: translateY(0); opacity: .6; }
-  50%        { transform: translateY(-5px); opacity: 1; }
-}
-@keyframes pulse-dot {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,.5); }
-  50%       { box-shadow: 0 0 0 5px rgba(16,185,129,0); }
-}
-#loic-pulse { animation: pulse-dot 1.8s ease-in-out infinite; }
-.chat-input-bar {
-  padding: 14px 18px;
-  border-top: 1px solid rgba(255,255,255,.08);
-  display: flex; align-items: center; gap: 10px;
-}
-.chat-input-mock {
-  flex: 1; padding: 10px 14px; border-radius: var(--radius-sm);
-  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
-  color: rgba(255,255,255,.45); font-size: var(--text-sm);
-  font-family: inherit; pointer-events: none;
-}
-.chat-send {
-  width: 36px; height: 36px; border-radius: var(--radius-sm);
-  background: var(--color-primary); color: #fff;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
+.hv-media {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 24px;
+  transform: translateZ(0);
+  will-change: transform;
+  pointer-events: none;
+  user-select: none;
 }
 
 /* ── 10. PROOF BAR ─────────────────────────────────────────── */
@@ -1067,7 +1001,7 @@ ul, ol { list-style: none; }
   .container { padding: 0 24px; }
   .hero-inner { grid-template-columns: 1fr; gap: 48px; }
   .hero-h1 { font-size: 52px; }
-  .hero-demo { max-width: 480px; margin: 0 auto; }
+  .hero-demo { width: 100%; max-width: 560px; margin: 0 auto; }
   .hero-content { text-align: center; }
   .hero-ctas { justify-content: center; }
   .hero-subtitle { margin: 0 auto 36px; }
@@ -1091,7 +1025,7 @@ ul, ol { list-style: none; }
   #hero { padding: 120px 0 80px; min-height: 85vh; }
   .hero-h1 { font-size: 38px; }
   .hero-subtitle { font-size: var(--text-base); }
-  .hero-demo { display: none; }
+  .hero-demo { width: 100%; max-width: 100%; margin: 0; }
   .proof-grid { grid-template-columns: repeat(2, 1fr); gap: 0; }
   .proof-stat:nth-child(3)::before { display: none; }
   .proof-stat:nth-child(n+3) { padding-top: 24px; margin-top: 24px; border-top: 1px solid rgba(255,255,255,.12); }

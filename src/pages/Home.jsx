@@ -4,6 +4,7 @@ import '../../css/main.css'
 import { usePageMeta } from '../lib/seo'
 import { useJsonLd, organizationSchema, websiteSchema, webPageSchema, itemListSchema, faqSchema } from '../lib/schema'
 import { SeoSection, SeoProse, SeoMethod, SeoComparison, SeoFaq } from '../components/SeoContent'
+import HeroVideo from '../components/hero/HeroVideo'
 
 const HOME_METHOD = [
   { title: 'Diagnostic',   desc: "On analyse votre activité, vos processus et vos données. On identifie les 3 leviers digitaux avec le meilleur ratio impact/effort." },
@@ -218,50 +219,6 @@ export default function Home() {
       animate(document.getElementById('hero-desc'), 350)
       animate(document.getElementById('hero-ctas'), 450)
       animate(document.getElementById('hero-micro'), 550)
-      animate(document.getElementById('hero-demo'), 650)
-
-      var msgs = document.getElementById('chat-messages')
-      if (!msgs) return
-      var seq = [
-        { role: 'loic', text: 'Bonjour ! Je suis Loïc, votre consultant IA chez CA-TECH. 👋', delay: 800 },
-        { role: 'user', text: "Combien d'heures mon équipe perd-elle sur des tâches répétitives ?", delay: 3200 },
-        { role: 'loic', text: 'En moyenne, nos clients récupèrent 14h/semaine dès le premier mois. 🚀', delay: 5200 },
-        { role: 'user', text: 'Vous faites aussi des sites internet ?', delay: 8400 },
-        { role: 'loic', text: 'Oui — vitrines, e-commerce, applications métier. Livré en 1 à 6 semaines. ✅', delay: 10400 },
-        { role: 'user', text: "C'est quoi exactement un collaborateur IA ?", delay: 13800 },
-        { role: 'loic', text: 'Un agent qui répond à vos clients, traite vos tickets et relance vos prospects — 24h/24, sans congé. 🤖', delay: 15800 },
-        { role: 'user', text: 'Et pour le SEO et le marketing ?', delay: 19600 },
-        { role: 'loic', text: 'Notre SEO IA publie du contenu optimisé chaque semaine. Résultat moyen : ×3 de trafic en 6 mois. 📈', delay: 21600 },
-        { role: 'user', text: 'Quel est le prix pour démarrer ?', delay: 25200 },
-        { role: 'loic', text: 'À partir de 800 € — ROI dès le 1er mois. 🎯', delay: 27200 },
-      ]
-      seq.forEach(function (m) {
-        setTimeout(function () {
-          var t = document.createElement('div')
-          t.className = 'chat-typing show'
-          t.innerHTML = '<span></span><span></span><span></span>'
-          msgs.appendChild(t)
-          msgs.scrollTop = msgs.scrollHeight
-          setTimeout(function () {
-            msgs.removeChild(t)
-            var b = document.createElement('div')
-            b.className = 'chat-bubble ' + m.role
-            b.textContent = m.text
-            msgs.appendChild(b)
-            requestAnimationFrame(function () { b.classList.add('show') })
-            msgs.scrollTop = msgs.scrollHeight
-          }, 900)
-        }, m.delay)
-      })
-      setTimeout(function () {
-        var cta = document.createElement('a')
-        cta.href = '/contact'
-        cta.className = 'chat-bubble loic show'
-        cta.innerHTML = '<strong>→ Lancer mon diagnostic gratuit</strong>'
-        cta.style.cursor = 'pointer'
-        msgs.appendChild(cta)
-        msgs.scrollTop = msgs.scrollHeight
-      }, 30000)
     })()
 
     /* ── SCROLL REVEAL ────────────────────────────────────────────────── */
@@ -330,21 +287,8 @@ export default function Home() {
               </div>
               <p className="hero-micro" id="hero-micro" style={{ opacity: 0 }}>Gratuit · Sans engagement · Premier livrable en 72h</p>
             </div>
-            <div className="hero-demo" aria-hidden="true" id="hero-demo" style={{ opacity: 0, transform: 'scale(.96)' }}>
-              <div className="chat-frame">
-                <div className="chat-bar">
-                  <div className="chat-dots"><span></span><span></span><span></span></div>
-                  <span className="chat-bar-title">Loïc — Consultant IA</span>
-                  <span className="chat-bar-status">En ligne</span>
-                </div>
-                <div className="chat-messages" id="chat-messages"></div>
-                <div className="chat-input-bar">
-                  <div className="chat-input-mock">Votre message...</div>
-                  <div className="chat-send">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" /></svg>
-                  </div>
-                </div>
-              </div>
+            <div className="hero-demo">
+              <HeroVideo />
             </div>
           </div>
         </div>
