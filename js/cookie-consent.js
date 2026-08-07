@@ -165,7 +165,7 @@
 .ck-banner{position:fixed;bottom:24px;left:24px;z-index:9998;max-width:360px;width:calc(100% - 48px);animation:ck-appear .5s cubic-bezier(.16,1,.3,1) both}
 @keyframes ck-appear{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
 @media(prefers-reduced-motion:reduce){.ck-banner,.ck-modal-overlay,.ck-modal,.ck-float-btn{animation:none!important;transition:none!important}}
-.ck-inner{background:rgba(5,13,26,.96);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(255,255,255,.08);border-top:1px solid rgba(0,102,255,.22);border-radius:16px;box-shadow:0 0 0 1px rgba(255,255,255,.03) inset,0 8px 32px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.3);padding:18px 18px 14px;display:flex;flex-direction:column;gap:12px}
+.ck-inner{background:rgba(5,13,26,.96);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(255,255,255,.1);border-top:2px solid rgba(0,102,255,.55);border-radius:16px;box-shadow:0 0 0 1px rgba(255,255,255,.04) inset,0 8px 32px rgba(0,0,0,.55),0 2px 8px rgba(0,0,0,.3),0 0 24px rgba(0,102,255,.12);padding:18px 18px 14px;display:flex;flex-direction:column;gap:12px}
 .ck-header{display:flex;align-items:center;gap:9px}
 .ck-icon{flex-shrink:0;width:28px;height:28px;border-radius:8px;background:rgba(0,102,255,.15);border:1px solid rgba(0,102,255,.2);display:flex;align-items:center;justify-content:center;color:#4d9fff}
 .ck-icon svg{width:13px;height:13px}
@@ -218,8 +218,8 @@
 .ck-modal-actions{display:flex;flex-direction:column;gap:7px}
 .ck-modal-actions .ck-btn-primary{padding:10px 14px;font-size:13px}
 .ck-modal-actions-row{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-.ck-float-btn{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:20px;z-index:9990;display:flex;align-items:center;gap:7px;height:36px;padding:0 12px 0 10px;border-radius:18px;background:rgba(5,13,26,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.09);box-shadow:0 2px 12px rgba(0,0,0,.35);cursor:pointer;color:rgba(255,255,255,.5);font-size:11.5px;font-weight:500;transition:border-color .2s,box-shadow .2s,color .2s;font-family:inherit}
-.ck-float-btn:hover{border-color:rgba(0,102,255,.35);box-shadow:0 4px 20px rgba(0,102,255,.2);color:rgba(255,255,255,.8)}
+.ck-float-btn{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:20px;z-index:9990;display:flex;align-items:center;gap:7px;height:36px;padding:0 14px 0 11px;border-radius:18px;background:rgba(5,13,26,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(0,102,255,.3);box-shadow:0 2px 12px rgba(0,0,0,.4),0 0 0 1px rgba(0,102,255,.08) inset;cursor:pointer;color:rgba(255,255,255,.75);font-size:12px;font-weight:500;transition:border-color .2s,box-shadow .2s,color .2s;font-family:inherit}
+.ck-float-btn:hover{border-color:rgba(0,102,255,.55);box-shadow:0 4px 20px rgba(0,102,255,.25),0 0 0 1px rgba(0,102,255,.12) inset;color:#fff}
 .ck-float-btn:focus-visible{outline:2px solid #0066ff;outline-offset:2px}
 .ck-float-icon{width:14px;height:14px;color:rgba(0,102,255,.7);flex-shrink:0}
 @media(max-width:520px){.ck-banner{bottom:0;left:0;right:0;max-width:none;width:100%;animation:ck-appear-mobile .45s cubic-bezier(.16,1,.3,1) both}@keyframes ck-appear-mobile{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}.ck-inner{border-radius:16px 16px 0 0;border-bottom:none;padding:16px 16px calc(12px + env(safe-area-inset-bottom,0px))}.ck-modal{padding:22px 16px 20px}}
