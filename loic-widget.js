@@ -218,6 +218,7 @@
     panel.setAttribute('role', 'dialog')
     panel.setAttribute('aria-label', 'Chat avec Loïc')
     panel.setAttribute('aria-hidden', 'true')
+    panel.setAttribute('inert', '')
 
     // Header
     var hdr = document.createElement('div')
@@ -425,6 +426,7 @@
     btn.appendChild(badge)
     panel.classList.add('loic-open')
     panel.setAttribute('aria-hidden', 'false')
+    panel.removeAttribute('inert')
     unread = 0
     showBadge(0)
     if (msgs.length === 0) startChat()
@@ -438,6 +440,7 @@
     btn.appendChild(badge)
     panel.classList.remove('loic-open')
     panel.setAttribute('aria-hidden', 'true')
+    panel.setAttribute('inert', '')
   }
 
   // ── Chat ────────────────────────────────────────────────────────
