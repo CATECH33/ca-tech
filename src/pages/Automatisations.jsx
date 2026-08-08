@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import './Automatisations.css'
 import { usePageMeta } from '../lib/seo'
@@ -256,6 +256,8 @@ const TECHS = [
 ══════════════════════════════════════════════════════════ */
 export default function Automatisations() {
   const [active, setActive] = useState('tous')
+  const heroVideoRef = useRef(null)
+  const heroVideoWrapRef = useRef(null)
 
   usePageMeta({
     title: "Automatisation d'entreprise — Récupérez 14h/semaine · CA-TECH",
@@ -289,6 +291,18 @@ export default function Automatisations() {
     () => active === 'tous' ? SERVICES : SERVICES.filter(s => s.cat === active),
     [active]
   )
+
+  useEffect(() => {
+    const wrap = heroVideoWrapRef.current
+    if (wrap) requestAnimationFrame(() => requestAnimationFrame(() => wrap.classList.add('ready')))
+    const video = heroVideoRef.current
+    if (!video) return
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const apply = () => { if (mq.matches) video.pause(); else video.play().catch(() => {}) }
+    apply()
+    mq.addEventListener('change', apply)
+    return () => mq.removeEventListener('change', apply)
+  }, [])
 
   useEffect(() => {
     const cv = document.getElementById('atCanvas')
@@ -347,42 +361,61 @@ export default function Automatisations() {
         <div className="at-halo at-halo-3" aria-hidden="true" />
 
         <div className="at-hero-inner">
-          <p className="at-kicker at-a0"><span />Automatisations métier · CA-TECH<span /></p>
-          <h1 className="at-a1">
-            Automatisez vos processus —<br /><em>N8N, Make, Zapier : 14h récupérées/semaine.</em>
-          </h1>
-          <p className="at-hero-sub at-a2">
-            14 services d'automatisation prêts à déployer. Chaque heure récupérée, chaque lead traité, chaque facture envoyée — sans que vous leviez le petit doigt.
-          </p>
-
-          <div className="at-stats at-a3">
-            <div>
-              <div className="at-stat-val">14<em>+</em></div>
-              <div className="at-stat-lbl">Services</div>
-            </div>
-            <div>
-              <div className="at-stat-val">48<em>h</em></div>
-              <div className="at-stat-lbl">Déploiement</div>
-            </div>
-            <div>
-              <div className="at-stat-val">15<em>h</em></div>
-              <div className="at-stat-lbl">Récupérées / semaine</div>
-            </div>
-            <div>
-              <div className="at-stat-val">30<em>j</em></div>
-              <div className="at-stat-lbl">ROI visible</div>
+          {/* Colonne vidéo — GAUCHE */}
+          <div className="at-hero-video-col" aria-hidden="true">
+            <div className="at-hero-video-wrap" ref={heroVideoWrapRef}>
+              <video
+                ref={heroVideoRef}
+                autoPlay muted loop playsInline preload="metadata"
+                className="at-hero-video"
+                poster="/automatisations/automatisation-hero.webp"
+                aria-label="Démonstration des automatisations CA-TECH"
+              >
+                <source src="/automatisations/Automatisations.mp4" type="video/mp4" />
+              </video>
+              <div className="at-hero-video-overlay" />
             </div>
           </div>
 
-          <div className="at-hero-ctas at-a4">
-            <a
-              href="#services"
-              className="btn-primary"
-              onClick={e => { e.preventDefault(); document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' }) }}
-            >
-              Voir les services →
-            </a>
-            <Link to="/contact" className="btn-outline">Demander une démo gratuite</Link>
+          {/* Colonne contenu — DROITE */}
+          <div className="at-hero-content">
+            <p className="at-kicker at-a0"><span />Automatisations métier · CA-TECH<span /></p>
+            <h1 className="at-a1">
+              Automatisez vos processus —<br /><em>N8N, Make, Zapier : 14h récupérées/semaine.</em>
+            </h1>
+            <p className="at-hero-sub at-a2">
+              14 services d'automatisation prêts à déployer. Chaque heure récupérée, chaque lead traité, chaque facture envoyée — sans que vous leviez le petit doigt.
+            </p>
+
+            <div className="at-stats at-a3">
+              <div>
+                <div className="at-stat-val">14<em>+</em></div>
+                <div className="at-stat-lbl">Services</div>
+              </div>
+              <div>
+                <div className="at-stat-val">48<em>h</em></div>
+                <div className="at-stat-lbl">Déploiement</div>
+              </div>
+              <div>
+                <div className="at-stat-val">15<em>h</em></div>
+                <div className="at-stat-lbl">Récupérées / semaine</div>
+              </div>
+              <div>
+                <div className="at-stat-val">30<em>j</em></div>
+                <div className="at-stat-lbl">ROI visible</div>
+              </div>
+            </div>
+
+            <div className="at-hero-ctas at-a4">
+              <a
+                href="#services"
+                className="btn-primary"
+                onClick={e => { e.preventDefault(); document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' }) }}
+              >
+                Voir les services →
+              </a>
+              <Link to="/contact" className="btn-outline">Demander une démo gratuite</Link>
+            </div>
           </div>
         </div>
       </section>
