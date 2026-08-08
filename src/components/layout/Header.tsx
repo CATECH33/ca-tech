@@ -21,7 +21,6 @@ const NAV = [
   { label: 'Méthodologie', href: '/methodologie' },
   { label: 'Blog',         href: '/blog' },
   { label: 'Tarifs',       to: '/tarifs' },
-  { label: 'À propos',     href: '/a-propos' },
   { label: 'Contact',      to: '/contact' },
 ] as const
 

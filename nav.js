@@ -29,7 +29,6 @@
     ['/realisations',      'Réalisations'],
     ['/blog',              'Blog'],
     ['/tarifs',            'Tarifs'],
-    ['/loic',              'À propos'],
     ['/contact',           'Contact'],
   ];
 
@@ -162,7 +161,6 @@
     'blog':                        '/blog',
     'tarifs':                      '/tarifs',
     'loic':                        '/loic',
-    'a-propos':                    '/loic',
     'contact':                     '/contact',
     'devis':                       '/contact',
     'services':                    null,
