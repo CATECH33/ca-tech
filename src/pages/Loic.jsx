@@ -246,7 +246,7 @@ export default function Loic() {
                 poster="/collaborateurs/commercial-ia.webp"
                 aria-label="Démonstration de Loïc, l'agent IA conversationnel CA-TECH"
               >
-                <source src="/Lo%C3%AFc%20IA/Lo%C3%AFc%20IA.mp4" type="video/mp4" />
+                <source src="/loic/loic-ia.mp4" type="video/mp4" />
               </video>
               <div className="ldemo-hero-video-overlay" />
             </div>
