@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import DetailDrawer from '../components/DetailDrawer'
 import './CollaborateursIA.css'
@@ -533,6 +533,7 @@ function CollaborateurPanel({ collab, onClose }) {
 ══════════════════════════════════════════════════ */
 export default function CollaborateursIA() {
   const [selected, setSelected] = useState(null)
+  const heroVideoRef = useRef(null)
 
   usePageMeta({
     title: 'Collaborateurs IA — 6 agents autonomes 24/7 pour PME · CA-TECH',
@@ -680,6 +681,16 @@ export default function CollaborateursIA() {
     }
   }, [])
 
+  useEffect(() => {
+    const video = heroVideoRef.current
+    if (!video) return
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const apply = () => { if (mq.matches) video.pause(); else video.play().catch(() => {}) }
+    apply()
+    mq.addEventListener('change', apply)
+    return () => mq.removeEventListener('change', apply)
+  }, [])
+
   const openDrawer = useCallback(c => setSelected(c), [])
   const closeDrawer = useCallback(() => setSelected(null), [])
 
@@ -694,6 +705,35 @@ export default function CollaborateursIA() {
         <div className="cai-halo cai-halo-3" id="halo3" aria-hidden="true" />
 
         <div className="cai-hero-inner">
+          {/* Colonne vidéo — GAUCHE */}
+          <div className="cai-hero-right">
+            <div className="cai-hero-photo-wrap">
+              <video
+                ref={heroVideoRef}
+                autoPlay muted loop playsInline preload="metadata"
+                className="cai-hero-video"
+                poster="/collaborateurs/collaborateur-ia-hero.webp"
+                aria-label="Démonstration des collaborateurs IA CA-TECH en action"
+              >
+                <source src="/collaborateurs/Collaborateurs%20IA.mp4" type="video/mp4" />
+              </video>
+              <div className="cai-hero-photo-overlay" />
+            </div>
+            <div className="cai-metric m-1" aria-hidden="true">
+              <span className="cai-metric-num">847</span>
+              <span className="cai-metric-lbl">tickets résolus ce mois</span>
+            </div>
+            <div className="cai-metric m-2" aria-hidden="true">
+              <span className="cai-metric-num"><em>×3</em></span>
+              <span className="cai-metric-lbl">leads générés</span>
+            </div>
+            <div className="cai-metric m-3" aria-hidden="true">
+              <span className="cai-metric-num">98<em>%</em></span>
+              <span className="cai-metric-lbl">satisfaction</span>
+            </div>
+          </div>
+
+          {/* Colonne texte — DROITE */}
           <div className="cai-hero-left">
             <p className="cai-kicker cai-anim-0">
               <span />Vos nouvelles recrues · Toujours disponibles<span />
@@ -714,29 +754,6 @@ export default function CollaborateursIA() {
                 Découvrir nos collaborateurs →
               </a>
               <Link to="/contact" className="btn-outline">Demander une démo</Link>
-            </div>
-          </div>
-
-          <div className="cai-hero-right" aria-hidden="true">
-            <div className="cai-hero-photo-wrap">
-              <img
-                src="/collaborateurs/collaborateur-ia-hero.webp"
-                alt="Équipe CA-TECH"
-                loading="eager" decoding="async" width="620" height="560"
-              />
-              <div className="cai-hero-photo-overlay" />
-            </div>
-            <div className="cai-metric m-1">
-              <span className="cai-metric-num">847</span>
-              <span className="cai-metric-lbl">tickets résolus ce mois</span>
-            </div>
-            <div className="cai-metric m-2">
-              <span className="cai-metric-num"><em>×3</em></span>
-              <span className="cai-metric-lbl">leads générés</span>
-            </div>
-            <div className="cai-metric m-3">
-              <span className="cai-metric-num">98<em>%</em></span>
-              <span className="cai-metric-lbl">satisfaction</span>
             </div>
           </div>
         </div>

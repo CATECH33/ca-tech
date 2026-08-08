@@ -144,6 +144,12 @@
   object-position: center 20%;
   display: block;
 }
+.cai-hero-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 .cai-hero-photo-overlay {
   position: absolute;
   inset: 0;
@@ -770,7 +776,8 @@
 /* ══════════════════════════════════════════════════════════ */
 @media (max-width: 960px) {
   .cai-hero-inner { grid-template-columns: 1fr; gap: 2rem; }
-  .cai-hero-right { display: none; }
+  .cai-hero-right { height: 280px; overflow: hidden; }
+  .cai-metric { display: none; }
   .cai-hero h1, .cai-hero-sub { text-align: center; }
   .cai-hero-btns { justify-content: center; }
   .cai-kicker { display: flex; justify-content: center; }
@@ -782,6 +789,7 @@
   .cai-col-img  { height: 200px; }
 }
 @media (max-width: 600px) {
+  .cai-hero-right { height: 220px; }
   .cai-bento { grid-template-columns: 1fr; grid-auto-rows: auto; }
   .cai-bento .b-lg,
   .cai-bento .b-sm { grid-column: 1 / -1; }
