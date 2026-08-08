@@ -139,6 +139,8 @@ export default function Loic() {
   const [isTyping, setIsTyping] = useState(false)
   const scrollRef = useRef(null)
   const inputRef = useRef(null)
+  const heroVideoRef = useRef(null)
+  const heroVideoWrapRef = useRef(null)
 
   usePageMeta({
     title: 'Loïc — Démo Agent IA support client en live · CA-TECH',
@@ -186,6 +188,18 @@ export default function Loic() {
   })
 
   useEffect(() => {
+    const wrap = heroVideoWrapRef.current
+    if (wrap) requestAnimationFrame(() => requestAnimationFrame(() => wrap.classList.add('ready')))
+    const video = heroVideoRef.current
+    if (!video) return
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const apply = () => { if (mq.matches) video.pause(); else video.play().catch(() => {}) }
+    apply()
+    mq.addEventListener('change', apply)
+    return () => mq.removeEventListener('change', apply)
+  }, [])
+
+  useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
@@ -218,18 +232,40 @@ export default function Loic() {
         <div className="ldemo-halo ldemo-halo-1" aria-hidden="true" />
         <div className="ldemo-halo ldemo-halo-2" aria-hidden="true" />
         <div className="ldemo-hero-inner">
-          <p className="ldemo-kicker">
-            <span className="ldemo-kicker-dot" aria-hidden="true" />
-            Centre de démonstration IA · CA-TECH
-          </p>
-          <h1 className="ldemo-h1">Discutez avec <em>Loïc</em>,<br />notre collaborateur IA.</h1>
-          <p className="ldemo-sub">Posez n'importe quelle question commerciale, support ou RH. Loïc vous répond en temps réel — exactement comme il le ferait dans votre entreprise.</p>
-          <div className="ldemo-hero-btns">
-            <button className="ldemo-btn-main" onClick={() => document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' })}>
-              Tester gratuitement
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><polyline points="6 9 12 15 18 9" /></svg>
-            </button>
-            <Link to="/contact" className="ldemo-btn-ghost">Déployer Loïc →</Link>
+          {/* Colonne vidéo — GAUCHE */}
+          <div className="ldemo-hero-video-col" aria-hidden="true">
+            <div className="ldemo-hero-video-wrap" ref={heroVideoWrapRef}>
+              <video
+                ref={heroVideoRef}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                className="ldemo-hero-video"
+                poster="/collaborateurs/commercial-ia.webp"
+                aria-label="Démonstration de Loïc, l'agent IA conversationnel CA-TECH"
+              >
+                <source src="/Lo%C3%AFc%20IA/Lo%C3%AFc%20IA.mp4" type="video/mp4" />
+              </video>
+              <div className="ldemo-hero-video-overlay" />
+            </div>
+          </div>
+          {/* Colonne contenu — DROITE */}
+          <div className="ldemo-hero-content">
+            <p className="ldemo-kicker">
+              <span className="ldemo-kicker-dot" aria-hidden="true" />
+              Centre de démonstration IA · CA-TECH
+            </p>
+            <h1 className="ldemo-h1">Discutez avec <em>Loïc</em>,<br />notre collaborateur IA.</h1>
+            <p className="ldemo-sub">Posez n'importe quelle question commerciale, support ou RH. Loïc vous répond en temps réel — exactement comme il le ferait dans votre entreprise.</p>
+            <div className="ldemo-hero-btns">
+              <button className="ldemo-btn-main" onClick={() => document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' })}>
+                Tester gratuitement
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><polyline points="6 9 12 15 18 9" /></svg>
+              </button>
+              <Link to="/contact" className="ldemo-btn-ghost">Déployer Loïc →</Link>
+            </div>
           </div>
         </div>
       </section>

@@ -43,9 +43,42 @@
 
 .ldemo-hero-inner {
   position: relative; z-index: 2;
-  max-width: 820px;
-  margin: 0 auto;
-  text-align: center;
+  max-width: 1440px;
+  margin: 0 auto; width: 100%;
+  display: grid;
+  grid-template-columns: 60fr 40fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+/* ── Video column (LEFT) ── */
+.ldemo-hero-video-col {
+  position: relative;
+  align-self: stretch;
+  min-height: 320px;
+}
+.ldemo-hero-video-wrap {
+  position: absolute; inset: 0;
+  border-radius: 20px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,.09);
+  box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(0,102,255,.12), 0 0 60px rgba(0,102,255,.12);
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 700ms cubic-bezier(.16,1,.3,1), transform 700ms cubic-bezier(.16,1,.3,1);
+  will-change: transform, opacity;
+}
+.ldemo-hero-video-wrap.ready { opacity: 1; transform: translateY(0); }
+.ldemo-hero-video {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+.ldemo-hero-video-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(160deg, rgba(2,11,24,.4) 0%, rgba(0,30,80,.15) 60%, rgba(0,102,255,.05) 100%);
+}
+
+/* ── Content column (RIGHT) ── */
+.ldemo-hero-content {
+  position: relative;
 }
 
 .ldemo-kicker {
@@ -73,11 +106,11 @@
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 .ldemo-sub {
-  font-size: clamp(.98rem, 2vw, 1.15rem);
-  color: rgba(255,255,255,.6); line-height: 1.65;
-  max-width: 600px; margin: 0 auto 36px;
+  font-size: clamp(.9rem, 1.4vw, 1.05rem);
+  color: rgba(255,255,255,.62); line-height: 1.72;
+  max-width: 100%; margin: 0 0 36px;
 }
-.ldemo-hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.ldemo-hero-btns { display: flex; gap: 14px; justify-content: flex-start; flex-wrap: wrap; }
 
 .ldemo-btn-main {
   display: inline-flex; align-items: center; gap: 8px;
@@ -457,11 +490,24 @@
    RESPONSIVE
 ══════════════════════════════════════════════════════════ */
 @media (max-width: 1024px) {
+  .ldemo-hero-inner { gap: 2.5rem; }
   .ldemo-layout {
     grid-template-columns: 300px 1fr;
   }
 }
 @media (max-width: 860px) {
+  .ldemo-hero-inner {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .ldemo-hero-video-col {
+    align-self: auto;
+    height: 260px;
+    min-height: unset;
+  }
+  .ldemo-hero-content { text-align: center; }
+  .ldemo-hero-btns { justify-content: center; }
+  .ldemo-sub { margin: 0 auto 36px; }
   .ldemo-layout {
     grid-template-columns: 1fr;
   }
@@ -477,6 +523,7 @@
 }
 @media (max-width: 600px) {
   .ldemo-hero { padding: calc(var(--nav-h, 72px) + 40px) 6% 56px; }
+  .ldemo-hero-video-col { height: 220px; }
   .ldemo-section { padding: 56px 6%; }
   .ldemo-cta { padding: 72px 6%; }
   .ldemo-strip-item { padding: 20px 12px; }
