@@ -41,17 +41,18 @@
 }
 .at-hero-inner {
   position:relative;z-index:2;
-  max-width:1280px;margin:0 auto;width:100%;
+  max-width:1440px;margin:0 auto;width:100%;
   display:grid;
-  grid-template-columns:55fr 45fr;
-  gap:3.5rem;
+  grid-template-columns:60fr 40fr;
+  gap:3rem;
   align-items:center;
 }
 
 /* Colonne vidéo — GAUCHE */
 .at-hero-video-col {
   position:relative;
-  aspect-ratio:16/9;
+  align-self:stretch;
+  min-height:320px;
 }
 .at-hero-video-wrap {
   position:absolute;inset:0;
@@ -106,9 +107,9 @@
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 .at-hero-sub {
-  font-size:clamp(.95rem,1.5vw,1.08rem);
-  color:rgba(255,255,255,.6);line-height:1.8;max-width:580px;
-  margin:0 0 2.8rem;
+  font-size:clamp(.9rem,1.3vw,1rem);
+  color:rgba(255,255,255,.6);line-height:1.75;max-width:100%;
+  margin:0 0 2rem;
 }
 
 /* ── SEARCH BAR ────────────────────────────────────────────── */
@@ -164,8 +165,8 @@
 
 /* ── HERO STATS ────────────────────────────────────────────── */
 .at-stats {
-  display:flex;gap:2.5rem;justify-content:flex-start;flex-wrap:wrap;
-  padding-top:2.6rem;margin-top:2.6rem;
+  display:flex;gap:1.6rem;justify-content:flex-start;flex-wrap:wrap;
+  padding-top:1.6rem;margin-top:1.6rem;
   border-top:1px solid rgba(255,255,255,.08);
 }
 .at-stat-val {
@@ -945,7 +946,7 @@
 }
 @media(max-width:880px){
   .at-hero-inner { grid-template-columns: 1fr; gap: 2rem; }
-  .at-hero-video-col { aspect-ratio: unset; height: 260px; }
+  .at-hero-video-col { align-self: auto; height: 260px; }
   .at-hero h1, .at-hero-sub { text-align: center; }
   .at-hero-content .at-kicker { justify-content: center; }
   .at-stats { justify-content: center; }
@@ -957,7 +958,7 @@
   .aut-section { padding: 56px 5% 72px; }
   .aut-filters { margin: 0 -5%; }
   .aut-filter-btn { padding: 12px 14px; font-size: .79rem; }
-  .at-hero-video-col { height: 220px; }
+  .at-hero-video-col { height: 220px; min-height: unset; }
 }
 @media(max-width:640px){
   .at-cta-btns .btn-cta-white,
