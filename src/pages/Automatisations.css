@@ -43,7 +43,7 @@
   position:relative;z-index:2;
   max-width:1280px;margin:0 auto;width:100%;
   display:grid;
-  grid-template-columns:45fr 55fr;
+  grid-template-columns:55fr 45fr;
   gap:3.5rem;
   align-items:center;
 }
@@ -51,7 +51,7 @@
 /* Colonne vidéo — GAUCHE */
 .at-hero-video-col {
   position:relative;
-  height:480px;
+  aspect-ratio:16/9;
 }
 .at-hero-video-wrap {
   position:absolute;inset:0;
@@ -942,11 +942,10 @@
   .aut-grid { grid-template-columns: repeat(2, 1fr); }
   .at-why-grid { grid-template-columns: repeat(2, 1fr); }
   .at-hero-inner { gap: 2.5rem; }
-  .at-hero-video-col { height: 400px; }
 }
 @media(max-width:880px){
   .at-hero-inner { grid-template-columns: 1fr; gap: 2rem; }
-  .at-hero-video-col { height: 260px; }
+  .at-hero-video-col { aspect-ratio: unset; height: 260px; }
   .at-hero h1, .at-hero-sub { text-align: center; }
   .at-hero-content .at-kicker { justify-content: center; }
   .at-stats { justify-content: center; }

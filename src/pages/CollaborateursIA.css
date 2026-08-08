@@ -123,7 +123,7 @@
 /* ── Right side: premium photo + 3 offset metric tiles ── */
 .cai-hero-right {
   position: relative;
-  height: 540px;
+  aspect-ratio: 16 / 9;
   overflow: visible;
 }
 .cai-hero-photo-wrap {
@@ -776,7 +776,7 @@
 /* ══════════════════════════════════════════════════════════ */
 @media (max-width: 960px) {
   .cai-hero-inner { grid-template-columns: 1fr; gap: 2rem; }
-  .cai-hero-right { height: 280px; overflow: hidden; }
+  .cai-hero-right { aspect-ratio: unset; height: 280px; overflow: hidden; }
   .cai-metric { display: none; }
   .cai-hero h1, .cai-hero-sub { text-align: center; }
   .cai-hero-btns { justify-content: center; }
