@@ -26,7 +26,7 @@ for f in \
 done
 
 # Copie des assets à la racine pour les chemins sans /dist/ prefix
-for dir in collaborateurs services portfolio automatisations videos images; do
+for dir in collaborateurs services portfolio automatisations videos images loic; do
   [ -d "dist/$dir" ] && cp -r "dist/$dir" . || true
 done
 
