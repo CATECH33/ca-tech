@@ -51,6 +51,22 @@ res-*.png
 debug-*.png
 manager-*.png
 ss-*.png
+verify-*.png
+verify-*.mjs
+audit-*.png
+audit-*.mjs
+audit-*.json
+audit-report.json
+audit-lighthouse.json
+lighthouse-*.json
+manager/verify-*.png
+verify-blog-ressources/
+verify-nouvelles-pages/
+verify-prod-maillage/
+
+# Vidéos sources (trop lourdes pour git — servies via CDN ou dossier public/)
+public/videos/
+public/hero-ca-tech.mp4
 
 # Artifacts de déploiement manuel Vercel
 deploy-payload*.json

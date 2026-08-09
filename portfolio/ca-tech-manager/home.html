@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=1440"/>
+<title>CA-TECH Manager — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#f4f6f9;color:#111827;-webkit-font-smoothing:antialiased;font-size:14px;overflow:hidden;height:100vh}
+
+/* ── LAYOUT ── */
+.app{display:grid;grid-template-columns:220px 1fr;grid-template-rows:52px 1fr;height:100vh;overflow:hidden}
+
+/* ── SIDEBAR ── */
+.sidebar{grid-column:1;grid-row:1/3;background:#fff;border-right:1px solid #e9ecef;display:flex;flex-direction:column;overflow:hidden}
+.s-brand{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid #f0f2f5;height:52px;flex-shrink:0}
+.s-icon{width:30px;height:30px;background:#0066FF;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;letter-spacing:-.3px;flex-shrink:0;box-shadow:0 2px 8px rgba(0,102,255,.35)}
+.s-name{font-size:.8rem;font-weight:700;color:#111827;line-height:1.2;letter-spacing:.1px}
+.s-tagline{font-size:.58rem;color:#9ca3af;font-weight:500}
+.s-nav{padding:10px 8px;flex:1;overflow-y:auto}
+.s-section{margin-bottom:18px}
+.s-section-lbl{font-size:.58rem;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:1.5px;padding:0 10px;margin-bottom:5px}
+.s-item{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:6px;font-size:.75rem;font-weight:500;color:#6b7280;cursor:pointer;transition:all .12s;margin-bottom:1px;text-decoration:none}
+.s-item:hover{background:#f9fafb;color:#374151}
+.s-item.active{background:#eff6ff;color:#0066FF;font-weight:600}
+.s-item-icon{font-size:13px;width:16px;text-align:center;flex-shrink:0;opacity:.8}
+.s-badge{margin-left:auto;background:#0066FF;color:#fff;font-size:.58rem;font-weight:700;padding:1px 6px;border-radius:10px;line-height:1.6}
+.s-badge-gray{margin-left:auto;background:#f3f4f6;color:#6b7280;font-size:.58rem;font-weight:600;padding:1px 6px;border-radius:10px;line-height:1.6}
+.s-footer{padding:10px 8px;border-top:1px solid #f0f2f5;flex-shrink:0}
+.s-user{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;cursor:pointer;transition:background .12s}
+.s-user:hover{background:#f9fafb}
+.s-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#0066FF,#00D4FF);display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:700;color:#fff;flex-shrink:0}
+.s-user-name{font-size:.73rem;font-weight:600;color:#111827}
+.s-user-role{font-size:.62rem;color:#9ca3af}
+.s-status{margin-left:auto;width:7px;height:7px;background:#10b981;border-radius:50%;border:1.5px solid #fff;box-shadow:0 0 0 1.5px #10b981}
+
+/* ── TOPBAR ── */
+.topbar{grid-column:2;grid-row:1;background:#fff;border-bottom:1px solid #e9ecef;display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:16px;flex-shrink:0}
+.breadcrumb{display:flex;align-items:center;gap:5px;font-size:.73rem;color:#9ca3af}
+.breadcrumb span{color:#374151;font-weight:600}
+.breadcrumb-sep{color:#d1d5db;font-size:.65rem}
+.tb-search{display:flex;align-items:center;gap:7px;background:#f9fafb;border:1px solid #e9ecef;border-radius:7px;padding:6px 12px;font-size:.73rem;color:#9ca3af;width:210px;cursor:text}
+.tb-search-icon{font-size:12px;opacity:.6}
+.tb-right{display:flex;align-items:center;gap:8px}
+.tb-btn{width:30px;height:30px;border-radius:6px;background:#f9fafb;border:1px solid #e9ecef;display:flex;align-items:center;justify-content:center;font-size:12px;color:#6b7280;cursor:pointer;transition:background .12s;position:relative}
+.tb-btn:hover{background:#f0f2f5}
+.notif-pip{position:absolute;top:4px;right:4px;width:6px;height:6px;background:#ef4444;border-radius:50%;border:1.5px solid #fff}
+.tb-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#0066FF,#00D4FF);display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:700;color:#fff;cursor:pointer;border:2px solid #e9ecef}
+.tb-date{font-size:.68rem;color:#9ca3af;font-weight:500}
+
+/* ── MAIN CONTENT ── */
+.main{grid-column:2;grid-row:2;overflow-y:auto;padding:18px 24px 20px;display:flex;flex-direction:column;gap:14px;background:#f4f6f9}
+
+/* ── PAGE HEADER ── */
+.page-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.page-hd-left h1{font-size:1.1rem;font-weight:800;color:#111827;margin-bottom:3px;letter-spacing:-.2px}
+.page-hd-left p{font-size:.73rem;color:#6b7280;line-height:1.5;max-width:520px}
+.page-hd-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:7px;font-size:.73rem;font-weight:600;cursor:pointer;border:1px solid transparent;font-family:inherit;transition:all .12s;white-space:nowrap}
+.btn-ghost{background:#fff;border-color:#e9ecef;color:#374151}
+.btn-ghost:hover{background:#f9fafb}
+.btn-outline{background:#fff;border-color:#d1d5db;color:#374151}
+.btn-primary{background:#0066FF;color:#fff;border-color:#0066FF;box-shadow:0 1px 4px rgba(0,102,255,.3)}
+.btn-primary:hover{background:#0052cc}
+
+/* ── KPI CARDS ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi{background:#fff;border:1px solid #e9ecef;border-radius:10px;padding:16px 18px;position:relative;overflow:hidden;transition:box-shadow .2s}
+.kpi:hover{box-shadow:0 4px 16px rgba(0,0,0,.07)}
+.kpi-accent{position:absolute;top:0;left:0;right:0;height:3px;border-radius:10px 10px 0 0}
+.kpi-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.kpi-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px}
+.kpi-tag{font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:10px}
+.kpi-val{font-size:1.75rem;font-weight:900;color:#111827;letter-spacing:-1.5px;line-height:1;margin-bottom:6px}
+.kpi-label{font-size:.68rem;color:#9ca3af;font-weight:500;letter-spacing:.2px;margin-bottom:8px}
+.kpi-trend{font-size:.67rem;font-weight:600;display:flex;align-items:center;gap:4px}
+.kpi-trend-up{color:#10b981}
+.kpi-trend-dn{color:#ef4444}
+.kpi-desc{font-size:.65rem;color:#d1d5db;margin-left:4px;font-weight:400}
+
+/* ── CONTENT GRID ── */
+.content-grid{display:grid;grid-template-columns:1fr 262px;gap:14px;align-items:start}
+
+/* ── CARD ── */
+.card{background:#fff;border:1px solid #e9ecef;border-radius:10px;overflow:hidden}
+.card-hd{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-bottom:1px solid #f0f2f5}
+.card-hd-left .card-title{font-size:.8rem;font-weight:700;color:#111827}
+.card-hd-left .card-sub{font-size:.65rem;color:#9ca3af;margin-top:1px}
+.card-link{font-size:.68rem;font-weight:600;color:#0066FF;cursor:pointer;display:flex;align-items:center;gap:3px;text-decoration:none}
+.card-link:hover{text-decoration:underline}
+
+/* ── TABLE ── */
+table{width:100%;border-collapse:collapse}
+thead th{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:#9ca3af;padding:8px 18px;text-align:left;background:#fafbfc;border-bottom:1px solid #f0f2f5}
+tbody tr{border-bottom:1px solid #f7f8fa;cursor:pointer;transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:#fafbff}
+td{padding:10px 18px;vertical-align:middle}
+.proj-cell .proj-name{font-size:.78rem;font-weight:600;color:#111827;margin-bottom:2px}
+.proj-cell .proj-id{font-size:.62rem;color:#c4c9d0;font-weight:500}
+.client-cell{display:flex;align-items:center;gap:8px}
+.client-logo{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.58rem;font-weight:800;color:#fff;flex-shrink:0}
+.client-name{font-size:.75rem;color:#374151;font-weight:500}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:.65rem;font-weight:600;white-space:nowrap}
+.badge:before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.b-blue{background:#eff6ff;color:#0066FF}.b-blue:before{background:#0066FF}
+.b-green{background:#ecfdf5;color:#059669}.b-green:before{background:#059669}
+.b-orange{background:#fffbeb;color:#d97706}.b-orange:before{background:#d97706}
+.b-violet{background:#f5f3ff;color:#7c3aed}.b-violet:before{background:#7c3aed}
+.b-red{background:#fef2f2;color:#dc2626}.b-red:before{background:#dc2626}
+.b-gray{background:#f3f4f6;color:#6b7280}.b-gray:before{background:#9ca3af}
+.prog-wrap{display:flex;align-items:center;gap:8px}
+.prog-bar{width:64px;height:4px;background:#f0f2f5;border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;border-radius:2px}
+.prog-pct{font-size:.65rem;color:#9ca3af;font-weight:500;min-width:26px}
+.date-cell{font-size:.73rem;color:#374151}
+.date-cell.soon{color:#d97706}
+.date-cell.ok{color:#9ca3af}
+.td-actions{display:flex;gap:4px;opacity:0;transition:opacity .12s}
+tr:hover .td-actions{opacity:1}
+.td-action-btn{width:22px;height:22px;border-radius:4px;border:1px solid #e9ecef;background:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;color:#6b7280}
+
+/* ── AGENDA ── */
+.agenda-section{margin-bottom:4px}
+.agenda-day{padding:6px 16px;font-size:.6rem;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:1px}
+.agenda-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;transition:background .1s;border-left:2.5px solid transparent}
+.agenda-item:hover{background:#fafbff}
+.ag-blue{border-left-color:#0066FF}
+.ag-green{border-left-color:#10b981}
+.ag-orange{border-left-color:#f59e0b}
+.ag-red{border-left-color:#ef4444}
+.agenda-time{font-size:.7rem;font-weight:700;color:#374151;min-width:38px;font-variant-numeric:tabular-nums}
+.agenda-info{flex:1;min-width:0}
+.agenda-title{font-size:.75rem;font-weight:600;color:#111827;margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.agenda-client{font-size:.63rem;color:#9ca3af}
+.agenda-pip{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+
+/* ── BOTTOM ROW ── */
+.bottom-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;align-items:start}
+
+/* ── CHART ── */
+.chart-body{padding:12px 18px 14px}
+.chart-legend{display:flex;gap:14px;margin-bottom:10px;flex-wrap:wrap}
+.leg{display:flex;align-items:center;gap:4px;font-size:.62rem;color:#6b7280;font-weight:500}
+.leg-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.chart-svg{width:100%;overflow:visible}
+
+/* ── DONUT ── */
+.donut-wrap{display:flex;align-items:center;gap:16px;padding:16px 18px}
+.donut-legend{display:flex;flex-direction:column;gap:8px;flex:1}
+.dl-item{display:flex;align-items:center;gap:7px;font-size:.68rem}
+.dl-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.dl-label{color:#374151;font-weight:500;flex:1}
+.dl-pct{font-weight:700;color:#111827;font-variant-numeric:tabular-nums}
+.dl-bar{margin-top:2px;height:3px;border-radius:2px;opacity:.3}
+
+/* ── ACTIVITY ── */
+.activity-list{padding:4px 0}
+.act-item{display:flex;align-items:flex-start;gap:10px;padding:10px 18px;border-bottom:1px solid #f7f8fa;cursor:pointer;transition:background .1s}
+.act-item:last-child{border-bottom:none}
+.act-item:hover{background:#fafbff}
+.act-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:1px}
+.ai-blue{background:#eff6ff}
+.ai-green{background:#ecfdf5}
+.ai-orange{background:#fffbeb}
+.ai-violet{background:#f5f3ff}
+.act-body{flex:1;min-width:0}
+.act-desc{font-size:.73rem;color:#374151;line-height:1.4;margin-bottom:2px}
+.act-desc strong{color:#111827;font-weight:600}
+.act-meta{display:flex;align-items:center;gap:8px}
+.act-time{font-size:.62rem;color:#9ca3af}
+.act-tag{font-size:.58rem;font-weight:600;background:#f3f4f6;color:#6b7280;padding:1px 6px;border-radius:4px}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="s-brand">
+      <div class="s-icon">CTM</div>
+      <div>
+        <div class="s-name">CA-TECH Manager</div>
+        <div class="s-tagline">ERP & Gestion Interne</div>
+      </div>
+    </div>
+    <nav class="s-nav">
+      <div class="s-section">
+        <div class="s-section-lbl">Principal</div>
+        <a class="s-item active"><span class="s-item-icon">⊞</span>Dashboard</a>
+        <a class="s-item"><span class="s-item-icon">👥</span>Clients<span class="s-badge">127</span></a>
+        <a class="s-item"><span class="s-item-icon">📁</span>Projets<span class="s-badge">42</span></a>
+        <a class="s-item"><span class="s-item-icon">📄</span>Devis<span class="s-badge-gray">8</span></a>
+        <a class="s-item"><span class="s-item-icon">💶</span>Factures<span class="s-badge-gray">89</span></a>
+        <a class="s-item"><span class="s-item-icon">🔧</span>Prestations</a>
+      </div>
+      <div class="s-section">
+        <div class="s-section-lbl">Analyses</div>
+        <a class="s-item"><span class="s-item-icon">📊</span>Rapports</a>
+        <a class="s-item"><span class="s-item-icon">📅</span>Agenda</a>
+        <a class="s-item"><span class="s-item-icon">⏱</span>Suivi temps</a>
+      </div>
+      <div class="s-section">
+        <div class="s-section-lbl">Équipe</div>
+        <a class="s-item"><span class="s-item-icon">👤</span>Collaborateurs</a>
+        <a class="s-item"><span class="s-item-icon">⚙️</span>Paramètres</a>
+      </div>
+    </nav>
+    <div class="s-footer">
+      <div class="s-user">
+        <div class="s-avatar">JK</div>
+        <div>
+          <div class="s-user-name">Jean K.</div>
+          <div class="s-user-role">Administrateur</div>
+        </div>
+        <div class="s-status"></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:20px">
+      <div class="breadcrumb">
+        CA-TECH Manager <span class="breadcrumb-sep">›</span> <span>Dashboard</span>
+      </div>
+      <div class="tb-search">
+        <span class="tb-search-icon">🔍</span>
+        Rechercher un client, projet…
+        <span style="margin-left:auto;font-size:.6rem;background:#f0f2f5;border:1px solid #e5e7eb;border-radius:4px;padding:1px 5px;color:#9ca3af">⌘K</span>
+      </div>
+    </div>
+    <div class="tb-right">
+      <div class="tb-date">Jeudi 19 juin 2026</div>
+      <div class="tb-btn" style="position:relative">📥<div class="notif-pip"></div></div>
+      <div class="tb-btn">🔔</div>
+      <div class="tb-btn">❓</div>
+      <div class="tb-avatar">JK</div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- Page header -->
+    <div class="page-hd">
+      <div class="page-hd-left">
+        <h1>Tableau de bord</h1>
+        <p>Plateforme de gestion interne pour le pilotage des clients, projets, devis, factures et prestations.</p>
+      </div>
+      <div class="page-hd-actions">
+        <button class="btn btn-ghost">📊 Rapports</button>
+        <button class="btn btn-ghost">📤 Exporter</button>
+        <button class="btn btn-primary">＋ Nouveau projet</button>
+      </div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-row">
+      <!-- Clients -->
+      <div class="kpi">
+        <div class="kpi-accent" style="background:#0066FF"></div>
+        <div class="kpi-top">
+          <div class="kpi-icon" style="background:#eff6ff">👥</div>
+          <span class="kpi-tag" style="background:#eff6ff;color:#0066FF">+12 ce mois</span>
+        </div>
+        <div class="kpi-val">127</div>
+        <div class="kpi-label">Clients actifs</div>
+        <div class="kpi-trend kpi-trend-up">↑ 10.4% <span class="kpi-desc">vs mois dernier</span></div>
+      </div>
+      <!-- Projets -->
+      <div class="kpi">
+        <div class="kpi-accent" style="background:#10b981"></div>
+        <div class="kpi-top">
+          <div class="kpi-icon" style="background:#ecfdf5">📁</div>
+          <span class="kpi-tag" style="background:#ecfdf5;color:#059669">6 livrés</span>
+        </div>
+        <div class="kpi-val">42</div>
+        <div class="kpi-label">Projets actifs</div>
+        <div class="kpi-trend kpi-trend-up">↑ 8.2% <span class="kpi-desc">vs mois dernier</span></div>
+      </div>
+      <!-- Factures -->
+      <div class="kpi">
+        <div class="kpi-accent" style="background:#f59e0b"></div>
+        <div class="kpi-top">
+          <div class="kpi-icon" style="background:#fffbeb">💶</div>
+          <span class="kpi-tag" style="background:#fef2f2;color:#dc2626">3 en retard</span>
+        </div>
+        <div class="kpi-val">89</div>
+        <div class="kpi-label">Factures émises</div>
+        <div class="kpi-trend kpi-trend-up">↑ 5.7% <span class="kpi-desc">vs mois dernier</span></div>
+      </div>
+      <!-- CA -->
+      <div class="kpi">
+        <div class="kpi-accent" style="background:#8b5cf6"></div>
+        <div class="kpi-top">
+          <div class="kpi-icon" style="background:#f5f3ff">💰</div>
+          <span class="kpi-tag" style="background:#f5f3ff;color:#7c3aed">Juin 2026</span>
+        </div>
+        <div class="kpi-val" style="font-size:1.35rem">124 580 €</div>
+        <div class="kpi-label">Chiffre d'affaires</div>
+        <div class="kpi-trend kpi-trend-up">↑ 18.3% <span class="kpi-desc">vs mois dernier</span></div>
+      </div>
+    </div>
+
+    <!-- Content grid -->
+    <div class="content-grid">
+
+      <!-- Projects table -->
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-hd-left">
+            <div class="card-title">Projets récents</div>
+            <div class="card-sub">8 projets mis à jour cette semaine</div>
+          </div>
+          <a class="card-link">Voir tout →</a>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Projet</th>
+              <th>Client</th>
+              <th>Statut</th>
+              <th>Avancement</th>
+              <th>Échéance</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="proj-cell"><div class="proj-name">Refonte Site Immobilier</div><div class="proj-id">#PRJ-089</div></td>
+              <td><div class="client-cell"><div class="client-logo" style="background:#f59e0b">RI</div><span class="client-name">RealImmo Paris</span></div></td>
+              <td><span class="badge b-blue">En cours</span></td>
+              <td><div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:68%;background:#0066FF"></div></div><span class="prog-pct">68%</span></div></td>
+              <td><div class="date-cell soon">28 juin 2026</div></td>
+              <td><div class="td-actions"><div class="td-action-btn">✎</div><div class="td-action-btn">⋯</div></div></td>
+            </tr>
+            <tr>
+              <td class="proj-cell"><div class="proj-name">Boutique E-commerce</div><div class="proj-id">#PRJ-088</div></td>
+              <td><div class="client-cell"><div class="client-logo" style="background:#10b981">MB</div><span class="client-name">Mode &amp; Beauté</span></div></td>
+              <td><span class="badge b-green">Livré</span></td>
+              <td><div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:100%;background:#10b981"></div></div><span class="prog-pct">100%</span></div></td>
+              <td><div class="date-cell ok">12 juin 2026</div></td>
+              <td><div class="td-actions"><div class="td-action-btn">✎</div><div class="td-action-btn">⋯</div></div></td>
+            </tr>
+            <tr>
+              <td class="proj-cell"><div class="proj-name">CRM Cabinet Juridique</div><div class="proj-id">#PRJ-087</div></td>
+              <td><div class="client-cell"><div class="client-logo" style="background:#7c3aed">CJ</div><span class="client-name">Cabinet Dupont</span></div></td>
+              <td><span class="badge b-orange">Validation</span></td>
+              <td><div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:92%;background:#f59e0b"></div></div><span class="prog-pct">92%</span></div></td>
+              <td><div class="date-cell soon">22 juin 2026</div></td>
+              <td><div class="td-actions"><div class="td-action-btn">✎</div><div class="td-action-btn">⋯</div></div></td>
+            </tr>
+            <tr>
+              <td class="proj-cell"><div class="proj-name">Application Mobile RH</div><div class="proj-id">#PRJ-086</div></td>
+              <td><div class="client-cell"><div class="client-logo" style="background:#0066FF">LT</div><span class="client-name">LogisTech SAS</span></div></td>
+              <td><span class="badge b-blue">En cours</span></td>
+              <td><div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:41%;background:#0066FF"></div></div><span class="prog-pct">41%</span></div></td>
+              <td><div class="date-cell ok">15 juil. 2026</div></td>
+              <td><div class="td-actions"><div class="td-action-btn">✎</div><div class="td-action-btn">⋯</div></div></td>
+            </tr>
+            <tr>
+              <td class="proj-cell"><div class="proj-name">Audit Cybersécurité</div><div class="proj-id">#PRJ-085</div></td>
+              <td><div class="client-cell"><div class="client-logo" style="background:#ef4444">SC</div><span class="client-name">SecureCorp</span></div></td>
+              <td><span class="badge b-violet">Planifié</span></td>
+              <td><div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:0%;background:#7c3aed"></div></div><span class="prog-pct">0%</span></div></td>
+              <td><div class="date-cell ok">5 août 2026</div></td>
+              <td><div class="td-actions"><div class="td-action-btn">✎</div><div class="td-action-btn">⋯</div></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Agenda -->
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-hd-left">
+            <div class="card-title">Agenda du jour</div>
+            <div class="card-sub">Jeudi 19 juin 2026</div>
+          </div>
+          <a class="card-link">Calendrier →</a>
+        </div>
+
+        <div class="agenda-section">
+          <div class="agenda-day">Matin</div>
+          <div class="agenda-item ag-orange">
+            <span class="agenda-time">09:00</span>
+            <div class="agenda-info">
+              <div class="agenda-title">Standup équipe</div>
+              <div class="agenda-client">Interne · 15 min</div>
+            </div>
+            <div class="agenda-pip" style="background:#f59e0b"></div>
+          </div>
+          <div class="agenda-item ag-blue">
+            <span class="agenda-time">10:00</span>
+            <div class="agenda-info">
+              <div class="agenda-title">Maintenance Serveur</div>
+              <div class="agenda-client">LogisTech SAS · 1h</div>
+            </div>
+            <div class="agenda-pip" style="background:#0066FF"></div>
+          </div>
+          <div class="agenda-item ag-green">
+            <span class="agenda-time">11:30</span>
+            <div class="agenda-info">
+              <div class="agenda-title">Livraison Boutique</div>
+              <div class="agenda-client">Mode &amp; Beauté · 30 min</div>
+            </div>
+            <div class="agenda-pip" style="background:#10b981"></div>
+          </div>
+        </div>
+
+        <div class="agenda-section">
+          <div class="agenda-day">Après-midi</div>
+          <div class="agenda-item ag-blue">
+            <span class="agenda-time">14:00</span>
+            <div class="agenda-info">
+              <div class="agenda-title">Client Premium</div>
+              <div class="agenda-client">RealImmo Paris · 1h</div>
+            </div>
+            <div class="agenda-pip" style="background:#0066FF"></div>
+          </div>
+          <div class="agenda-item ag-orange">
+            <span class="agenda-time">15:30</span>
+            <div class="agenda-info">
+              <div class="agenda-title">Revue de sprint</div>
+              <div class="agenda-client">Équipe Dev · 45 min</div>
+            </div>
+            <div class="agenda-pip" style="background:#f59e0b"></div>
+          </div>
+          <div class="agenda-item ag-red">
+            <span class="agenda-time">16:30</span>
+            <div class="agenda-info">
+              <div class="agenda-title">Audit Web</div>
+              <div class="agenda-client">SecureCorp · 2h</div>
+            </div>
+            <div class="agenda-pip" style="background:#ef4444"></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content-grid -->
+
+    <!-- Bottom row -->
+    <div class="bottom-row">
+
+      <!-- Revenue chart -->
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-hd-left">
+            <div class="card-title">Chiffre d'affaires mensuel</div>
+            <div class="card-sub">Jan → Jun 2026</div>
+          </div>
+          <span style="font-size:.68rem;font-weight:700;color:#10b981;background:#ecfdf5;padding:2px 8px;border-radius:10px">↑ +34% sur 6 mois</span>
+        </div>
+        <div class="chart-body">
+          <div class="chart-legend">
+            <div class="leg"><div class="leg-dot" style="background:#0066FF"></div>CA réel</div>
+            <div class="leg"><div class="leg-dot" style="background:#d1d5db;border-style:dashed"></div>Objectif</div>
+          </div>
+          <svg class="chart-svg" viewBox="0 0 310 130" xmlns="http://www.w3.org/2000/svg">
+            <!-- Grid -->
+            <line x1="0" y1="105" x2="310" y2="105" stroke="#f0f2f5" stroke-width="1"/>
+            <line x1="0" y1="80" x2="310" y2="80" stroke="#f0f2f5" stroke-width="1"/>
+            <line x1="0" y1="55" x2="310" y2="55" stroke="#f0f2f5" stroke-width="1"/>
+            <line x1="0" y1="30" x2="310" y2="30" stroke="#f0f2f5" stroke-width="1"/>
+            <!-- Y labels -->
+            <text x="0" y="108" font-size="7" fill="#c4c9d0" font-family="Inter">0</text>
+            <text x="0" y="83" font-size="7" fill="#c4c9d0" font-family="Inter">8k</text>
+            <text x="0" y="58" font-size="7" fill="#c4c9d0" font-family="Inter">16k</text>
+            <text x="0" y="33" font-size="7" fill="#c4c9d0" font-family="Inter">24k</text>
+            <!-- Gradient fill area -->
+            <defs>
+              <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#0066FF" stop-opacity=".85"/>
+                <stop offset="100%" stop-color="#60a5fa" stop-opacity=".6"/>
+              </linearGradient>
+              <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#0066FF" stop-opacity=".08"/>
+                <stop offset="100%" stop-color="#0066FF" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <!-- Bars (values: 8.2k, 11.4k, 9.8k, 15.6k, 19.2k, 22.8k; max 25k → 75px range from y=30 to y=105) -->
+            <!-- Scale: 25000 → 75px; 1000 = 3px -->
+            <!-- 8200 → 24.6px → y=80.4, 11400 → 34.2 → y=70.8, 9800 → 29.4 → y=75.6, 15600 → 46.8 → y=58.2, 19200 → 57.6 → y=47.4, 22800 → 68.4 → y=36.6 -->
+            <rect x="18" y="80" width="26" height="25" rx="4" fill="url(#barGrad)" opacity=".4"/>
+            <rect x="65" y="71" width="26" height="34" rx="4" fill="url(#barGrad)" opacity=".55"/>
+            <rect x="112" y="76" width="26" height="29" rx="4" fill="url(#barGrad)" opacity=".5"/>
+            <rect x="159" y="58" width="26" height="47" rx="4" fill="url(#barGrad)" opacity=".7"/>
+            <rect x="206" y="47" width="26" height="58" rx="4" fill="url(#barGrad)" opacity=".85"/>
+            <rect x="253" y="37" width="26" height="68" rx="4" fill="#0066FF"/>
+            <!-- Trend line -->
+            <polyline points="31,80 78,71 125,76 172,58 219,47 266,37" fill="none" stroke="#0066FF" stroke-width="1.5" opacity=".4" stroke-dasharray="3,2"/>
+            <!-- Objective line -->
+            <line x1="18" y1="63" x2="292" y2="55" stroke="#d1d5db" stroke-width="1" stroke-dasharray="4,3"/>
+            <!-- Value labels -->
+            <text x="31" y="77" text-anchor="middle" font-size="7" fill="#9ca3af" font-family="Inter">8.2k</text>
+            <text x="78" y="68" text-anchor="middle" font-size="7" fill="#9ca3af" font-family="Inter">11.4k</text>
+            <text x="125" y="73" text-anchor="middle" font-size="7" fill="#9ca3af" font-family="Inter">9.8k</text>
+            <text x="172" y="55" text-anchor="middle" font-size="7" fill="#9ca3af" font-family="Inter">15.6k</text>
+            <text x="219" y="44" text-anchor="middle" font-size="7" fill="#6b7280" font-family="Inter">19.2k</text>
+            <text x="266" y="34" text-anchor="middle" font-size="7.5" fill="#0066FF" font-weight="700" font-family="Inter">22.8k</text>
+            <!-- Month labels -->
+            <text x="31" y="120" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="Inter">Jan</text>
+            <text x="78" y="120" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="Inter">Fév</text>
+            <text x="125" y="120" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="Inter">Mar</text>
+            <text x="172" y="120" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="Inter">Avr</text>
+            <text x="219" y="120" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="Inter">Mai</text>
+            <text x="266" y="120" text-anchor="middle" font-size="8" fill="#0066FF" font-weight="700" font-family="Inter">Jun</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Projects status donut -->
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-hd-left">
+            <div class="card-title">Statut des projets</div>
+            <div class="card-sub">42 projets actifs</div>
+          </div>
+        </div>
+        <div class="donut-wrap">
+          <!-- Donut SVG (r=38, C=238.8) -->
+          <svg viewBox="0 0 100 100" width="100" height="100" style="flex-shrink:0">
+            <defs>
+              <filter id="shadow"><feDropShadow dx="0" dy="0" stdDeviation="2" flood-opacity=".12"/></filter>
+            </defs>
+            <!-- bg -->
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#f3f4f6" stroke-width="13"/>
+            <!-- En cours 42%: 238.8*0.42=100.3, offset=238.8/4=59.7 -->
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#0066FF" stroke-width="13"
+              stroke-dasharray="100.3 238.8" stroke-dashoffset="59.7" stroke-linecap="butt"/>
+            <!-- Livré 35%: 238.8*0.35=83.6, offset=59.7-100.3=-40.6 -->
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#10b981" stroke-width="13"
+              stroke-dasharray="83.6 238.8" stroke-dashoffset="-40.6" stroke-linecap="butt"/>
+            <!-- Validation 15%: 238.8*0.15=35.8, offset=-40.6-83.6=-124.2 -->
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#f59e0b" stroke-width="13"
+              stroke-dasharray="35.8 238.8" stroke-dashoffset="-124.2" stroke-linecap="butt"/>
+            <!-- En pause 8%: 238.8*0.08=19.1 -->
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#d1d5db" stroke-width="13"
+              stroke-dasharray="19.1 238.8" stroke-dashoffset="-160" stroke-linecap="butt"/>
+            <!-- Center -->
+            <text x="50" y="46" text-anchor="middle" font-size="13" font-weight="900" fill="#111827" font-family="Inter">42</text>
+            <text x="50" y="57" text-anchor="middle" font-size="7" fill="#9ca3af" font-family="Inter">projets</text>
+          </svg>
+          <div class="donut-legend">
+            <div class="dl-item"><div class="dl-dot" style="background:#0066FF"></div><span class="dl-label">En cours</span><span class="dl-pct">42%</span></div>
+            <div class="dl-item"><div class="dl-dot" style="background:#10b981"></div><span class="dl-label">Livré</span><span class="dl-pct">35%</span></div>
+            <div class="dl-item"><div class="dl-dot" style="background:#f59e0b"></div><span class="dl-label">Validation</span><span class="dl-pct">15%</span></div>
+            <div class="dl-item"><div class="dl-dot" style="background:#d1d5db"></div><span class="dl-label">En pause</span><span class="dl-pct">8%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity -->
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-hd-left">
+            <div class="card-title">Activité récente</div>
+            <div class="card-sub">Mises à jour temps réel</div>
+          </div>
+          <a class="card-link">Tout voir →</a>
+        </div>
+        <div class="activity-list">
+          <div class="act-item">
+            <div class="act-icon ai-violet">💶</div>
+            <div class="act-body">
+              <div class="act-desc">Facture <strong>#F-089</strong> envoyée à <strong>RealImmo Paris</strong></div>
+              <div class="act-meta"><span class="act-time">il y a 2h</span><span class="act-tag">Facture</span></div>
+            </div>
+          </div>
+          <div class="act-item">
+            <div class="act-icon ai-blue">📁</div>
+            <div class="act-body">
+              <div class="act-desc">Projet <strong>Refonte Site Immobilier</strong> mis à jour — étape Design validée</div>
+              <div class="act-meta"><span class="act-time">il y a 5h</span><span class="act-tag">Projet</span></div>
+            </div>
+          </div>
+          <div class="act-item">
+            <div class="act-icon ai-orange">📄</div>
+            <div class="act-body">
+              <div class="act-desc">Devis <strong>#D-034</strong> créé pour <strong>StartupTech Lyon</strong> — 4 800 €</div>
+              <div class="act-meta"><span class="act-time">hier</span><span class="act-tag">Devis</span></div>
+            </div>
+          </div>
+          <div class="act-item">
+            <div class="act-icon ai-green">👥</div>
+            <div class="act-body">
+              <div class="act-desc">Nouveau client <strong>Cabinet Dupont &amp; Associés</strong> ajouté</div>
+              <div class="act-meta"><span class="act-time">il y a 2j</span><span class="act-tag">Client</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /bottom-row -->
+
+  </main><!-- /main -->
+</div><!-- /app -->
+</body>
+</html>
