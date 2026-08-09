@@ -70,7 +70,7 @@
   margin: 0 auto;
   width: 100%;
   display: grid;
-  grid-template-columns: 60fr 40fr;
+  grid-template-columns: 65fr 35fr;
   gap: 3rem;
   align-items: center;
 }
@@ -79,12 +79,12 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-size: .72rem;
+  font-size: .67rem;
   font-weight: 700;
   letter-spacing: .12em;
   text-transform: uppercase;
   color: rgba(255,255,255,.5);
-  margin-bottom: 1.6rem;
+  margin-bottom: 1.1rem;
 }
 .cai-kicker span {
   display: block;
@@ -93,12 +93,12 @@
   border-radius: 2px;
 }
 .cai-hero h1 {
-  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  font-size: clamp(1.9rem, 3.8vw, 3rem);
   font-weight: 800;
   color: #fff;
   line-height: 1.08;
   letter-spacing: -.02em;
-  margin-bottom: 1.6rem;
+  margin-bottom: 1.2rem;
 }
 .cai-hero h1 em {
   font-style: normal;
@@ -108,11 +108,11 @@
   background-clip: text;
 }
 .cai-hero-sub {
-  font-size: clamp(.9rem, 1.3vw, 1rem);
+  font-size: clamp(.82rem, 1.1vw, .92rem);
   color: rgba(255,255,255,.62);
-  line-height: 1.75;
+  line-height: 1.7;
   max-width: 100%;
-  margin: 0 0 2rem;
+  margin: 0 0 1.6rem;
 }
 .cai-hero-btns {
   display: flex;
@@ -123,8 +123,7 @@
 /* ── Right side: premium photo + 3 offset metric tiles ── */
 .cai-hero-right {
   position: relative;
-  align-self: stretch;
-  min-height: 560px;
+  aspect-ratio: 16/9;
   overflow: visible;
 }
 .cai-hero-photo-wrap {
@@ -777,7 +776,7 @@
 /* ══════════════════════════════════════════════════════════ */
 @media (max-width: 960px) {
   .cai-hero-inner { grid-template-columns: 1fr; gap: 2rem; }
-  .cai-hero-right { align-self: auto; height: 280px; min-height: unset; overflow: hidden; }
+  .cai-hero-right { align-self: auto; aspect-ratio: unset; height: 280px; overflow: hidden; }
   .cai-metric { display: none; }
   .cai-hero h1, .cai-hero-sub { text-align: center; }
   .cai-hero-btns { justify-content: center; }
@@ -790,7 +789,7 @@
   .cai-col-img  { height: 200px; }
 }
 @media (max-width: 600px) {
-  .cai-hero-right { height: 220px; min-height: unset; }
+  .cai-hero-right { height: 220px; }
   .cai-bento { grid-template-columns: 1fr; grid-auto-rows: auto; }
   .cai-bento .b-lg,
   .cai-bento .b-sm { grid-column: 1 / -1; }

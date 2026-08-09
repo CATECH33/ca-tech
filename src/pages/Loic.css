@@ -46,7 +46,7 @@
   max-width: 1440px;
   margin: 0 auto; width: 100%;
   display: grid;
-  grid-template-columns: 60fr 40fr;
+  grid-template-columns: 65fr 35fr;
   gap: 3rem;
   align-items: center;
 }
@@ -54,8 +54,7 @@
 /* ── Video column (LEFT) ── */
 .ldemo-hero-video-col {
   position: relative;
-  align-self: stretch;
-  min-height: 560px;
+  aspect-ratio: 16/9;
 }
 .ldemo-hero-video-wrap {
   position: absolute; inset: 0;
@@ -83,8 +82,8 @@
 
 .ldemo-kicker {
   display: inline-flex; align-items: center; gap: 8px;
-  font-size: .75rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
-  color: rgba(255,255,255,.5); margin-bottom: 28px;
+  font-size: .67rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(255,255,255,.5); margin-bottom: 20px;
 }
 .ldemo-kicker-dot {
   display: inline-block; width: 7px; height: 7px; border-radius: 50%;
@@ -95,9 +94,9 @@
 @keyframes ldemoGreen { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
 
 .ldemo-h1 {
-  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-size: clamp(1.9rem, 3.8vw, 3rem);
   font-weight: 800; line-height: 1.1;
-  color: #fff; margin: 0 0 22px;
+  color: #fff; margin: 0 0 16px;
   letter-spacing: -.02em;
 }
 .ldemo-h1 em {
@@ -106,16 +105,16 @@
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 .ldemo-sub {
-  font-size: clamp(.9rem, 1.4vw, 1.05rem);
-  color: rgba(255,255,255,.62); line-height: 1.72;
-  max-width: 100%; margin: 0 0 36px;
+  font-size: clamp(.82rem, 1.1vw, .92rem);
+  color: rgba(255,255,255,.62); line-height: 1.7;
+  max-width: 100%; margin: 0 0 26px;
 }
 .ldemo-hero-btns { display: flex; gap: 14px; justify-content: flex-start; flex-wrap: wrap; }
 
 .ldemo-btn-main {
   display: inline-flex; align-items: center; gap: 8px;
-  padding: 14px 28px;
-  background: #0066FF; color: #fff; font-weight: 600; font-size: .95rem;
+  padding: 12px 22px;
+  background: #0066FF; color: #fff; font-weight: 600; font-size: .9rem;
   border-radius: 10px; text-decoration: none; border: none; cursor: pointer;
   transition: background .25s, transform .3s cubic-bezier(.16,1,.3,1), box-shadow .3s;
   box-shadow: 0 0 28px rgba(0,102,255,.35);
@@ -124,9 +123,9 @@
 
 .ldemo-btn-ghost {
   display: inline-flex; align-items: center; gap: 8px;
-  padding: 14px 28px;
+  padding: 12px 22px;
   border: 1px solid rgba(255,255,255,.18);
-  color: rgba(255,255,255,.8); font-weight: 500; font-size: .95rem;
+  color: rgba(255,255,255,.8); font-weight: 500; font-size: .9rem;
   border-radius: 10px; text-decoration: none;
   transition: border-color .25s, color .25s, transform .3s cubic-bezier(.16,1,.3,1);
   background: none; cursor: pointer;
@@ -501,9 +500,8 @@
     gap: 2rem;
   }
   .ldemo-hero-video-col {
-    align-self: auto;
+    aspect-ratio: unset;
     height: 260px;
-    min-height: unset;
   }
   .ldemo-hero-content { text-align: center; }
   .ldemo-hero-btns { justify-content: center; }

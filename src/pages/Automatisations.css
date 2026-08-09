@@ -43,7 +43,7 @@
   position:relative;z-index:2;
   max-width:1440px;margin:0 auto;width:100%;
   display:grid;
-  grid-template-columns:minmax(0,60fr) minmax(0,40fr);
+  grid-template-columns:minmax(0,65fr) minmax(0,35fr);
   gap:3rem;
   align-items:center;
 }
@@ -51,8 +51,7 @@
 /* Colonne vidéo — GAUCHE */
 .at-hero-video-col {
   position:relative;
-  align-self:stretch;
-  min-height:560px;
+  aspect-ratio:16/9;
 }
 .at-hero-video-wrap {
   position:absolute;inset:0;
@@ -90,16 +89,16 @@
 
 .at-kicker {
   display:inline-flex;align-items:center;gap:10px;
-  font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  color:rgba(255,255,255,.5);margin-bottom:1.5rem;
+  font-size:.67rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(255,255,255,.5);margin-bottom:1.1rem;
 }
 .at-kicker span {
   display:block;width:28px;height:1px;
   background:rgba(0,102,255,.6);border-radius:2px;
 }
 .at-hero h1 {
-  font-size:clamp(2.2rem,5vw,3.6rem);font-weight:800;
-  color:#fff;line-height:1.08;letter-spacing:-.02em;margin-bottom:1.4rem;
+  font-size:clamp(1.9rem,3.8vw,3rem);font-weight:800;
+  color:#fff;line-height:1.08;letter-spacing:-.02em;margin-bottom:1.1rem;
   overflow-wrap:break-word;
 }
 .at-hero h1 em {
@@ -108,9 +107,9 @@
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 .at-hero-sub {
-  font-size:clamp(.9rem,1.3vw,1rem);
-  color:rgba(255,255,255,.6);line-height:1.75;max-width:100%;
-  margin:0 0 2rem;
+  font-size:clamp(.82rem,1.1vw,.92rem);
+  color:rgba(255,255,255,.6);line-height:1.7;max-width:100%;
+  margin:0 0 1.5rem;
 }
 
 /* ── SEARCH BAR ────────────────────────────────────────────── */
@@ -166,13 +165,13 @@
 
 /* ── HERO STATS ────────────────────────────────────────────── */
 .at-stats {
-  display:flex;gap:1.6rem;justify-content:flex-start;flex-wrap:wrap;
-  padding-top:1.6rem;margin-top:1.6rem;
+  display:flex;gap:1.2rem;justify-content:flex-start;flex-wrap:wrap;
+  padding-top:1.2rem;margin-top:1.2rem;
   border-top:1px solid rgba(255,255,255,.08);
 }
 .at-stat-val {
   font-family:'Rajdhani',sans-serif;
-  font-size:1.9rem;font-weight:700;color:#fff;line-height:1;margin-bottom:4px;
+  font-size:1.6rem;font-weight:700;color:#fff;line-height:1;margin-bottom:4px;
 }
 .at-stat-val em{font-style:normal;color:var(--cyan)}
 .at-stat-lbl{font-size:.7rem;color:rgba(255,255,255,.45);letter-spacing:.5px}
@@ -947,7 +946,7 @@
 }
 @media(max-width:880px){
   .at-hero-inner { grid-template-columns: 1fr; gap: 2rem; }
-  .at-hero-video-col { align-self: auto; height: 260px; min-height: unset; }
+  .at-hero-video-col { aspect-ratio: unset; height: 260px; }
   .at-hero h1, .at-hero-sub { text-align: center; }
   .at-hero-content .at-kicker { justify-content: center; }
   .at-stats { justify-content: center; }
@@ -959,7 +958,7 @@
   .aut-section { padding: 56px 5% 72px; }
   .aut-filters { margin: 0 -5%; }
   .aut-filter-btn { padding: 12px 14px; font-size: .79rem; }
-  .at-hero-video-col { height: 220px; min-height: unset; }
+  .at-hero-video-col { height: 220px; }
 }
 @media(max-width:640px){
   .at-cta-btns .btn-cta-white,
