@@ -124,7 +124,7 @@
 .cai-hero-right {
   position: relative;
   align-self: stretch;
-  min-height: 320px;
+  min-height: 560px;
   overflow: visible;
 }
 .cai-hero-photo-wrap {
@@ -777,7 +777,7 @@
 /* ══════════════════════════════════════════════════════════ */
 @media (max-width: 960px) {
   .cai-hero-inner { grid-template-columns: 1fr; gap: 2rem; }
-  .cai-hero-right { align-self: auto; height: 280px; overflow: hidden; }
+  .cai-hero-right { align-self: auto; height: 280px; min-height: unset; overflow: hidden; }
   .cai-metric { display: none; }
   .cai-hero h1, .cai-hero-sub { text-align: center; }
   .cai-hero-btns { justify-content: center; }

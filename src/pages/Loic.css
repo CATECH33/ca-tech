@@ -55,7 +55,7 @@
 .ldemo-hero-video-col {
   position: relative;
   align-self: stretch;
-  min-height: 320px;
+  min-height: 560px;
 }
 .ldemo-hero-video-wrap {
   position: absolute; inset: 0;

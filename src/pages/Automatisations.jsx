@@ -381,7 +381,7 @@ export default function Automatisations() {
           <div className="at-hero-content">
             <p className="at-kicker at-a0"><span />Automatisations métier · CA-TECH<span /></p>
             <h1 className="at-a1">
-              Automatisez vos processus —<br /><em>N8N, Make, Zapier : 14h récupérées/semaine.</em>
+              Automatisez vos processus —<br /><em>N8N, Make, Zapier : 14h récupérées/<wbr />semaine.</em>
             </h1>
             <p className="at-hero-sub at-a2">
               14 services d'automatisation prêts à déployer. Chaque heure récupérée, chaque lead traité, chaque facture envoyée — sans que vous leviez le petit doigt.
