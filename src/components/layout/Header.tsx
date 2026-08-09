@@ -1,34 +1,35 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { useState, useEffect, useCallback } from 'react'
 import './Header.css'
 
 const SOLUTIONS = [
   { label: 'Création de site Web', href: '/creation-site-vitrine' },
-  { label: 'Applications Métier',  href: '/services#apps' },
-  { label: 'CRM sur mesure',       href: '/services#apps' },
-  { label: 'SEO & Visibilité',     href: '/services#seo' },
+  { label: 'E-commerce',           href: '/creation-site-ecommerce' },
+  { label: 'Applications Métier',  href: '/services' },
+  { label: 'CRM sur mesure',       href: '/services' },
+  { label: 'SEO & Visibilité',     href: '/services' },
   { label: 'Maintenance',          href: '/maintenance-site-web' },
 ]
 
-const IA_ITEMS = [
-  { label: 'Collaborateurs IA', to: '/collaborateurs-ia' },
-  { label: 'Automatisations',   to: '/automatisations' },
-  { label: 'Loïc IA',          to: '/loic' },
-]
+// React SPA routes that belong to "Solutions"
+const SOL_PATHS = ['/services', '/catalogue']
 
 const NAV = [
-  { label: 'Réalisations', to: '/realisations' },
-  { label: 'Méthodologie', href: '/methodologie' },
-  { label: 'Blog',         href: '/blog' },
-  { label: 'Tarifs',       to: '/tarifs' },
-  { label: 'Contact',      to: '/contact' },
+  { label: 'Collaborateurs IA', to: '/collaborateurs-ia' },
+  { label: 'Automatisations',   to: '/automatisations' },
+  { label: 'Réalisations',      to: '/realisations' },
+  { label: 'Blog',              href: '/blog' },
+  { label: 'Tarifs',            to: '/tarifs' },
+  { label: 'Contact',           to: '/contact' },
 ] as const
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [solOpen, setSolOpen] = useState(false)
-  const [iaOpen, setIaOpen] = useState(false)
+  const location = useLocation()
+
+  const solActive = SOL_PATHS.some(p => location.pathname.startsWith(p))
 
   useEffect(() => {
     let ticking = false
@@ -48,7 +49,6 @@ export default function Header() {
   const closeMenu = useCallback(() => {
     setMenuOpen(false)
     setSolOpen(false)
-    setIaOpen(false)
   }, [])
 
   const active = ({ isActive }: { isActive: boolean }) =>
@@ -62,9 +62,7 @@ export default function Header() {
         {/* Logo */}
         <NavLink to="/" className="logo" onClick={closeMenu} aria-label="CA-TECH — Retour à l'accueil">
           <picture>
-            {/* Mobile & tablette : SVG compact — net sur Retina, léger */}
             <source media="(max-width: 1024px)" srcSet="/logos/logo-ca-tech-icon.svg" type="image/svg+xml" />
-            {/* Desktop : logo complet WebP */}
             <source media="(min-width: 1025px)" srcSet="/assets/logos/logo-ca-tech.webp" type="image/webp" />
             <img
               src="/assets/logos/logo-ca-tech.png"
@@ -88,7 +86,10 @@ export default function Header() {
 
           {/* Solutions dropdown */}
           <li className="nav-dropdown">
-            <button className="nav-dd-trigger" aria-haspopup="true">
+            <button
+              className={`nav-dd-trigger${solActive ? ' nav-active' : ''}`}
+              aria-haspopup="true"
+            >
               Solutions <span className="nav-caret" aria-hidden="true">▾</span>
             </button>
             <div className="nav-sol-panel" role="menu">
@@ -96,20 +97,6 @@ export default function Header() {
                 <a key={label} href={href} className="nav-sol-link" role="menuitem" onClick={closeMenu}>
                   {label}
                 </a>
-              ))}
-            </div>
-          </li>
-
-          {/* IA dropdown */}
-          <li className="nav-dropdown">
-            <button className="nav-dd-trigger" aria-haspopup="true">
-              IA <span className="nav-caret" aria-hidden="true">▾</span>
-            </button>
-            <div className="nav-sol-panel" role="menu">
-              {IA_ITEMS.map(({ label, to }) => (
-                <NavLink key={label} to={to} className="nav-sol-link" role="menuitem" onClick={closeMenu}>
-                  {label}
-                </NavLink>
               ))}
             </div>
           </li>
@@ -156,18 +143,6 @@ export default function Header() {
         </button>
         {solOpen && SOLUTIONS.map(({ label, href }) => (
           <a key={label} href={href} className="mob-dd-item" onClick={closeMenu}>{label}</a>
-        ))}
-
-        {/* IA mobile toggle */}
-        <button
-          className={`mob-sol-hd${iaOpen ? ' open' : ''}`}
-          onClick={() => setIaOpen(o => !o)}
-          aria-expanded={iaOpen}
-        >
-          IA <span className="nav-caret" aria-hidden="true">▾</span>
-        </button>
-        {iaOpen && IA_ITEMS.map(({ label, to }) => (
-          <NavLink key={label} to={to} className="mob-dd-item" onClick={closeMenu}>{label}</NavLink>
         ))}
 
         {NAV.map(item => (

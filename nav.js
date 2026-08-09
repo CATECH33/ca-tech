@@ -15,11 +15,12 @@
 
   /* ── Données Solutions dropdown ───────────────────────────────── */
   var SOLUTIONS = [
-    ['/creation-site-vitrine', 'Création de site Web'],
-    ['/services#apps',         'Applications Métier'],
-    ['/services#apps',         'CRM sur mesure'],
-    ['/services#seo',          'SEO'],
-    ['/maintenance-site-web',  'Maintenance'],
+    ['/creation-site-vitrine',   'Création de site Web'],
+    ['/creation-site-ecommerce', 'E-commerce'],
+    ['/services#apps',           'Applications Métier'],
+    ['/services#apps',           'CRM sur mesure'],
+    ['/services#seo',            'SEO & Visibilité'],
+    ['/maintenance-site-web',    'Maintenance'],
   ];
 
   /* ── Items desktop (hors Solutions) ──────────────────────────── */
@@ -65,7 +66,9 @@
         'height:2px;background:#00D4FF;border-radius:2px;',
         'animation:nav-bar-in .3s cubic-bezier(.4,0,.2,1) forwards}',
       '@keyframes nav-bar-in{from{transform:scaleX(0);opacity:0}to{transform:scaleX(1);opacity:1}}',
+      '.nav-dd-trigger.nav-active{color:#00D4FF!important}',
       '.mob-menu a.nav-active{color:#00D4FF}',
+      '.mob-sol-hd.nav-active{color:#00D4FF}',
       /* Mobile Solutions */
       '.mob-sol-hd{display:flex;align-items:center;justify-content:space-between;',
         'color:rgba(255,255,255,.7);font-size:.88rem;font-weight:500;',
@@ -167,6 +170,7 @@
     'solutions':                   null,
     'catalogue':                   null,
     'creation-site-vitrine':       '/creation-site-vitrine',
+    'creation-site-ecommerce':     '/creation-site-ecommerce',
     'maintenance-site-web':        '/maintenance-site-web',
     'methodologie':                null,
     'technologies':                null,
@@ -202,6 +206,16 @@
     if (elD) elD.classList.add('nav-active');
     var elM = mob.querySelector(sel);
     if (elM) elM.classList.add('nav-active');
+  }
+
+  /* ── Solutions button actif sur pages Solutions ─────────────── */
+  var SOL_HREFS = SOLUTIONS.map(function (s) { return s[0].split('#')[0]; });
+  var isSolPage = activeHref && SOL_HREFS.indexOf(activeHref.split('#')[0]) !== -1;
+  if (isSolPage) {
+    var solTrigger = nav.querySelector('.nav-dd-trigger');
+    if (solTrigger) solTrigger.classList.add('nav-active');
+    var mobSolHd = mob.querySelector('.mob-sol-hd');
+    if (mobSolHd) mobSolHd.classList.add('nav-active');
   }
 
   /* ── Scroll ──────────────────────────────────────────────────── */

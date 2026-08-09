@@ -146,7 +146,8 @@ nav.scrolled {
   transition: color .25s, background .25s;
   white-space: nowrap;
 }
-.nav-dd-trigger:hover {
+.nav-dd-trigger:hover,
+.nav-dd-trigger.nav-active {
   color: var(--cyan);
   background: rgba(0,212,255,.08);
 }
