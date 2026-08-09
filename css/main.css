@@ -426,7 +426,7 @@ ul, ol { list-style: none; }
 .hero-content { position: relative; z-index: 1; }
 .hero-pill { margin-bottom: 28px; }
 .hero-h1 {
-  font-size: var(--text-7xl); font-weight: 800;
+  font-size: clamp(2.6rem, 4.2vw, 3.4rem); font-weight: 800;
   color: #fff; line-height: 1.0;
   letter-spacing: -.04em;
   margin-bottom: 24px;
