@@ -32,7 +32,7 @@ function mapRow(row: Record<string, any>): Devis {
     client_id: row.client_id,
     client: row.clients ? mapClient(row.clients) : undefined,
     status: STATUS_FROM_DB[row.status] ?? 'brouillon',
-    lignes: (row.devis_items ?? row.quote_items ?? []).map((i: any) => ({
+    lignes: (row.devis_items ?? []).map((i: any) => ({
       id: i.id, service_id: i.service_id ?? undefined,
       description: i.description,
       quantite: Number(i.quantity), prix_unitaire: Number(i.unit_price),

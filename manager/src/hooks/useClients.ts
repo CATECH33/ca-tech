@@ -161,14 +161,14 @@ export function useClientDevis(clientId: string | null) {
     enabled: !!clientId,
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('quotes')
-        .select('id, quote_number, total, status, created_at')
+        .from('devis')
+        .select('id, devis_number, total, status, created_at')
         .eq('client_id', clientId!)
         .order('created_at', { ascending: false })
       if (error) throw error
       return (data ?? []).map(r => ({
         id: r.id as string,
-        numero: r.quote_number as string,
+        numero: r.devis_number as string,
         total_ttc: Number(r.total ?? 0),
         status: DEVIS_STATUS[r.status as string] ?? 'brouillon',
         created_at: r.created_at as string,

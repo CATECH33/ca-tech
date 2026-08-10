@@ -37,15 +37,15 @@ export function useServiceStats() {
     queryKey: ['service-stats'],
     queryFn: async () => {
       const [qResult, iResult] = await Promise.all([
-        supabase.from('quote_items').select('service_id, total_price').not('service_id', 'is', null),
-        supabase.from('invoice_items').select('service_id, total_price').not('service_id', 'is', null),
+        supabase.from('devis_items').select('service_id, total').not('service_id', 'is', null),
+        supabase.from('invoice_items').select('service_id, total').not('service_id', 'is', null),
       ])
       const stats: Record<string, { ventes: number; ca: number }> = {}
       for (const item of [...(qResult.data ?? []), ...(iResult.data ?? [])]) {
         if (!item.service_id) continue
         if (!stats[item.service_id]) stats[item.service_id] = { ventes: 0, ca: 0 }
         stats[item.service_id].ventes++
-        stats[item.service_id].ca += Number(item.total_price ?? 0)
+        stats[item.service_id].ca += Number(item.total ?? 0)
       }
       return stats
     },
