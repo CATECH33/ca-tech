@@ -35,3 +35,7 @@ cp dist/site.webmanifest site.webmanifest
 cp dist/apple-touch-icon.png apple-touch-icon.png
 cp -r dist/icons/ icons/
 cp -r dist/logos/ logos/
+
+# Manager SPA routing — remplace le template Vite dev par le build de prod
+# cleanUrls:true sert manager/index.html avant tout rewrite — il doit être le build, pas le template
+cp manager/dist/index.html manager/index.html
