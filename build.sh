@@ -39,3 +39,8 @@ cp -r dist/logos/ logos/
 # Manager SPA routing — remplace le template Vite dev par le build de prod
 # cleanUrls:true sert manager/index.html avant tout rewrite — il doit être le build, pas le template
 cp manager/dist/index.html manager/index.html
+
+# Google OAuth callback — cleanUrls:true a besoin d'un fichier physique pour /manager/auth/google/callback
+# Sans ce fichier, Google redirige le popup vers une 404 Vercel (le rewrite est court-circuité)
+mkdir -p manager/auth/google
+cp manager/dist/index.html manager/auth/google/callback.html
