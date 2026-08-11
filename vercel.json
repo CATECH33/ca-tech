@@ -59,6 +59,6 @@
   ],
   "rewrites": [
     { "source": "/manager/assets/(.*)", "destination": "/manager/dist/assets/$1" },
-    { "source": "/manager/(.*)",        "destination": "/manager/dist/index.html" }
+    { "source": "/manager/(.*)",        "destination": "/manager/index.html" }
   ]
 }
