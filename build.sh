@@ -36,11 +36,29 @@ cp dist/apple-touch-icon.png apple-touch-icon.png
 cp -r dist/icons/ icons/
 cp -r dist/logos/ logos/
 
-# Manager SPA routing — remplace le template Vite dev par le build de prod
-# cleanUrls:true sert manager/index.html avant tout rewrite — il doit être le build, pas le template
+# Manager SPA routing — cleanUrls:true exige des fichiers physiques (les rewrites vers .html ne fonctionnent pas)
+# On copie manager/dist/index.html vers chaque route connue du manager
 cp manager/dist/index.html manager/index.html
 
-# Google OAuth callback — cleanUrls:true a besoin d'un fichier physique pour /manager/auth/google/callback
-# Sans ce fichier, Google redirige le popup vers une 404 Vercel (le rewrite est court-circuité)
+for route in \
+  login forgot-password reset-password \
+  clients leads devis factures projets taches \
+  services paiements portfolio agenda messages \
+  support parametres integrations documents loic notifications prospection catalogue; do
+  cp manager/dist/index.html "manager/${route}.html"
+done
+
+# Sous-routes statiques prospection et catalogue
+for route in \
+  prospection/ia prospection/prospects prospection/recherche \
+  prospection/qualification prospection/brouillons prospection/campagnes \
+  prospection/relances prospection/statistiques prospection/config \
+  prospection/pipeline prospection/connecteurs \
+  catalogue/services catalogue/collaborateurs; do
+  mkdir -p "manager/$(dirname $route)"
+  cp manager/dist/index.html "manager/${route}.html"
+done
+
+# Google OAuth callback
 mkdir -p manager/auth/google
 cp manager/dist/index.html manager/auth/google/callback.html

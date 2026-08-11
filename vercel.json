@@ -58,7 +58,6 @@
     { "source": "/loic-ia",         "destination": "/loic",          "permanent": true }
   ],
   "rewrites": [
-    { "source": "/manager/assets/(.*)", "destination": "/manager/dist/assets/$1" },
-    { "source": "/manager/(.*)",        "destination": "/manager/index.html" }
+    { "source": "/manager/assets/(.*)", "destination": "/manager/dist/assets/$1" }
   ]
 }
