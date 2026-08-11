@@ -72,7 +72,9 @@ Deno.serve(async (req: Request) => {
   })
   const tokenData = await tokenRes.json()
   if (!tokenRes.ok || !tokenData.access_token) {
-    return json({ error: tokenData.error_description ?? 'Token exchange failed' }, 400)
+    console.error('Google token error:', JSON.stringify(tokenData))
+    console.error('redirect_uri used:', redirect_uri)
+    return json({ error: tokenData.error_description ?? 'Token exchange failed', code: tokenData.error }, 400)
   }
 
   // Récupération de l'email Google
