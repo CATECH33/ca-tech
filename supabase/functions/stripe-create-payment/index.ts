@@ -117,7 +117,13 @@ Deno.serve(async (req) => {
       .select('id')
       .single()
 
-    if (invErr) throw invErr
+    if (invErr) {
+      // Code 23505 = violation contrainte UNIQUE (race condition simultanée)
+      if ((invErr as any).code === '23505') {
+        return json({ error: 'Un paiement de ce type est déjà en cours de génération pour ce devis' }, 409)
+      }
+      throw invErr
+    }
 
     // Stripe Checkout Session — montant fixé côté serveur
     const stripe  = new Stripe(STRIPE_KEY, { apiVersion: '2024-06-20' })
