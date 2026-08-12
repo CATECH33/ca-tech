@@ -149,7 +149,7 @@ Deno.serve(async (req) => {
         payment_type,
         client_id:    devis.client_id,
       },
-      expires_at:  Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60,
+      expires_at:  Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60,
       success_url: 'https://ca-tech.fr?paiement=confirme',
       cancel_url:  'https://ca-tech.fr?paiement=annule',
     })
