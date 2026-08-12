@@ -168,7 +168,7 @@ export function useUpdateFacture() {
       if (d.status !== undefined) {
         updates.status = STATUS_TO_DB[d.status]
         if (d.status === 'envoyee') updates.sent_at = new Date().toISOString()
-        if (d.status === 'payee') { updates.paid_at = new Date().toISOString(); updates.amount_paid = -1 }
+        if (d.status === 'payee') updates.paid_at = new Date().toISOString()
       }
       if (d.lignes !== undefined) {
         const rate = d.tva_rate ?? 20
@@ -190,6 +190,14 @@ export function useUpdateFacture() {
       } else if (d.tva_rate !== undefined) {
         updates.tva_rate = d.tva_rate
       }
+      if (d.status === 'payee') {
+        if (updates.total !== undefined) {
+          updates.amount_paid = updates.total
+        } else {
+          const { data: cur } = await supabase.from('invoices').select('total').eq('id', d.id).single()
+          updates.amount_paid = cur?.total ?? 0
+        }
+      }
       const { data, error } = await supabase.from('invoices').update(updates).eq('id', d.id).select('*, clients(*), invoice_items(*)').single()
       if (error) throw error
       return mapRow(data)
@@ -204,7 +212,11 @@ export function useUpdateFactureStatus() {
     mutationFn: async ({ id, status }: { id: string; status: FactureStatus }) => {
       const update: Record<string, any> = { status: STATUS_TO_DB[status] }
       if (status === 'envoyee') update.sent_at = new Date().toISOString()
-      if (status === 'payee') { update.paid_at = new Date().toISOString(); update.amount_paid = -1 }
+      if (status === 'payee') {
+        update.paid_at = new Date().toISOString()
+        const { data: inv } = await supabase.from('invoices').select('total').eq('id', id).single()
+        update.amount_paid = inv?.total ?? 0
+      }
       const { data, error } = await supabase
         .from('invoices')
         .update(update)

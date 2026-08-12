@@ -15,7 +15,7 @@ import { cn, formatDate } from '@/lib/utils'
 import {
   useMessages, useMarkMessage, useMarkAllRead, useReplyMessage,
   useArchiveMessage, useDeleteMessage, useCreateMessage,
-  useMessagesRealtime, useGenerateReply,
+  useMessagesRealtime, useGenerateReply, useLinkMessageToLead,
 } from '@/hooks/useMessages'
 import type { MessageRow } from '@/hooks/useMessages'
 import { useCreateLead, useLeads } from '@/hooks/useLeads'
@@ -166,7 +166,8 @@ export function Messages() {
   const archiveMessage = useArchiveMessage()
   const deleteMessage  = useDeleteMessage()
   const createMessage  = useCreateMessage()
-  const createLead     = useCreateLead()
+  const createLead        = useCreateLead()
+  const linkMessageToLead = useLinkMessageToLead()
   const createTicket   = useCreateTicket()
   const generateReply  = useGenerateReply()
 
@@ -271,10 +272,33 @@ export function Messages() {
   function handleConvertToLead() {
     if (!selected) return
     const { nom, prenom } = splitName(selected.from_name)
+
+    // If message already linked to a lead, do nothing
+    if (selected.lead_id) {
+      setBanner({ type: 'lead', label: selected.from_name })
+      setTimeout(() => setBanner(null), 5000)
+      return
+    }
+
+    // If a lead already exists with this email, link the message to it
+    const existingLead = leadsData.find(
+      l => l.email.toLowerCase() === selected.from_email.toLowerCase()
+    )
+    if (existingLead) {
+      linkMessageToLead.mutate({ messageId: selected.id, leadId: existingLead.id }, {
+        onSuccess: () => {
+          setBanner({ type: 'lead', label: `${existingLead.prenom} ${existingLead.nom}` })
+          setTimeout(() => setBanner(null), 5000)
+        },
+      })
+      return
+    }
+
     createLead.mutate(
       { prenom, nom, email: selected.from_email, besoin: selected.body, source: selected.source },
       {
-        onSuccess: () => {
+        onSuccess: (newLead) => {
+          linkMessageToLead.mutate({ messageId: selected.id, leadId: newLead.id })
           setBanner({ type: 'lead', label: `${prenom} ${nom}` })
           setTimeout(() => setBanner(null), 5000)
         },

@@ -145,6 +145,17 @@ export function useCreateMessage() {
   })
 }
 
+export function useLinkMessageToLead() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ messageId, leadId }: { messageId: string; leadId: string }) => {
+      const { error } = await supabase.from('messages').update({ lead_id: leadId }).eq('id', messageId)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: Q }),
+  })
+}
+
 export function useDeleteMessage() {
   const qc = useQueryClient()
   return useMutation({

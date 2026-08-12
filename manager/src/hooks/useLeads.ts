@@ -142,22 +142,33 @@ export function useConvertLeadToClient() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async (lead: Lead) => {
-      const { data: client, error: ce } = await supabase
+      // Check for existing client with same email to prevent duplicates
+      const { data: existing } = await supabase
         .from('clients')
-        .insert([{
-          first_name: lead.prenom, last_name: lead.nom, email: lead.email,
-          phone: lead.telephone || null, company: lead.entreprise || null,
-          country: 'France', status: 'active',
-        }])
-        .select()
-        .single()
-      if (ce) throw ce
+        .select('id')
+        .eq('email', lead.email)
+        .maybeSingle()
+
+      const clientId = existing?.id ?? await (async () => {
+        const { data: client, error: ce } = await supabase
+          .from('clients')
+          .insert([{
+            first_name: lead.prenom, last_name: lead.nom, email: lead.email,
+            phone: lead.telephone || null, company: lead.entreprise || null,
+            country: 'France', status: 'active',
+          }])
+          .select('id')
+          .single()
+        if (ce) throw ce
+        return client.id
+      })()
+
       const { error: le } = await supabase
         .from('leads')
-        .update({ status: 'won', converted_to_client_id: client.id })
+        .update({ status: 'won', converted_to_client_id: clientId })
         .eq('id', lead.id)
       if (le) throw le
-      return client
+      return { id: clientId, isExisting: !!existing }
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: Q })
