@@ -22,7 +22,7 @@ export function Breadcrumbs() {
   if (segments.length === 0) return (
     <div className="flex items-center gap-1.5 text-xs text-gray-500">
       <Home className="h-3.5 w-3.5" />
-      <span className="font-medium text-gray-900">Dashboard</span>
+      <span className="font-medium text-gray-900">Vue d'ensemble</span>
     </div>
   )
 
