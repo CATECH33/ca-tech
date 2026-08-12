@@ -2,6 +2,10 @@ export type Status = 'actif' | 'inactif' | 'archive'
 export type LeadStatus = 'nouveau' | 'contact' | 'qualifie' | 'proposition' | 'negocie' | 'gagne' | 'perdu'
 export type DevisStatus = 'brouillon' | 'envoye' | 'accepte' | 'refuse' | 'expire'
 export type FactureStatus = 'brouillon' | 'envoyee' | 'partiellement_payee' | 'payee' | 'en_retard' | 'annulee'
+export type PaymentType = 'acompte' | 'solde' | 'unique'
+export type SubscriptionStatus = 'active' | 'paused' | 'cancelled' | 'past_due' | 'trialing'
+export type SubscriptionFrequency = 'monthly' | 'annual'
+export type SubscriptionPlan = 'vitrine' | 'ecommerce' | 'ia'
 export type ProjetStatus = 'planifie' | 'en_cours' | 'en_pause' | 'termine' | 'annule'
 export type TacheStatus = 'a_faire' | 'en_cours' | 'termine' | 'bloque'
 export type TachePriority = 'basse' | 'normale' | 'haute' | 'urgente'
@@ -27,6 +31,26 @@ export interface Client {
   notes?: string
   avatar_url?: string
   total_ca: number
+  stripe_customer_id?: string
+}
+
+export interface Subscription {
+  id: string
+  created_at: string
+  updated_at: string
+  client_id: string
+  devis_id?: string
+  name: string
+  amount: number
+  currency: string
+  frequency: SubscriptionFrequency
+  status: SubscriptionStatus
+  stripe_customer_id?: string
+  stripe_subscription_id?: string
+  stripe_checkout_session_id?: string
+  current_period_start?: string
+  current_period_end?: string
+  cancelled_at?: string
 }
 
 export interface Lead {
@@ -127,6 +151,7 @@ export interface Facture {
   client?: Client
   devis_id?: string
   projet_id?: string
+  payment_type: PaymentType
   status: FactureStatus
   lignes: FactureLigne[]
   sous_total_ht: number

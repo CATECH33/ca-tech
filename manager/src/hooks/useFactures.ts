@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
-import type { Facture, FactureStatus } from '@/types'
+import type { Facture, FactureStatus, PaymentType } from '@/types'
 
 const SUPABASE_URL      = import.meta.env.VITE_SUPABASE_URL  as string
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string
@@ -55,6 +55,8 @@ function mapRow(row: Record<string, any>): Facture {
     date_paiement: row.paid_at ? row.paid_at.split('T')[0] : undefined,
     notes: row.notes ?? undefined,
     stripe_payment_link: row.stripe_payment_link ?? undefined,
+    payment_type: (row.payment_type ?? 'unique') as PaymentType,
+    devis_id: row.devis_id ?? undefined,
   }
 }
 
@@ -329,6 +331,49 @@ export function useCreateStripeCheckout() {
       return data.url as string
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: Q }),
+  })
+}
+
+export function useDevisInvoices(devisId: string | null) {
+  return useQuery({
+    queryKey: ['devis-invoices', devisId],
+    enabled: !!devisId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('invoices')
+        .select('*, clients(*), invoice_items(*)')
+        .eq('devis_id', devisId!)
+        .order('payment_type', { ascending: true })
+      if (error) throw error
+      return (data ?? []).map(mapRow)
+    },
+  })
+}
+
+export function useCreateStripeProjectPayment() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ devis_id, payment_type }: { devis_id: string; payment_type: 'acompte' | 'solde' }) => {
+      const { data: { session } } = await supabase.auth.getSession()
+      const token = session?.access_token ?? SUPABASE_ANON_KEY
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/stripe-create-payment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+          'apikey': SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({ devis_id, payment_type }),
+      })
+      const data = await res.json() as { url?: string; invoice_id?: string; error?: string }
+      if (!res.ok) throw new Error(data.error ?? `HTTP ${res.status}`)
+      if (!data.url) throw new Error('Aucune URL retournée')
+      return { url: data.url as string, invoice_id: data.invoice_id as string }
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: Q })
+      qc.invalidateQueries({ queryKey: ['devis-invoices'] })
+    },
   })
 }
 

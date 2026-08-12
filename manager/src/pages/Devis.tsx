@@ -24,9 +24,10 @@ import {
   useDevis, useCreateDevis, useUpdateDevis, useUpdateDevisStatus,
   useDeleteDevis, useDuplicateDevis, useConvertDevisToFacture,
 } from '@/hooks/useDevis'
+import { useDevisInvoices, useCreateStripeProjectPayment } from '@/hooks/useFactures'
 import { useClients } from '@/hooks/useClients'
 import { useServices } from '@/hooks/useServices'
-import type { Client, Devis as DevisType, DevisStatus, Service } from '@/types'
+import type { Client, Devis as DevisType, DevisStatus, Facture, Service } from '@/types'
 import { useGmailSend } from '@/hooks/useGmailSend'
 
 /* ─── Types & constantes ────────────────────────────────────── */
@@ -623,6 +624,142 @@ function LignesEditor({
 
 /* ─── DevisFiche ─────────────────────────────────────────────── */
 
+/* ─── DevisPaymentSection ────────────────────────────────────── */
+
+const PAYMENT_STATUS_LABEL: Record<string, { label: string; cls: string }> = {
+  payee:                { label: 'Payé',       cls: 'text-emerald-600 bg-emerald-50 border-emerald-200' },
+  envoyee:              { label: 'En attente', cls: 'text-amber-600 bg-amber-50 border-amber-200' },
+  partiellement_payee:  { label: 'Partiel',    cls: 'text-orange-600 bg-orange-50 border-orange-200' },
+  brouillon:            { label: 'Brouillon',  cls: 'text-gray-500 bg-gray-50 border-gray-200' },
+  en_retard:            { label: 'En retard',  cls: 'text-red-600 bg-red-50 border-red-200' },
+}
+
+function DevisPaymentSection({ devis }: { devis: DevisType }) {
+  const { data: invoices = [], isLoading } = useDevisInvoices(devis.id)
+  const createPayment = useCreateStripeProjectPayment()
+  const [copiedUrl, setCopiedUrl] = useState<string | null>(null)
+
+  const acompte = invoices.find(i => i.payment_type === 'acompte')
+  const solde   = invoices.find(i => i.payment_type === 'solde')
+
+  const montant50 = devis.total_ttc * 0.5
+
+  const handleGenerate = async (type: 'acompte' | 'solde') => {
+    try {
+      const { url } = await createPayment.mutateAsync({ devis_id: devis.id, payment_type: type })
+      window.open(url, '_blank', 'noopener,noreferrer')
+    } catch (e: any) {
+      alert(e?.message ?? 'Erreur lors de la génération du lien')
+    }
+  }
+
+  const handleCopy = async (url: string) => {
+    await navigator.clipboard.writeText(url)
+    setCopiedUrl(url)
+    setTimeout(() => setCopiedUrl(null), 2000)
+  }
+
+  if (isLoading) return null
+
+  function PaymentRow({ label, invoice, type, canGenerate }: {
+    label: string
+    invoice?: Facture
+    type: 'acompte' | 'solde'
+    canGenerate: boolean
+  }) {
+    const statusInfo = invoice ? (PAYMENT_STATUS_LABEL[invoice.status] ?? PAYMENT_STATUS_LABEL.sent) : null
+    const isPending  = createPayment.isPending && createPayment.variables?.payment_type === type
+
+    return (
+      <div className="flex items-center justify-between gap-4 py-3">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className={cn(
+            'h-8 w-8 rounded-lg flex items-center justify-center shrink-0 text-xs font-bold',
+            invoice?.status === 'payee' ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'
+          )}>
+            50%
+          </div>
+          <div>
+            <p className="text-sm font-medium text-gray-800">{label}</p>
+            <p className="text-xs text-gray-400">{formatCurrency(montant50)}</p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          {statusInfo && (
+            <span className={cn('text-xs font-medium px-2.5 py-1 rounded-full border', statusInfo.cls)}>
+              {statusInfo.label}
+            </span>
+          )}
+          {invoice?.stripe_payment_link && invoice.status !== 'payee' && (
+            <button
+              type="button"
+              onClick={() => handleCopy(invoice.stripe_payment_link!)}
+              className="text-xs text-brand-500 hover:text-brand-600 font-medium px-2.5 py-1 rounded-lg border border-brand-200 hover:bg-brand-50 transition flex items-center gap-1"
+              title="Copier le lien"
+            >
+              {copiedUrl === invoice.stripe_payment_link ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+              {copiedUrl === invoice.stripe_payment_link ? 'Copié !' : 'Copier'}
+            </button>
+          )}
+          {canGenerate && !invoice && (
+            <Button
+              size="sm"
+              disabled={isPending}
+              onClick={() => handleGenerate(type)}
+            >
+              {isPending
+                ? <span className="h-3 w-3 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                : <ChevronRight className="h-3.5 w-3.5" />
+              }
+              {isPending ? 'Génération…' : 'Générer le lien'}
+            </Button>
+          )}
+          {!canGenerate && !invoice && (
+            <span className="text-xs text-gray-400 italic">Acompte requis d'abord</span>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <Card className="mb-5">
+      <div className="flex items-center gap-2 mb-3 pb-3 border-b border-gray-100">
+        <div className="h-6 w-6 rounded-md bg-brand-50 flex items-center justify-center shrink-0">
+          <Receipt className="h-3.5 w-3.5 text-brand-500" />
+        </div>
+        <p className="text-sm font-semibold text-gray-800">Paiements du projet</p>
+        <span className="ml-auto text-xs text-gray-400">Total devis : {formatCurrency(devis.total_ttc)}</span>
+      </div>
+
+      <div className="divide-y divide-gray-50">
+        <PaymentRow
+          label="Acompte 50 %"
+          invoice={acompte}
+          type="acompte"
+          canGenerate={true}
+        />
+        <PaymentRow
+          label="Solde 50 %"
+          invoice={solde}
+          type="solde"
+          canGenerate={acompte?.status === 'payee'}
+        />
+      </div>
+
+      {acompte?.status === 'payee' && solde?.status === 'payee' && (
+        <div className="mt-3 pt-3 border-t border-gray-100 flex items-center gap-2">
+          <Check className="h-4 w-4 text-emerald-500 shrink-0" />
+          <span className="text-sm font-medium text-emerald-600">Projet entièrement réglé</span>
+        </div>
+      )}
+    </Card>
+  )
+}
+
+/* ─── DevisFiche ─────────────────────────────────────────────── */
+
 function DevisFiche({
   devis, clients, services, onBack, onUpdate, onUpdateStatus,
   onDelete, onDuplicate, onConvert,
@@ -861,6 +998,11 @@ function DevisFiche({
           </Button>
         </div>
       </div>
+
+      {/* Section paiements projet (devis accepté) */}
+      {devis.status === 'accepte' && !editMode && (
+        <DevisPaymentSection devis={devis} />
+      )}
 
       {/* Edit mode */}
       {editMode ? (

@@ -4,7 +4,7 @@ import {
   LayoutGrid, List, Edit, FileText, Receipt,
   CreditCard, FolderOpen, StickyNote, Briefcase,
   X, Activity, LifeBuoy, MessageSquare, TrendingUp,
-  Users, CheckCircle,
+  Users, CheckCircle, RefreshCw, Ban, ExternalLink,
 } from 'lucide-react'
 import { Layout } from '@/components/layout/Layout'
 import { Button } from '@/components/ui/Button'
@@ -20,7 +20,10 @@ import {
   useClientProjets, useClientDevis, useClientFactures,
   useClientPaiements, useClientTickets, useClientMessages,
 } from '@/hooks/useClients'
-import type { Client, Status } from '@/types'
+import {
+  useSubscriptions, useCreateSubscriptionCheckout, useCancelSubscription,
+} from '@/hooks/useSubscriptions'
+import type { Client, Status, SubscriptionPlan } from '@/types'
 
 // ─── Constants ─────────────────────────────────────────────────────────────────
 
@@ -46,7 +49,7 @@ const FORM_INIT = {
   entreprise: '', secteur: '', adresse: '', code_postal: '', ville: '',
 }
 
-type FicheTab = 'infos' | 'activite' | 'projets' | 'devis' | 'factures' | 'paiements' | 'tickets' | 'messages' | 'notes'
+type FicheTab = 'infos' | 'activite' | 'projets' | 'devis' | 'factures' | 'paiements' | 'abonnements' | 'tickets' | 'messages' | 'notes'
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -167,12 +170,19 @@ function ClientPanel({ client, onClose, onUpdate, onDelete, isUpdating, isDeleti
     setNotes(client.notes ?? '')
   }, [client.id]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const { data: projets   = [] } = useClientProjets(client.id)
-  const { data: devis     = [] } = useClientDevis(client.id)
-  const { data: factures  = [] } = useClientFactures(client.id)
-  const { data: paiements = [] } = useClientPaiements(client.id)
-  const { data: tickets   = [] } = useClientTickets(client.id)
-  const { data: messages  = [] } = useClientMessages(client.id)
+  const { data: projets       = [] } = useClientProjets(client.id)
+  const { data: devis         = [] } = useClientDevis(client.id)
+  const { data: factures      = [] } = useClientFactures(client.id)
+  const { data: paiements     = [] } = useClientPaiements(client.id)
+  const { data: tickets       = [] } = useClientTickets(client.id)
+  const { data: messages      = [] } = useClientMessages(client.id)
+  const { data: abonnements   = [] } = useSubscriptions(client.id)
+  const createSubscription           = useCreateSubscriptionCheckout()
+  const cancelSubscription           = useCancelSubscription()
+
+  const [showSubModal, setShowSubModal]     = useState(false)
+  const [subPlan, setSubPlan]               = useState<SubscriptionPlan>('vitrine')
+  const [subDevisId, setSubDevisId]         = useState('')
 
   // Activity timeline
   const activite = useMemo(() => {
@@ -210,8 +220,9 @@ function ClientPanel({ client, onClose, onUpdate, onDelete, isUpdating, isDeleti
     { id: 'projets',   label: 'Projets',   icon: FolderOpen,    count: projets.length },
     { id: 'devis',     label: 'Devis',     icon: FileText,      count: devis.length },
     { id: 'factures',  label: 'Factures',  icon: Receipt,       count: factures.length },
-    { id: 'paiements', label: 'Paiements', icon: CreditCard,    count: paiements.length },
-    { id: 'tickets',   label: 'Tickets',   icon: LifeBuoy,      count: tickets.length },
+    { id: 'paiements',    label: 'Paiements',    icon: CreditCard,    count: paiements.length },
+    { id: 'abonnements',  label: 'Abonnements',  icon: RefreshCw,     count: abonnements.length },
+    { id: 'tickets',      label: 'Tickets',      icon: LifeBuoy,      count: tickets.length },
     { id: 'messages',  label: 'Messages',  icon: MessageSquare, count: messages.length },
     { id: 'notes',     label: 'Notes',     icon: StickyNote },
   ]
@@ -514,6 +525,143 @@ function ClientPanel({ client, onClose, onUpdate, onDelete, isUpdating, isDeleti
                   <span className="text-xs text-gray-400">{paiements.length} paiement{paiements.length > 1 ? 's' : ''}</span>
                   <span className="text-sm font-bold text-emerald-600">{formatCurrency(totalPaiements)}</span>
                 </div>
+              )}
+            </>
+          )}
+
+          {/* ── Abonnements ── */}
+          {tab === 'abonnements' && (
+            <>
+              <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+                <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Abonnements maintenance</span>
+                <button
+                  type="button"
+                  onClick={() => setShowSubModal(true)}
+                  className="flex items-center gap-1.5 text-xs font-medium text-brand-600 hover:text-brand-700 px-3 py-1.5 rounded-lg border border-brand-200 hover:bg-brand-50 transition"
+                >
+                  <Plus className="h-3.5 w-3.5" />Nouvel abonnement
+                </button>
+              </div>
+              <Table>
+                <Thead>
+                  <Tr><Th>Plan</Th><Th>Montant</Th><Th>Statut</Th><Th>Prochain renouvellement</Th><Th></Th></Tr>
+                </Thead>
+                <Tbody>
+                  {abonnements.length === 0 ? (
+                    <EmptyRow cols={5} message="Aucun abonnement actif" />
+                  ) : abonnements.map(a => (
+                    <Tr key={a.id}>
+                      <Td className="font-medium text-gray-800 text-sm">{a.name}</Td>
+                      <Td className="font-bold text-gray-900">{formatCurrency(a.amount)}<span className="text-xs font-normal text-gray-400">/mois</span></Td>
+                      <Td>
+                        <span className={cn(
+                          'text-xs font-medium px-2.5 py-1 rounded-full border',
+                          a.status === 'active'    && 'text-emerald-600 bg-emerald-50 border-emerald-200',
+                          a.status === 'trialing'  && 'text-blue-600 bg-blue-50 border-blue-200',
+                          a.status === 'past_due'  && 'text-orange-600 bg-orange-50 border-orange-200',
+                          a.status === 'cancelled' && 'text-gray-500 bg-gray-50 border-gray-200',
+                          a.status === 'paused'    && 'text-gray-500 bg-gray-50 border-gray-200',
+                        )}>
+                          {a.status === 'active' ? 'Actif' : a.status === 'trialing' ? 'En cours' : a.status === 'past_due' ? 'En retard' : a.status === 'cancelled' ? 'Annulé' : 'En pause'}
+                        </span>
+                      </Td>
+                      <Td className="text-xs text-gray-400">
+                        {a.current_period_end ? formatDate(a.current_period_end) : '—'}
+                      </Td>
+                      <Td>
+                        {a.status !== 'cancelled' && (
+                          <button
+                            type="button"
+                            onClick={() => { if (confirm('Annuler cet abonnement ?')) cancelSubscription.mutate(a.id) }}
+                            disabled={cancelSubscription.isPending}
+                            className="p-1.5 text-gray-300 hover:text-red-400 hover:bg-red-50 rounded-lg transition disabled:opacity-40"
+                            title="Annuler l'abonnement"
+                          >
+                            <Ban className="h-3.5 w-3.5" />
+                          </button>
+                        )}
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+
+              {/* Modal création abonnement */}
+              {showSubModal && (
+                <Modal open={showSubModal} title="Nouvel abonnement" onClose={() => setShowSubModal(false)}>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1.5">Plan de maintenance</label>
+                      <div className="space-y-2">
+                        {([
+                          { value: 'vitrine',   label: 'Maintenance Site Vitrine',    price: '49 €/mois' },
+                          { value: 'ecommerce', label: 'Maintenance E-commerce',      price: '99 €/mois' },
+                          { value: 'ia',        label: 'Maintenance IA / Sur-mesure', price: '149 €/mois' },
+                        ] as const).map(p => (
+                          <label key={p.value} className={cn(
+                            'flex items-center justify-between p-3 rounded-xl border cursor-pointer transition',
+                            subPlan === p.value ? 'border-brand-400 bg-brand-50' : 'border-gray-200 hover:border-gray-300'
+                          )}>
+                            <div className="flex items-center gap-2">
+                              <input type="radio" className="sr-only" value={p.value} checked={subPlan === p.value} onChange={() => setSubPlan(p.value)} />
+                              <div className={cn('h-4 w-4 rounded-full border-2 flex items-center justify-center shrink-0', subPlan === p.value ? 'border-brand-500' : 'border-gray-300')}>
+                                {subPlan === p.value && <div className="h-2 w-2 rounded-full bg-brand-500" />}
+                              </div>
+                              <span className="text-sm font-medium text-gray-800">{p.label}</span>
+                            </div>
+                            <span className="text-sm font-bold text-gray-900">{p.price}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                    {devis.length > 0 && (
+                      <div>
+                        <label className="block text-xs font-medium text-gray-600 mb-1.5">Lier à un devis (optionnel)</label>
+                        <select
+                          value={subDevisId}
+                          onChange={e => setSubDevisId(e.target.value)}
+                          className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400"
+                        >
+                          <option value="">— Aucun —</option>
+                          {devis.filter(d => d.status === 'accepte').map(d => (
+                            <option key={d.id} value={d.id}>{d.numero} — {formatCurrency(d.total_ttc)}</option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+                    <p className="text-xs text-gray-400">
+                      Un lien de paiement Stripe sera généré. Le client entre sa carte bancaire pour activer l'abonnement récurrent.
+                    </p>
+                  </div>
+                  <div className="flex justify-end gap-2 mt-5 pt-4 border-t border-gray-100">
+                    <button type="button" onClick={() => setShowSubModal(false)} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 transition">Annuler</button>
+                    <button
+                      type="button"
+                      disabled={createSubscription.isPending}
+                      onClick={async () => {
+                        try {
+                          const url = await createSubscription.mutateAsync({
+                            client_id: client.id,
+                            plan: subPlan,
+                            devis_id: subDevisId || undefined,
+                          })
+                          setShowSubModal(false)
+                          window.open(url, '_blank', 'noopener,noreferrer')
+                        } catch (e: any) {
+                          alert(e?.message ?? 'Erreur lors de la création')
+                        }
+                      }}
+                      className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold bg-brand-500 text-white rounded-xl hover:bg-brand-600 disabled:opacity-50 transition"
+                    >
+                      {createSubscription.isPending ? (
+                        <span className="h-3.5 w-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                      ) : (
+                        <ExternalLink className="h-3.5 w-3.5" />
+                      )}
+                      {createSubscription.isPending ? 'Génération…' : 'Générer le lien Stripe'}
+                    </button>
+                  </div>
+                </Modal>
               )}
             </>
           )}
