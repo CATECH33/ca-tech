@@ -7,9 +7,12 @@ const labels: Record<string, string> = {
   projets: 'Projets', taches: 'Tâches', services: 'Services', paiements: 'Paiements',
   portfolio: 'Portfolio', messages: 'Messages', support: 'Support', parametres: 'Paramètres',
   nouveau: 'Nouveau', edit: 'Modifier',
-  prospection: 'Prospection IA', prospects: 'Prospects', recherche: 'Recherche',
+  demandes: 'Demandes & Devis',
+  prospection: 'Prospection', prospects: 'Prospects', recherche: 'Recherche',
   qualification: 'Qualification IA', brouillons: 'Brouillons', relances: 'Relances',
   statistiques: 'Statistiques', config: 'Paramètres',
+  loic: 'Loïc IA', agenda: 'Agenda', documents: 'Documents', integrations: 'Intégrations',
+  catalogue: 'Catalogue', collaborateurs: 'Collaborateurs IA',
 }
 
 export function Breadcrumbs() {

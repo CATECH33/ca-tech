@@ -12,6 +12,7 @@ import { GoogleOAuthCallback } from './pages/GoogleOAuthCallback'
 
 // Pages métier — lazy-loaded (un chunk par module)
 const Dashboard           = lazy(() => import('./pages/Dashboard').then(m => ({ default: m.Dashboard })))
+const DemandesDevis       = lazy(() => import('./pages/DemandesDevis').then(m => ({ default: m.DemandesDevis })))
 const Clients             = lazy(() => import('./pages/Clients').then(m => ({ default: m.Clients })))
 const Leads               = lazy(() => import('./pages/Leads').then(m => ({ default: m.Leads })))
 const Devis               = lazy(() => import('./pages/Devis').then(m => ({ default: m.Devis })))
@@ -72,6 +73,7 @@ function ProtectedApp() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password"  element={<ResetPassword />} />
         <Route path="/"               element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/demandes/*"     element={<ProtectedRoute><DemandesDevis /></ProtectedRoute>} />
         <Route path="/clients/*"      element={<ProtectedRoute><Clients /></ProtectedRoute>} />
         <Route path="/leads/*"        element={<ProtectedRoute><Leads /></ProtectedRoute>} />
         <Route path="/devis/*"        element={<ProtectedRoute><Devis /></ProtectedRoute>} />

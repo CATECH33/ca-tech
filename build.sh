@@ -42,7 +42,7 @@ cp manager/dist/index.html manager/index.html
 
 for route in \
   login forgot-password reset-password \
-  clients leads devis factures projets taches \
+  demandes clients leads devis factures projets taches \
   services paiements portfolio agenda messages \
   support parametres integrations documents loic notifications prospection catalogue; do
   cp manager/dist/index.html "manager/${route}.html"
