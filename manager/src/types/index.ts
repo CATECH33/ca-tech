@@ -92,6 +92,20 @@ export interface Devis {
   conditions?: string
   projet_id?: string
   signature?: string
+  // Champs formulaire prospect (migration 004)
+  contact_name?: string
+  contact_email?: string
+  contact_phone?: string
+  company_name?: string
+  project_type?: string
+  activity?: string
+  features?: string[]
+  budget_range?: string
+  deadline?: string
+  seo_option?: boolean
+  maintenance_option?: boolean
+  hosting_option?: boolean
+  branding_option?: boolean
 }
 
 export interface FactureLigne {

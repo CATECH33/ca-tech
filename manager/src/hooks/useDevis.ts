@@ -48,6 +48,19 @@ function mapRow(row: Record<string, any>): Devis {
     date_expiration: row.valid_until ?? undefined,
     notes: row.notes ?? undefined,
     signature: row.signature ?? undefined,
+    contact_name: row.contact_name ?? undefined,
+    contact_email: row.contact_email ?? undefined,
+    contact_phone: row.contact_phone ?? undefined,
+    company_name: row.company_name ?? undefined,
+    project_type: row.project_type ?? undefined,
+    activity: row.activity ?? undefined,
+    features: Array.isArray(row.features) ? row.features : (row.features ? Object.values(row.features) : undefined),
+    budget_range: row.budget_range ?? undefined,
+    deadline: row.deadline ?? undefined,
+    seo_option: row.seo_option ?? undefined,
+    maintenance_option: row.maintenance_option ?? undefined,
+    hosting_option: row.hosting_option ?? undefined,
+    branding_option: row.branding_option ?? undefined,
   }
 }
 
