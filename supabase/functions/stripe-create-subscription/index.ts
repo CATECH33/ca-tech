@@ -65,6 +65,19 @@ Deno.serve(async (req) => {
         .eq('id', client_id)
     }
 
+    // Vérifier doublon : pas deux abonnements actifs/trialing identiques pour ce client
+    const { data: existing } = await sb
+      .from('subscriptions')
+      .select('id, status')
+      .eq('client_id', client_id)
+      .eq('name', planConfig.name)
+      .in('status', ['active', 'trialing'])
+      .maybeSingle()
+
+    if (existing) {
+      return json({ error: `Un abonnement "${planConfig.name}" est déjà actif ou en cours pour ce client` }, 409)
+    }
+
     // Créer la Checkout Session en mode subscription
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
