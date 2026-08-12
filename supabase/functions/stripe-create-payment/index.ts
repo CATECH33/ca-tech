@@ -41,8 +41,26 @@ Deno.serve(async (req) => {
     if (dErr || !devis) return json({ error: 'Devis introuvable' }, 404)
     if (devis.status !== 'accepted') return json({ error: 'Le devis doit être accepté' }, 400)
 
-    // Pour le solde, vérifier que l'acompte est payé
+    // Contrôles d'intégrité — jamais de double paiement
+    if (payment_type === 'acompte') {
+      const { data: existing } = await sb
+        .from('invoices')
+        .select('id')
+        .eq('devis_id', devis_id)
+        .eq('payment_type', 'acompte')
+        .maybeSingle()
+      if (existing) return json({ error: 'Un acompte existe déjà pour ce devis' }, 400)
+    }
+
     if (payment_type === 'solde') {
+      const { data: existingSolde } = await sb
+        .from('invoices')
+        .select('id')
+        .eq('devis_id', devis_id)
+        .eq('payment_type', 'solde')
+        .maybeSingle()
+      if (existingSolde) return json({ error: 'Un solde existe déjà pour ce devis' }, 400)
+
       const { data: acompte } = await sb
         .from('invoices')
         .select('status')
