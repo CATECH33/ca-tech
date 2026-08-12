@@ -2,6 +2,9 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { Facture, FactureStatus } from '@/types'
 
+const SUPABASE_URL      = import.meta.env.VITE_SUPABASE_URL  as string
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string
+
 // ─── Maps ────────────────────────────────────────────────────────────────────
 
 const STATUS_FROM_DB: Record<string, FactureStatus> = {
@@ -293,6 +296,39 @@ export function useEnregistrerPaiement() {
       qc.invalidateQueries({ queryKey: ['paiements'] })
       qc.invalidateQueries({ queryKey: ['clients'] })
     },
+  })
+}
+
+export function useCreateStripeCheckout() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (facture: Facture) => {
+      const { data: { session } } = await supabase.auth.getSession()
+      const token = session?.access_token ?? SUPABASE_ANON_KEY
+
+      const remaining = Math.max(0, facture.total_ttc - facture.amount_paid)
+      if (remaining <= 0) throw new Error('Cette facture est déjà entièrement réglée')
+
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/stripe-create-checkout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+          'apikey': SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({
+          invoice_id:     facture.id,
+          invoice_number: facture.numero,
+          amount_ttc:     remaining,
+          client_email:   facture.client?.email,
+        }),
+      })
+      const data = await res.json() as { url?: string; error?: string }
+      if (!res.ok) throw new Error(data.error ?? `HTTP ${res.status}`)
+      if (!data.url) throw new Error('Aucune URL retournée')
+      return data.url as string
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: Q }),
   })
 }
 
