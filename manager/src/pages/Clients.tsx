@@ -544,15 +544,15 @@ function ClientPanel({ client, onClose, onUpdate, onDelete, isUpdating, isDeleti
               </div>
               <Table>
                 <Thead>
-                  <Tr><Th>Plan</Th><Th>Montant</Th><Th>Statut</Th><Th>Prochain renouvellement</Th><Th></Th></Tr>
+                  <Tr><Th>Plan</Th><Th>Montant</Th><Th>Statut</Th><Th>Date de début</Th><Th>Prochain renouvellement</Th><Th></Th></Tr>
                 </Thead>
                 <Tbody>
                   {abonnements.length === 0 ? (
-                    <EmptyRow cols={5} message="Aucun abonnement actif" />
+                    <EmptyRow cols={6} message="Aucun abonnement actif" />
                   ) : abonnements.map(a => (
                     <Tr key={a.id}>
                       <Td className="font-medium text-gray-800 text-sm">{a.name}</Td>
-                      <Td className="font-bold text-gray-900">{formatCurrency(a.amount)}<span className="text-xs font-normal text-gray-400">/mois</span></Td>
+                      <Td className="font-bold text-gray-900">{formatCurrency(a.amount)}<span className="text-xs font-normal text-gray-400">{a.frequency === 'monthly' ? '/mois' : '/an'}</span></Td>
                       <Td>
                         <span className={cn(
                           'text-xs font-medium px-2.5 py-1 rounded-full border',
@@ -564,6 +564,9 @@ function ClientPanel({ client, onClose, onUpdate, onDelete, isUpdating, isDeleti
                         )}>
                           {a.status === 'active' ? 'Actif' : a.status === 'trialing' ? 'En cours' : a.status === 'past_due' ? 'En retard' : a.status === 'cancelled' ? 'Annulé' : 'En pause'}
                         </span>
+                      </Td>
+                      <Td className="text-xs text-gray-400">
+                        {a.current_period_start ? formatDate(a.current_period_start) : '—'}
                       </Td>
                       <Td className="text-xs text-gray-400">
                         {a.current_period_end ? formatDate(a.current_period_end) : '—'}
