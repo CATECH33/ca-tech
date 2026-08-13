@@ -171,11 +171,22 @@ Deno.serve(async (req) => {
       if (stripeInv.subscription) {
         const subId = typeof stripeInv.subscription === 'string' ? stripeInv.subscription : null
         if (subId) {
+          // W2 : ne pas écraser un abonnement déjà annulé — un paiement échoué
+          // post-annulation ne doit pas remettre le statut à 'past_due'.
           await sb.from('subscriptions')
             .update({ status: 'past_due' })
             .eq('stripe_subscription_id', subId)
+            .neq('status', 'cancelled')
         }
       }
+      return new Response('OK', { status: 200 })
+    }
+
+    // ─── customer.subscription.trial_will_end ─────────────────────────────────
+    // W3 (amélioration future) : notifier le client J-3 avant fin d'essai.
+    // Non implémenté — aucun essai gratuit (trialing) n'est actuellement utilisé
+    // par CA-TECH. À implémenter si des trials sont activés dans Stripe.
+    if (event.type === 'customer.subscription.trial_will_end') {
       return new Response('OK', { status: 200 })
     }
 
