@@ -308,9 +308,6 @@ export function useCreateStripeCheckout() {
       const { data: { session } } = await supabase.auth.getSession()
       const token = session?.access_token ?? SUPABASE_ANON_KEY
 
-      const remaining = Math.max(0, facture.total_ttc - facture.amount_paid)
-      if (remaining <= 0) throw new Error('Cette facture est déjà entièrement réglée')
-
       const res = await fetch(`${SUPABASE_URL}/functions/v1/stripe-create-checkout`, {
         method: 'POST',
         headers: {
@@ -318,12 +315,7 @@ export function useCreateStripeCheckout() {
           'Authorization': `Bearer ${token}`,
           'apikey': SUPABASE_ANON_KEY,
         },
-        body: JSON.stringify({
-          invoice_id:     facture.id,
-          invoice_number: facture.numero,
-          amount_ttc:     remaining,
-          client_email:   facture.client?.email,
-        }),
+        body: JSON.stringify({ invoice_id: facture.id }),
       })
       const data = await res.json() as { url?: string; error?: string }
       if (!res.ok) throw new Error(data.error ?? `HTTP ${res.status}`)

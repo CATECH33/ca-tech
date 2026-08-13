@@ -142,7 +142,24 @@ Deno.serve(async (req) => {
     if (event.type === 'invoice.payment_succeeded') {
       const stripeInv = event.data.object as Stripe.Invoice
       if (stripeInv.subscription) {
-        const stripeSubId = typeof stripeInv.subscription === 'string' ? stripeInv.subscription : null
+        const stripeSubId     = typeof stripeInv.subscription   === 'string' ? stripeInv.subscription   : null
+        const stripePaymentId = typeof stripeInv.payment_intent === 'string' ? stripeInv.payment_intent : null
+
+        // F2 : idempotence — ne pas insérer un paiement déjà enregistré.
+        // Le UNIQUE index payments_stripe_payment_id_key garantit l'unicité en DB,
+        // mais on vérifie en amont pour éviter une erreur 23505 et des retry Stripe infinis.
+        if (stripePaymentId) {
+          const { data: existingPayment } = await sb
+            .from('payments')
+            .select('id')
+            .eq('stripe_payment_id', stripePaymentId)
+            .maybeSingle()
+          if (existingPayment) {
+            console.log('[stripe-webhook] invoice.payment_succeeded déjà traité, ignoré', stripePaymentId)
+            return new Response('OK', { status: 200 })
+          }
+        }
+
         if (stripeSubId) {
           const { data: sub } = await sb
             .from('subscriptions')
@@ -155,7 +172,7 @@ Deno.serve(async (req) => {
               amount:            (stripeInv.amount_paid ?? 0) / 100,
               method:            'stripe',
               status:            'completed',
-              stripe_payment_id: typeof stripeInv.payment_intent === 'string' ? stripeInv.payment_intent : null,
+              stripe_payment_id: stripePaymentId,
               notes:             `Renouvellement abonnement · Stripe Invoice ${stripeInv.id}`,
               paid_at:           new Date().toISOString(),
             }])
