@@ -2,6 +2,9 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { Paiement, PaiementMethod } from '@/types'
 
+const SUPABASE_URL      = import.meta.env.VITE_SUPABASE_URL  as string
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string
+
 export type PaiementRow = Paiement & {
   facture_numero?: string
   facture_total?: number
@@ -137,23 +140,30 @@ export function useCreatePaiement() {
       date_paiement: string
       notes?: string
     }) => {
-      const { data, error } = await supabase
-        .from('payments')
-        .insert([{
-          client_id: p.client_id,
-          invoice_id: p.invoice_id || null,
-          amount: p.montant,
-          method: METHOD_TO_DB[p.methode],
-          status: 'completed',
-          reference: p.reference || null,
-          notes: p.notes || null,
-          paid_at: new Date(p.date_paiement).toISOString(),
-        }])
-        .select('*, clients(*), invoices(invoice_number, total, amount_paid)')
-        .single()
-      if (error) throw error
-      if (p.invoice_id) await syncInvoice(p.invoice_id)
-      return mapRow(data)
+      // P1 : le montant est validé côté serveur (edge function).
+      // Plus de INSERT direct depuis le frontend — empêche la manipulation du montant.
+      const { data: { session } } = await supabase.auth.getSession()
+      const token = session?.access_token ?? SUPABASE_ANON_KEY
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/create-manual-payment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+          'apikey': SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({
+          client_id:     p.client_id,
+          invoice_id:    p.invoice_id || undefined,
+          montant:       p.montant,
+          methode:       METHOD_TO_DB[p.methode],
+          date_paiement: p.date_paiement,
+          reference:     p.reference,
+          notes:         p.notes,
+        }),
+      })
+      const data = await res.json() as { id?: string; amount?: number; error?: string }
+      if (!res.ok) throw new Error(data.error ?? `HTTP ${res.status}`)
+      return data
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: Q })

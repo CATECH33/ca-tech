@@ -119,6 +119,8 @@ Deno.serve(async (req) => {
         canceled: 'cancelled', unpaid:   'past_due',
         paused:   'paused',   trialing:  'trialing',
       }
+      // A1 : ne jamais réactiver un abonnement déjà annulé — Stripe envoie parfois
+      // customer.subscription.updated après customer.subscription.deleted (ordre non garanti).
       await sb.from('subscriptions')
         .update({
           status:               statusMap[sub.status] ?? sub.status,
@@ -126,6 +128,7 @@ Deno.serve(async (req) => {
           current_period_end:   new Date(sub.current_period_end   * 1000).toISOString(),
         })
         .eq('stripe_subscription_id', sub.id)
+        .neq('status', 'cancelled')
       return new Response('OK', { status: 200 })
     }
 
