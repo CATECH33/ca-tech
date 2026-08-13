@@ -261,33 +261,35 @@ export function useEnregistrerPaiement() {
       facture: Facture; montant: number; methode: string
       reference?: string; date_paiement: string; notes?: string
     }) => {
-      const paidAt = new Date(date_paiement).toISOString()
-      const newAmountPaid = Math.min(facture.amount_paid + montant, facture.total_ttc)
-      const isFullyPaid = newAmountPaid >= facture.total_ttc
+      // P1 : montant validé côté serveur (create-manual-payment) depuis la DB.
+      // Le frontend ne détermine jamais le montant réel inséré en base.
+      const { data: { session } } = await supabase.auth.getSession()
+      const token = session?.access_token ?? SUPABASE_ANON_KEY
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/create-manual-payment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+          'apikey': SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({
+          invoice_id:    facture.id,
+          client_id:     facture.client_id,
+          montant,
+          methode,
+          date_paiement,
+          reference,
+          notes,
+        }),
+      })
+      const result = await res.json() as { id?: string; amount?: number; error?: string }
+      if (!res.ok) throw new Error(result.error ?? `HTTP ${res.status}`)
 
-      const { error: pErr } = await supabase.from('payments').insert([{
-        invoice_id: facture.id,
-        client_id: facture.client_id,
-        amount: montant,
-        method: methode,
-        reference: reference || null,
-        notes: notes || null,
-        paid_at: paidAt,
-        status: 'completed',
-      }])
-      if (pErr) throw pErr
-
-      const updates: Record<string, any> = {
-        status: isFullyPaid ? 'paid' : 'partial',
-        amount_paid: newAmountPaid,
-      }
-      if (isFullyPaid) updates.paid_at = paidAt
-
+      // Re-fetch la facture mise à jour pour retourner le type Facture attendu par l'appelant
       const { data, error } = await supabase
         .from('invoices')
-        .update(updates)
-        .eq('id', facture.id)
         .select('*, clients(*), invoice_items(*)')
+        .eq('id', facture.id)
         .single()
       if (error) throw error
       return mapRow(data)
