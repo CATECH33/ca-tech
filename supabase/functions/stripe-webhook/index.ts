@@ -96,17 +96,12 @@ Deno.serve(async (req) => {
         return new Response('Erreur BDD', { status: 500 })
       }
 
-      // Synchroniser la facture
-      const newAmountPaid = Math.min(Number(inv.amount_paid ?? 0) + amountEuros, Number(inv.total))
-      const isFullyPaid   = newAmountPaid >= Number(inv.total)
-      const invoiceUpdate: Record<string, unknown> = {
-        amount_paid: newAmountPaid,
-        status:      isFullyPaid ? 'paid' : 'partial',
-      }
-      if (isFullyPaid) invoiceUpdate.paid_at = paidAt
-
-      const { error: iErr } = await sb.from('invoices').update(invoiceUpdate).eq('id', invoiceId)
-      if (iErr) console.error('[stripe-webhook] Erreur UPDATE invoices', iErr)
+      // P2 : sync atomique via RPC — FOR UPDATE élimine la race condition
+      const { error: syncErr } = await sb.rpc('sync_invoice_after_payment', {
+        p_invoice_id: invoiceId,
+        p_paid_at:    paidAt,
+      })
+      if (syncErr) console.error('[stripe-webhook] Erreur sync facture', syncErr)
 
       return new Response('OK', { status: 200 })
     }
