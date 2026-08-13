@@ -13,6 +13,8 @@ export type NotificationTrigger =
   | 'escalate'
   | 'email_captured'
   | 'phone_captured'
+  | 'show_score'
+  | 'send_report'
 
 export type Priority = 'high' | 'medium' | 'low'
 
@@ -31,7 +33,7 @@ export interface NotificationContext {
 
 export function getPriority(trigger: NotificationTrigger): Priority {
   if (trigger === 'create_lead' || trigger === 'escalate') return 'high'
-  if (trigger === 'show_quote' || trigger === 'propose_appointment') return 'medium'
+  if (trigger === 'show_quote' || trigger === 'propose_appointment' || trigger === 'send_report') return 'medium'
   return 'low'
 }
 
@@ -43,6 +45,8 @@ export function getTriggerLabel(trigger: NotificationTrigger): string {
     escalate:             'Escalade humaine',
     email_captured:       'Email collecté',
     phone_captured:       'Téléphone collecté',
+    show_score:           'Score diagnostic généré',
+    send_report:          'Rapport envoyé',
   }
   return labels[trigger]
 }

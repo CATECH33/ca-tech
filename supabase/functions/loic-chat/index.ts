@@ -1,80 +1,157 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { notify, getPriority, type NotificationTrigger } from './notifications/notificationService.ts'
-import { sendClientConfirmation } from './notifications/email.ts'
+import { sendClientConfirmation, sendDiagnosticReport } from './notifications/email.ts'
 
-const ANTHROPIC_KEY      = Deno.env.get('ANTHROPIC_API_KEY')
-const SUPABASE_URL       = Deno.env.get('SUPABASE_URL')!
-const SUPABASE_SERVICE   = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+const ANTHROPIC_KEY    = Deno.env.get('ANTHROPIC_API_KEY')
+const SUPABASE_URL     = Deno.env.get('SUPABASE_URL')!
+const SUPABASE_SERVICE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 
 const CORS = {
   'Access-Control-Allow-Origin':  '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-const SYSTEM_PROMPT = `Tu es Loïc, l'assistant commercial IA de CA-TECH, une agence web & design française présente à Paris, Lyon, Dijon et Troyes.
+// ── Appel Claude API ──────────────────────────────────────────────────────────
+async function callClaude(system: string, userMessages: { role: string; content: string }[], maxTokens = 1024): Promise<string> {
+  if (!ANTHROPIC_KEY) return ''
+  const r = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': ANTHROPIC_KEY,
+      'anthropic-version': '2023-06-01',
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: maxTokens,
+      system,
+      messages: userMessages,
+    }),
+  })
+  if (!r.ok) throw new Error(`Anthropic ${r.status}: ${await r.text()}`)
+  const d = await r.json()
+  return d.content?.[0]?.text ?? ''
+}
 
-## Mission
-Accueillir chaleureusement les visiteurs, présenter les services CA-TECH avec enthousiasme, qualifier les prospects naturellement et créer des leads automatiquement.
+// ── System prompt V2 — Diagnostic IA ─────────────────────────────────────────
+const SYSTEM_PROMPT = `Tu es Loïc, consultant IA de CA-TECH — cabinet de conseil spécialisé en Intelligence Artificielle, Automatisation et SEO pour les entreprises françaises.
 
-## Services CA-TECH — catalogue complet
+## Mission V2 — Diagnostic de maturité IA
 
-### Sites web
-- **Landing page** : à partir de 270 € — page unique haute conversion, idéale pour lancer un produit ou capturer des leads. Livraison : 5-7 jours.
-- **Site vitrine** : à partir de 590 € — site professionnel 3-10 pages, mobile-first, SEO optimisé, formulaire de contact. Livraison : 2-3 semaines.
-- **Refonte de site** : à partir de 590 € — modernisation complète d'un site existant (design, perf, SEO).
-- **Site e-commerce** : à partir de 1 090 € — boutique en ligne complète, paiement Stripe, gestion des stocks, mobile. Livraison : 4-6 semaines.
-- **Développement sur mesure** : à partir de 2 500 € — application web, plateforme métier, API, tableau de bord personnalisé.
+Tu mènes des diagnostics IA pour aider les dirigeants à comprendre où ils en sont et quelles opportunités IA/automatisation sont prioritaires pour eux.
 
-### Design & Identité visuelle
-- **Création de logo** : à partir de 180 € — 3 propositions créatives, fichiers HD (SVG, PNG, PDF vectoriel).
-- **Identité visuelle complète** : à partir de 500 € — logo + charte graphique + guidelines d'utilisation.
-- **Création de flyers** : à partir de 139 € — flyer recto/verso HD, prêt pour impression.
+## Phase 1 — Accueil (1-2 échanges maximum)
 
-### Intelligence artificielle & Automatisation
-- **Collaborateurs IA** : à partir de 800 € — assistants IA sur mesure intégrés à votre site ou vos outils (chatbots, agents, FAQ intelligentes).
-- **Automatisations** : à partir de 800 € — workflows automatiques, intégrations API, scripts (Zapier, Make, n8n, etc.) pour éliminer les tâches répétitives.
-- **IA avancée** : à partir de 1 500 € — RAG, agents autonomes, pipelines IA complexes, analyse de données.
+Accueille chaleureusement le visiteur, présente-toi en 2 phrases. Après 1 échange, propose naturellement de lancer le diagnostic IA gratuit : "Je peux réaliser votre diagnostic de maturité IA — 8 questions, 5 minutes, et vous repartez avec un score et 3 recommandations personnalisées. On commence ?"
 
-### Services complémentaires
-- **Maintenance mensuelle** : 89,99 €/mois (vitrine) ou 120 €/mois (e-commerce) — mises à jour, sécurité, sauvegardes, support prioritaire.
-- **Hébergement géré** : 30 €/mois — domaine + SSL + CDN haute disponibilité.
-- **SEO avancé** : +200 € — optimisation complète on-page, balises, sitemap, Core Web Vitals.
+## Phase 2 — Diagnostic structuré (8 questions)
 
-## Style de conversation
-- Réponses courtes : 2-4 phrases max, puis UNE question pour relancer
-- Chaleureux, direct, expert — comme un conseiller humain
-- Illustre avec des exemples concrets ("pour un restaurant, on ferait…")
-- Si le visiteur hésite, propose un appel découverte gratuit de 30 min
+Pose UNE seule question à la fois. Après chaque réponse, reformule brièvement ce que tu as compris, puis enchaîne sur la suivante. Ne pose jamais deux questions dans le même message.
 
-## Qualification — collecte progressivement dans la conversation
-1. Prénom + Nom
-2. Entreprise ou activité
-3. Email
-4. Téléphone
-5. Description du projet
-6. Budget estimé
+Ordre des questions :
+1. "Quelle est votre activité principale — secteur, produit ou service ?"
+2. "Combien de personnes travaillent dans votre équipe (ou votre entreprise) ?"
+3. "Quelles sont les 2 ou 3 tâches qui consomment le plus de temps chaque semaine dans votre équipe ?"
+4. "Quels outils numériques utilisez-vous aujourd'hui — CRM, ERP, Excel, logiciels métier ?"
+5. "Avez-vous déjà utilisé des outils IA ou des automatisations ? Si oui, lesquels ?"
+6. "Quel est votre principal défi business en ce moment — croissance, coûts, délais, qualité ?"
+7. "Avez-vous un budget envisagé pour la digitalisation ou l'IA cette année ? (fourchette approximative)"
+8. "Quelles sont vos 2 priorités pour les 6 prochains mois ?"
+
+## Phase 3 — Score de maturité (après la question 8)
+
+Quand tu as collecté les 8 réponses, calcule honnêtement le score sur 100 réparti en 4 dimensions de 25 points chacune :
+
+**Processus (0-25)** :
+- 20-25 : processus bien identifiés, répétitifs, documentés
+- 10-19 : quelques processus clairs mais peu structurés
+- 0-9   : processus flous ou très manuels
+
+**Données & Outils (0-25)** :
+- 20-25 : outils numériques organisés, données centralisées
+- 10-19 : mix numérique/Excel, données partiellement organisées
+- 0-9   : principalement Excel ou papier, données éparpillées
+
+**Maturité IA (0-25)** :
+- 20-25 : expérience IA/automatisation existante et fonctionnelle
+- 10-19 : essais ou réflexion en cours
+- 0-9   : aucune expérience IA, démarrage complet
+
+**Ambition & Budget (0-25)** :
+- 20-25 : budget clair, priorités concrètes, décision proche
+- 10-19 : budget vague ou priorités à définir
+- 0-9   : pas de budget identifié ou priorités floues
+
+Niveaux :
+- 0-30  : "Débutant" — "Vous démarrez votre parcours IA. C'est exactement le bon moment pour poser de bonnes bases."
+- 31-55 : "En transition" — "Vous avez les fondations. Quelques actions ciblées vont accélérer fortement vos résultats."
+- 56-80 : "Avancé" — "Vous avez les bases solides. L'IA peut vous faire passer un cap décisif dès maintenant."
+- 81-100: "Leader IA" — "Vous êtes prêt à faire de l'IA un avantage concurrentiel majeur et durable."
+
+Génère 3 recommandations précises et actionnables basées sur les réponses (mentionner l'impact estimé : temps gagné, leads, coûts).
+
+Déclenche l'action show_score avec les données calculées.
+
+Après avoir déclenché show_score, dis : "Je peux vous envoyer un rapport complet par email avec l'analyse détaillée et un plan d'action. Quelle est votre adresse email ?"
+
+## Phase 4 — Rapport
+
+Quand tu as l'email du prospect :
+1. Déclenche create_lead si pas encore fait (avec projet = "Diagnostic IA — score X/100")
+2. Déclenche send_report avec l'email et les données du score
 
 ## Actions disponibles (une seule par réponse, entre balises <action></action>)
 
-### Estimation de devis
-<action>{"type":"show_quote","items":[{"service":"Site vitrine","prix":590},{"service":"SEO avancé","prix":200}],"total_ht":790,"tva":158,"total_ttc":948}</action>
+### Score de maturité
+<action>{"type":"show_score","score":72,"level":"Avancé","level_description":"Vous avez les bases solides. L'IA peut vous faire passer un cap décisif dès maintenant.","dimensions":{"processus":18,"donnees":16,"maturite_ia":20,"ambition":18},"recommandations":["Automatiser la qualification de leads entrants (gain estimé : 4-6h/semaine)","Déployer un agent support client 24/7 sur votre site (−60% tickets traités manuellement)","Intégrer un assistant IA à votre processus de relance commerciale (×2 taux de réponse)"]}</action>
 
-### Rendez-vous
-<action>{"type":"propose_appointment","data":{"motif":"Appel découverte gratuit 30 min"}}</action>
+### Envoyer le rapport
+<action>{"type":"send_report","email":"contact@entreprise.fr","prenom":"Marie","nom":"Dupont","entreprise":"Société X"}</action>
 
-### Créer le lead (dès que tu as nom + email OU nom + téléphone)
-<action>{"type":"create_lead","data":{"prenom":"Marie","nom":"Dupont","email":"marie@exemple.fr","telephone":"0612345678","entreprise":"Ma Boutique","projet":"Site e-commerce mode","budget":1200,"ville":"Paris"}}</action>
+### Créer le lead
+<action>{"type":"create_lead","data":{"prenom":"Marie","nom":"Dupont","email":"marie@exemple.fr","telephone":"0612345678","entreprise":"Ma Boutique","projet":"Diagnostic IA — score 72/100","budget":3000,"ville":"Paris"}}</action>
 
 ### Escalade humaine
 <action>{"type":"escalate","reason":"Demande hors périmètre"}</action>
 
 ## Règles strictes
 - Toujours en français, jamais de tutoiement
-- Ne jamais mentionner les balises <action>
-- Collecter les informations naturellement — jamais en liste de questions brutes
-- Déclencher create_lead dès le minimum : nom + (email OU téléphone)
-- Ne jamais inventer d'informations sur le prospect
-- Si question hors périmètre (comptabilité, juridique…) : escalader poliment`
+- Ne jamais mentionner les balises <action> ni le mot "action"
+- UNE question à la fois — jamais deux questions dans le même message
+- Ton naturel et consultatif, pas robotique ni formel
+- Ne jamais inventer les scores — les calculer honnêtement selon les réponses
+- Déclencher create_lead dès que tu as prénom + email`
+
+// ── Prompt pour générer le contenu du rapport ─────────────────────────────────
+function buildReportPrompt(meta: any): string {
+  return `Tu es Loïc, consultant IA de CA-TECH. Génère le contenu textuel d'un rapport de diagnostic IA pour ce prospect.
+
+Données du diagnostic :
+- Activité : ${meta.activite ?? 'non renseignée'}
+- Équipe : ${meta.taille ?? 'non renseignée'}
+- Tâches chronophages : ${meta.taches ?? 'non renseignées'}
+- Outils actuels : ${meta.outils ?? 'non renseignés'}
+- Expérience IA : ${meta.experience_ia ?? 'non renseignée'}
+- Défi principal : ${meta.defi ?? 'non renseigné'}
+- Budget : ${meta.budget_digital ?? 'non renseigné'}
+- Priorités : ${meta.priorites ?? 'non renseignées'}
+- Score : ${meta.score_data?.score ?? '?'}/100 — ${meta.score_data?.level ?? ''}
+
+Rédige 4-5 paragraphes courts (2-3 phrases chacun) en français, ton consultatif et direct. Structure :
+1. Contexte et situation actuelle
+2. Opportunités IA/automatisation identifiées
+3. Points forts à valoriser
+4. Plan d'action recommandé (6 mois)
+5. Prochaine étape concrète
+
+Ne répète pas le score ou les recommandations (déjà affichés). Reste factuel et actionnable.`
+}
+
+function json(body: unknown, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status, headers: { ...CORS, 'Content-Type': 'application/json' },
+  })
+}
 
 Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS })
@@ -91,8 +168,8 @@ Deno.serve(async (req: Request) => {
       const { data: conv, error: ce } = await supabase
         .from('ai_conversations')
         .insert([{
-          type: 'qualification', status: 'active', messages: [],
-          metadata: { ...metadata, source: metadata.source ?? 'widget' },
+          type: 'diagnostic', status: 'active', messages: [],
+          metadata: { ...metadata, source: metadata.source ?? 'loic-page' },
         }])
         .select().single()
       if (ce) throw ce
@@ -107,44 +184,90 @@ Deno.serve(async (req: Request) => {
 
     const prevMeta = { ...currentMeta }
 
-    // ── Appel Claude Haiku ────────────────────────────────────────────────
+    // ── Appel Claude ──────────────────────────────────────────────────────
     let responseText = ''
     let action: any  = null
 
     if (!ANTHROPIC_KEY) {
-      responseText = "Bonjour ! Je suis Loïc, l'assistant CA-TECH. Notre équipe vous contactera très prochainement. Écrivez-nous à pemoustaskit@gmail.com"
-      action = { type: 'escalate', reason: 'API key non configurée' }
+      responseText = "Bonjour ! Je suis Loïc, consultant IA de CA-TECH. Écrivez-nous à contact@ca-tech.fr pour démarrer votre diagnostic gratuit."
     } else {
-      const r = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': ANTHROPIC_KEY,
-          'anthropic-version': '2023-06-01',
-        },
-        body: JSON.stringify({
-          model: 'claude-haiku-4-5-20251001',
-          max_tokens: 1024,
-          system: SYSTEM_PROMPT,
-          messages: messages.slice(-20).map((m: any) => ({ role: m.role, content: m.content })),
-        }),
-      })
-      if (!r.ok) throw new Error(`Anthropic ${r.status}: ${await r.text()}`)
-      const d   = await r.json()
-      const raw = d.content?.[0]?.text ?? ''
-
+      const raw = await callClaude(
+        SYSTEM_PROMPT,
+        messages.slice(-20).map((m: any) => ({ role: m.role, content: m.content }))
+      )
       const match = raw.match(/<action>([\s\S]*?)<\/action>/)
       if (match) {
-        try { action = JSON.parse(match[1].trim()) } catch { /* ignore parse error */ }
+        try { action = JSON.parse(match[1].trim()) } catch { /* ignore */ }
       }
       responseText = raw.replace(/<action>[\s\S]*?<\/action>/g, '').trim()
     }
 
-    // ── Traiter l'action et mettre à jour la metadata ────────────────────
+    // ── Traiter les actions ───────────────────────────────────────────────
     let newMeta  = { ...currentMeta }
     let leadId: string | null = null
     const triggers: NotificationTrigger[] = []
 
+    // show_score — stocker le score dans la metadata
+    if (action?.type === 'show_score') {
+      newMeta.score_data = {
+        score:             action.score,
+        level:             action.level,
+        level_description: action.level_description,
+        dimensions:        action.dimensions,
+        recommandations:   action.recommandations,
+      }
+      triggers.push('show_score')
+    }
+
+    // send_report — générer et envoyer le rapport par email
+    if (action?.type === 'send_report' && action.email && !newMeta.report_sent) {
+      const scoreData = newMeta.score_data ?? {}
+      triggers.push('send_report')
+
+      // Mettre à jour le prospect dans la metadata
+      if (action.prenom)    newMeta.prenom    = action.prenom
+      if (action.nom)       newMeta.nom       = action.nom
+      if (action.email)     newMeta.email     = action.email
+      if (action.entreprise) newMeta.entreprise = action.entreprise
+
+      const reportPromise = (async () => {
+        try {
+          // Générer le contenu du rapport via Claude
+          const reportContent = await callClaude(
+            buildReportPrompt({ ...newMeta }),
+            [{ role: 'user', content: 'Génère le rapport.' }],
+            800
+          )
+
+          // Envoyer le rapport par email
+          const { ok, error: rErr } = await sendDiagnosticReport({
+            clientEmail:      action.email,
+            clientName:       `${action.prenom ?? ''} ${action.nom ?? ''}`.trim() || action.email,
+            entreprise:       action.entreprise,
+            score:            scoreData.score ?? 0,
+            level:            scoreData.level ?? '—',
+            levelDescription: scoreData.level_description ?? '',
+            dimensions:       scoreData.dimensions ?? { processus: 0, donnees: 0, maturite_ia: 0, ambition: 0 },
+            recommandations:  scoreData.recommandations ?? [],
+            reportContent,
+          })
+
+          newMeta.report_sent = ok
+          if (rErr) console.warn('[loic-chat/send_report] Email error:', rErr)
+        } catch (e) {
+          console.error('[loic-chat/send_report]', e)
+        }
+      })()
+
+      // @ts-ignore — EdgeRuntime dans Supabase Edge Functions
+      if (typeof EdgeRuntime !== 'undefined') {
+        EdgeRuntime.waitUntil(reportPromise)
+      } else {
+        await reportPromise
+      }
+    }
+
+    // create_lead — même logique que V1
     if (action?.type === 'create_lead' && action.data) {
       const d = action.data
       if (d.prenom)     newMeta.prenom     = d.prenom
@@ -159,32 +282,30 @@ Deno.serve(async (req: Request) => {
       if (!newMeta.lead_created) {
         const wfSteps: string[] = []
 
-        // ── STEP 1/6 : Enregistrement lead ─────────────────────────────────
-        console.log('[STEP 1/6] Enregistrement du lead...')
+        console.log('[STEP 1/3] Enregistrement du lead...')
         try {
-          const notes = [d.projet, d.ville ? `Ville: ${d.ville}` : ''].filter(Boolean).join(' | ')
+          const scoreInfo = newMeta.score_data ? ` | Score IA : ${newMeta.score_data.score}/100` : ''
           const { data: lead, error: leadErr } = await supabase.from('leads').insert([{
             first_name: d.prenom ?? '',
             last_name:  d.nom ?? '',
             email:      d.email ?? '',
             phone:      d.telephone ?? null,
             company:    d.entreprise ?? null,
-            notes:      notes || null,
+            notes:      `${d.projet ?? ''}${scoreInfo}`.trim() || null,
             budget_max: d.budget ?? null,
-            source:     'loic_widget',
+            source:     'loic_diagnostic',
             status:     'new',
           }]).select().single()
           if (leadErr) throw leadErr
           leadId = lead.id
           wfSteps.push('✓ Lead enregistré')
-          console.log(`[STEP 1/6] ✓ Lead: ${lead.id}`)
+          console.log(`[STEP 1/3] ✓ Lead: ${lead.id}`)
         } catch (e) {
           wfSteps.push(`✗ Lead: ${String(e)}`)
-          console.error('[STEP 1/6] ✗ Lead:', e)
+          console.error('[STEP 1/3] ✗ Lead:', e)
         }
 
-        // ── STEP 2/6 : Création du devis automatique ────────────────────────
-        console.log('[STEP 2/6] Création du devis automatique...')
+        console.log('[STEP 2/3] Création du devis automatique...')
         let devisNumber: string | null = null
         let devisId: string | null = null
         try {
@@ -206,62 +327,51 @@ Deno.serve(async (req: Request) => {
             budget_range:    d.budget ? String(d.budget) : null,
             lead_id:         leadId,
             conversation_id: convId,
-            subtotal:        0, discount: 0, tax_rate: 20, tax_amount: 0, total: 0,
-            valid_until:     validUntil.toISOString().split('T')[0],
+            subtotal: 0, discount: 0, tax_rate: 20, tax_amount: 0, total: 0,
+            valid_until: validUntil.toISOString().split('T')[0],
           }]).select().single()
           if (devisErr) throw devisErr
           devisId = devisData.id
           newMeta.devis_id     = devisId
           newMeta.devis_number = devisNumber
           wfSteps.push(`✓ Devis créé: ${devisNumber}`)
-          console.log(`[STEP 2/6] ✓ Devis: ${devisNumber}`)
+          console.log(`[STEP 2/3] ✓ Devis: ${devisNumber}`)
         } catch (e) {
           wfSteps.push(`✗ Devis: ${String(e)}`)
-          console.error('[STEP 2/6] ✗ Devis:', e)
+          console.error('[STEP 2/3] ✗ Devis:', e)
         }
 
-        // ── STEP 3/6 : Email de confirmation au client ──────────────────────
-        console.log('[STEP 3/6] Email confirmation client...')
+        console.log('[STEP 3/3] Email de confirmation client...')
         if (d.email) {
           try {
             const { ok: cOk, error: cErr } = await sendClientConfirmation({
               clientEmail: d.email,
               clientName:  `${d.prenom ?? ''} ${d.nom ?? ''}`.trim() || 'Vous',
               devisNumber: devisNumber ?? '—',
-              projet:      d.projet ?? 'Projet à définir',
+              projet:      d.projet ?? 'Diagnostic IA',
               budget:      d.budget,
             })
             wfSteps.push(cOk ? '✓ Email client envoyé' : `✗ Email client: ${cErr}`)
-            console.log(`[STEP 3/6] Email client: ${cOk ? '✓' : '✗ ' + cErr}`)
           } catch (e) {
             wfSteps.push(`✗ Email client: ${String(e)}`)
-            console.error('[STEP 3/6] ✗ Email client:', e)
           }
-        } else {
-          wfSteps.push('⚠ Email client: email non disponible')
-          console.log('[STEP 3/6] ⚠ Email client: email absent')
         }
 
         newMeta.lead_created   = true
         newMeta.workflow_steps = wfSteps
-        console.log('[Loïc Workflow]', wfSteps.join(' | '))
+        console.log('[Loïc V2 Workflow]', wfSteps.join(' | '))
       }
       triggers.push('create_lead')
 
     } else if (action?.type === 'escalate') {
       newMeta.escalated = true
       triggers.push('escalate')
-    } else if (action?.type === 'show_quote') {
-      triggers.push('show_quote')
-    } else if (action?.type === 'propose_appointment') {
-      triggers.push('propose_appointment')
     }
 
-    // Détection première capture email / téléphone
-    if (action?.data?.email && !prevMeta.email)     triggers.push('email_captured')
+    // Détection première capture
+    if (action?.data?.email && !prevMeta.email)        triggers.push('email_captured')
     if (action?.data?.telephone && !prevMeta.telephone) triggers.push('phone_captured')
 
-    // Dédupliquer : si create_lead, supprimer email_captured / phone_captured
     const finalTriggers = triggers.filter(t => {
       if ((t === 'email_captured' || t === 'phone_captured') && triggers.includes('create_lead')) return false
       return true
@@ -276,7 +386,7 @@ Deno.serve(async (req: Request) => {
     if (leadId) patch.lead_id = leadId
     await supabase.from('ai_conversations').update(patch).eq('id', convId)
 
-    // ── Envoyer les notifications (async, non bloquant) ───────────────────
+    // ── Notifications (non bloquant) ──────────────────────────────────────
     if (finalTriggers.length > 0) {
       const primaryTrigger = finalTriggers[0]
       const summary = messages
@@ -287,11 +397,11 @@ Deno.serve(async (req: Request) => {
         .slice(0, 500)
 
       const notifyPromise = notify(
-        { prospect: newMeta, summary: summary || 'Conversation débutée', conversationId: convId, trigger: primaryTrigger },
+        { prospect: newMeta, summary: summary || 'Diagnostic démarré', conversationId: convId, trigger: primaryTrigger },
         supabase
       ).catch(e => console.error('[loic-chat/notify]', e))
 
-      // @ts-ignore — EdgeRuntime disponible dans Supabase Edge Functions
+      // @ts-ignore
       if (typeof EdgeRuntime !== 'undefined') {
         EdgeRuntime.waitUntil(notifyPromise)
       } else {

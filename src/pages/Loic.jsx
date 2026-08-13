@@ -5,122 +5,8 @@ import { usePageMeta, SITE_URL } from '../lib/seo'
 import { useJsonLd, webPageSchema, breadcrumbSchema } from '../lib/schema'
 import { SeoRelated } from '../components/SeoContent'
 
-/* ── Simulated response database ── */
-const RESPONSES = [
-  {
-    keywords: ['bonjour', 'hello', 'salut', 'hé', 'hey', 'coucou'],
-    text: 'Bonjour ! Je suis Loïc, le collaborateur IA de CA-TECH. Je suis spécialisé en ventes, support client, RH et création de contenu.\n\nQue puis-je faire pour vous aujourd\'hui ?',
-  },
-  {
-    keywords: ['qualif', 'lead', 'prospect', 'startup', 'scoring', 'score'],
-    text: '✓ **Analyse du lead effectuée**\n\nProfil détecté : Startup SaaS, ~20 salariés\nBudget estimé : 3 000–5 000 €/mois\nScore de qualification : **84/100** — fort potentiel\n\n**Actions déclenchées automatiquement :**\n— Proposition commerciale personnalisée envoyée\n— Créneau de démo bloqué (lundi 14h, votre agenda est libre)\n— Lead ajouté au pipeline CRM en phase « Proposition »\n\nVoulez-vous que je rédige un email de suivi ?',
-  },
-  {
-    keywords: ['email', 'relance', 'inactif', 'prospect inactif', 'mail'],
-    text: '**Email de relance généré**\n\n---\nObjet : Suite à notre échange — une question rapide\n\nBonjour [Prénom],\n\nJe me permets de revenir vers vous. Avez-vous eu l\'occasion d\'étudier notre proposition ?\n\nNous venons d\'aider une entreprise similaire à la vôtre à réduire de 40 % son temps de traitement des demandes clients. Je serais ravi d\'échanger 15 minutes pour voir si ce résultat s\'applique à votre contexte.\n\nBonne semaine,\n[Votre signature]\n---\n\nEmail prêt. Voulez-je l\'envoyer directement ou l\'adapter ?',
-  },
-  {
-    keywords: ['proposition', 'commerciale', 'devis', 'offre'],
-    text: '**Proposition commerciale générée**\n\nClient : [Nom de l\'entreprise]\nDate : ' + new Date().toLocaleDateString('fr-FR') + '\n\n**Périmètre proposé :**\n— Collaborateur IA Commercial (qualification + relances)\n— Intégration CRM HubSpot + Gmail\n— Tableau de bord de performance\n\n**Investissement :** 490 €/mois (engagement 3 mois)\n**Délai de déploiement :** 48h\n**ROI estimé :** +12h/semaine récupérées dès le mois 1\n\nDocument PDF prêt à envoyer. Signature électronique incluse.',
-  },
-  {
-    keywords: ['support', 'client', 'ticket', 'service client', 'week-end', 'nuit', 'urgent'],
-    text: 'Pour le support client, voici ce que je fais concrètement :\n\n— Je réponds aux **questions fréquentes** instantanément (FAQ, commandes, délais…)\n— Je **classe et priorise** les tickets entrants par urgence\n— J\'escalade automatiquement les cas **critiques** à votre équipe\n— Je suis disponible **24h/24, 7j/7** — week-end et jours fériés inclus\n— Je rédige des réponses avec **le ton de votre marque**\n\nRésultat moyen chez nos clients : **−60 % de temps** passé sur le support.\n\nVoulez-vous voir un exemple de ticket traité ?',
-  },
-  {
-    keywords: ['rh', 'ressources humaines', 'cv', 'recrutement', 'congé', 'onboarding', 'embauche'],
-    text: 'En RH, je prends en charge :\n\n— **Tri de CV** automatique selon vos critères (poste, expérience, compétences)\n— Réponses aux **questions fréquentes** (congés, bulletins, politique interne)\n— Gestion des **demandes de congés** et vérification des soldes\n— **Onboarding** automatisé : documents, accès, planning J+1\n— Rédaction d\'**offres d\'emploi** optimisées pour les job boards\n\nSur quel aspect voulez-vous que je me concentre ?',
-  },
-  {
-    keywords: ['seo', 'contenu', 'article', 'blog', 'rédige', 'texte', 'fiche', 'produit'],
-    text: '**Article SEO généré — aperçu**\n\nTitre : « 5 façons d\'automatiser votre prospection B2B en 2025 »\n\n**Structure :**\n1. Le temps perdu en prospection manuelle (chiffres clés)\n2. L\'IA pour qualifier les leads entrants\n3. Les emails de relance automatisés\n4. Le scoring de leads en temps réel\n5. L\'intégration CRM sans friction\n\nMots-clés : automatisation prospection, IA commerciale, CRM automatisé\nLongueur : 1 200 mots · Lecture : 5 min · Score SEO estimé : 91/100\n\nVoulez-vous l\'article complet ou une version courte pour les réseaux ?',
-  },
-  {
-    keywords: ['integr', 'connecter', 'crm', 'slack', 'gmail', 'whatsapp', 'notion', 'outlook', 'teams', 'hubspot'],
-    text: 'Je suis compatible avec tous vos outils actuels :\n\n📧 **Email** — Gmail, Outlook, Apple Mail\n📅 **Agenda** — Google Calendar, Outlook Calendar\n💬 **Messagerie** — Slack, WhatsApp Business, Teams\n📊 **CRM** — HubSpot, Salesforce, Pipedrive, Notion\n📁 **Stockage** — Google Drive, OneDrive, Dropbox\n🧾 **Facturation** — Pennylane, QuickBooks, Sage\n\nAucune installation pour vos équipes. Je me connecte en lecture/écriture sur ce que vous avez déjà, en moins de 30 minutes.',
-  },
-  {
-    keywords: ['coût', 'prix', 'tarif', 'combien', 'abonnement', 'forfait'],
-    text: 'Le tarif dépend du rôle et du niveau d\'intégration :\n\n**Starter** — 290 €/mois\n1 rôle métier · Intégrations email + agenda · Support inclus\n\n**Pro** — 490 €/mois\nMulti-rôles · CRM + email + agenda · Reporting mensuel\n\n**Enterprise** — sur devis\nAccès API complet · SLA garanti · Account manager dédié\n\nTous les plans incluent un **diagnostic gratuit** et 30 jours d\'accompagnement. Le ROI moyen de nos clients est visible dès le premier mois.\n\nVoulez-vous planifier un appel de 20 minutes ?',
-  },
-  {
-    keywords: ['temps', 'délai', 'opérationnel', 'combien de temps', '48h', 'rapidement', 'vite', 'quand'],
-    text: '**Déploiement en 48h — planning type :**\n\n🕐 Heure 0 — Appel de diagnostic (30 min)\n🕒 Heure 2 — Configuration de votre base de connaissances\n🕙 Jour 1 soir — Tests avec vos vraies données\n🕗 Jour 2 — Ajustements et validation\n🚀 Jour 2 soir — Mise en production\n\nVous recevez un accès tableau de bord dès le jour 1. L\'accompagnement est inclus pendant 30 jours. Nos clients sont systématiquement opérationnels sous 48h.',
-  },
-  {
-    keywords: ['faire', 'capable', 'fonctions', 'compétences', 'aide', 'montre', 'exemple', 'quoi', 'peux'],
-    text: 'Voici ce que je fais concrètement :\n\n**Commercial**\n— Qualifier et scorer vos leads entrants\n— Envoyer des propositions personnalisées\n— Relancer automatiquement vos prospects\n\n**Support client**\n— Répondre aux questions 24h/24\n— Trier et prioriser les tickets\n— Escalader les cas complexes\n\n**RH**\n— Gérer les demandes de congés\n— Trier des CVs automatiquement\n— Automatiser l\'onboarding\n\n**Contenu**\n— Rédiger des articles SEO\n— Générer des emails de campagne\n— Créer des fiches produits optimisées\n\nVoulez-vous un exemple concret sur l\'un de ces domaines ?',
-  },
-]
-
-const FALLBACK = 'Dans un déploiement réel, je serais connecté à votre base de connaissances et je vous répondrais avec une précision totale.\n\nPour cette démonstration, les réponses couvrent les cas d\'usage les plus fréquents. Essayez par exemple :\n— « Qualifie ce lead »\n— « Rédige un email de relance »\n— « Que peux-tu faire pour mon équipe ? »\n\nOu contactez-nous pour un diagnostic gratuit et je vous montrerai ce que je peux faire avec vos vraies données.'
-
-const CATEGORIES = [
-  {
-    label: 'Commercial',
-    color: '#0066FF',
-    questions: [
-      'Que peux-tu faire pour mon équipe ?',
-      'Qualifie ce lead : startup SaaS, 20 salariés, budget 3k€',
-      'Génère une proposition commerciale pour un hôtel',
-      'Rédige un email de relance pour un prospect inactif',
-    ],
-  },
-  {
-    label: 'Support & RH',
-    color: '#7c3aed',
-    questions: [
-      'Comment gères-tu les tickets urgents ?',
-      'Peux-tu répondre à mes clients le week-end ?',
-      'Que fais-tu pour le recrutement ?',
-    ],
-  },
-  {
-    label: 'Contenu & SEO',
-    color: '#0891b2',
-    questions: [
-      'Rédige un article de blog SEO',
-      'Avec quels outils peux-tu t\'intégrer ?',
-    ],
-  },
-  {
-    label: 'Tarifs & Déploiement',
-    color: '#059669',
-    questions: [
-      'Combien ça coûte ?',
-      'En combien de temps es-tu opérationnel ?',
-    ],
-  },
-]
-
-const STATS = [
-  { val: '24/7', label: 'Disponibilité' },
-  { val: '< 2s', label: 'Temps de réponse' },
-  { val: '−70 %', label: 'Tâches manuelles' },
-  { val: '48h', label: 'Déploiement' },
-]
-
-function fmt(text) {
-  const escaped = text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-  return escaped
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\n/g, '<br />')
-}
-
-function getTime() {
-  return new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
-}
-
-function findResponse(input) {
-  const t = input.toLowerCase()
-  for (const r of RESPONSES) {
-    if (r.keywords.some(kw => t.includes(kw))) return r.text
-  }
-  return FALLBACK
-}
+const SUPABASE_URL      = import.meta.env.VITE_SUPABASE_URL      ?? 'https://jhcyooksjeivajdjicka.supabase.co'
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY ?? ''
 
 const LOIC_RELATED = [
   { href: '/collaborateurs-ia', label: '6 Collaborateurs IA',      icon: '🤖', desc: 'Voir tous les agents disponibles' },
@@ -128,64 +14,123 @@ const LOIC_RELATED = [
   { href: '/realisations',      label: 'Études de cas',             icon: '🏆', desc: 'ROI mesuré sur missions réelles' },
   { href: '/services',          label: 'Nos services',              icon: '✨', desc: 'Web, IA, automatisations' },
   { href: '/automatisations',   label: 'Automatisations',           icon: '⚙️', desc: 'Complémentaires à vos agents IA' },
-  { href: '/contact',           label: 'Demander un déploiement',   icon: '→',  desc: 'Opérationnel en 48h' },
+  { href: '/contact',           label: 'Planifier un appel',        icon: '→',  desc: 'Gratuit · 30 min · Sans engagement' },
 ]
+
+const DIAGNOSTIC_STEPS = [
+  { label: "Activité & secteur" },
+  { label: "Taille de l'équipe" },
+  { label: "Tâches chronophages" },
+  { label: "Outils actuels" },
+  { label: "Expérience IA" },
+  { label: "Défi principal" },
+  { label: "Budget envisagé" },
+  { label: "Priorités 6 mois" },
+]
+
+const STARTER_QUESTIONS = [
+  'Faire le diagnostic IA de mon entreprise',
+  'Quels processus peut-on automatiser ?',
+  'Combien coûte un agent IA ?',
+  'Vous avez des références dans mon secteur ?',
+]
+
+function getTime() {
+  return new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+}
+
+function fmt(text) {
+  const escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  return escaped
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n/g, '<br />')
+}
+
+// ── Score card rendu inline dans le chat ──────────────────────────────────────
+function ScoreCard({ data }) {
+  const { score, level, level_description, dimensions, recommandations } = data
+  const color = score >= 70 ? '#059669' : score >= 45 ? '#0066FF' : '#F59E0B'
+  const dimEntries = [
+    { key: 'processus',   label: 'Processus' },
+    { key: 'donnees',     label: 'Données & Outils' },
+    { key: 'maturite_ia', label: 'Maturité IA' },
+    { key: 'ambition',    label: 'Ambition & Budget' },
+  ]
+  return (
+    <div className="lv2-score-card">
+      <div className="lv2-score-top">
+        <div className="lv2-score-circle" style={{ borderColor: color }}>
+          <span className="lv2-score-num" style={{ color }}>{score}</span>
+          <span className="lv2-score-max">/100</span>
+        </div>
+        <div>
+          <p className="lv2-score-level" style={{ color }}>{level}</p>
+          <p className="lv2-score-desc">{level_description}</p>
+        </div>
+      </div>
+      <div className="lv2-dims">
+        {dimEntries.map(({ key, label }) => (
+          <div key={key} className="lv2-dim-row">
+            <span className="lv2-dim-label">{label}</span>
+            <div className="lv2-dim-bar-wrap">
+              <div className="lv2-dim-bar-fill" style={{ width: `${Math.round((dimensions[key] ?? 0) / 25 * 100)}%`, background: color }} />
+            </div>
+            <span className="lv2-dim-val">{dimensions[key] ?? 0}/25</span>
+          </div>
+        ))}
+      </div>
+      <div className="lv2-recos">
+        <p className="lv2-recos-title">3 actions prioritaires</p>
+        {(recommandations ?? []).map((r, i) => (
+          <div key={i} className="lv2-reco-item">
+            <span className="lv2-reco-num">{i + 1}</span>
+            <span className="lv2-reco-text">{r}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 export default function Loic() {
   const [messages, setMessages] = useState([
-    { role: 'bot', text: 'Bonjour ! Je suis Loïc, votre démonstrateur IA CA-TECH.\n\nJe peux traiter vos leads, rédiger vos emails, gérer votre support client et bien plus encore. Posez-moi une question ou choisissez un exemple à gauche.', time: getTime() },
+    {
+      role: 'bot',
+      text: 'Bonjour ! Je suis Loïc, consultant IA de CA-TECH.\n\nJe réalise des diagnostics de maturité IA pour les entreprises — 8 questions, 5 minutes, et vous repartez avec un score et 3 recommandations personnalisées.\n\nOn commence votre diagnostic ?',
+      time: getTime(),
+    },
   ])
-  const [input, setInput] = useState('')
-  const [isTyping, setIsTyping] = useState(false)
-  const scrollRef = useRef(null)
-  const inputRef = useRef(null)
-  const heroVideoRef = useRef(null)
+  const [input, setInput]             = useState('')
+  const [isTyping, setIsTyping]       = useState(false)
+  const [conversationId, setConvId]   = useState(null)
+  const [apiMessages, setApiMessages] = useState([])
+  const [scoreData, setScoreData]     = useState(null)
+  const [reportSent, setReportSent]   = useState(false)
+  const [diagStep, setDiagStep]       = useState(0)
+  const [error, setError]             = useState(null)
+
+  const scrollRef       = useRef(null)
+  const inputRef        = useRef(null)
+  const heroVideoRef    = useRef(null)
   const heroVideoWrapRef = useRef(null)
 
   usePageMeta({
-    title: 'Loïc — Démo Agent IA support client en live · CA-TECH',
-    description: "Testez Loïc, notre agent IA conversationnel : qualifie vos leads, répond au support client, rédige vos emails. Démo gratuite sans compte, sans inscription.",
-    keywords: 'démo agent IA, tester chatbot IA gratuit, agent IA support client, IA conversationnelle française, démonstration chatbot entreprise, tester assistant IA en ligne',
+    title: 'Loïc — Diagnostic IA gratuit en 5 minutes · CA-TECH',
+    description: "Obtenez votre score de maturité IA en 5 minutes : 8 questions, analyse personnalisée, 3 recommandations actionnables. Diagnostic gratuit par Loïc, consultant IA CA-TECH.",
+    keywords: 'diagnostic maturité IA, score IA entreprise, consultant IA gratuit, audit IA PME, automatisation entreprise, agent IA conversationnel',
     path: '/loic',
   })
   useJsonLd('loic-page', webPageSchema({
-    name: 'Loïc — Démo Agent IA support client en live · CA-TECH',
-    description: "Testez Loïc, notre agent IA conversationnel : qualifie vos leads, répond au support client, rédige vos emails. Démo gratuite sans compte, sans inscription.",
+    name: 'Loïc — Diagnostic IA gratuit en 5 minutes · CA-TECH',
+    description: "Obtenez votre score de maturité IA en 5 minutes. Diagnostic personnalisé, rapport PDF gratuit.",
     path: '/loic',
     image: '/collaborateurs/commercial-ia.webp',
     speakableCssSelectors: ['h1', '.ldemo-tagline'],
   }))
   useJsonLd('breadcrumb', breadcrumbSchema([
     { name: 'Accueil', path: '/' },
-    { name: 'Loïc — Démo IA', path: '/loic' },
+    { name: 'Diagnostic IA — Loïc', path: '/loic' },
   ]))
-  useJsonLd('loic-app', {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    '@id': `${SITE_URL}/loic#app`,
-    name: 'Loïc — Agent IA conversationnel',
-    applicationCategory: 'BusinessApplication',
-    applicationSubCategory: 'CRM & Sales Automation',
-    operatingSystem: 'All',
-    url: `${SITE_URL}/loic`,
-    description: "Agent IA conversationnel : qualifie les leads, gère le support client, rédige des emails. Démo gratuite sans inscription — opérationnel en 30 secondes.",
-    featureList: [
-      'Qualification de leads en temps réel',
-      'Support client 24h/24 multicanal',
-      'Rédaction automatique d\'emails',
-      'Intégration CRM native',
-      'Escalade vers un humain sur cas complexes',
-    ],
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'EUR',
-      description: 'Démo gratuite sans inscription ni carte bancaire',
-      availability: 'https://schema.org/InStock',
-    },
-    author: { '@id': `${SITE_URL}/#organization` },
-    provider: { '@id': `${SITE_URL}/#organization` },
-  })
 
   useEffect(() => {
     const wrap = heroVideoWrapRef.current
@@ -205,22 +150,83 @@ export default function Loic() {
     }
   }, [messages, isTyping])
 
-  const send = useCallback((text) => {
+  const send = useCallback(async (text) => {
     const trimmed = text.trim()
     if (!trimmed || isTyping) return
     setInput('')
-    setMessages(prev => [...prev, { role: 'user', text: trimmed, time: getTime() }])
+    setError(null)
+
+    const userMsg = { role: 'user', text: trimmed, time: getTime() }
+    setMessages(prev => [...prev, userMsg])
     setIsTyping(true)
-    const delay = 1000 + Math.random() * 700
-    setTimeout(() => {
-      setMessages(prev => [...prev, { role: 'bot', text: findResponse(trimmed), time: getTime() }])
+
+    const nextApiMessages = [...apiMessages, { role: 'user', content: trimmed }]
+    setApiMessages(nextApiMessages)
+
+    // Incrémenter le step du diagnostic (heuristique : chaque message user avance d'une question)
+    setDiagStep(prev => Math.min(prev + 1, DIAGNOSTIC_STEPS.length))
+
+    try {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/loic-chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'apikey': SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({
+          messages:        nextApiMessages,
+          conversation_id: conversationId,
+          metadata:        { source: 'loic-page' },
+        }),
+      })
+
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const data = await res.json()
+
+      if (data.conversation_id && !conversationId) {
+        setConvId(data.conversation_id)
+      }
+
+      const botText = data.message ?? ''
+      const action  = data.action ?? null
+
+      if (action?.type === 'show_score') {
+        setScoreData(action)
+        setDiagStep(DIAGNOSTIC_STEPS.length)
+      }
+      if (action?.type === 'send_report') {
+        setReportSent(true)
+      }
+
+      const botApiMsg = { role: 'assistant', content: botText }
+      setApiMessages(prev => [...prev, botApiMsg])
+
+      setMessages(prev => [...prev, {
+        role:      'bot',
+        text:      botText,
+        time:      getTime(),
+        scoreData: action?.type === 'show_score' ? action : null,
+      }])
+    } catch (err) {
+      console.error('[Loic]', err)
+      setError('La connexion a échoué. Réessayez ou écrivez à contact@ca-tech.fr')
+      setMessages(prev => [...prev, {
+        role: 'bot',
+        text: 'Je rencontre une difficulté technique. Vous pouvez me réécrire ou contacter CA-TECH directement à contact@ca-tech.fr',
+        time: getTime(),
+      }])
+    } finally {
       setIsTyping(false)
-    }, delay)
-  }, [isTyping])
+    }
+  }, [isTyping, apiMessages, conversationId])
 
   function handleKey(e) {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(input) }
   }
+
+  const diagProgress = Math.min(Math.round((diagStep / DIAGNOSTIC_STEPS.length) * 100), 100)
+  const diagStarted  = diagStep > 0
 
   return (
     <>
@@ -232,39 +238,33 @@ export default function Loic() {
         <div className="ldemo-halo ldemo-halo-1" aria-hidden="true" />
         <div className="ldemo-halo ldemo-halo-2" aria-hidden="true" />
         <div className="ldemo-hero-inner">
-          {/* Colonne vidéo — GAUCHE */}
           <div className="ldemo-hero-video-col" aria-hidden="true">
             <div className="ldemo-hero-video-wrap" ref={heroVideoWrapRef}>
               <video
                 ref={heroVideoRef}
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="metadata"
+                autoPlay muted loop playsInline preload="metadata"
                 className="ldemo-hero-video"
                 poster="/collaborateurs/commercial-ia.webp"
-                aria-label="Démonstration de Loïc, l'agent IA conversationnel CA-TECH"
+                aria-label="Démonstration de Loïc, consultant IA CA-TECH"
               >
                 <source src="/loic/loic-ia.mp4" type="video/mp4" />
               </video>
               <div className="ldemo-hero-video-overlay" />
             </div>
           </div>
-          {/* Colonne contenu — DROITE */}
           <div className="ldemo-hero-content">
             <p className="ldemo-kicker">
               <span className="ldemo-kicker-dot" aria-hidden="true" />
-              Centre de démonstration IA · CA-TECH
+              Diagnostic IA gratuit · CA-TECH
             </p>
-            <h1 className="ldemo-h1">Discutez avec <em>Loïc</em>,<br />notre collaborateur IA.</h1>
-            <p className="ldemo-sub">Posez n'importe quelle question commerciale, support ou RH. Loïc vous répond en temps réel — exactement comme il le ferait dans votre entreprise.</p>
+            <h1 className="ldemo-h1">Quel est votre score de<br /><em>maturité IA</em> ?</h1>
+            <p className="ldemo-sub">8 questions · 5 minutes · Score personnalisé + rapport envoyé par email. Loïc analyse votre situation et identifie vos meilleures opportunités IA.</p>
             <div className="ldemo-hero-btns">
-              <button className="ldemo-btn-main" onClick={() => document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' })}>
-                Tester gratuitement
+              <button className="ldemo-btn-main" onClick={() => document.getElementById('diagnostic')?.scrollIntoView({ behavior: 'smooth' })}>
+                Démarrer le diagnostic
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><polyline points="6 9 12 15 18 9" /></svg>
               </button>
-              <Link to="/contact" className="ldemo-btn-ghost">Déployer Loïc →</Link>
+              <Link to="/contact" className="ldemo-btn-ghost">Parler à un expert →</Link>
             </div>
           </div>
         </div>
@@ -274,7 +274,12 @@ export default function Loic() {
           STATS STRIP
       ════════════════════════════════════════ */}
       <div className="ldemo-strip">
-        {STATS.map(({ val, label }) => (
+        {[
+          { val: '5 min',  label: 'Durée du diagnostic' },
+          { val: '8',      label: 'Questions ciblées' },
+          { val: '100 pts',label: 'Score de maturité' },
+          { val: 'Gratuit',label: 'Sans engagement' },
+        ].map(({ val, label }) => (
           <div key={label} className="ldemo-strip-item">
             <span className="ldemo-strip-val">{val}</span>
             <span className="ldemo-strip-lbl">{label}</span>
@@ -283,9 +288,9 @@ export default function Loic() {
       </div>
 
       {/* ════════════════════════════════════════
-          DEMO
+          DIAGNOSTIC
       ════════════════════════════════════════ */}
-      <section className="ldemo-section" id="demo">
+      <section className="ldemo-section" id="diagnostic">
         <div className="ldemo-layout">
 
           {/* ── Sidebar ── */}
@@ -294,40 +299,54 @@ export default function Loic() {
               <div className="ldemo-avatar-lg">L</div>
               <div>
                 <p className="ldemo-about-name">Loïc</p>
-                <p className="ldemo-about-role">Collaborateur IA · CA-TECH</p>
+                <p className="ldemo-about-role">Consultant IA · CA-TECH</p>
                 <p className="ldemo-online"><span className="ldemo-dot" />En ligne · Répond instantanément</p>
               </div>
             </div>
 
-            <div className="ldemo-use-cases">
-              <p className="ldemo-uc-title">Cas d'usage</p>
-              <div className="ldemo-uc-list">
-                {[
-                  { icon: '💼', label: 'Qualification de leads' },
-                  { icon: '📧', label: 'Emails de relance' },
-                  { icon: '🎧', label: 'Support client 24/7' },
-                  { icon: '📋', label: 'RH & Recrutement' },
-                  { icon: '📈', label: 'Contenu SEO' },
-                  { icon: '🔗', label: '50+ intégrations' },
-                ].map(({ icon, label }) => (
-                  <div key={label} className="ldemo-uc-item">
-                    <span>{icon}</span>
-                    <span>{label}</span>
-                  </div>
-                ))}
+            {/* Étapes du diagnostic */}
+            <div className="lv2-steps-block">
+              <p className="lv2-steps-title">Le diagnostic en 3 temps</p>
+              <div className="lv2-step-item">
+                <span className="lv2-step-num" style={{ background: '#0066FF' }}>1</span>
+                <div>
+                  <p className="lv2-step-label">8 questions</p>
+                  <p className="lv2-step-sub">Activité, processus, outils, budget</p>
+                </div>
+              </div>
+              <div className="lv2-step-item">
+                <span className="lv2-step-num" style={{ background: '#7c3aed' }}>2</span>
+                <div>
+                  <p className="lv2-step-label">Score de maturité</p>
+                  <p className="lv2-step-sub">4 dimensions · /100 points</p>
+                </div>
+              </div>
+              <div className="lv2-step-item">
+                <span className="lv2-step-num" style={{ background: '#059669' }}>3</span>
+                <div>
+                  <p className="lv2-step-label">Rapport par email</p>
+                  <p className="lv2-step-sub">Analyse + plan d'action personnalisé</p>
+                </div>
               </div>
             </div>
 
-            <div className="ldemo-examples">
-              <p className="ldemo-ex-title">Exemples de questions</p>
-              {CATEGORIES.map(({ label, color, questions }) => (
-                <div key={label} className="ldemo-cat">
-                  <p className="ldemo-cat-label" style={{ color }}>{label}</p>
-                  {questions.map(q => (
-                    <button key={q} className="ldemo-chip" onClick={() => { send(q); inputRef.current?.focus() }}>{q}</button>
-                  ))}
-                </div>
-              ))}
+            {/* Thèmes couverts */}
+            <div className="ldemo-use-cases">
+              <p className="ldemo-uc-title">Thèmes analysés</p>
+              <div className="ldemo-uc-list">
+                {[
+                  { icon: '⚙️', label: 'Processus & tâches répétitives' },
+                  { icon: '🗄️', label: 'Outils & organisation des données' },
+                  { icon: '🤖', label: 'Maturité IA actuelle' },
+                  { icon: '🎯', label: 'Priorités & budget' },
+                  { icon: '💡', label: 'Opportunités identifiées' },
+                  { icon: '📋', label: "Plan d'action personnalisé" },
+                ].map(({ icon, label }) => (
+                  <div key={label} className="ldemo-uc-item">
+                    <span>{icon}</span><span>{label}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </aside>
 
@@ -336,13 +355,22 @@ export default function Loic() {
             <div className="ldemo-chat-header">
               <div className="ldemo-chat-avatar">L</div>
               <div className="ldemo-chat-info">
-                <p className="ldemo-chat-name">Loïc — Collaborateur IA</p>
-                <p className="ldemo-chat-status"><span className="ldemo-dot" />En ligne · Répond en moins de 2s</p>
+                <p className="ldemo-chat-name">Loïc — Consultant IA</p>
+                <p className="ldemo-chat-status"><span className="ldemo-dot" />En ligne · Diagnostic IA gratuit</p>
               </div>
-              <div className="ldemo-badge-demo">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="13" height="13"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
-                Démonstration
-              </div>
+              {diagStarted && !scoreData && (
+                <div className="lv2-progress-wrap" title={`Question ${diagStep}/${DIAGNOSTIC_STEPS.length}`}>
+                  <div className="lv2-progress-label">Question {Math.min(diagStep, DIAGNOSTIC_STEPS.length)}/{DIAGNOSTIC_STEPS.length}</div>
+                  <div className="lv2-progress-bar">
+                    <div className="lv2-progress-fill" style={{ width: `${diagProgress}%` }} />
+                  </div>
+                </div>
+              )}
+              {scoreData && (
+                <div className="lv2-score-badge" style={{ color: scoreData.score >= 70 ? '#059669' : scoreData.score >= 45 ? '#0066FF' : '#F59E0B' }}>
+                  Score : {scoreData.score}/100
+                </div>
+              )}
             </div>
 
             <div className="ldemo-messages" ref={scrollRef}>
@@ -350,7 +378,12 @@ export default function Loic() {
                 <div key={i} className={`ldemo-msg ldemo-msg--${m.role}`}>
                   {m.role === 'bot' && <div className="ldemo-msg-av">L</div>}
                   <div className="ldemo-msg-body">
-                    <div className="ldemo-msg-bubble" dangerouslySetInnerHTML={{ __html: fmt(m.text) }} />
+                    {m.text && (
+                      <div className="ldemo-msg-bubble" dangerouslySetInnerHTML={{ __html: fmt(m.text) }} />
+                    )}
+                    {m.scoreData && (
+                      <ScoreCard data={m.scoreData} />
+                    )}
                     <div className="ldemo-msg-meta">
                       {m.role === 'bot' ? 'Loïc' : 'Vous'} · {m.time}
                       {m.role === 'bot' && <span className="ldemo-check">✓✓</span>}
@@ -367,20 +400,29 @@ export default function Loic() {
                   </div>
                 </div>
               )}
+
+              {reportSent && (
+                <div className="lv2-report-confirm">
+                  <span className="lv2-report-icon">✅</span>
+                  Rapport envoyé par email · Vérifiez votre boîte de réception (et vos spams).
+                </div>
+              )}
             </div>
 
             <div className="ldemo-input-area">
-              <div className="ldemo-chips-row">
-                <button className="ldemo-chip-quick" onClick={() => send('Que peux-tu faire pour mon équipe ?')}>Que peux-tu faire ?</button>
-                <button className="ldemo-chip-quick" onClick={() => send('Combien ça coûte ?')}>Tarifs</button>
-                <button className="ldemo-chip-quick" onClick={() => send('En combien de temps es-tu opérationnel ?')}>Délai de déploiement</button>
-              </div>
+              {!diagStarted && (
+                <div className="ldemo-chips-row">
+                  {STARTER_QUESTIONS.map(q => (
+                    <button key={q} className="ldemo-chip-quick" onClick={() => { send(q); inputRef.current?.focus() }}>{q}</button>
+                  ))}
+                </div>
+              )}
               <div className="ldemo-input-row">
                 <input
                   ref={inputRef}
                   type="text"
                   className="ldemo-input"
-                  placeholder="Posez une question à Loïc..."
+                  placeholder={scoreData ? 'Entrez votre email pour recevoir le rapport...' : 'Répondez à Loïc...'}
                   value={input}
                   onChange={e => setInput(e.target.value)}
                   onKeyDown={handleKey}
@@ -399,7 +441,7 @@ export default function Loic() {
               </div>
             </div>
 
-            <p className="ldemo-disclaimer">Démonstration avec réponses simulées. Le vrai Loïc est connecté à votre base de données et vos outils.</p>
+            <p className="ldemo-disclaimer">Diagnostic confidentiel · Données utilisées uniquement pour votre rapport · Aucun engagement</p>
           </div>
         </div>
       </section>
@@ -409,18 +451,18 @@ export default function Loic() {
       ════════════════════════════════════════ */}
       <SeoRelated
         eyebrow="Aller plus loin"
-        title="Déployer au-delà de la démo"
+        title="De l'analyse à l'exécution"
         links={LOIC_RELATED}
       />
 
       <section className="ldemo-cta">
         <div className="ldemo-cta-inner">
-          <p className="ldemo-cta-label">Prêt à passer en production ?</p>
-          <h2 className="ldemo-cta-h2">Déployez Loïc dans votre entreprise en <strong>48h.</strong></h2>
-          <p className="ldemo-cta-sub">Diagnostic gratuit · Configuration sur mesure · Accompagnement 30 jours inclus</p>
+          <p className="ldemo-cta-label">Après le diagnostic</p>
+          <h2 className="ldemo-cta-h2">Passez de l'analyse à l'<strong>action en 48h.</strong></h2>
+          <p className="ldemo-cta-sub">Appel découverte gratuit · Plan d'action personnalisé · Première livraison visible dès la semaine 1</p>
           <div className="ldemo-cta-btns">
-            <Link to="/contact" className="ldemo-btn-main">Tester gratuitement →</Link>
-            <Link to="/collaborateurs-ia" className="ldemo-btn-ghost">Voir tous les collaborateurs IA</Link>
+            <Link to="/contact" className="ldemo-btn-main">Planifier un appel →</Link>
+            <Link to="/services" className="ldemo-btn-ghost">Voir nos services</Link>
           </div>
         </div>
       </section>

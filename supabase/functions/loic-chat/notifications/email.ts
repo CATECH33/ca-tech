@@ -184,6 +184,167 @@ export async function sendClientConfirmation(payload: ClientConfirmationPayload)
   return { ok: false, error: 'Aucune clé email configurée', provider: 'none' }
 }
 
+// ── Rapport de diagnostic IA au client ───────────────────────────────────────
+
+export interface DiagnosticReportPayload {
+  clientEmail:    string
+  clientName:     string
+  entreprise?:    string
+  score:          number
+  level:          string
+  levelDescription: string
+  dimensions: {
+    processus:   number
+    donnees:     number
+    maturite_ia: number
+    ambition:    number
+  }
+  recommandations: string[]
+  reportContent:   string // Texte du rapport généré par Claude
+}
+
+function buildReportHtml(p: DiagnosticReportPayload): string {
+  const prenom = p.clientName.split(' ')[0] || 'vous'
+  const scoreColor = p.score >= 70 ? '#059669' : p.score >= 45 ? '#0066FF' : '#F59E0B'
+  const dimBar = (val: number, max = 25) =>
+    `<div style="background:#E2E8F0;border-radius:4px;height:6px;margin:4px 0 12px">
+       <div style="background:${scoreColor};border-radius:4px;height:6px;width:${Math.round(val/max*100)}%"></div>
+     </div>`
+
+  const recoItems = p.recommandations.map((r, i) =>
+    `<div style="display:flex;gap:12px;margin-bottom:12px;align-items:flex-start">
+       <span style="background:#0066FF;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">${i+1}</span>
+       <span style="font-size:13px;color:#334155;line-height:1.5">${r}</span>
+     </div>`
+  ).join('')
+
+  const reportLines = p.reportContent
+    .split('\n')
+    .map(l => `<p style="font-size:13px;color:#334155;line-height:1.7;margin:0 0 8px">${l}</p>`)
+    .join('')
+
+  return `<!DOCTYPE html><html lang="fr">
+<head><meta charset="UTF-8"/><title>Votre rapport diagnostic IA — CA-TECH</title></head>
+<body style="margin:0;padding:0;font-family:Inter,-apple-system,sans-serif;background:#F8FAFC">
+<div style="max-width:600px;margin:32px auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.08)">
+
+  <div style="background:linear-gradient(135deg,#0A2540 0%,#0066FF 100%);padding:32px">
+    <div style="color:#fff;font-size:22px;font-weight:700">Votre rapport diagnostic IA</div>
+    <div style="color:rgba(255,255,255,.65);font-size:13px;margin-top:6px">Établi par Loïc · CA-TECH</div>
+  </div>
+
+  <div style="padding:28px 32px 0">
+    <p style="font-size:15px;color:#1E293B;margin:0 0 24px">Bonjour <strong>${prenom}</strong>,</p>
+    <p style="font-size:14px;color:#475569;line-height:1.6;margin:0 0 28px">
+      Voici votre rapport de maturité IA personnalisé, basé sur notre diagnostic. Il résume les opportunités identifiées et les premières actions recommandées pour votre entreprise.
+    </p>
+  </div>
+
+  <!-- Score -->
+  <div style="margin:0 32px 28px;background:#F8FAFC;border-radius:12px;padding:24px;text-align:center">
+    <div style="font-size:52px;font-weight:800;color:${scoreColor};line-height:1">${p.score}</div>
+    <div style="font-size:12px;color:#94A3B8;font-weight:600;margin-top:2px">/100</div>
+    <div style="font-size:16px;font-weight:700;color:#1E293B;margin-top:10px">${p.level}</div>
+    <div style="font-size:13px;color:#64748B;margin-top:4px">${p.levelDescription}</div>
+  </div>
+
+  <!-- Dimensions -->
+  <div style="margin:0 32px 28px">
+    <div style="font-size:12px;font-weight:700;color:#0066FF;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px">Analyse par dimension</div>
+    <div style="font-size:12px;color:#64748B;font-weight:500;margin-bottom:2px">Processus <span style="float:right;color:#1E293B;font-weight:700">${p.dimensions.processus}/25</span></div>
+    ${dimBar(p.dimensions.processus)}
+    <div style="font-size:12px;color:#64748B;font-weight:500;margin-bottom:2px">Données & Outils <span style="float:right;color:#1E293B;font-weight:700">${p.dimensions.donnees}/25</span></div>
+    ${dimBar(p.dimensions.donnees)}
+    <div style="font-size:12px;color:#64748B;font-weight:500;margin-bottom:2px">Maturité IA <span style="float:right;color:#1E293B;font-weight:700">${p.dimensions.maturite_ia}/25</span></div>
+    ${dimBar(p.dimensions.maturite_ia)}
+    <div style="font-size:12px;color:#64748B;font-weight:500;margin-bottom:2px">Ambition & Budget <span style="float:right;color:#1E293B;font-weight:700">${p.dimensions.ambition}/25</span></div>
+    ${dimBar(p.dimensions.ambition)}
+  </div>
+
+  <!-- Recommandations -->
+  <div style="margin:0 32px 28px">
+    <div style="font-size:12px;font-weight:700;color:#0066FF;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px">3 actions prioritaires</div>
+    ${recoItems}
+  </div>
+
+  <!-- Rapport détaillé -->
+  <div style="margin:0 32px 28px;padding:20px;background:#F8FAFC;border-radius:12px;border-left:3px solid #0066FF">
+    <div style="font-size:12px;font-weight:700;color:#0066FF;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">Analyse détaillée</div>
+    ${reportLines}
+  </div>
+
+  <div style="padding:0 32px 28px">
+    <a href="https://ca-tech.fr/contact" style="display:inline-block;background:#0066FF;color:#fff;text-decoration:none;padding:14px 28px;border-radius:10px;font-size:14px;font-weight:600">
+      Planifier un appel découverte gratuit →
+    </a>
+  </div>
+
+  <div style="padding:14px 32px;background:#F8FAFC;border-top:1px solid #E2E8F0;font-size:11px;color:#94A3B8">
+    Rapport établi par Loïc, consultant IA · CA-TECH · contact@ca-tech.fr
+  </div>
+</div>
+</body></html>`
+}
+
+export async function sendDiagnosticReport(payload: DiagnosticReportPayload): Promise<{ ok: boolean; error?: string; provider: string }> {
+  const subject = `🎯 Votre rapport diagnostic IA — Score ${payload.score}/100 · CA-TECH`
+  const html = buildReportHtml(payload)
+  const text = [
+    `Bonjour ${payload.clientName},`,
+    '',
+    `Votre score de maturité IA : ${payload.score}/100 — ${payload.level}`,
+    `${payload.levelDescription}`,
+    '',
+    'Dimensions :',
+    `  Processus       : ${payload.dimensions.processus}/25`,
+    `  Données & Outils : ${payload.dimensions.donnees}/25`,
+    `  Maturité IA     : ${payload.dimensions.maturite_ia}/25`,
+    `  Ambition        : ${payload.dimensions.ambition}/25`,
+    '',
+    '3 actions prioritaires :',
+    ...payload.recommandations.map((r, i) => `  ${i+1}. ${r}`),
+    '',
+    'Analyse :',
+    payload.reportContent,
+    '',
+    'Planifier un appel découverte : https://ca-tech.fr/contact',
+    '',
+    'CA-TECH · contact@ca-tech.fr',
+  ].join('\n')
+
+  if (RESEND_KEY) {
+    try {
+      const res = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${RESEND_KEY}` },
+        body: JSON.stringify({ from: FROM_EMAIL, to: [payload.clientEmail], subject, html, text }),
+      })
+      if (res.ok) return { ok: true, provider: 'resend' }
+      const err = await res.text()
+      console.warn('[Loic/report] Resend failed:', err)
+    } catch (e) { console.warn('[Loic/report] Resend error:', e) }
+  }
+
+  if (BREVO_KEY) {
+    try {
+      const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'api-key': BREVO_KEY },
+        body: JSON.stringify({
+          sender: { name: 'Loïc — CA-TECH', email: FROM_EMAIL },
+          to: [{ email: payload.clientEmail }],
+          subject, htmlContent: html, textContent: text,
+        }),
+      })
+      if (res.ok) return { ok: true, provider: 'brevo' }
+      const err = await res.text()
+      return { ok: false, error: `Brevo: ${err}`, provider: 'brevo' }
+    } catch (e) { return { ok: false, error: String(e), provider: 'brevo' } }
+  }
+
+  return { ok: false, error: 'Aucune clé email configurée', provider: 'none' }
+}
+
 export async function sendEmail(payload: EmailPayload): Promise<{ ok: boolean; error?: string; provider: string }> {
   const subject = `🚀 Nouveau prospect${payload.prospect.prenom ? ` — ${payload.prospect.prenom}` : ''} | CA-TECH`
   const html    = buildHtml(payload)
