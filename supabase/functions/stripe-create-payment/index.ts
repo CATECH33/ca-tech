@@ -16,6 +16,21 @@ function json(body: unknown, status = 200) {
   })
 }
 
+// Extrait le sub (user UUID) du JWT déjà vérifié par la gateway Supabase (verify_jwt=true).
+// La signature est garantie valide — on décode uniquement le payload.
+function extractUserId(req: Request): string | null {
+  try {
+    const token = (req.headers.get('Authorization') ?? '').replace('Bearer ', '')
+    if (!token) return null
+    const parts = token.split('.')
+    if (parts.length !== 3) return null
+    const b64 = parts[1].replace(/-/g, '+').replace(/_/g, '/')
+    const pad = b64.length % 4 === 0 ? '' : '='.repeat(4 - (b64.length % 4))
+    const payload = JSON.parse(atob(b64 + pad))
+    return typeof payload.sub === 'string' ? payload.sub : null
+  } catch { return null }
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS })
 
@@ -30,6 +45,18 @@ Deno.serve(async (req) => {
     }
 
     const sb = createClient(SUPABASE_URL, SUPABASE_SERVICE)
+
+    // ── Vérification IDOR (S2) : l'appelant doit être un manager enregistré ─
+    const userId = extractUserId(req)
+    if (!userId) return json({ error: 'Token invalide' }, 401)
+
+    const { data: mgr } = await sb
+      .from('manager_users')
+      .select('user_id')
+      .eq('user_id', userId)
+      .maybeSingle()
+    if (!mgr) return json({ error: 'Accès refusé' }, 403)
+    // ─────────────────────────────────────────────────────────────────────────
 
     // Source de vérité : le devis (jamais le frontend)
     const { data: devis, error: dErr } = await sb
