@@ -23,10 +23,10 @@ export function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose }: Side
 
   const navItems: NavItem[] = [
     { label: "Vue d'ensemble",    icon: LayoutDashboard, to: '/' },
-    { label: 'Contacts',          icon: Inbox,           to: '/contacts' },
+    { label: 'Contacts & demandes', icon: Inbox,          to: '/contacts' },
     { label: 'Clients',           icon: Users,           to: '/clients' },
     { label: 'Devis',             icon: FileText,        to: '/devis' },
-    { label: 'Paiements',         icon: CreditCard,      to: '/paiements' },
+    { label: 'Paiements & abonnements', icon: CreditCard, to: '/paiements' },
     { label: 'Loïc IA',           icon: Bot,             to: '/loic' },
     { label: 'Prospection',       icon: Target,          to: '/prospection' },
     { label: 'Google Workspace',  icon: Globe,           to: '/google' },

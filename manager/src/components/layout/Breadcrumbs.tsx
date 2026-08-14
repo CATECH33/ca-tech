@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 
 const labels: Record<string, string> = {
   clients: 'Clients', leads: 'Leads', devis: 'Devis', factures: 'Factures',
-  projets: 'Projets', taches: 'Tâches', services: 'Services', paiements: 'Paiements',
+  projets: 'Projets', taches: 'Tâches', services: 'Services', paiements: 'Paiements & abonnements',
   portfolio: 'Portfolio', messages: 'Messages', support: 'Support', parametres: 'Paramètres',
   nouveau: 'Nouveau', edit: 'Modifier',
   contacts: 'Contacts & Demandes', demandes: 'Contacts & Demandes',
