@@ -1,10 +1,12 @@
 import { useState, useEffect, useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import {
   Search, Plus, X, UserCheck, Mail, Phone, Reply, Trash2,
   UserPlus, Send, LifeBuoy, Inbox, MailOpen, Archive, CheckCheck,
   Check, MessageSquare, RefreshCw, Wand2, AlertCircle,
   Users, TrendingUp, Award, Percent, Columns3, List,
   GripVertical, Building2, CheckCircle2, DollarSign,
+  Bot, FileText, ExternalLink,
 } from 'lucide-react'
 import { format, isToday, isYesterday, isThisWeek, parseISO } from 'date-fns'
 import { fr } from 'date-fns/locale'
@@ -29,6 +31,7 @@ import {
 } from '@/hooks/useMessages'
 import type { MessageRow } from '@/hooks/useMessages'
 import { useClients } from '@/hooks/useClients'
+import { useDevis } from '@/hooks/useDevis'
 import { useCreateTicket } from '@/hooks/useTickets'
 
 // ─── TAB TYPE ─────────────────────────────────────────────────────────────────
@@ -36,10 +39,11 @@ import { useCreateTicket } from '@/hooks/useTickets'
 type Tab = 'leads' | 'messages'
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// LEADS SECTION
+// LEADS / DEMANDES SECTION
 // ═══════════════════════════════════════════════════════════════════════════════
 
 type ViewMode = 'kanban' | 'liste'
+type FilterGroup = 'toutes' | 'nouvelles' | 'encours' | 'traitees' | 'perdues'
 
 type ColDef = {
   status: LeadStatus; label: string
@@ -70,6 +74,10 @@ const FORM_INIT = {
   source: '', budget_estime: '', besoin: '', status: 'nouveau' as LeadStatus,
 }
 
+const FILTER_LABELS: Record<FilterGroup, string> = {
+  toutes: 'Toutes', nouvelles: 'Nouvelles', encours: 'En cours', traitees: 'Traitées', perdues: 'Perdues',
+}
+
 function colDef(status: LeadStatus) {
   return COLUMNS.find(c => c.status === status) ?? COLUMNS[0]
 }
@@ -89,16 +97,19 @@ type FicheForm = {
   besoin: string; status: LeadStatus
 }
 
+type DevisResume = { id: string; numero: string; status: string; total_ttc: number }
+
 // ─── LeadFiche ────────────────────────────────────────────────────────────────
 
 function LeadFiche({
-  lead, onClose, onSave, onDelete, onConvert,
+  lead, onClose, onSave, onDelete, onConvert, devisLies = [],
 }: {
   lead: Lead
   onClose: () => void
   onSave: (data: FicheForm) => Promise<void>
   onDelete: () => Promise<void>
   onConvert: (l: Lead) => void
+  devisLies?: DevisResume[]
 }) {
   const [form, setForm] = useState<FicheForm>({
     prenom: lead.prenom, nom: lead.nom, email: lead.email,
@@ -106,7 +117,7 @@ function LeadFiche({
     source: lead.source ?? '', budget_estime: lead.budget_estime ? String(lead.budget_estime) : '',
     besoin: lead.besoin ?? '', status: lead.status,
   })
-  const [saving, setSaving]   = useState(false)
+  const [saving, setSaving]     = useState(false)
   const [deleting, setDeleting] = useState(false)
 
   useEffect(() => {
@@ -124,6 +135,17 @@ function LeadFiche({
 
   const isActive    = ACTIVE_STATUSES.includes(lead.status)
   const isConverted = !!lead.client_id
+
+  const devisStatusColor: Record<string, string> = {
+    brouillon: 'bg-gray-100 text-gray-600',
+    envoye:    'bg-blue-100 text-blue-700',
+    accepte:   'bg-emerald-100 text-emerald-700',
+    refuse:    'bg-red-100 text-red-700',
+    expire:    'bg-amber-100 text-amber-700',
+  }
+  const devisStatusLabel: Record<string, string> = {
+    brouillon: 'Brouillon', envoye: 'Envoyé', accepte: 'Accepté', refuse: 'Refusé', expire: 'Expiré',
+  }
 
   return (
     <div className="fixed inset-0 z-40 flex justify-end">
@@ -156,7 +178,9 @@ function LeadFiche({
               <X className="h-4 w-4 text-gray-500" />
             </button>
           </div>
-          <div className="flex gap-2">
+
+          {/* Action buttons */}
+          <div className="flex flex-wrap gap-2">
             {lead.email && (
               <a href={`mailto:${lead.email}`}
                 className="flex items-center gap-1.5 text-xs px-2.5 py-1.5 bg-white/80 hover:bg-white rounded-lg border border-gray-200 text-gray-600 transition">
@@ -169,6 +193,16 @@ function LeadFiche({
                 <Phone className="h-3 w-3" /> Appeler
               </a>
             )}
+            {isConverted && (
+              <Link to="/clients"
+                className="flex items-center gap-1.5 text-xs px-2.5 py-1.5 bg-white/80 hover:bg-white rounded-lg border border-gray-200 text-gray-600 transition">
+                <Users className="h-3 w-3" /> Voir le client
+              </Link>
+            )}
+            <Link to="/loic"
+              className="flex items-center gap-1.5 text-xs px-2.5 py-1.5 bg-white/80 hover:bg-white rounded-lg border border-gray-200 text-gray-600 transition">
+              <Bot className="h-3 w-3" /> Loïc IA
+            </Link>
             {isActive && !isConverted && (
               <button
                 onClick={() => onConvert(lead)}
@@ -255,11 +289,43 @@ function LeadFiche({
             </div>
           </div>
           <div>
-            <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-2">Notes & besoin</p>
+            <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-2">Besoin / Service demandé</p>
             <textarea value={form.besoin} onChange={set('besoin')} rows={4}
-              placeholder="Besoin du client, contexte, remarques…"
+              placeholder="Service demandé, besoin du client, contexte, remarques…"
               className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-400/30 focus:border-brand-400 resize-none transition" />
           </div>
+
+          {/* Devis associé */}
+          <div>
+            <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-2">Devis associé</p>
+            {devisLies.length === 0 ? (
+              <div className="flex items-center gap-2 px-3 py-2.5 bg-gray-50 rounded-xl border border-gray-100">
+                <FileText className="h-3.5 w-3.5 text-gray-300 shrink-0" />
+                <p className="text-xs text-gray-400">Aucun devis associé</p>
+              </div>
+            ) : (
+              <div className="space-y-1.5">
+                {devisLies.map(d => (
+                  <Link
+                    key={d.id}
+                    to="/devis"
+                    className="flex items-center gap-2.5 px-3 py-2.5 bg-white rounded-xl border border-gray-100 hover:border-gray-200 hover:shadow-sm transition group"
+                  >
+                    <FileText className="h-3.5 w-3.5 text-blue-400 shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-semibold text-gray-800">{d.numero}</p>
+                      <p className="text-[11px] text-gray-500">{formatCurrency(d.total_ttc)}</p>
+                    </div>
+                    <span className={cn('text-[10px] font-medium px-2 py-0.5 rounded-full', devisStatusColor[d.status] ?? 'bg-gray-100 text-gray-500')}>
+                      {devisStatusLabel[d.status] ?? d.status}
+                    </span>
+                    <ExternalLink className="h-3 w-3 text-gray-300 group-hover:text-gray-500 shrink-0 transition" />
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
           <div className="bg-gray-50 rounded-xl p-3 text-xs space-y-1 text-gray-500">
             <div className="flex justify-between">
               <span>Créé le</span><span className="font-medium text-gray-700">{formatDate(lead.created_at)}</span>
@@ -267,6 +333,11 @@ function LeadFiche({
             <div className="flex justify-between">
               <span>Modifié le</span><span className="font-medium text-gray-700">{formatDate(lead.updated_at)}</span>
             </div>
+            {lead.source && (
+              <div className="flex justify-between">
+                <span>Source</span><span className="font-medium text-gray-700">{getSourceIcon(lead.source)} {lead.source}</span>
+              </div>
+            )}
             {lead.budget_estime && (
               <div className="flex justify-between">
                 <span>Valeur estimée</span><span className="font-bold text-gray-800">{formatCurrency(lead.budget_estime)}</span>
@@ -430,7 +501,7 @@ function ListeView({ leads, onOpen }: { leads: Lead[]; onOpen: (l: Lead) => void
       <Table>
         <Thead>
           <Tr>
-            <Th>Lead</Th><Th>Contact</Th><Th>Source</Th>
+            <Th>Demande</Th><Th>Contact</Th><Th>Source</Th>
             <Th>Statut</Th><Th>Budget</Th><Th>Date</Th><Th></Th>
           </Tr>
         </Thead>
@@ -449,6 +520,7 @@ function ListeView({ leads, onOpen }: { leads: Lead[]; onOpen: (l: Lead) => void
                         {isConverted && <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />}
                       </div>
                       {l.entreprise && <p className="text-xs text-gray-400">{l.entreprise}</p>}
+                      {l.besoin && <p className="text-xs text-gray-400 truncate max-w-[200px]">{l.besoin}</p>}
                     </div>
                   </div>
                 </Td>
@@ -502,18 +574,20 @@ function ListeView({ leads, onOpen }: { leads: Lead[]; onOpen: (l: Lead) => void
 // ─── LeadsSection ─────────────────────────────────────────────────────────────
 
 function LeadsSection() {
-  const [view, setView]       = useState<ViewMode>('kanban')
-  const [search, setSearch]   = useState('')
-  const [filterGroup, setFG]  = useState<'tous' | 'actifs' | 'gagnes' | 'perdus'>('tous')
-  const [filterSource, setFS] = useState('')
-  const [fiche, setFiche]     = useState<Lead | null>(null)
-  const [showAdd, setShowAdd] = useState(false)
+  const [view, setView]         = useState<ViewMode>('kanban')
+  const [search, setSearch]     = useState('')
+  const [filterGroup, setFG]    = useState<FilterGroup>('toutes')
+  const [filterSource, setFS]   = useState('')
+  const [fiche, setFiche]       = useState<Lead | null>(null)
+  const [showAdd, setShowAdd]   = useState(false)
   const [addStatus, setAddStatus] = useState<LeadStatus>('nouveau')
-  const [form, setForm]       = useState(FORM_INIT)
+  const [form, setForm]         = useState(FORM_INIT)
   const [convertLead, setConvertLead] = useState<Lead | null>(null)
 
   const { data: leads = [], isLoading } = useLeads()
   useLeadsRealtime()
+  const { data: devis = [] }    = useDevis()
+  const { data: clients = [] }  = useClients()
   const createLead      = useCreateLead()
   const updateLead      = useUpdateLead()
   const updateStatus    = useUpdateLeadStatus()
@@ -533,11 +607,26 @@ function LeadsSection() {
       if (!`${l.prenom} ${l.nom} ${l.entreprise ?? ''} ${l.email}`.toLowerCase().includes(q)) return false
     }
     if (filterSource && l.source !== filterSource) return false
-    if (filterGroup === 'actifs' && !ACTIVE_STATUSES.includes(l.status)) return false
-    if (filterGroup === 'gagnes' && l.status !== 'gagne') return false
-    if (filterGroup === 'perdus' && l.status !== 'perdu') return false
+    if (filterGroup === 'nouvelles' && l.status !== 'nouveau') return false
+    if (filterGroup === 'encours' && !['contact', 'qualifie', 'proposition', 'negocie'].includes(l.status)) return false
+    if (filterGroup === 'traitees' && l.status !== 'gagne') return false
+    if (filterGroup === 'perdues' && l.status !== 'perdu') return false
     return true
   })
+
+  // Devis liés au lead sélectionné (via son client)
+  const devisForFiche = useMemo(() => {
+    if (!fiche?.client_id) return []
+    return devis
+      .filter(d => d.client_id === fiche.client_id)
+      .map(d => ({ id: d.id, numero: d.numero, status: d.status, total_ttc: d.total_ttc }))
+  }, [devis, fiche?.client_id])
+
+  // Vérification client existant pour le modal de conversion
+  const existingClientForConvert = useMemo(() => {
+    if (!convertLead?.email) return null
+    return clients.find(c => c.email.toLowerCase() === convertLead.email.toLowerCase()) ?? null
+  }, [clients, convertLead?.email])
 
   const closedLeads = leads.filter(l => l.status === 'gagne' || l.status === 'perdu')
   const wonLeads    = leads.filter(l => l.status === 'gagne')
@@ -575,14 +664,14 @@ function LeadsSection() {
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-5">
         <Card>
-          <div className="flex items-center justify-between mb-1"><p className="text-xs text-gray-500">Total leads</p><Users className="h-4 w-4 text-gray-300" /></div>
+          <div className="flex items-center justify-between mb-1"><p className="text-xs text-gray-500">Total demandes</p><Users className="h-4 w-4 text-gray-300" /></div>
           <p className="text-2xl font-bold text-gray-900">{leads.length}</p>
-          <p className="text-xs text-gray-400 mt-1">{activeCount} actifs</p>
+          <p className="text-xs text-gray-400 mt-1">{activeCount} actives</p>
         </Card>
         <Card>
           <div className="flex items-center justify-between mb-1"><p className="text-xs text-gray-500">Conversion</p><Percent className="h-4 w-4 text-gray-300" /></div>
           <p className="text-2xl font-bold text-emerald-600">{winRate}%</p>
-          <p className="text-xs text-gray-400 mt-1">{wonLeads.length} gagnés</p>
+          <p className="text-xs text-gray-400 mt-1">{wonLeads.length} gagnées</p>
         </Card>
         <Card>
           <div className="flex items-center justify-between mb-1"><p className="text-xs text-gray-500">Pipeline actif</p><TrendingUp className="h-4 w-4 text-gray-300" /></div>
@@ -603,28 +692,28 @@ function LeadsSection() {
 
       {/* Filters + actions */}
       <div className="flex flex-wrap items-center gap-2 mb-4">
-        <Input placeholder="Rechercher un lead…" value={search} onChange={e => setSearch(e.target.value)}
-          leading={<Search className="h-3.5 w-3.5" />} className="w-56" />
+        <Input placeholder="Rechercher par nom, email, entreprise…" value={search} onChange={e => setSearch(e.target.value)}
+          leading={<Search className="h-3.5 w-3.5" />} className="w-64" />
         <select value={filterSource} onChange={e => setFS(e.target.value)}
           className="text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-400/30 focus:border-brand-400 bg-white text-gray-600 transition">
           {sourceFilterOpts.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
-        {(['tous', 'actifs', 'gagnes', 'perdus'] as const).map(g => (
+        {(['toutes', 'nouvelles', 'encours', 'traitees', 'perdues'] as const).map(g => (
           <button key={g} onClick={() => setFG(g)}
             className={cn(
               'text-[11px] font-medium px-2.5 py-1 rounded-lg border transition',
               filterGroup === g ? 'bg-gray-900 text-white border-gray-900' : 'border-gray-200 text-gray-500 hover:border-gray-300',
             )}>
-            {{ tous: 'Tous', actifs: 'Actifs', gagnes: 'Gagnés', perdus: 'Perdus' }[g]}
+            {FILTER_LABELS[g]}
           </button>
         ))}
-        {(search || filterSource || filterGroup !== 'tous') && (
-          <button onClick={() => { setSearch(''); setFS(''); setFG('tous') }}
+        {(search || filterSource || filterGroup !== 'toutes') && (
+          <button onClick={() => { setSearch(''); setFS(''); setFG('toutes') }}
             className="text-[11px] text-gray-400 hover:text-gray-600 flex items-center gap-0.5 transition">
             <X className="h-3 w-3" /> Réinitialiser
           </button>
         )}
-        <span className="text-xs text-gray-400">{filtered.length} lead{filtered.length !== 1 ? 's' : ''}</span>
+        <span className="text-xs text-gray-400">{filtered.length} demande{filtered.length !== 1 ? 's' : ''}</span>
         <div className="ml-auto flex items-center gap-2">
           <div className="flex items-center bg-gray-100 rounded-lg p-0.5">
             <button onClick={() => setView('kanban')} title="Kanban"
@@ -637,7 +726,7 @@ function LeadsSection() {
             </button>
           </div>
           <Button size="sm" onClick={() => openAdd()}>
-            <Plus className="h-3.5 w-3.5" /> Nouveau lead
+            <Plus className="h-3.5 w-3.5" /> Nouvelle demande
           </Button>
         </div>
       </div>
@@ -655,6 +744,7 @@ function LeadsSection() {
       {/* Fiche side panel */}
       {fiche && (
         <LeadFiche lead={fiche} onClose={() => setFiche(null)}
+          devisLies={devisForFiche}
           onSave={async data => {
             if (!fiche) return
             await updateLead.mutateAsync({
@@ -669,14 +759,14 @@ function LeadsSection() {
         />
       )}
 
-      {/* Modal: nouveau lead */}
-      <Modal open={showAdd} onClose={() => setShowAdd(false)} title="Nouveau lead"
+      {/* Modal: nouvelle demande */}
+      <Modal open={showAdd} onClose={() => setShowAdd(false)} title="Nouvelle demande"
         description={COLUMNS.find(c => c.status === addStatus)?.label} size="lg"
         footer={
           <>
             <Button variant="outline" onClick={() => setShowAdd(false)}>Annuler</Button>
             <Button onClick={handleCreate} disabled={createLead.isPending || !form.prenom || !form.nom}>
-              {createLead.isPending ? 'Création…' : 'Créer le lead'}
+              {createLead.isPending ? 'Création…' : 'Créer la demande'}
             </Button>
           </>
         }
@@ -696,7 +786,7 @@ function LeadsSection() {
             </select>
           </div>
           <Input label="Budget estimé (€)" type="number" placeholder="0" value={form.budget_estime} onChange={set('budget_estime')} />
-          <Textarea label="Notes / Besoin" placeholder="Besoin du client, contexte…" value={form.besoin} onChange={set('besoin')} rows={3} className="col-span-2" />
+          <Textarea label="Service demandé / Besoin" placeholder="Site vitrine, e-commerce, logo, identité visuelle…" value={form.besoin} onChange={set('besoin')} rows={3} className="col-span-2" />
           <Select label="Statut initial" value={form.status} options={STATUS_OPTIONS}
             onChange={e => setForm(f => ({ ...f, status: e.target.value as LeadStatus }))} className="col-span-2" />
         </div>
@@ -710,14 +800,24 @@ function LeadsSection() {
             <Button onClick={async () => { if (convertLead) { await convertToClient.mutateAsync(convertLead); setConvertLead(null); setFiche(null) } }}
               disabled={convertToClient.isPending}>
               <UserCheck className="h-3.5 w-3.5" />
-              {convertToClient.isPending ? 'Conversion…' : 'Convertir'}
+              {convertToClient.isPending ? 'Conversion…' : existingClientForConvert ? 'Lier au client existant' : 'Convertir'}
             </Button>
           </>
         }
       >
         {convertLead && (
           <div className="space-y-3">
-            <p className="text-sm text-gray-600">Un profil client sera créé. Le lead passera au statut <strong>Gagné</strong>.</p>
+            {existingClientForConvert ? (
+              <div className="flex items-start gap-2 px-3 py-2.5 rounded-xl bg-amber-50 border border-amber-200">
+                <AlertCircle className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
+                <p className="text-xs text-amber-700">
+                  Client existant détecté : <strong>{existingClientForConvert.prenom} {existingClientForConvert.nom}</strong>.
+                  Le lead sera lié à ce client sans créer de doublon.
+                </p>
+              </div>
+            ) : (
+              <p className="text-sm text-gray-600">Un profil client sera créé. Le lead passera au statut <strong>Gagné</strong>.</p>
+            )}
             <div className="bg-gray-50 rounded-xl p-3 space-y-1.5">
               <div className="flex items-center gap-2">
                 <Avatar nom={convertLead.nom} prenom={convertLead.prenom} size="sm" />
@@ -1085,9 +1185,10 @@ function MessagesSection() {
                       {(linkedClient || linkedLead) && (
                         <div className="flex items-center gap-1.5 mt-2 flex-wrap">
                           {linkedClient && (
-                            <span className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full bg-brand-50 text-brand-600 border border-brand-200">
+                            <Link to="/clients"
+                              className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full bg-brand-50 text-brand-600 border border-brand-200 hover:bg-brand-100 transition">
                               👤 {linkedClient.prenom} {linkedClient.nom}
-                            </span>
+                            </Link>
                           )}
                           {linkedLead && (
                             <span className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
@@ -1125,6 +1226,11 @@ function MessagesSection() {
                       loading={createTicket.isPending} title="Créer un ticket support">
                       <LifeBuoy className="h-4 w-4" />
                     </Button>
+                    <Link to="/loic"
+                      className="inline-flex items-center justify-center h-9 w-9 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 text-gray-500 hover:text-gray-700 transition"
+                      title="Ouvrir Loïc IA">
+                      <Bot className="h-4 w-4" />
+                    </Link>
                     <Button size="icon" variant="ghost" onClick={() => setShowDelete(true)}
                       title="Supprimer" className="text-red-400 hover:text-red-600 hover:bg-red-50">
                       <Trash2 className="h-4 w-4" />
@@ -1298,8 +1404,8 @@ export function Contacts() {
   const unreadMsgs    = (messages as MessageRow[]).filter(m => !m.lu && !m.is_archived).length
 
   const tabs: { key: Tab; label: string; badge?: number }[] = [
-    { key: 'leads',    label: 'Leads',    badge: newLeads   || undefined },
-    { key: 'messages', label: 'Messages', badge: unreadMsgs || undefined },
+    { key: 'leads',    label: 'Demandes',  badge: newLeads   || undefined },
+    { key: 'messages', label: 'Messages',  badge: unreadMsgs || undefined },
   ]
 
   return (
