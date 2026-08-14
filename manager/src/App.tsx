@@ -31,8 +31,8 @@ const Notifications       = lazy(() => import('./pages/Notifications').then(m =>
 const Documents           = lazy(() => import('./pages/Documents').then(m => ({ default: m.Documents })))
 const Integrations        = lazy(() => import('./pages/Integrations').then(m => ({ default: m.Integrations })))
 
-// V2 routes — alias vers pages existantes (pages dédiées = sprints suivants)
-const ContactsV2          = lazy(() => import('./pages/DemandesDevis').then(m => ({ default: m.DemandesDevis })))
+// V2 routes — pages dédiées sprint 11.3+
+const Contacts            = lazy(() => import('./pages/Contacts').then(m => ({ default: m.Contacts })))
 const GoogleWorkspaceV2   = lazy(() => import('./pages/Integrations').then(m => ({ default: m.Integrations })))
 
 // Module prospection — regroupé dans un chunk unique
@@ -77,7 +77,7 @@ function ProtectedApp() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password"  element={<ResetPassword />} />
         <Route path="/"               element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-        <Route path="/contacts/*"     element={<ProtectedRoute><ContactsV2 /></ProtectedRoute>} />
+        <Route path="/contacts/*"     element={<ProtectedRoute><Contacts /></ProtectedRoute>} />
         <Route path="/demandes/*"     element={<ProtectedRoute><DemandesDevis /></ProtectedRoute>} />
         <Route path="/clients/*"      element={<ProtectedRoute><Clients /></ProtectedRoute>} />
         <Route path="/leads/*"        element={<ProtectedRoute><Leads /></ProtectedRoute>} />
