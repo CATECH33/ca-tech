@@ -7,11 +7,12 @@ const labels: Record<string, string> = {
   projets: 'Projets', taches: 'Tâches', services: 'Services', paiements: 'Paiements',
   portfolio: 'Portfolio', messages: 'Messages', support: 'Support', parametres: 'Paramètres',
   nouveau: 'Nouveau', edit: 'Modifier',
-  demandes: 'Demandes & Devis',
+  contacts: 'Contacts & Demandes', demandes: 'Contacts & Demandes',
+  google: 'Google Workspace', integrations: 'Google Workspace',
   prospection: 'Prospection', prospects: 'Prospects', recherche: 'Recherche',
   qualification: 'Qualification IA', brouillons: 'Brouillons', relances: 'Relances',
   statistiques: 'Statistiques', config: 'Paramètres',
-  loic: 'Loïc IA', agenda: 'Agenda', documents: 'Documents', integrations: 'Intégrations',
+  loic: 'Loïc IA', agenda: 'Agenda', documents: 'Documents',
   catalogue: 'Catalogue', collaborateurs: 'Collaborateurs IA',
 }
 

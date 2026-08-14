@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from 'react-router-dom'
 import {
   LayoutDashboard, Users, CreditCard, Bot, Target, Settings,
-  ChevronLeft, ChevronRight, Zap, Inbox,
+  ChevronLeft, ChevronRight, Zap, Inbox, FileText, Globe,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -22,12 +22,14 @@ export function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose }: Side
   const location = useLocation()
 
   const navItems: NavItem[] = [
-    { label: "Vue d'ensemble", icon: LayoutDashboard, to: '/' },
-    { label: 'Demandes & Devis', icon: Inbox, to: '/demandes' },
-    { label: 'Clients', icon: Users, to: '/clients' },
-    { label: 'Paiements', icon: CreditCard, to: '/paiements' },
-    { label: 'Loïc IA', icon: Bot, to: '/loic' },
-    { label: 'Prospection', icon: Target, to: '/prospection' },
+    { label: "Vue d'ensemble",    icon: LayoutDashboard, to: '/' },
+    { label: 'Contacts',          icon: Inbox,           to: '/contacts' },
+    { label: 'Clients',           icon: Users,           to: '/clients' },
+    { label: 'Devis',             icon: FileText,        to: '/devis' },
+    { label: 'Paiements',         icon: CreditCard,      to: '/paiements' },
+    { label: 'Loïc IA',           icon: Bot,             to: '/loic' },
+    { label: 'Prospection',       icon: Target,          to: '/prospection' },
+    { label: 'Google Workspace',  icon: Globe,           to: '/google' },
   ]
 
   return (

@@ -31,6 +31,10 @@ const Notifications       = lazy(() => import('./pages/Notifications').then(m =>
 const Documents           = lazy(() => import('./pages/Documents').then(m => ({ default: m.Documents })))
 const Integrations        = lazy(() => import('./pages/Integrations').then(m => ({ default: m.Integrations })))
 
+// V2 routes — alias vers pages existantes (pages dédiées = sprints suivants)
+const ContactsV2          = lazy(() => import('./pages/DemandesDevis').then(m => ({ default: m.DemandesDevis })))
+const GoogleWorkspaceV2   = lazy(() => import('./pages/Integrations').then(m => ({ default: m.Integrations })))
+
 // Module prospection — regroupé dans un chunk unique
 const ProspectionCommercialDashboard = lazy(() => import('./pages/prospection/ProspectionCommercialDashboard').then(m => ({ default: m.ProspectionCommercialDashboard })))
 const ProspectionDashboard           = lazy(() => import('./pages/prospection/ProspectionDashboard').then(m => ({ default: m.ProspectionDashboard })))
@@ -73,6 +77,7 @@ function ProtectedApp() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password"  element={<ResetPassword />} />
         <Route path="/"               element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/contacts/*"     element={<ProtectedRoute><ContactsV2 /></ProtectedRoute>} />
         <Route path="/demandes/*"     element={<ProtectedRoute><DemandesDevis /></ProtectedRoute>} />
         <Route path="/clients/*"      element={<ProtectedRoute><Clients /></ProtectedRoute>} />
         <Route path="/leads/*"        element={<ProtectedRoute><Leads /></ProtectedRoute>} />
@@ -87,6 +92,7 @@ function ProtectedApp() {
         <Route path="/messages/*"     element={<ProtectedRoute><Messages /></ProtectedRoute>} />
         <Route path="/support/*"      element={<ProtectedRoute><Support /></ProtectedRoute>} />
         <Route path="/parametres/*"   element={<ProtectedRoute><Parametres /></ProtectedRoute>} />
+        <Route path="/google"         element={<ProtectedRoute><GoogleWorkspaceV2 /></ProtectedRoute>} />
         <Route path="/integrations"   element={<ProtectedRoute><Integrations /></ProtectedRoute>} />
         <Route path="/documents/*"    element={<ProtectedRoute><Documents /></ProtectedRoute>} />
         <Route path="/loic/*"         element={<ProtectedRoute><Loic /></ProtectedRoute>} />
