@@ -2,6 +2,11 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { Client, Status } from '@/types'
 
+const LEAD_STATUS_FROM_DB: Record<string, string> = {
+  new: 'nouveau', contacted: 'contact', qualified: 'qualifie',
+  proposal: 'proposition', negotiation: 'negocie', won: 'gagne', lost: 'perdu',
+}
+
 const PROJ_STATUS: Record<string, string> = {
   draft: 'planifie', pending: 'planifie', in_progress: 'en_cours',
   review: 'en_cours', completed: 'termine', cancelled: 'annule', on_hold: 'en_pause',
@@ -39,6 +44,8 @@ function mapRow(row: Record<string, any>): Client {
     total_ca: (row.invoices ?? [])
       .filter((i: any) => i.status === 'paid')
       .reduce((s: number, i: any) => s + Number(i.total), 0),
+    devis_count: (row.devis ?? []).length,
+    paiements_count: (row.payments ?? []).length,
   }
 }
 
@@ -50,7 +57,7 @@ export function useClients() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('clients')
-        .select('*, invoices(total, status)')
+        .select('*, invoices(total, status), devis(id), payments(id)')
         .order('created_at', { ascending: false })
       if (error) throw error
       return (data ?? []).map(mapRow)
@@ -266,6 +273,34 @@ export function useClientMessages(clientId: string | null) {
         source: r.source as string,
         lu: Boolean(r.is_read),
         replied: Boolean(r.is_replied),
+        created_at: r.created_at as string,
+      }))
+    },
+  })
+}
+
+export function useClientLeads(clientId: string | null) {
+  return useQuery({
+    queryKey: ['client-leads', clientId],
+    enabled: !!clientId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('leads')
+        .select('id, first_name, last_name, email, phone, company, source, status, notes, budget_max, created_at')
+        .eq('converted_to_client_id', clientId!)
+        .order('created_at', { ascending: false })
+      if (error) throw error
+      return (data ?? []).map(r => ({
+        id: r.id as string,
+        prenom: (r.first_name ?? '') as string,
+        nom: (r.last_name ?? '') as string,
+        email: (r.email ?? '') as string,
+        telephone: (r.phone ?? undefined) as string | undefined,
+        entreprise: (r.company ?? undefined) as string | undefined,
+        source: (r.source ?? '') as string,
+        status: (LEAD_STATUS_FROM_DB[r.status as string] ?? 'nouveau') as string,
+        besoin: (r.notes ?? undefined) as string | undefined,
+        budget_estime: r.budget_max ? Number(r.budget_max) : undefined,
         created_at: r.created_at as string,
       }))
     },

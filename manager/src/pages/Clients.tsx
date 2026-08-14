@@ -1,10 +1,12 @@
 import { useState, useEffect, useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import {
   Plus, Search, Mail, Phone, Building2, Trash2, MapPin, Globe,
   LayoutGrid, List, Edit, FileText, Receipt,
   CreditCard, FolderOpen, StickyNote, Briefcase,
   X, Activity, LifeBuoy, MessageSquare, TrendingUp,
   Users, CheckCircle, RefreshCw, Ban, ExternalLink,
+  Inbox, Bot, AlertCircle,
 } from 'lucide-react'
 import { Layout } from '@/components/layout/Layout'
 import { Button } from '@/components/ui/Button'
@@ -19,6 +21,7 @@ import {
   useClients, useCreateClient, useUpdateClient, useDeleteClient,
   useClientProjets, useClientDevis, useClientFactures,
   useClientPaiements, useClientTickets, useClientMessages,
+  useClientLeads,
 } from '@/hooks/useClients'
 import {
   useSubscriptions, useCreateSubscriptionCheckout, useCancelSubscription,
@@ -49,7 +52,7 @@ const FORM_INIT = {
   entreprise: '', secteur: '', adresse: '', code_postal: '', ville: '',
 }
 
-type FicheTab = 'infos' | 'activite' | 'projets' | 'devis' | 'factures' | 'paiements' | 'abonnements' | 'tickets' | 'messages' | 'notes'
+type FicheTab = 'infos' | 'demandes' | 'activite' | 'projets' | 'devis' | 'factures' | 'paiements' | 'abonnements' | 'tickets' | 'messages' | 'notes'
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -177,6 +180,7 @@ function ClientPanel({ client, onClose, onUpdate, onDelete, isUpdating, isDeleti
   const { data: tickets       = [] } = useClientTickets(client.id)
   const { data: messages      = [] } = useClientMessages(client.id)
   const { data: abonnements   = [] } = useSubscriptions(client.id)
+  const { data: demandesClient = [] } = useClientLeads(client.id)
   const createSubscription           = useCreateSubscriptionCheckout()
   const cancelSubscription           = useCancelSubscription()
 
@@ -216,6 +220,7 @@ function ClientPanel({ client, onClose, onUpdate, onDelete, isUpdating, isDeleti
 
   const TABS: Array<{ id: FicheTab; label: string; icon: React.ElementType; count?: number }> = [
     { id: 'infos',     label: 'Infos',     icon: Edit },
+    { id: 'demandes',  label: 'Demandes',  icon: Inbox,         count: demandesClient.length || undefined },
     { id: 'activite',  label: 'Activité',  icon: Activity,      count: activite.length },
     { id: 'projets',   label: 'Projets',   icon: FolderOpen,    count: projets.length },
     { id: 'devis',     label: 'Devis',     icon: FileText,      count: devis.length },
@@ -272,6 +277,11 @@ function ClientPanel({ client, onClose, onUpdate, onDelete, isUpdating, isDeleti
               <Button size="sm" variant="outline" onClick={() => { setTab('infos'); setEditMode(true) }}>
                 <Edit className="h-3.5 w-3.5" />Modifier
               </Button>
+              <Link to="/loic"
+                className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg border border-gray-200 bg-white text-gray-500 hover:text-gray-700 hover:bg-gray-50 transition text-xs font-medium"
+                title="Ouvrir Loïc IA">
+                <Bot className="h-3.5 w-3.5" />Loïc IA
+              </Link>
               <Button size="icon" variant="ghost" onClick={() => setShowDelete(true)} className="text-red-400 hover:text-red-600 hover:bg-red-50">
                 <Trash2 className="h-4 w-4" />
               </Button>
@@ -381,6 +391,63 @@ function ClientPanel({ client, onClose, onUpdate, onDelete, isUpdating, isDeleti
                       <InfoField icon={Globe} label="Pays" value={client.pays} />
                     </div>
                   </Card>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ── Demandes ── */}
+          {tab === 'demandes' && (
+            <div className="p-5">
+              {demandesClient.length === 0 ? (
+                <div className="text-center py-12 text-gray-400">
+                  <Inbox className="h-8 w-8 mx-auto mb-2 text-gray-200" />
+                  <p className="text-sm">Aucune demande liée à ce client</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {demandesClient.map(lead => {
+                    const STATUS_DOT: Record<string, string> = {
+                      nouveau: 'bg-blue-500', contact: 'bg-indigo-500', qualifie: 'bg-violet-500',
+                      proposition: 'bg-amber-500', negocie: 'bg-orange-500', gagne: 'bg-emerald-500', perdu: 'bg-red-500',
+                    }
+                    const STATUS_LABEL: Record<string, string> = {
+                      nouveau: 'Nouveau', contact: 'Contacté', qualifie: 'Qualifié',
+                      proposition: 'Proposition', negocie: 'Négociation', gagne: 'Gagné', perdu: 'Perdu',
+                    }
+                    return (
+                      <div key={lead.id} className="flex items-start gap-3 p-3.5 rounded-xl bg-gray-50 border border-gray-100 hover:border-gray-200 transition">
+                        <Avatar nom={lead.nom} prenom={lead.prenom} size="sm" className="shrink-0 mt-0.5" />
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-2 mb-1">
+                            <p className="text-sm font-semibold text-gray-800">{lead.prenom} {lead.nom}</p>
+                            <div className="flex items-center gap-1.5 shrink-0">
+                              <span className={cn('h-2 w-2 rounded-full shrink-0', STATUS_DOT[lead.status] ?? 'bg-gray-400')} />
+                              <span className="text-xs text-gray-500">{STATUS_LABEL[lead.status] ?? lead.status}</span>
+                            </div>
+                          </div>
+                          {lead.besoin && (
+                            <p className="text-xs text-gray-500 mb-2 line-clamp-2 leading-relaxed">{lead.besoin}</p>
+                          )}
+                          <div className="flex items-center gap-3 flex-wrap">
+                            {lead.source && (
+                              <span className="text-[11px] bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">{lead.source}</span>
+                            )}
+                            {lead.budget_estime && (
+                              <span className="text-[11px] font-semibold text-gray-700">{formatCurrency(lead.budget_estime)}</span>
+                            )}
+                            <span className="text-[11px] text-gray-400">{formatDate(lead.created_at)}</span>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })}
+                  <div className="pt-2 border-t border-gray-100">
+                    <Link to="/contacts"
+                      className="inline-flex items-center gap-1.5 text-xs text-brand-600 hover:text-brand-700 font-medium transition">
+                      Voir dans Contacts →
+                    </Link>
+                  </div>
                 </div>
               )}
             </div>
@@ -827,11 +894,17 @@ export function Clients() {
     return arr
   }, [clients, filterStatus, filterSecteur, search, sort])
 
+  const existingEmailClient = useMemo(() => {
+    if (!form.email) return null
+    return clients.find(c => c.email.toLowerCase() === form.email.toLowerCase()) ?? null
+  }, [clients, form.email])
+
   const set = (k: keyof typeof FORM_INIT) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm(f => ({ ...f, [k]: e.target.value }))
 
   async function handleCreate() {
     if (!form.prenom || !form.nom || !form.email) return
+    if (existingEmailClient) return
     const c = await createClient.mutateAsync({
       prenom: form.prenom, nom: form.nom, email: form.email,
       telephone: form.telephone, entreprise: form.entreprise,
@@ -948,7 +1021,7 @@ export function Clients() {
             <Thead>
               <Tr>
                 <Th>Client</Th><Th>Entreprise</Th><Th>Contact</Th>
-                <Th>Ville</Th><Th>Status</Th><Th>CA total</Th><Th>Depuis</Th>
+                <Th>Ville</Th><Th>Status</Th><Th>Devis / Paiements</Th><Th>CA total</Th><Th>Depuis</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -989,6 +1062,19 @@ export function Clients() {
                     </Td>
                     <Td className="text-sm text-gray-600">{client.ville ?? <span className="text-gray-300">—</span>}</Td>
                     <Td><Badge status={client.status} dot /></Td>
+                    <Td>
+                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                        <span className="flex items-center gap-1">
+                          <FileText className="h-3 w-3 text-gray-300" />
+                          {client.devis_count ?? 0}
+                        </span>
+                        <span className="text-gray-200">·</span>
+                        <span className="flex items-center gap-1">
+                          <CreditCard className="h-3 w-3 text-gray-300" />
+                          {client.paiements_count ?? 0}
+                        </span>
+                      </div>
+                    </Td>
                     <Td className="font-semibold text-gray-800">{formatCurrency(client.total_ca)}</Td>
                     <Td className="text-xs text-gray-400">{formatDate(client.created_at)}</Td>
                   </Tr>
@@ -1038,7 +1124,7 @@ export function Clients() {
         footer={
           <>
             <Button variant="outline" onClick={() => setShowAdd(false)}>Annuler</Button>
-            <Button onClick={handleCreate} disabled={createClient.isPending || !form.prenom || !form.nom || !form.email}>
+            <Button onClick={handleCreate} disabled={createClient.isPending || !form.prenom || !form.nom || !form.email || !!existingEmailClient}>
               {createClient.isPending ? 'Création…' : 'Créer le client'}
             </Button>
           </>
@@ -1051,6 +1137,15 @@ export function Clients() {
               <Input label="Prénom *" placeholder="Sophie" value={form.prenom} onChange={set('prenom')} />
               <Input label="Nom *" placeholder="Martin" value={form.nom} onChange={set('nom')} />
               <Input label="Email *" type="email" placeholder="sophie@entreprise.fr" className="col-span-2" value={form.email} onChange={set('email')} />
+              {existingEmailClient && (
+                <div className="col-span-2 flex items-start gap-2 px-3 py-2.5 rounded-xl bg-amber-50 border border-amber-200">
+                  <AlertCircle className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
+                  <p className="text-xs text-amber-700">
+                    Client existant avec cet email : <strong>{existingEmailClient.prenom} {existingEmailClient.nom}</strong>.
+                    Modifiez l'email ou ouvrez la fiche de ce client.
+                  </p>
+                </div>
+              )}
               <Input label="Téléphone" placeholder="06 XX XX XX XX" value={form.telephone} onChange={set('telephone')} />
             </div>
           </div>

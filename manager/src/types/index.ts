@@ -31,6 +31,8 @@ export interface Client {
   notes?: string
   avatar_url?: string
   total_ca: number
+  devis_count?: number
+  paiements_count?: number
   stripe_customer_id?: string
 }
 
