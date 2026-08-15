@@ -620,6 +620,79 @@ export function Loic() {
             ))}
           </div>
 
+          {/* Flux Loïc */}
+          {(leadsCount > 0 || conversations.some(c => c.metadata?.escalated)) && (
+            <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
+              <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-brand-500" />
+                  <h3 className="text-sm font-semibold text-gray-900">Flux Loïc</h3>
+                </div>
+                <button
+                  onClick={() => navigate('/contacts')}
+                  className="flex items-center gap-1.5 text-xs font-medium text-brand-600 hover:text-brand-700 transition"
+                >
+                  Voir tous les leads <ChevronRight className="h-3.5 w-3.5" />
+                </button>
+              </div>
+              <div className="p-4 space-y-2">
+                {conversations.filter(c => c.lead_id).slice(0, 5).map(c => (
+                  <div key={c.id} className="flex items-center gap-3 p-3 bg-green-50 border border-green-100 rounded-xl">
+                    <div className="h-8 w-8 rounded-full bg-green-500 flex items-center justify-center shrink-0">
+                      <CheckCircle className="h-4 w-4 text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-semibold text-gray-900 truncate">
+                        {(c.metadata.prenom || c.metadata.nom)
+                          ? `${c.metadata.prenom ?? ''} ${c.metadata.nom ?? ''}`.trim()
+                          : 'Prospect anonyme'}
+                      </p>
+                      {c.metadata.projet && (
+                        <p className="text-[11px] text-gray-500 truncate">{c.metadata.projet}</p>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      {c.metadata.email && (
+                        <span className="text-[10px] text-gray-400 hidden sm:block">{c.metadata.email}</span>
+                      )}
+                      <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-green-700 bg-green-100 px-1.5 py-0.5 rounded-full">
+                        Lead
+                      </span>
+                      <button
+                        onClick={() => { setActiveId(c.id); setTab('chat') }}
+                        className="text-gray-300 hover:text-brand-500 transition-colors"
+                        title="Voir la conversation"
+                      >
+                        <MessageSquare className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                {conversations.filter(c => c.metadata?.escalated && !c.lead_id).slice(0, 3).map(c => (
+                  <div key={c.id} className="flex items-center gap-3 p-3 bg-amber-50 border border-amber-100 rounded-xl">
+                    <div className="h-8 w-8 rounded-full bg-amber-400 flex items-center justify-center shrink-0">
+                      <AlertTriangle className="h-4 w-4 text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-semibold text-gray-900 truncate">
+                        {(c.metadata.prenom || c.metadata.nom)
+                          ? `${c.metadata.prenom ?? ''} ${c.metadata.nom ?? ''}`.trim()
+                          : 'Prospect anonyme'}
+                      </p>
+                      <p className="text-[11px] text-amber-600">Conversation escaladée — intervention requise</p>
+                    </div>
+                    <button
+                      onClick={() => { setActiveId(c.id); setTab('chat') }}
+                      className="flex items-center gap-1 text-xs font-medium text-amber-600 hover:text-amber-700 shrink-0 transition"
+                    >
+                      Traiter <ChevronRight className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Knowledge base summary */}
           <div className="bg-white rounded-xl border border-gray-100 p-5">
             <h3 className="text-sm font-semibold text-gray-900 mb-4">Base de connaissances active</h3>

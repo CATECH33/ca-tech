@@ -13,7 +13,7 @@ const FN_URL = `${SUPABASE_URL}/functions/v1/integration-health`
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-export type ServiceId = 'gmail' | 'calendar' | 'drive' | 'sheets'
+export type ServiceId = 'gmail' | 'calendar' | 'drive' | 'sheets' | 'docs'
 
 export interface ServiceResult {
   ok: boolean

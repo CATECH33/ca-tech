@@ -6,7 +6,7 @@ import {
   CreditCard, FolderOpen, StickyNote, Briefcase,
   X, Activity, LifeBuoy, MessageSquare, TrendingUp,
   Users, CheckCircle, RefreshCw, Ban, ExternalLink,
-  Inbox, Bot, AlertCircle,
+  Inbox, Bot, AlertCircle, Sparkles,
 } from 'lucide-react'
 import { Layout } from '@/components/layout/Layout'
 import { Button } from '@/components/ui/Button'
@@ -26,6 +26,7 @@ import {
 import {
   useSubscriptions, useCreateSubscriptionCheckout, useCancelSubscription,
 } from '@/hooks/useSubscriptions'
+import { useLoicConversations } from '@/hooks/useLoic'
 import type { Client, Status, SubscriptionPlan } from '@/types'
 
 // ─── Constants ─────────────────────────────────────────────────────────────────
@@ -52,7 +53,7 @@ const FORM_INIT = {
   entreprise: '', secteur: '', adresse: '', code_postal: '', ville: '',
 }
 
-type FicheTab = 'infos' | 'demandes' | 'activite' | 'projets' | 'devis' | 'factures' | 'paiements' | 'abonnements' | 'tickets' | 'messages' | 'notes'
+type FicheTab = 'infos' | 'demandes' | 'activite' | 'projets' | 'devis' | 'factures' | 'paiements' | 'abonnements' | 'tickets' | 'messages' | 'notes' | 'loic'
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -181,6 +182,8 @@ function ClientPanel({ client, onClose, onUpdate, onDelete, isUpdating, isDeleti
   const { data: messages      = [] } = useClientMessages(client.id)
   const { data: abonnements   = [] } = useSubscriptions(client.id)
   const { data: demandesClient = [] } = useClientLeads(client.id)
+  const { data: allLoicConvs  = [] } = useLoicConversations()
+  const loicConvs = useMemo(() => allLoicConvs.filter(c => c.client_id === client.id), [allLoicConvs, client.id])
   const createSubscription           = useCreateSubscriptionCheckout()
   const cancelSubscription           = useCancelSubscription()
 
@@ -230,6 +233,7 @@ function ClientPanel({ client, onClose, onUpdate, onDelete, isUpdating, isDeleti
     { id: 'tickets',      label: 'Tickets',      icon: LifeBuoy,      count: tickets.length },
     { id: 'messages',  label: 'Messages',  icon: MessageSquare, count: messages.length },
     { id: 'notes',     label: 'Notes',     icon: StickyNote },
+    { id: 'loic',      label: 'Loïc IA',   icon: Bot,           count: loicConvs.length || undefined },
   ]
 
   return (
@@ -793,6 +797,76 @@ function ClientPanel({ client, onClose, onUpdate, onDelete, isUpdating, isDeleti
                 ))}
               </Tbody>
             </Table>
+          )}
+
+          {/* ── Loïc IA ── */}
+          {tab === 'loic' && (
+            <div className="p-4 space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Conversations Loïc IA</span>
+                <Link
+                  to="/loic"
+                  className="flex items-center gap-1.5 text-xs font-medium text-brand-600 hover:text-brand-700 px-3 py-1.5 rounded-lg border border-brand-200 hover:bg-brand-50 transition"
+                >
+                  <Sparkles className="h-3.5 w-3.5" />Ouvrir Loïc IA
+                </Link>
+              </div>
+              {loicConvs.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-10 text-center">
+                  <div className="h-12 w-12 rounded-2xl bg-brand-50 flex items-center justify-center mb-3">
+                    <Bot className="h-6 w-6 text-brand-400" />
+                  </div>
+                  <p className="text-sm text-gray-500 mb-1">Aucune conversation Loïc liée à ce client</p>
+                  <p className="text-xs text-gray-400 mb-4">Les conversations créées depuis le widget et liées à ce client apparaîtront ici.</p>
+                  <Link
+                    to="/loic"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 bg-brand-500 text-white text-sm font-medium rounded-xl hover:bg-brand-600 transition"
+                  >
+                    <Sparkles className="h-3.5 w-3.5" />Démarrer une conversation
+                  </Link>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {loicConvs.map(c => {
+                    const lastMsg = c.messages[c.messages.length - 1]
+                    return (
+                      <div key={c.id} className="p-3 bg-gray-50 rounded-xl border border-gray-100">
+                        <div className="flex items-center justify-between mb-1.5">
+                          <div className="flex items-center gap-2">
+                            <div className="h-6 w-6 rounded-full bg-brand-500 flex items-center justify-center">
+                              <Bot className="h-3 w-3 text-white" />
+                            </div>
+                            <span className="text-xs font-semibold text-gray-800">
+                              {c.metadata?.prenom ? `${c.metadata.prenom} ${c.metadata.nom ?? ''}`.trim() : 'Conversation Loïc'}
+                            </span>
+                            {c.lead_id && (
+                              <span className="flex items-center gap-0.5 text-[10px] font-medium text-green-600 bg-green-50 px-1.5 py-0.5 rounded-full">
+                                <CheckCircle className="h-2.5 w-2.5" />Lead créé
+                              </span>
+                            )}
+                          </div>
+                          <span className="text-[10px] text-gray-400">{c.messages.length} msg{c.messages.length > 1 ? 's' : ''}</span>
+                        </div>
+                        {lastMsg && (
+                          <p className="text-xs text-gray-500 line-clamp-2 pl-8">
+                            {lastMsg.content.substring(0, 100)}{lastMsg.content.length > 100 ? '…' : ''}
+                          </p>
+                        )}
+                        <div className="flex items-center justify-between mt-2 pl-8">
+                          <span className="text-[10px] text-gray-300">{formatDate(c.updated_at)}</span>
+                          <Link
+                            to="/loic"
+                            className="text-[10px] text-brand-500 hover:text-brand-700 font-medium flex items-center gap-0.5"
+                          >
+                            Voir dans Loïc <ExternalLink className="h-2.5 w-2.5" />
+                          </Link>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
           )}
 
           {/* ── Notes ── */}

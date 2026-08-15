@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import {
   CheckCircle2, XCircle, AlertTriangle, RefreshCw, Zap, Wifi,
   WifiOff, Clock, Activity, BarChart2, ChevronDown, ChevronUp,
-  ExternalLink, Wrench, Mail, Calendar, HardDrive, Sheet,
+  ExternalLink, Wrench, Mail, Calendar, HardDrive, Sheet, FileText,
   Cpu, MapPin, Search, Building2,
 } from 'lucide-react'
 import { Layout } from '@/components/layout/Layout'
@@ -34,6 +34,7 @@ const SERVICES: ServiceDef[] = [
   { id: 'calendar', label: 'Google Agenda', scope: 'calendar',     icon: Calendar,    color: 'text-blue-600',   bg: 'bg-blue-50',   border: 'border-blue-100' },
   { id: 'drive',    label: 'Google Drive',  scope: 'drive',        icon: HardDrive,   color: 'text-yellow-600', bg: 'bg-yellow-50', border: 'border-yellow-100' },
   { id: 'sheets',   label: 'Google Sheets', scope: 'spreadsheets', icon: Sheet,       color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-100' },
+  { id: 'docs',     label: 'Google Docs',   scope: 'documents',    icon: FileText,    color: 'text-indigo-600', bg: 'bg-indigo-50', border: 'border-indigo-100' },
 ]
 
 // ── Sub-components ────────────────────────────────────────────────────────────
@@ -109,10 +110,11 @@ function ServiceLabel({ service }: { service: string }) {
     calendar: 'text-blue-600 bg-blue-50',
     drive: 'text-yellow-700 bg-yellow-50',
     sheets: 'text-emerald-700 bg-emerald-50',
+    docs: 'text-indigo-600 bg-indigo-50',
     google: 'text-brand-600 bg-brand-50',
   }
   const labels: Record<string, string> = {
-    gmail: 'Gmail', calendar: 'Agenda', drive: 'Drive', sheets: 'Sheets', google: 'Google',
+    gmail: 'Gmail', calendar: 'Agenda', drive: 'Drive', sheets: 'Sheets', docs: 'Docs', google: 'Google',
   }
   return (
     <span className={cn('inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full', colors[service] ?? 'text-gray-600 bg-gray-100')}>
@@ -150,6 +152,7 @@ function GoogleAccountCard({
     scope?.includes('calendar') && 'Agenda',
     scope?.includes('drive') && 'Drive',
     scope?.includes('spreadsheets') && 'Sheets',
+    scope?.includes('documents') && 'Docs',
   ].filter(Boolean) as string[]
 
   return (
@@ -849,7 +852,7 @@ export function Integrations() {
         )}
 
         {/* ── Service cards 2×2 ──────────────────────────────────────────── */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
           {SERVICES.map(svc => (
             <ServiceCard
               key={svc.id}
