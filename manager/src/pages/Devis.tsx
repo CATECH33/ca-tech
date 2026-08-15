@@ -69,6 +69,19 @@ const TVA_PRESETS = [
   { value: 20,   label: '20%' },
 ]
 
+const STORAGE_KEY = 'catech_settings'
+
+function getAgenceSettings() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (!raw) return { nom: 'CA-TECH', email: 'contact@ca-tech.fr', logo: '', telephone: '', adresse: '', ville: '', pays: 'France' }
+    const s = JSON.parse(raw)
+    return { nom: 'CA-TECH', email: 'contact@ca-tech.fr', logo: '', telephone: '', adresse: '', ville: '', pays: 'France', ...(s.agence ?? {}) }
+  } catch {
+    return { nom: 'CA-TECH', email: 'contact@ca-tech.fr', logo: '', telephone: '', adresse: '', ville: '', pays: 'France' }
+  }
+}
+
 function computeTotals(lignes: LigneForm[], tvaRate: number) {
   const ht = lignes.reduce((s, l) => s + (parseFloat(l.quantite) || 0) * (parseFloat(l.prix_unitaire) || 0), 0)
   const tva = ht * (tvaRate / 100)
@@ -788,6 +801,7 @@ function DevisFiche({
   const [convertedTo, setConvertedTo]       = useState<string | null>(null)
   const [editAttachments, setEditAttachments] = useState<FileEntry[]>([])
   const [pdfLoading, setPdfLoading]         = useState(false)
+  const agence = useMemo(() => getAgenceSettings(), [])
   const uploadDocsMutation = useUploadDocuments()
   const [form, setForm] = useState({
     client_id:   devis.client_id,
@@ -1065,9 +1079,16 @@ function DevisFiche({
         <div id="devis-document" className="bg-white rounded-2xl border border-gray-100 shadow-card overflow-hidden">
           {/* Header band */}
           <div className="bg-gradient-to-br from-gray-900 to-gray-800 text-white px-8 py-6 flex items-start justify-between">
-            <div>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">Devis</p>
-              <p className="text-3xl font-bold font-mono tracking-tight">{devis.numero}</p>
+            <div className="flex items-center gap-4">
+              {agence.logo && (
+                <div className="h-12 w-12 rounded-xl overflow-hidden bg-white/10 flex items-center justify-center shrink-0">
+                  <img src={agence.logo} alt="" crossOrigin="anonymous" className="h-full w-full object-contain p-1.5" />
+                </div>
+              )}
+              <div>
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">Devis</p>
+                <p className="text-3xl font-bold font-mono tracking-tight">{devis.numero}</p>
+              </div>
             </div>
             <div className="text-right">
               <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-white/10 border border-white/20 text-white mb-2">
@@ -1085,9 +1106,16 @@ function DevisFiche({
           <div className="grid grid-cols-2 divide-x divide-gray-100">
             <div className="p-8">
               <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">De</p>
-              <p className="font-bold text-gray-900 text-base">CA-TECH</p>
-              <p className="text-sm text-gray-500 mt-1">pemoustaskit@gmail.com</p>
-              <p className="text-sm text-gray-500">France</p>
+              {agence.logo && (
+                <img src={agence.logo} alt={agence.nom} crossOrigin="anonymous" className="h-8 w-auto object-contain mb-2" />
+              )}
+              <p className="font-bold text-gray-900 text-base">{agence.nom || 'CA-TECH'}</p>
+              {agence.email && <p className="text-sm text-gray-500 mt-1">{agence.email}</p>}
+              {agence.telephone && <p className="text-sm text-gray-500">{agence.telephone}</p>}
+              {agence.adresse && <p className="text-sm text-gray-500">{agence.adresse}</p>}
+              {(agence.ville || agence.pays) && (
+                <p className="text-sm text-gray-500">{[agence.ville, agence.pays].filter(Boolean).join(', ')}</p>
+              )}
             </div>
             <div className="p-8">
               <div className="flex items-center justify-between mb-3">
