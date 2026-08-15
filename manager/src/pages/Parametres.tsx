@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import {
   User, Building2, Receipt, Bell, Palette, Shield,
   Check, Eye, EyeOff, AlertTriangle, CreditCard,
   Clock, Monitor, Smartphone, LogOut, Mail, Send, MessageCircle,
-  Globe,
+  Globe, Upload, X, Loader2,
 } from 'lucide-react'
 import { Layout } from '@/components/layout/Layout'
 import { Card } from '@/components/ui/Card'
@@ -26,6 +26,7 @@ interface Settings {
     nom: string; email: string; telephone: string; site_web: string
     siret: string; tva_intra: string
     adresse: string; ville: string; code_postal: string; pays: string
+    logo: string
   }
   facturation: {
     prefixe_devis: string; prefixe_facture: string
@@ -57,6 +58,7 @@ const DEFAULT: Settings = {
     nom: 'CA-TECH', email: 'contact@ca-tech.fr', telephone: '+33 7 75 66 49 75',
     site_web: 'https://ca-tech.fr', siret: '', tva_intra: '',
     adresse: '', ville: 'Paris', code_postal: '75001', pays: 'France',
+    logo: '',
   },
   facturation: {
     prefixe_devis: 'DEV', prefixe_facture: 'FAC',
@@ -369,6 +371,56 @@ export function Parametres() {
   const [pwLoading, setPwLoading] = useState(false)
   const [pwSaved, setPwSaved] = useState(false)
 
+  const [logoUploading, setLogoUploading] = useState(false)
+  const [logoError, setLogoError] = useState('')
+  const logoInputRef = useRef<HTMLInputElement>(null)
+
+  async function handleLogoUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file) return
+
+    const allowed = ['image/png', 'image/svg+xml', 'image/jpeg', 'image/webp']
+    if (!allowed.includes(file.type)) {
+      setLogoError('Format non supporté — PNG, SVG, JPG ou WEBP uniquement')
+      return
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      setLogoError('Fichier trop lourd — 2 Mo maximum')
+      return
+    }
+
+    setLogoError('')
+    setLogoUploading(true)
+    try {
+      const ext = file.name.split('.').pop() ?? 'png'
+      const path = `logos/agency-logo.${ext}`
+
+      const { error: upErr } = await supabase.storage
+        .from('catalogue')
+        .upload(path, file, { upsert: true, contentType: file.type })
+
+      if (upErr) throw upErr
+
+      const { data } = supabase.storage.from('catalogue').getPublicUrl(path)
+      const url = `${data.publicUrl}?t=${Date.now()}`
+
+      patch('agence', { logo: url })
+      const next = { ...settings, agence: { ...settings.agence, logo: url } }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+    } catch (err) {
+      setLogoError(err instanceof Error ? err.message : 'Erreur lors de l\'upload')
+    } finally {
+      setLogoUploading(false)
+    }
+  }
+
+  function removeLogo() {
+    patch('agence', { logo: '' })
+    const next = { ...settings, agence: { ...settings.agence, logo: '' } }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+  }
+
   function patch<K extends keyof Settings>(section: K, vals: Partial<Settings[K]>) {
     setSettings(s => ({ ...s, [section]: { ...s[section], ...vals } }))
   }
@@ -460,16 +512,59 @@ export function Parametres() {
             <Card>
               <SectionHeader title="Informations agence" desc="Ces informations apparaissent sur vos devis et factures" />
               <div className="mb-5 pb-5 border-b border-gray-100">
-                <p className="text-xs font-medium text-gray-700 mb-2">Logo</p>
+                <p className="text-xs font-medium text-gray-700 mb-2">Logo de l'agence</p>
                 <div className="flex items-center gap-4">
-                  <div className="h-14 w-14 rounded-xl bg-brand-500 flex items-center justify-center text-white font-bold text-lg shrink-0">
-                    {ag.nom.charAt(0)}
+                  {/* Aperçu */}
+                  <div className="h-16 w-16 rounded-xl border-2 border-dashed border-gray-200 flex items-center justify-center shrink-0 overflow-hidden bg-gray-50">
+                    {ag.logo ? (
+                      <img src={ag.logo} alt="Logo agence" className="h-full w-full object-contain p-1" />
+                    ) : (
+                      <span className="text-xl font-bold text-brand-500">{ag.nom.charAt(0)}</span>
+                    )}
                   </div>
-                  <div>
-                    <Button variant="outline" size="sm">Téléverser un logo</Button>
-                    <p className="text-xs text-gray-400 mt-1">PNG ou SVG · max 2 Mo</p>
+
+                  {/* Actions */}
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => logoInputRef.current?.click()}
+                        disabled={logoUploading}
+                        className="gap-1.5"
+                      >
+                        {logoUploading
+                          ? <><Loader2 className="h-3.5 w-3.5 animate-spin" />Upload en cours…</>
+                          : <><Upload className="h-3.5 w-3.5" />Téléverser un logo</>
+                        }
+                      </Button>
+                      {ag.logo && (
+                        <button
+                          onClick={removeLogo}
+                          className="h-8 w-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                          title="Supprimer le logo"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      )}
+                    </div>
+                    <p className="text-xs text-gray-400">PNG, SVG, JPG ou WEBP · max 2 Mo</p>
+                    {logoError && (
+                      <p className="text-xs text-red-500 flex items-center gap-1">
+                        <AlertTriangle className="h-3 w-3 shrink-0" />{logoError}
+                      </p>
+                    )}
                   </div>
                 </div>
+
+                {/* Input caché */}
+                <input
+                  ref={logoInputRef}
+                  type="file"
+                  accept="image/png,image/svg+xml,image/jpeg,image/webp"
+                  onChange={handleLogoUpload}
+                  className="sr-only"
+                />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <Input label="Nom de l'agence" value={ag.nom} onChange={e => patch('agence', { nom: e.target.value })} className="col-span-2" />
