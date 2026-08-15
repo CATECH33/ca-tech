@@ -74,11 +74,11 @@ const STORAGE_KEY = 'catech_settings'
 function getAgenceSettings() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return { nom: 'CA-TECH', email: 'contact@ca-tech.fr', logo: '', telephone: '', adresse: '', ville: '', pays: 'France', siret: '' }
+    if (!raw) return { nom: 'CA-TECH', email: 'contact@ca-tech.fr', logo: '', telephone: '', adresse: '', ville: '', pays: 'France', siret: '', tva_intra: '' }
     const s = JSON.parse(raw)
-    return { nom: 'CA-TECH', email: 'contact@ca-tech.fr', logo: '', telephone: '', adresse: '', ville: '', pays: 'France', siret: '', ...(s.agence ?? {}) }
+    return { nom: 'CA-TECH', email: 'contact@ca-tech.fr', logo: '', telephone: '', adresse: '', ville: '', pays: 'France', siret: '', tva_intra: '', ...(s.agence ?? {}) }
   } catch {
-    return { nom: 'CA-TECH', email: 'contact@ca-tech.fr', logo: '', telephone: '', adresse: '', ville: '', pays: 'France', siret: '' }
+    return { nom: 'CA-TECH', email: 'contact@ca-tech.fr', logo: '', telephone: '', adresse: '', ville: '', pays: 'France', siret: '', tva_intra: '' }
   }
 }
 
@@ -1117,6 +1117,7 @@ function DevisFiche({
                 <p className="text-sm text-gray-500">{[agence.ville, agence.pays].filter(Boolean).join(', ')}</p>
               )}
               {agence.siret && <p className="text-sm text-gray-500 mt-1">SIRET {agence.siret}</p>}
+              {agence.tva_intra && <p className="text-sm text-gray-500">TVA {agence.tva_intra}</p>}
             </div>
             <div className="p-8">
               <div className="flex items-center justify-between mb-3">
