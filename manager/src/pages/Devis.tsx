@@ -74,11 +74,11 @@ const STORAGE_KEY = 'catech_settings'
 function getAgenceSettings() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return { nom: 'CA-TECH', email: 'contact@ca-tech.fr', logo: '', telephone: '', adresse: '', ville: '', pays: 'France' }
+    if (!raw) return { nom: 'CA-TECH', email: 'contact@ca-tech.fr', logo: '', telephone: '', adresse: '', ville: '', pays: 'France', siret: '' }
     const s = JSON.parse(raw)
-    return { nom: 'CA-TECH', email: 'contact@ca-tech.fr', logo: '', telephone: '', adresse: '', ville: '', pays: 'France', ...(s.agence ?? {}) }
+    return { nom: 'CA-TECH', email: 'contact@ca-tech.fr', logo: '', telephone: '', adresse: '', ville: '', pays: 'France', siret: '', ...(s.agence ?? {}) }
   } catch {
-    return { nom: 'CA-TECH', email: 'contact@ca-tech.fr', logo: '', telephone: '', adresse: '', ville: '', pays: 'France' }
+    return { nom: 'CA-TECH', email: 'contact@ca-tech.fr', logo: '', telephone: '', adresse: '', ville: '', pays: 'France', siret: '' }
   }
 }
 
@@ -1116,6 +1116,7 @@ function DevisFiche({
               {(agence.ville || agence.pays) && (
                 <p className="text-sm text-gray-500">{[agence.ville, agence.pays].filter(Boolean).join(', ')}</p>
               )}
+              {agence.siret && <p className="text-sm text-gray-500 mt-1">SIRET {agence.siret}</p>}
             </div>
             <div className="p-8">
               <div className="flex items-center justify-between mb-3">
