@@ -1118,7 +1118,7 @@ function DevisFiche({
               )}
               {agence.siret && <p className="text-sm text-gray-500 mt-1">SIRET {agence.siret}</p>}
               {agence.tva_intra && <p className="text-sm text-gray-500">TVA {agence.tva_intra}</p>}
-              {agence.site_web && <p className="text-sm text-gray-500 mt-1">{agence.site_web.replace(/^https?:\/\//, '')}</p>}
+              {agence.site_web && <p className="text-sm text-gray-500 mt-1">{agence.site_web}</p>}
             </div>
             <div className="p-8">
               <div className="flex items-center justify-between mb-3">
