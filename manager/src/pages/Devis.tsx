@@ -3,9 +3,11 @@ import {
   Search, Send, FileText, Plus, Trash2, X, ArrowLeft,
   Edit, Copy, Check, Receipt, ChevronRight, Printer,
   PenLine, Type, RotateCcw, Download, Paperclip, Mail, Loader2,
+  ExternalLink,
 } from 'lucide-react'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
+import { Link } from 'react-router-dom'
 import { Layout } from '@/components/layout/Layout'
 import { Button } from '@/components/ui/Button'
 import { Input, Select, Textarea } from '@/components/ui/Input'
@@ -1088,7 +1090,18 @@ function DevisFiche({
               <p className="text-sm text-gray-500">France</p>
             </div>
             <div className="p-8">
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Pour</p>
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Pour</p>
+                {devis.client && (
+                  <Link
+                    to="/clients"
+                    className="inline-flex items-center gap-1 text-[10px] text-brand-500 hover:text-brand-700 font-medium transition"
+                    title="Voir la fiche client"
+                  >
+                    <ExternalLink className="h-3 w-3" />Fiche client
+                  </Link>
+                )}
+              </div>
               {devis.client ? (
                 <>
                   <div className="flex items-center gap-2.5 mb-2">

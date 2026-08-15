@@ -2,10 +2,12 @@ import { useState, useMemo, useEffect } from 'react'
 import {
   Plus, X, Trash2, Search, TrendingUp, Calendar, DollarSign, ArrowUpRight,
   CreditCard, Building2, Zap, FileText, Banknote, Receipt, User, StickyNote,
+  Repeat, AlertCircle, CheckCircle2, PauseCircle, XCircle, ChevronRight,
 } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts'
+import { Link } from 'react-router-dom'
 import { Layout } from '@/components/layout/Layout'
 import { Button } from '@/components/ui/Button'
 import { Input, Select, Textarea } from '@/components/ui/Input'
@@ -19,7 +21,8 @@ import {
   useClientInvoicesForPayment,
 } from '@/hooks/usePaiements'
 import { useClients } from '@/hooks/useClients'
-import type { PaiementMethod } from '@/types'
+import { useSubscriptions, useCancelSubscription } from '@/hooks/useSubscriptions'
+import type { PaiementMethod, Subscription } from '@/types'
 
 // ─── Method config ────────────────────────────────────────────────────────────
 
@@ -72,12 +75,52 @@ function MethodBadge({ methode }: { methode: string }) {
   )
 }
 
+// ─── Payment type badge ───────────────────────────────────────────────────────
+
+const FACTURE_TYPE: Record<string, { label: string; cls: string }> = {
+  acompte: { label: 'Acompte', cls: 'bg-blue-50 text-blue-700 border border-blue-100' },
+  solde:   { label: 'Solde',   cls: 'bg-violet-50 text-violet-700 border border-violet-100' },
+  unique:  { label: 'Unique',  cls: 'bg-gray-50 text-gray-600 border border-gray-200' },
+}
+
+function TypeBadge({ type }: { type?: string }) {
+  if (!type) return <span className="text-xs text-gray-300">—</span>
+  const cfg = FACTURE_TYPE[type]
+  if (!cfg) return <span className="text-xs text-gray-300">—</span>
+  return (
+    <span className={cn('inline-flex items-center text-xs font-medium px-2 py-0.5 rounded-full', cfg.cls)}>
+      {cfg.label}
+    </span>
+  )
+}
+
+// ─── Subscription status config ───────────────────────────────────────────────
+
+const SUB_STATUS: Record<string, { label: string; cls: string; icon: React.ReactNode }> = {
+  active:    { label: 'Actif',      cls: 'bg-emerald-50 text-emerald-700 border border-emerald-100', icon: <CheckCircle2 className="h-3 w-3" /> },
+  trialing:  { label: 'Essai',      cls: 'bg-blue-50 text-blue-700 border border-blue-100',           icon: <CheckCircle2 className="h-3 w-3" /> },
+  paused:    { label: 'Suspendu',   cls: 'bg-amber-50 text-amber-700 border border-amber-100',        icon: <PauseCircle className="h-3 w-3" /> },
+  past_due:  { label: 'Impayé',     cls: 'bg-red-50 text-red-700 border border-red-100',              icon: <AlertCircle className="h-3 w-3" /> },
+  cancelled: { label: 'Annulé',     cls: 'bg-gray-50 text-gray-500 border border-gray-200',           icon: <XCircle className="h-3 w-3" /> },
+}
+
+function SubStatusBadge({ status }: { status: string }) {
+  const cfg = SUB_STATUS[status] ?? SUB_STATUS.cancelled
+  return (
+    <span className={cn('inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full', cfg.cls)}>
+      {cfg.icon} {cfg.label}
+    </span>
+  )
+}
+
 // ─── Period ───────────────────────────────────────────────────────────────────
 
 type Period = 'month' | 'quarter' | 'year' | 'all'
 const PERIOD_LABELS: Record<Period, string> = {
   month: 'Ce mois', quarter: 'Ce trimestre', year: 'Cette année', all: 'Tout',
 }
+
+type PageTab = 'paiements' | 'abonnements'
 
 // ─── Form ─────────────────────────────────────────────────────────────────────
 
@@ -94,6 +137,7 @@ const FORM_INIT = {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export function Paiements() {
+  const [tab, setTab]                   = useState<PageTab>('paiements')
   const [period, setPeriod]             = useState<Period>('all')
   const [filterMethod, setFilterMethod] = useState<PaiementMethod | 'all'>('all')
   const [search, setSearch]             = useState('')
@@ -101,12 +145,17 @@ export function Paiements() {
   const [panelId, setPanelId]           = useState<string | null>(null)
   const [confirmDel, setConfirmDel]     = useState(false)
   const [form, setForm]                 = useState(FORM_INIT)
+  const [subPanel, setSubPanel]         = useState<Subscription | null>(null)
+  const [confirmSubCancel, setConfirmSubCancel] = useState(false)
+  const [subSearch, setSubSearch]       = useState('')
 
-  const { data: paiements = [], isLoading } = usePaiements()
-  const { data: clients = [] }              = useClients()
+  const { data: paiements = [], isLoading }       = usePaiements()
+  const { data: clients = [] }                    = useClients()
+  const { data: subscriptions = [], isLoading: subLoading } = useSubscriptions()
   const createPaiement  = useCreatePaiement()
   const deletePaiement  = useDeletePaiement()
-  const { data: clientInvoices = [] }       = useClientInvoicesForPayment(form.client_id || null)
+  const cancelSub       = useCancelSubscription()
+  const { data: clientInvoices = [] }             = useClientInvoicesForPayment(form.client_id || null)
 
   const panelP = panelId ? paiements.find(p => p.id === panelId) ?? null : null
 
@@ -219,6 +268,23 @@ export function Paiements() {
     setConfirmDel(false)
   }
 
+  const handleSubCancel = async () => {
+    if (!subPanel) return
+    await cancelSub.mutateAsync(subPanel.id)
+    setConfirmSubCancel(false)
+    setSubPanel(null)
+  }
+
+  const filteredSubs = useMemo(() => {
+    if (!subSearch) return subscriptions
+    const q = subSearch.toLowerCase()
+    return subscriptions.filter(s => {
+      const client = clients.find(c => c.id === s.client_id)
+      const hay = `${client?.prenom ?? ''} ${client?.nom ?? ''} ${client?.entreprise ?? ''} ${s.name}`.toLowerCase()
+      return hay.includes(q)
+    })
+  }, [subscriptions, subSearch, clients])
+
   const clientOptions = useMemo(() =>
     clients.map(c => ({ value: c.id, label: `${c.prenom} ${c.nom}${c.entreprise ? ` — ${c.entreprise}` : ''}` })),
   [clients])
@@ -232,13 +298,267 @@ export function Paiements() {
 
   return (
     <Layout
-      title="Paiements"
+      title="Paiements & abonnements"
       actions={
-        <Button size="sm" onClick={openCreate}>
-          <Plus className="h-3.5 w-3.5" />Enregistrer un paiement
-        </Button>
+        tab === 'paiements' ? (
+          <Button size="sm" onClick={openCreate}>
+            <Plus className="h-3.5 w-3.5" />Enregistrer un paiement
+          </Button>
+        ) : undefined
       }
     >
+
+      {/* ── Tab switcher ─────────────────────────────────────────────────── */}
+      <div className="flex items-center gap-1 bg-gray-100 rounded-xl p-1 w-fit mb-5">
+        <button
+          onClick={() => setTab('paiements')}
+          className={cn(
+            'px-4 py-1.5 text-xs font-medium rounded-lg transition',
+            tab === 'paiements' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700',
+          )}
+        >
+          <span className="flex items-center gap-1.5">
+            <Receipt className="h-3.5 w-3.5" />Paiements
+          </span>
+        </button>
+        <button
+          onClick={() => setTab('abonnements')}
+          className={cn(
+            'px-4 py-1.5 text-xs font-medium rounded-lg transition',
+            tab === 'abonnements' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700',
+          )}
+        >
+          <span className="flex items-center gap-1.5">
+            <Repeat className="h-3.5 w-3.5" />Abonnements
+            {subscriptions.filter(s => s.status === 'active').length > 0 && (
+              <span className="inline-flex items-center justify-center h-4 min-w-4 px-1 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold">
+                {subscriptions.filter(s => s.status === 'active').length}
+              </span>
+            )}
+          </span>
+        </button>
+      </div>
+
+      {tab === 'abonnements' ? (
+        /* ── Abonnements section ─────────────────────────────────────────── */
+        <>
+          {/* Search */}
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-sm text-gray-500">
+              <span className="font-semibold text-gray-800">{subscriptions.filter(s => s.status === 'active').length}</span> actif{subscriptions.filter(s => s.status === 'active').length > 1 ? 's' : ''}
+              {' '}· {subscriptions.length} au total
+            </p>
+            <Input
+              placeholder="Client, offre…"
+              value={subSearch}
+              onChange={e => setSubSearch(e.target.value)}
+              leading={<Search className="h-3.5 w-3.5" />}
+              className="w-64"
+            />
+          </div>
+
+          {/* Abonnements table */}
+          <Card padding={false}>
+            <Table>
+              <Thead>
+                <Tr>
+                  <Th>Client</Th>
+                  <Th>Offre</Th>
+                  <Th>Montant</Th>
+                  <Th>Fréquence</Th>
+                  <Th>Statut</Th>
+                  <Th>Début</Th>
+                  <Th>Prochaine échéance</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {subLoading ? (
+                  <EmptyRow cols={7} message="Chargement…" />
+                ) : filteredSubs.length === 0 ? (
+                  <EmptyRow cols={7} message="Aucun abonnement" />
+                ) : filteredSubs.map(s => {
+                  const client = clients.find(c => c.id === s.client_id)
+                  return (
+                    <Tr
+                      key={s.id}
+                      onClick={() => { setSubPanel(s); setConfirmSubCancel(false) }}
+                      className="cursor-pointer hover:bg-gray-50 transition-colors"
+                    >
+                      <Td>
+                        {client ? (
+                          <div className="flex items-center gap-2.5">
+                            <Avatar nom={client.nom} prenom={client.prenom} size="sm" />
+                            <div>
+                              <p className="text-sm font-medium text-gray-800">{client.prenom} {client.nom}</p>
+                              {client.entreprise && <p className="text-xs text-gray-400">{client.entreprise}</p>}
+                            </div>
+                          </div>
+                        ) : (
+                          <span className="text-xs text-gray-400">—</span>
+                        )}
+                      </Td>
+                      <Td>
+                        <span className="text-sm font-medium text-gray-800">{s.name}</span>
+                      </Td>
+                      <Td>
+                        <span className="font-bold text-gray-900 text-sm">{formatCurrency(s.amount)}</span>
+                      </Td>
+                      <Td>
+                        <span className="text-xs text-gray-600">
+                          {s.frequency === 'monthly' ? 'Mensuel' : 'Annuel'}
+                        </span>
+                      </Td>
+                      <Td><SubStatusBadge status={s.status} /></Td>
+                      <Td className="text-xs text-gray-400 whitespace-nowrap">
+                        {s.current_period_start ? formatDate(s.current_period_start) : formatDate(s.created_at)}
+                      </Td>
+                      <Td className="text-xs text-gray-400 whitespace-nowrap">
+                        {s.current_period_end ? formatDate(s.current_period_end) : '—'}
+                      </Td>
+                    </Tr>
+                  )
+                })}
+              </Tbody>
+            </Table>
+          </Card>
+
+          {/* Subscription detail panel */}
+          {subPanel && (() => {
+            const client = clients.find(c => c.id === subPanel.client_id)
+            return (
+              <>
+                <div
+                  className="fixed inset-0 z-20 bg-black/10 backdrop-blur-[2px]"
+                  onClick={() => { setSubPanel(null); setConfirmSubCancel(false) }}
+                />
+                <div className="fixed inset-y-0 right-0 w-[480px] z-30 bg-white shadow-2xl flex flex-col border-l border-gray-100">
+                  <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 shrink-0">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 bg-teal-50 rounded-xl flex items-center justify-center">
+                        <Repeat className="h-4 w-4 text-teal-500" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-400">Abonnement</p>
+                        <p className="text-base font-bold text-gray-900">{subPanel.name}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <SubStatusBadge status={subPanel.status} />
+                      <button
+                        onClick={() => { setSubPanel(null); setConfirmSubCancel(false) }}
+                        className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
+                      >
+                        <X className="h-4 w-4 text-gray-400" />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="flex-1 overflow-y-auto px-6 py-5 space-y-5">
+                    {/* Client */}
+                    {client && (
+                      <div>
+                        <div className="flex items-center gap-1.5 mb-3">
+                          <User className="h-3.5 w-3.5 text-gray-400" />
+                          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Client</p>
+                        </div>
+                        <Link
+                          to="/clients"
+                          className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition group"
+                        >
+                          <Avatar nom={client.nom} prenom={client.prenom} size="md" />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-semibold text-gray-900">{client.prenom} {client.nom}</p>
+                            {client.entreprise && <p className="text-xs text-gray-500">{client.entreprise}</p>}
+                            <p className="text-xs text-gray-400">{client.email}</p>
+                          </div>
+                          <ChevronRight className="h-4 w-4 text-gray-300 group-hover:text-gray-500 transition shrink-0" />
+                        </Link>
+                      </div>
+                    )}
+
+                    {/* Détails */}
+                    <div>
+                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Détails</p>
+                      <dl className="space-y-2.5">
+                        <div className="flex justify-between text-sm">
+                          <dt className="text-gray-500">Montant</dt>
+                          <dd className="font-bold text-gray-900">{formatCurrency(subPanel.amount)} / {subPanel.frequency === 'monthly' ? 'mois' : 'an'}</dd>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <dt className="text-gray-500">Fréquence</dt>
+                          <dd className="font-medium text-gray-700">{subPanel.frequency === 'monthly' ? 'Mensuel' : 'Annuel'}</dd>
+                        </div>
+                        {subPanel.current_period_start && (
+                          <div className="flex justify-between text-sm">
+                            <dt className="text-gray-500">Période en cours</dt>
+                            <dd className="text-gray-700">
+                              {formatDate(subPanel.current_period_start)} → {subPanel.current_period_end ? formatDate(subPanel.current_period_end) : '…'}
+                            </dd>
+                          </div>
+                        )}
+                        {subPanel.cancelled_at && (
+                          <div className="flex justify-between text-sm">
+                            <dt className="text-gray-500">Annulé le</dt>
+                            <dd className="text-red-500 font-medium">{formatDate(subPanel.cancelled_at)}</dd>
+                          </div>
+                        )}
+                        {subPanel.stripe_subscription_id && (
+                          <div className="flex justify-between text-sm">
+                            <dt className="text-gray-500">Stripe ID</dt>
+                            <dd className="font-mono text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded truncate max-w-48">{subPanel.stripe_subscription_id}</dd>
+                          </div>
+                        )}
+                        <div className="flex justify-between text-sm">
+                          <dt className="text-gray-500">Créé le</dt>
+                          <dd className="text-gray-500 text-xs">{formatDate(subPanel.created_at)}</dd>
+                        </div>
+                      </dl>
+                    </div>
+                  </div>
+
+                  {/* Footer — cancel */}
+                  {(subPanel.status === 'active' || subPanel.status === 'trialing') && (
+                    <div className="px-6 py-4 border-t border-gray-100 shrink-0">
+                      {confirmSubCancel ? (
+                        <div className="flex items-center gap-3 p-3 bg-red-50 rounded-xl border border-red-100">
+                          <p className="text-xs text-red-700 flex-1">Annuler cet abonnement ? L'annulation est envoyée à Stripe et prendra effet à la fin de la période.</p>
+                          <div className="flex gap-2 shrink-0">
+                            <button
+                              onClick={() => setConfirmSubCancel(false)}
+                              className="px-3 py-1.5 text-xs rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 transition-colors"
+                            >
+                              Annuler
+                            </button>
+                            <button
+                              onClick={handleSubCancel}
+                              disabled={cancelSub.isPending}
+                              className="px-3 py-1.5 text-xs rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors disabled:opacity-50"
+                            >
+                              {cancelSub.isPending ? 'Annulation…' : 'Confirmer'}
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          onClick={() => setConfirmSubCancel(true)}
+                          className="w-full justify-center"
+                        >
+                          <XCircle className="h-3.5 w-3.5" />
+                          Annuler l'abonnement
+                        </Button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </>
+            )
+          })()}
+        </>
+      ) : (
+        /* ── Paiements section ───────────────────────────────────────────── */
+        <>
 
       {/* ── Stats ────────────────────────────────────────────────────────── */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
@@ -443,6 +763,7 @@ export function Paiements() {
             <Tr>
               <Th>Client</Th>
               <Th>Facture</Th>
+              <Th>Type</Th>
               <Th>Montant</Th>
               <Th>Méthode</Th>
               <Th>Référence</Th>
@@ -451,9 +772,9 @@ export function Paiements() {
           </Thead>
           <Tbody>
             {isLoading ? (
-              <EmptyRow cols={6} message="Chargement…" />
+              <EmptyRow cols={7} message="Chargement…" />
             ) : filtered.length === 0 ? (
-              <EmptyRow cols={6} />
+              <EmptyRow cols={7} />
             ) : filtered.map(p => (
               <Tr
                 key={p.id}
@@ -478,6 +799,7 @@ export function Paiements() {
                     <span className="text-gray-300 text-xs">—</span>
                   )}
                 </Td>
+                <Td><TypeBadge type={p.facture_type} /></Td>
                 <Td>
                   <span className="font-bold text-emerald-600 text-sm">{formatCurrency(p.montant)}</span>
                 </Td>
@@ -593,6 +915,12 @@ export function Paiements() {
                     <dt className="text-gray-500">Méthode</dt>
                     <dd><MethodBadge methode={panelP.methode} /></dd>
                   </div>
+                  {panelP.facture_type && (
+                    <div className="flex justify-between text-sm">
+                      <dt className="text-gray-500">Type de paiement</dt>
+                      <dd><TypeBadge type={panelP.facture_type} /></dd>
+                    </div>
+                  )}
                   {(panelP.reference || panelP.stripe_payment_id) && (
                     <div className="flex justify-between text-sm">
                       <dt className="text-gray-500">Référence</dt>
@@ -742,6 +1070,8 @@ export function Paiements() {
           />
         </div>
       </Modal>
+        </>
+      )}
     </Layout>
   )
 }

@@ -9,6 +9,7 @@ export type PaiementRow = Paiement & {
   facture_numero?: string
   facture_total?: number
   facture_paid?: number
+  facture_type?: 'acompte' | 'solde' | 'unique'
 }
 
 export interface InvoiceForPayment {
@@ -60,6 +61,7 @@ function mapRow(row: Record<string, any>): PaiementRow {
     facture_numero: row.invoices?.invoice_number ?? undefined,
     facture_total: row.invoices ? Number(row.invoices.total ?? 0) : undefined,
     facture_paid: row.invoices ? Number(row.invoices.amount_paid ?? 0) : undefined,
+    facture_type: (row.invoices?.payment_type ?? undefined) as 'acompte' | 'solde' | 'unique' | undefined,
   }
 }
 
@@ -73,7 +75,7 @@ export function usePaiements() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('payments')
-        .select('*, clients(*), invoices(invoice_number, total, amount_paid)')
+        .select('*, clients(*), invoices(invoice_number, total, amount_paid, payment_type)')
         .eq('status', 'completed')
         .order('paid_at', { ascending: false })
       if (error) throw error
