@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from 'react-router-dom'
 import {
   LayoutDashboard, Users, CreditCard, Bot, Target, Settings,
-  ChevronLeft, ChevronRight, Zap, Inbox, FileText, Globe,
+  ChevronLeft, ChevronRight, Zap, Inbox, FileText, Globe, Plug,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -29,6 +29,7 @@ export function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose }: Side
     { label: 'Paiements & abonnements', icon: CreditCard, to: '/paiements' },
     { label: 'Loïc IA',           icon: Bot,             to: '/loic' },
     { label: 'Prospection',       icon: Target,          to: '/prospection' },
+    { label: 'Connecteurs',       icon: Plug,            to: '/prospection/connecteurs' },
     { label: 'Google Workspace',  icon: Globe,           to: '/google' },
   ]
 
