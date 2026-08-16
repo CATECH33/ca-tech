@@ -46,12 +46,15 @@ export class LinkedInConnector implements IConnector<LinkedInConfig> {
   }
 
   async test(): Promise<TestResult> {
-    // FUTURE: GET https://www.linkedin.com/voyager/api/identity/profiles/me
-    // with Cookie: li_at={liAtCookie}
-    // via a server-side proxy (CORS blocks direct browser call)
+    if (!this.config?.liAtCookie) {
+      return { ok: false, message: 'Cookie li_at manquant — ouvrez DevTools → Application → Cookies → linkedin.com → li_at.' }
+    }
+    // LinkedIn Voyager API is blocked by CORS from the browser — validation server-side only.
+    // We confirm the cookie is registered and non-empty.
+    const len = this.config.liAtCookie.length
     return {
-      ok:      false,
-      message: 'Configurez votre cookie LinkedIn pour tester la connexion.',
+      ok:      true,
+      message: `Cookie li_at enregistré (${len} caractères). Vérification directe impossible (CORS) — l'import utilisera ce cookie via Apify.`,
     }
   }
 

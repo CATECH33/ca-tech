@@ -315,9 +315,16 @@ function ManualProspectForm({ onDone }: { onDone: () => void }) {
 
 // ── Main panel ────────────────────────────────────────────────────────────────
 
+interface PendingDataset {
+  runId:      string
+  datasetId:  string
+  actorId:    string
+  finishedAt: string | null
+}
+
 export function ApifyPanel({ onClose }: { onClose: () => void }) {
   // ── Form state ──────────────────────────────────────────────────────────────
-  const [apiKey, setApiKey]           = useState('')
+  const [apiKey, setApiKey]           = useState(() => localStorage.getItem('apify_api_key') ?? '')
   const [actorTab, setActorTab]       = useState<'catalog' | 'mine' | 'custom'>('catalog')
   const [selectedId, setSelectedId]   = useState<string | null>(null)
   const [customActorId, setCustomId]  = useState('')
@@ -325,6 +332,9 @@ export function ApifyPanel({ onClose }: { onClose: () => void }) {
   const [jsonError, setJsonError]     = useState<string | null>(null)
   const [showInput, setShowInput]     = useState(false)
   const [showManual, setShowManual]   = useState(false)
+  const [pending, setPending]         = useState<PendingDataset | null>(() => {
+    try { return JSON.parse(localStorage.getItem('apify_pending_dataset') ?? 'null') } catch { return null }
+  })
 
   // ── Hooks ───────────────────────────────────────────────────────────────────
   const { configure }                               = useConfigureConnector('apify')
@@ -378,6 +388,14 @@ export function ApifyPanel({ onClose }: { onClose: () => void }) {
     launch(effectiveActorId, input)
   }, [inputJson, effectiveActorId, handleSave, launch])
 
+  // Clear pending dataset from localStorage after successful import
+  useEffect(() => {
+    if (importStatus === 'done' && pending) {
+      localStorage.removeItem('apify_pending_dataset')
+      setPending(null)
+    }
+  }, [importStatus, pending])
+
   // Live duration while running
   const [elapsed, setElapsed] = useState<number>(0)
   useEffect(() => {
@@ -417,6 +435,57 @@ export function ApifyPanel({ onClose }: { onClose: () => void }) {
 
         {/* ── Scrollable body ─────────────────────────────────────────────── */}
         <div className="flex-1 overflow-y-auto px-6 py-5 space-y-6">
+
+          {/* ── 0. Dataset en attente ─────────────────────────────────────── */}
+          {pending && importStatus !== 'done' && (
+            <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl space-y-3">
+              <div className="flex items-center gap-2">
+                <Download className="h-4 w-4 text-amber-600 shrink-0" />
+                <p className="text-sm font-semibold text-amber-900">Dataset en attente d'import</p>
+                <button
+                  onClick={() => { localStorage.removeItem('apify_pending_dataset'); setPending(null) }}
+                  className="ml-auto p-1 hover:bg-amber-100 rounded transition-colors"
+                  title="Ignorer"
+                >
+                  <X className="h-3.5 w-3.5 text-amber-500" />
+                </button>
+              </div>
+              <p className="text-xs text-amber-700">
+                Un scrape Google Maps a été complété
+                {pending.finishedAt ? ` le ${new Date(pending.finishedAt).toLocaleString('fr-FR')}` : ''}.
+                Connectez-vous avec votre clé API ci-dessous puis importez les résultats dans le CRM.
+              </p>
+              {status === 'connected' && (
+                <>
+                  {importStatus === 'idle' && (
+                    <button
+                      onClick={() => runImport(pending.datasetId, pending.actorId)}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-amber-600 text-white text-sm font-medium rounded-lg hover:bg-amber-700 transition-colors"
+                    >
+                      <Download className="h-4 w-4" />
+                      Importer les résultats dans le CRM
+                    </button>
+                  )}
+                  {(importStatus === 'fetching' || importStatus === 'mapping' || importStatus === 'writing') && (
+                    <div className="flex items-center gap-2 py-1">
+                      <Loader2 className="h-4 w-4 text-amber-600 animate-spin shrink-0" />
+                      <p className="text-sm text-amber-700">
+                        {importStatus === 'fetching' ? 'Récupération des données…'
+                          : importStatus === 'mapping' ? 'Analyse des résultats…'
+                          : 'Écriture dans la base de données…'}
+                      </p>
+                    </div>
+                  )}
+                  {importStatus === 'error' && importErr && (
+                    <p className="text-xs text-red-700">{importErr}</p>
+                  )}
+                </>
+              )}
+              {status !== 'connected' && (
+                <p className="text-xs text-amber-600 italic">Entrez votre clé API ci-dessous et cliquez Tester pour activer l'import.</p>
+              )}
+            </div>
+          )}
 
           {/* ── 1. Connexion ──────────────────────────────────────────────── */}
           <section>

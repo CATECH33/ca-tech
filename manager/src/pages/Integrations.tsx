@@ -558,11 +558,17 @@ function ApifySection() {
     if (savedKey) conn.test(savedKey)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Fetch dataset item count when run succeeds
+  // Fetch dataset item count + persist run when succeeded
   useEffect(() => {
     if (runner.run?.status !== 'SUCCEEDED' || !savedKey) return
     const datasetId = runner.run.defaultDatasetId
     if (!datasetId) return
+    localStorage.setItem('apify_pending_dataset', JSON.stringify({
+      runId:      runner.run.id,
+      datasetId,
+      actorId:    MAPS_ACTOR_ID,
+      finishedAt: runner.run.finishedAt,
+    }))
     const client = new ApifyClient(savedKey)
     client.getDatasetInfo(datasetId)
       .then(info => setItemCount(info.itemCount))

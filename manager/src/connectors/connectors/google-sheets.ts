@@ -46,11 +46,15 @@ export class GoogleSheetsConnector implements IConnector<GoogleSheetsConfig> {
   }
 
   async test(): Promise<TestResult> {
-    // FUTURE: GET https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}
-    // using OAuth token from useGoogleIntegration() / Supabase google_tokens table
+    if (!this.config?.spreadsheetId) {
+      return { ok: false, message: 'ID du Spreadsheet manquant — copiez-le depuis l\'URL de votre fichier Google Sheets (entre /d/ et /edit).' }
+    }
+    if (!this.config?.sheetName) {
+      return { ok: false, message: 'Nom de l\'onglet manquant (ex : Feuil1).' }
+    }
     return {
-      ok:      false,
-      message: 'Configurez l\'ID du Spreadsheet et connectez votre compte Google.',
+      ok:      true,
+      message: `Spreadsheet ${this.config.spreadsheetId.slice(0, 12)}… configuré. L'import utilisera le compte Google connecté dans Paramètres > Intégration.`,
     }
   }
 

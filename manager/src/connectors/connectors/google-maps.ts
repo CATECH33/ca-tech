@@ -50,11 +50,27 @@ export class GoogleMapsConnector implements IConnector<GoogleMapsConfig> {
   }
 
   async test(): Promise<TestResult> {
-    // FUTURE: GET /maps/api/place/textsearch/json?query=test&key={apiKey}
-    // Expect status=OK and non-empty results
-    return {
-      ok:      false,
-      message: 'Configurez votre clé API Google Maps pour tester la connexion.',
+    if (!this.config?.apiKey) {
+      return { ok: false, message: 'Clé API manquante — activez l\'API Places dans Google Cloud Console.' }
+    }
+    const start = Date.now()
+    try {
+      const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=test&key=${encodeURIComponent(this.config.apiKey)}`
+      const res  = await fetch(url)
+      const data = await res.json() as { status: string; error_message?: string }
+      const ms   = Date.now() - start
+      if (data.status === 'OK' || data.status === 'ZERO_RESULTS') {
+        return { ok: true, message: `Clé API Google Maps valide · ${ms}ms`, latency: ms }
+      }
+      if (data.status === 'REQUEST_DENIED') {
+        return { ok: false, message: `Clé refusée — ${data.error_message ?? 'vérifiez que l\'API Places est activée dans Google Cloud Console.'}` }
+      }
+      if (data.status === 'INVALID_REQUEST') {
+        return { ok: false, message: 'Requête invalide — vérifiez votre clé API.' }
+      }
+      return { ok: false, message: `Google Maps API : ${data.status}${data.error_message ? ' — ' + data.error_message : ''}` }
+    } catch (e) {
+      return { ok: false, message: e instanceof Error ? e.message : 'Erreur réseau — vérifiez votre clé API.' }
     }
   }
 
