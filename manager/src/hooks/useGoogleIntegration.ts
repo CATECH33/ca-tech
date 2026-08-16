@@ -92,6 +92,7 @@ export function useGoogleIntegration() {
           body: JSON.stringify({
             code: event.data.code,
             redirect_uri: `${window.location.origin}/manager/auth/google/callback`,
+            client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
           }),
         })
 

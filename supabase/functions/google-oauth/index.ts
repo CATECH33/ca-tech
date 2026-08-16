@@ -49,14 +49,15 @@ Deno.serve(async (req: Request) => {
   }
 
   // POST — échange code → tokens
-  let code: string, redirect_uri: string
+  let code: string, redirect_uri: string, client_id: string
   try {
     const body = await req.json()
     code = body.code
     redirect_uri = body.redirect_uri
-    if (!code || !redirect_uri) throw new Error()
+    client_id = body.client_id ?? GOOGLE_CLIENT_ID
+    if (!code || !redirect_uri || !client_id) throw new Error()
   } catch {
-    return json({ error: 'Missing code or redirect_uri' }, 400)
+    return json({ error: 'Missing code, redirect_uri or client_id' }, 400)
   }
 
   // Échange auprès de Google
@@ -64,7 +65,7 @@ Deno.serve(async (req: Request) => {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
-      client_id: GOOGLE_CLIENT_ID,
+      client_id,
       client_secret: GOOGLE_CLIENT_SECRET,
       code,
       redirect_uri,
