@@ -379,32 +379,33 @@ export default function Automatisations() {
 
           {/* Colonne contenu — DROITE */}
           <div className="at-hero-content">
-            <p className="at-kicker at-a0"><span />Automatisations métier · CA-TECH<span /></p>
+            <p className="at-kicker at-a0"><span />AUTOMATISATION DES PROCESSUS · CA-TECH<span /></p>
             <h1 className="at-a1">
-              Automatisez vos processus —<br /><em>N8N, Make, Zapier : 14h récupérées/<wbr />semaine.</em>
+              Automatisez vos tâches.<br /><em>Gagnez du temps.<br />Développez votre activité.</em>
             </h1>
             <p className="at-hero-sub at-a2">
-              14 services d'automatisation prêts à déployer. Chaque heure récupérée, chaque lead traité, chaque facture envoyée — sans que vous leviez le petit doigt.
+              CA-TECH automatise les tâches répétitives de votre entreprise pour vous faire gagner du temps, réduire les erreurs et permettre à vos équipes de se concentrer sur ce qui crée réellement de la valeur.
             </p>
 
             <div className="at-stats at-a3">
               <div>
-                <div className="at-stat-val">14<em>+</em></div>
-                <div className="at-stat-lbl">Services</div>
+                <div className="at-stat-val">+20</div>
+                <div className="at-stat-lbl">Processus automatisables</div>
               </div>
               <div>
-                <div className="at-stat-val">48<em>h</em></div>
-                <div className="at-stat-lbl">Déploiement</div>
+                <div className="at-stat-val">24<em>h</em></div>
+                <div className="at-stat-lbl">Déploiement possible</div>
               </div>
               <div>
-                <div className="at-stat-val">15<em>h</em></div>
-                <div className="at-stat-lbl">Récupérées / semaine</div>
+                <div className="at-stat-val">10<em>h</em></div>
+                <div className="at-stat-lbl">Gagnées chaque semaine*</div>
               </div>
               <div>
                 <div className="at-stat-val">30<em>j</em></div>
-                <div className="at-stat-lbl">ROI visible</div>
+                <div className="at-stat-lbl">Pour mesurer les premiers résultats</div>
               </div>
             </div>
+            <p className="at-stats-note at-a3" style={{fontSize:'0.72rem',color:'rgba(255,255,255,0.45)',marginTop:'0.5rem',marginBottom:0}}>*Selon le processus et le volume d'activité.</p>
 
             <div className="at-hero-ctas at-a4">
               <a
@@ -412,7 +413,7 @@ export default function Automatisations() {
                 className="btn-primary"
                 onClick={e => { e.preventDefault(); document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' }) }}
               >
-                Voir les services →
+                Découvrir les automatisations →
               </a>
               <Link to="/contact" className="btn-outline">Demander une démo gratuite</Link>
             </div>
