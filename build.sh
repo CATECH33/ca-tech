@@ -33,6 +33,12 @@ done
 # PWA — expose les fichiers nécessaires à la racine (scope /)
 cp dist/site.webmanifest site.webmanifest
 cp dist/apple-touch-icon.png apple-touch-icon.png
+cp dist/favicon.ico favicon.ico
+cp dist/favicon-16x16.png favicon-16x16.png
+cp dist/favicon-32x32.png favicon-32x32.png
+cp dist/android-chrome-192x192.png android-chrome-192x192.png
+cp dist/android-chrome-512x512.png android-chrome-512x512.png
+cp dist/android-chrome-512x512.webp android-chrome-512x512.webp
 cp -r dist/icons/ icons/
 cp -r dist/logos/ logos/
 
