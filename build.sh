@@ -65,6 +65,9 @@ for route in \
   cp manager/dist/index.html "manager/${route}.html"
 done
 
+# Manager PWA manifest
+cp manager/dist/site.webmanifest manager/site.webmanifest
+
 # Google OAuth callback
 mkdir -p manager/auth/google
 cp manager/dist/index.html manager/auth/google/callback.html
