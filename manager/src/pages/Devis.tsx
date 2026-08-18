@@ -3,7 +3,7 @@ import {
   Search, Send, FileText, Plus, Trash2, X, ArrowLeft,
   Edit, Copy, Check, Receipt, ChevronRight, Printer,
   PenLine, Type, RotateCcw, Download, Paperclip, Mail, Loader2,
-  ExternalLink,
+  ExternalLink, Upload, FileCheck, Clock,
 } from 'lucide-react'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
@@ -18,7 +18,7 @@ import { Modal } from '@/components/ui/Modal'
 import { Table, Thead, Tbody, Tr, Th, Td, EmptyRow } from '@/components/ui/Table'
 import { FileUpload, type FileEntry } from '@/components/ui/FileUpload'
 import {
-  useDocuments, useUploadDocuments, useDeleteDocument,
+  useDocuments, useUploadDocuments, useDeleteDocument, useSignedDocument,
   getSignedUrl, type DocumentRecord,
 } from '@/hooks/useDocuments'
 import { formatCurrency, formatDate, cn } from '@/lib/utils'
@@ -637,6 +637,176 @@ function LignesEditor({
   )
 }
 
+/* ─── SignatureDocumentsSection ──────────────────────────────── */
+
+function SignatureDocumentsSection({
+  devis,
+  onStatusChange,
+}: {
+  devis: DevisType
+  onStatusChange: (status: DevisStatus) => Promise<DevisType>
+}) {
+  const { data: signedDoc, isLoading } = useSignedDocument(devis.id)
+  const uploadMutation  = useUploadDocuments()
+  const deleteMutation  = useDeleteDocument()
+  const inputRef        = useRef<HTMLInputElement>(null)
+  const [uploading, setUploading]   = useState(false)
+  const [downloading, setDownloading] = useState(false)
+  const [error, setError]           = useState<string | null>(null)
+
+  const isSigned = !!signedDoc
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!e.target) return
+    e.target.value = ''
+    if (!file) return
+    if (file.type !== 'application/pdf') {
+      setError('Seuls les fichiers PDF sont acceptés.')
+      return
+    }
+    if (file.size > 20 * 1024 * 1024) {
+      setError('Taille maximale : 20 Mo.')
+      return
+    }
+    setError(null)
+    setUploading(true)
+    try {
+      await uploadMutation.mutateAsync({
+        file,
+        opts: {
+          entityType:   'quote',
+          entityId:     devis.id,
+          quoteId:      devis.id,
+          documentType: 'signed_quote',
+        },
+      })
+      if (devis.status !== 'accepte') {
+        await onStatusChange('accepte')
+      }
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Erreur lors de l'import.")
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  const handleView = async () => {
+    if (!signedDoc?.storage_path) return
+    setDownloading(true)
+    try {
+      const url = await getSignedUrl(signedDoc.storage_path)
+      window.open(url, '_blank', 'noopener,noreferrer')
+    } finally {
+      setDownloading(false)
+    }
+  }
+
+  const handleDelete = () => {
+    if (!signedDoc?.storage_path) return
+    deleteMutation.mutate({
+      id:           signedDoc.id,
+      storagePath:  signedDoc.storage_path,
+      entityType:   'quote',
+      entityId:     devis.id,
+      documentType: 'signed_quote',
+    })
+  }
+
+  return (
+    <Card className="mb-5">
+      <div className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100">
+        <div className="h-6 w-6 rounded-md bg-emerald-50 flex items-center justify-center shrink-0">
+          <FileCheck className="h-3.5 w-3.5 text-emerald-500" />
+        </div>
+        <p className="text-sm font-semibold text-gray-800">Signature & Documents</p>
+        <span className="ml-auto">
+          {isLoading ? null : isSigned ? (
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <Check className="h-3 w-3" />Signé
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
+              <Clock className="h-3 w-3" />En attente de signature
+            </span>
+          )}
+        </span>
+      </div>
+
+      {error && (
+        <div className="mb-3 bg-red-50 border border-red-100 rounded-xl px-3 py-2 text-xs text-red-600">
+          {error}
+        </div>
+      )}
+
+      {isSigned && signedDoc ? (
+        <div className="flex items-center gap-3 px-3 py-2.5 bg-emerald-50/60 rounded-xl border border-emerald-100">
+          <div className="shrink-0 h-9 w-9 rounded-lg bg-emerald-100 flex items-center justify-center">
+            <span className="text-[9px] font-bold text-emerald-700 uppercase leading-none">PDF</span>
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-gray-800 truncate">
+              {signedDoc.original_filename ?? 'Devis signé'}
+            </p>
+            <p className="text-[11px] text-gray-400 leading-none mt-0.5">
+              Importé le {formatDate(signedDoc.created_at)}
+              {signedDoc.size != null && ` · ${fmtFileSize(signedDoc.size)}`}
+            </p>
+          </div>
+          <div className="flex items-center gap-1.5 shrink-0">
+            <button
+              type="button"
+              onClick={handleView}
+              disabled={downloading}
+              className="flex items-center gap-1 text-xs text-brand-500 hover:text-brand-600 font-medium px-2.5 py-1.5 rounded-lg hover:bg-brand-50 border border-brand-100 transition disabled:opacity-50"
+            >
+              {downloading
+                ? <span className="block h-3 w-3 rounded-full border-2 border-brand-400 border-t-transparent animate-spin" />
+                : <Download className="h-3 w-3" />
+              }
+              Télécharger
+            </button>
+            <button
+              type="button"
+              onClick={handleDelete}
+              disabled={deleteMutation.isPending}
+              className="p-1.5 text-gray-300 hover:text-red-400 hover:bg-red-50 rounded-lg transition disabled:opacity-50"
+              title="Supprimer le document signé"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div>
+          <p className="text-xs text-gray-500 mb-3">
+            Importez le devis signé par le client (PDF uniquement). Le statut du devis passera automatiquement à <strong>Accepté</strong>.
+          </p>
+          <input
+            ref={inputRef}
+            type="file"
+            accept="application/pdf"
+            className="hidden"
+            onChange={handleFileSelect}
+          />
+          <button
+            type="button"
+            onClick={() => inputRef.current?.click()}
+            disabled={uploading}
+            className="flex items-center gap-2 px-4 py-2.5 bg-white border-2 border-dashed border-gray-200 rounded-xl hover:border-brand-300 hover:bg-brand-50 transition text-sm font-medium text-gray-600 hover:text-brand-600 disabled:opacity-50"
+          >
+            {uploading
+              ? <><Loader2 className="h-4 w-4 animate-spin text-brand-500" />Import en cours…</>
+              : <><Upload className="h-4 w-4" />Importer le devis signé (PDF)</>
+            }
+          </button>
+          <p className="text-[11px] text-gray-400 mt-2">Taille maximale : 20 Mo</p>
+        </div>
+      )}
+    </Card>
+  )
+}
+
 /* ─── DevisFiche ─────────────────────────────────────────────── */
 
 /* ─── DevisPaymentSection ────────────────────────────────────── */
@@ -1014,6 +1184,14 @@ function DevisFiche({
           </Button>
         </div>
       </div>
+
+      {/* Section Signature & Documents */}
+      {!editMode && (
+        <SignatureDocumentsSection
+          devis={devis}
+          onStatusChange={onUpdateStatus}
+        />
+      )}
 
       {/* Section paiements projet (devis accepté) */}
       {devis.status === 'accepte' && !editMode && (

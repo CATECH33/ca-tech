@@ -20,6 +20,7 @@ export interface DocumentRecord {
   size?: number
   storage_path?: string
   uploaded_by?: string
+  document_type?: string
   created_at: string
   // legacy columns
   name?: string
@@ -33,6 +34,7 @@ export interface UploadOptions {
   entityId: string
   quoteId?: string
   prospectId?: string
+  documentType?: string
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -76,6 +78,7 @@ export async function uploadDocument(
       size:              file.size,
       storage_path:      path,
       uploaded_by:       user.id,
+      document_type:     opts.documentType     ?? 'attachment',
       // colonnes legacy conservées pour compatibilité
       name:      file.name,
       file_url:  path,
@@ -131,11 +134,34 @@ export function useDocuments(entityType: string, entityId: string | undefined) {
         .eq('entity_type', entityType)
         .eq('entity_id', entityId!)
         .not('storage_path', 'is', null)
+        .neq('document_type', 'signed_quote')
         .order('created_at', { ascending: false })
       if (error) throw error
       return (data ?? []) as DocumentRecord[]
     },
     enabled: !!entityId,
+    staleTime: 30_000,
+  })
+}
+
+export function useSignedDocument(devisId: string | undefined) {
+  return useQuery({
+    queryKey: ['signed-document', devisId],
+    queryFn: async (): Promise<DocumentRecord | null> => {
+      const { data, error } = await supabase
+        .from('documents')
+        .select('*')
+        .eq('entity_type', 'quote')
+        .eq('entity_id', devisId!)
+        .eq('document_type', 'signed_quote')
+        .not('storage_path', 'is', null)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+      if (error) throw error
+      return data as DocumentRecord | null
+    },
+    enabled: !!devisId,
     staleTime: 30_000,
   })
 }
@@ -147,6 +173,9 @@ export function useUploadDocuments() {
       uploadDocument(file, opts),
     onSuccess: (_, { opts }) => {
       qc.invalidateQueries({ queryKey: ['documents', opts.entityType, opts.entityId] })
+      if (opts.documentType === 'signed_quote') {
+        qc.invalidateQueries({ queryKey: ['signed-document', opts.entityId] })
+      }
     },
   })
 }
@@ -162,10 +191,14 @@ export function useDeleteDocument() {
       storagePath: string
       entityType: string
       entityId: string
+      documentType?: string
     }) => deleteDocument(id, storagePath),
-    onSuccess: (_, { entityType, entityId }) => {
+    onSuccess: (_, { entityType, entityId, documentType }) => {
       qc.invalidateQueries({ queryKey: ['documents', entityType, entityId] })
       qc.invalidateQueries({ queryKey: ['all-documents'] })
+      if (documentType === 'signed_quote') {
+        qc.invalidateQueries({ queryKey: ['signed-document', entityId] })
+      }
     },
   })
 }
