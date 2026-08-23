@@ -4,7 +4,7 @@ import {
   Edit, Copy, Check, AlertCircle, ChevronRight,
   CreditCard, Calendar, Printer, Mail, Link,
   ClipboardCopy, ExternalLink, Clock, Banknote,
-  Download, Loader2,
+  Download, Loader2, Bell,
 } from 'lucide-react'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
@@ -25,6 +25,7 @@ import {
 import { useClients } from '@/hooks/useClients'
 import { useServices } from '@/hooks/useServices'
 import { useGmailSend } from '@/hooks/useGmailSend'
+import { useInvoiceReminders, STAGE_META } from '@/hooks/useInvoiceReminders'
 import type { Client, Facture, FactureStatus, Service } from '@/types'
 
 /* ─── Constantes ─────────────────────────────────────────────── */
@@ -622,6 +623,79 @@ function PaymentHistory({ factureId, total }: { factureId: string; total: number
   )
 }
 
+/* ─── ReminderHistory ────────────────────────────────────────── */
+
+function ReminderHistory({ factureId }: { factureId: string }) {
+  const { data: reminders = [], isLoading } = useInvoiceReminders(factureId)
+
+  if (isLoading || reminders.length === 0) return null
+
+  return (
+    <div className="px-8 py-6 border-t border-gray-100 bg-gray-50">
+      <div className="flex items-center gap-2 mb-4">
+        <Bell className="h-3.5 w-3.5 text-gray-400" />
+        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+          Historique des relances
+        </p>
+        <span className="ml-auto text-xs text-gray-400">{reminders.length} relance{reminders.length > 1 ? 's' : ''}</span>
+      </div>
+
+      <div className="space-y-2">
+        {reminders.map(r => {
+          const meta    = STAGE_META[r.stage]
+          const success = r.response_status !== null && r.response_status >= 200 && r.response_status < 300
+          const isEscalade = r.stage === 'escalade'
+
+          return (
+            <div
+              key={r.id}
+              className={cn(
+                'flex items-center gap-3 rounded-xl px-3 py-2.5 border',
+                meta.bg, meta.border,
+              )}
+            >
+              <div className={cn('p-1.5 rounded-lg shrink-0', meta.bg, meta.border, 'border')}>
+                <Bell className={cn('h-3.5 w-3.5', meta.color)} />
+              </div>
+
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className={cn('text-sm font-semibold', meta.color)}>
+                    {meta.label}
+                  </span>
+                  {isEscalade ? (
+                    <span className="text-xs text-red-500 bg-red-50 border border-red-100 rounded px-1.5 py-0.5">
+                      Notification manager
+                    </span>
+                  ) : success ? (
+                    <span className="text-xs text-emerald-600 bg-emerald-50 border border-emerald-100 rounded px-1.5 py-0.5 flex items-center gap-1">
+                      <Check className="h-3 w-3" />Email envoyé
+                    </span>
+                  ) : (
+                    <span className="text-xs text-red-500 bg-red-50 border border-red-100 rounded px-1.5 py-0.5">
+                      Erreur {r.response_status ?? '?'}
+                    </span>
+                  )}
+                </div>
+                {r.message_id && (
+                  <p className="text-xs text-gray-400 mt-0.5 truncate font-mono">
+                    ID : {r.message_id}
+                  </p>
+                )}
+              </div>
+
+              <div className="flex items-center gap-1 text-xs text-gray-400 shrink-0">
+                <Clock className="h-3 w-3" />
+                {formatDate(r.sent_at)}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 /* ─── FactureFiche ───────────────────────────────────────────── */
 
 function FactureFiche({
@@ -1035,6 +1109,9 @@ function FactureFiche({
 
           {/* Payment history */}
           <PaymentHistory factureId={facture.id} total={facture.total_ttc} />
+
+          {/* Reminder history */}
+          <ReminderHistory factureId={facture.id} />
         </div>
       )}
 
