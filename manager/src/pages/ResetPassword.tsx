@@ -1,4 +1,4 @@
-import { useState, useEffect, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Zap, Eye, EyeOff, Loader2, CheckCircle } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
@@ -11,17 +11,6 @@ export function ResetPassword() {
   const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
   const [error, setError] = useState('')
-  // Read the hash synchronously (before Supabase clears it) to avoid the race
-  // condition where PASSWORD_RECOVERY fires before useEffect registers the listener
-  const [ready, setReady] = useState(() => window.location.hash.includes('type=recovery'))
-
-  useEffect(() => {
-    // Fallback for PKCE flow where Supabase exchanges a ?code= param asynchronously
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === 'PASSWORD_RECOVERY') setReady(true)
-    })
-    return () => subscription.unsubscribe()
-  }, [])
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -38,7 +27,7 @@ export function ResetPassword() {
     const { error } = await supabase.auth.updateUser({ password })
     setLoading(false)
     if (error) {
-      setError('Erreur lors de la réinitialisation. Le lien a peut-être expiré.')
+      setError('Lien invalide ou expiré. Recommence la procédure "mot de passe oublié".')
     } else {
       setDone(true)
       setTimeout(() => navigate('/login'), 2500)
@@ -60,26 +49,6 @@ export function ResetPassword() {
             <CheckCircle className="h-10 w-10 text-green-500 mx-auto mb-3" />
             <h2 className="text-base font-semibold text-gray-900 mb-1">Mot de passe mis à jour</h2>
             <p className="text-sm text-gray-500">Redirection vers la connexion…</p>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  if (!ready) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <div className="w-full max-w-sm">
-          <div className="flex flex-col items-center mb-8">
-            <div className="h-12 w-12 rounded-2xl bg-brand-500 flex items-center justify-center mb-3 shadow-lg shadow-brand-500/30">
-              <Zap className="h-6 w-6 text-white" />
-            </div>
-            <h1 className="text-xl font-bold text-gray-900 tracking-tight">CA-TECH</h1>
-            <p className="text-xs text-gray-400 font-medium tracking-widest uppercase mt-0.5">Manager</p>
-          </div>
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 text-center">
-            <Loader2 className="h-8 w-8 text-brand-500 mx-auto mb-3 animate-spin" />
-            <p className="text-sm text-gray-500">Vérification du lien…</p>
           </div>
         </div>
       </div>
