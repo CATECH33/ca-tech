@@ -9,7 +9,7 @@
   var FN_URL  = 'https://jhcyooksjeivajdjicka.supabase.co/functions/v1/loic-chat'
   var BRAND   = '#0066FF'
   var DARK    = '#0A2540'
-  var WELCOME = 'Bonjour ! Je suis Loïc, le conseiller commercial de CA-TECH 👋\n\nSites web, e-commerce, logo, automatisations IA… je peux vous présenter nos services, calculer un devis gratuit et répondre à toutes vos questions.\n\nQuel est votre projet ?'
+  var WELCOME = 'Bonjour ! Je suis Loïc, consultant IA de CA-TECH 👋\n\nJ\'aide les dirigeants à identifier leurs meilleures opportunités en IA et automatisation grâce à un diagnostic personnalisé gratuit.\n\nSouhaitez-vous découvrir votre potentiel IA ? (8 questions, 5 min)'
 
   // ── Demo mode responses (fallback si API indisponible) ──────────
   var DEMO_RESPONSES = [

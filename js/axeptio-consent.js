@@ -582,6 +582,21 @@
     t.parentNode.insertBefore(e, t);
   }(document, 'script'));
 
+  // ── GA4 GCM v2 — chargement direct ────────────────────────────────────
+  //  GA4 se charge immédiatement et lit les signaux GCM définis en §3.
+  //  analytics_storage = 'denied' → pas de cookie, pas de donnée personnelle.
+  //  Quand Axeptio accorde analytics_storage, GA4 démarre la collecte complète.
+  //  Ce mode (GCM v2) ne nécessite pas de vendor Axeptio dédié pour fonctionner.
+  (function () {
+    if (!CONFIG.ga4.id || CONFIG.gtm.id) return;
+    _preconnect('https://www.googletagmanager.com');
+    _preconnect('https://www.google-analytics.com');
+    _script('https://www.googletagmanager.com/gtag/js?id=' + CONFIG.ga4.id, function () {
+      gtag('js', new Date());
+      gtag('config', CONFIG.ga4.id, { anonymize_ip: true });
+    });
+  })();
+
   // ══════════════════════════════════════════════════════════════════════
   // §6 — PERSONNALISATION VISUELLE AXEPTIO (glassmorphism CA-TECH)
   //      Idempotent — vérifie l'id "ca-axeptio-theme" avant injection.

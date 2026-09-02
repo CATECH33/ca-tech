@@ -11,10 +11,12 @@ export function ResetPassword() {
   const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
   const [error, setError] = useState('')
-  const [ready, setReady] = useState(false)
+  // Read the hash synchronously (before Supabase clears it) to avoid the race
+  // condition where PASSWORD_RECOVERY fires before useEffect registers the listener
+  const [ready, setReady] = useState(() => window.location.hash.includes('type=recovery'))
 
   useEffect(() => {
-    // Supabase envoie un événement PASSWORD_RECOVERY quand le token est valide
+    // Fallback for PKCE flow where Supabase exchanges a ?code= param asynchronously
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'PASSWORD_RECOVERY') setReady(true)
     })
