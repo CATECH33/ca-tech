@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Zap, Eye, EyeOff, Loader2, CheckCircle } from 'lucide-react'
+import { useNavigate, Link } from 'react-router-dom'
+import { Zap, Eye, EyeOff, Loader2, CheckCircle, RefreshCw } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
 export function ResetPassword() {
@@ -11,10 +11,12 @@ export function ResetPassword() {
   const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
   const [error, setError] = useState('')
+  const [linkExpired, setLinkExpired] = useState(false)
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setError('')
+    setLinkExpired(false)
     if (password !== confirm) {
       setError('Les mots de passe ne correspondent pas.')
       return
@@ -27,10 +29,11 @@ export function ResetPassword() {
     const { error } = await supabase.auth.updateUser({ password })
     setLoading(false)
     if (error) {
-      setError('Lien invalide ou expiré. Recommence la procédure "mot de passe oublié".')
+      setLinkExpired(true)
+      setError('Ce lien est invalide ou a expiré.')
     } else {
       setDone(true)
-      setTimeout(() => navigate('/login'), 2500)
+      setTimeout(() => navigate('/login'), 3000)
     }
   }
 
@@ -38,17 +41,13 @@ export function ResetPassword() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="w-full max-w-sm">
-          <div className="flex flex-col items-center mb-8">
-            <div className="h-12 w-12 rounded-2xl bg-brand-500 flex items-center justify-center mb-3 shadow-lg shadow-brand-500/30">
-              <Zap className="h-6 w-6 text-white" />
-            </div>
-            <h1 className="text-xl font-bold text-gray-900 tracking-tight">CA-TECH</h1>
-            <p className="text-xs text-gray-400 font-medium tracking-widest uppercase mt-0.5">Manager</p>
-          </div>
+          <BrandHeader />
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 text-center">
             <CheckCircle className="h-10 w-10 text-green-500 mx-auto mb-3" />
             <h2 className="text-base font-semibold text-gray-900 mb-1">Mot de passe mis à jour</h2>
-            <p className="text-sm text-gray-500">Redirection vers la connexion…</p>
+            <p className="text-sm text-gray-500">
+              Votre mot de passe a été réinitialisé. Vous pouvez maintenant vous connecter.
+            </p>
           </div>
         </div>
       </div>
@@ -58,13 +57,7 @@ export function ResetPassword() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
-        <div className="flex flex-col items-center mb-8">
-          <div className="h-12 w-12 rounded-2xl bg-brand-500 flex items-center justify-center mb-3 shadow-lg shadow-brand-500/30">
-            <Zap className="h-6 w-6 text-white" />
-          </div>
-          <h1 className="text-xl font-bold text-gray-900 tracking-tight">CA-TECH</h1>
-          <p className="text-xs text-gray-400 font-medium tracking-widest uppercase mt-0.5">Manager</p>
-        </div>
+        <BrandHeader />
 
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
           <h2 className="text-base font-semibold text-gray-900 mb-1">Nouveau mot de passe</h2>
@@ -91,6 +84,7 @@ export function ResetPassword() {
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
+              <p className="text-xs text-gray-400 mt-1">Au moins 8 caractères</p>
             </div>
 
             <div>
@@ -106,7 +100,18 @@ export function ResetPassword() {
             </div>
 
             {error && (
-              <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>
+              <div className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">
+                <p>{error}</p>
+                {linkExpired && (
+                  <Link
+                    to="/forgot-password"
+                    className="inline-flex items-center gap-1 mt-2 text-brand-500 hover:underline font-medium"
+                  >
+                    <RefreshCw className="h-3 w-3" />
+                    Demander un nouveau lien
+                  </Link>
+                )}
+              </div>
             )}
 
             <button
@@ -124,6 +129,18 @@ export function ResetPassword() {
           © {new Date().getFullYear()} CA-TECH — Accès restreint
         </p>
       </div>
+    </div>
+  )
+}
+
+function BrandHeader() {
+  return (
+    <div className="flex flex-col items-center mb-8">
+      <div className="h-12 w-12 rounded-2xl bg-brand-500 flex items-center justify-center mb-3 shadow-lg shadow-brand-500/30">
+        <Zap className="h-6 w-6 text-white" />
+      </div>
+      <h1 className="text-xl font-bold text-gray-900 tracking-tight">CA-TECH</h1>
+      <p className="text-xs text-gray-400 font-medium tracking-widest uppercase mt-0.5">Manager</p>
     </div>
   )
 }
