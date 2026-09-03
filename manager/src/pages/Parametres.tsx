@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import {
   User, Building2, Receipt, Bell, Palette, Shield,
   Check, Eye, EyeOff, AlertTriangle, CreditCard,
@@ -347,6 +347,7 @@ const CHANNEL_META: Record<string, { label: string; desc: string; icon: React.El
 }
 
 export function Parametres() {
+  const { pathname } = useLocation()
   const [tab, setTab] = useState<Tab>('profil')
   const [settings, setSettings] = useState(loadSettings)
   const [saved, setSaved] = useState<Tab | null>(null)
@@ -479,9 +480,17 @@ export function Parametres() {
             <div className="pt-2 mt-2 border-t border-gray-100">
               <Link
                 to="/parametres/abonnements-catalogue"
-                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                className={cn(
+                  'w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left',
+                  pathname === '/parametres/abonnements-catalogue'
+                    ? 'bg-brand-50 text-brand-600'
+                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                )}
               >
-                <LayoutGrid className="h-4 w-4 shrink-0 text-gray-400" />
+                <LayoutGrid className={cn(
+                  'h-4 w-4 shrink-0',
+                  pathname === '/parametres/abonnements-catalogue' ? 'text-brand-500' : 'text-gray-400'
+                )} />
                 Abonnements
               </Link>
             </div>
