@@ -50,7 +50,8 @@ for route in \
   login forgot-password reset-password \
   contacts demandes clients leads devis factures projets taches \
   services paiements portfolio agenda messages \
-  support parametres integrations google documents loic notifications prospection catalogue; do
+  support parametres integrations google documents loic notifications prospection catalogue \
+  emails-digest; do
   cp manager/dist/index.html "manager/${route}.html"
 done
 
@@ -60,7 +61,8 @@ for route in \
   prospection/qualification prospection/brouillons prospection/campagnes \
   prospection/relances prospection/statistiques prospection/config \
   prospection/pipeline prospection/connecteurs \
-  catalogue/services catalogue/collaborateurs; do
+  catalogue/services catalogue/collaborateurs \
+  parametres/abonnements-catalogue; do
   mkdir -p "manager/$(dirname $route)"
   cp manager/dist/index.html "manager/${route}.html"
 done
