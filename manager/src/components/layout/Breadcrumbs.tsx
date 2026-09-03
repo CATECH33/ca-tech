@@ -13,6 +13,7 @@ const labels: Record<string, string> = {
   qualification: 'Qualification IA', brouillons: 'Brouillons', relances: 'Relances',
   statistiques: 'Statistiques', config: 'Paramètres',
   loic: 'Loïc IA', agenda: 'Agenda', documents: 'Documents',
+  'emails-digest': 'Digest Emails IA',
   catalogue: 'Catalogue', collaborateurs: 'Collaborateurs IA',
 }
 

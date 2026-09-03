@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from 'react-router-dom'
 import {
   LayoutDashboard, Users, CreditCard, Bot, Target, Settings,
-  ChevronLeft, ChevronRight, Zap, Inbox, FileText, Globe, Plug,
+  ChevronLeft, ChevronRight, Zap, Inbox, FileText, Globe, Plug, Mail,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -31,6 +31,7 @@ export function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose }: Side
     { label: 'Prospection',       icon: Target,          to: '/prospection' },
     { label: 'Connecteurs',       icon: Plug,            to: '/prospection/connecteurs' },
     { label: 'Google Workspace',  icon: Globe,           to: '/google' },
+    { label: 'Digest Emails IA',  icon: Mail,            to: '/emails-digest' },
   ]
 
   return (
