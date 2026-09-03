@@ -14,6 +14,7 @@ const labels: Record<string, string> = {
   statistiques: 'Statistiques', config: 'Paramètres',
   loic: 'Loïc IA', agenda: 'Agenda', documents: 'Documents',
   'emails-digest': 'Digest Emails IA',
+  'abonnements-catalogue': 'Catalogue abonnements',
   catalogue: 'Catalogue', collaborateurs: 'Collaborateurs IA',
 }
 

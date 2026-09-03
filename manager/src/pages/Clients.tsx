@@ -6,7 +6,7 @@ import {
   CreditCard, FolderOpen, StickyNote, Briefcase,
   X, Activity, LifeBuoy, MessageSquare, TrendingUp,
   Users, CheckCircle, RefreshCw, Ban, ExternalLink,
-  Inbox, Bot, AlertCircle, Sparkles,
+  Inbox, Bot, AlertCircle, Sparkles, Loader2,
 } from 'lucide-react'
 import { Layout } from '@/components/layout/Layout'
 import { Button } from '@/components/ui/Button'
@@ -24,10 +24,11 @@ import {
   useClientLeads,
 } from '@/hooks/useClients'
 import {
-  useSubscriptions, useCreateSubscriptionCheckout, useCancelSubscription,
+  useSubscriptions, useCreateSubscriptionFromPlan, useCancelSubscription,
 } from '@/hooks/useSubscriptions'
+import { useStripePlans } from '@/hooks/useStripePlans'
 import { useLoicConversations } from '@/hooks/useLoic'
-import type { Client, Status, SubscriptionPlan } from '@/types'
+import type { Client, Status } from '@/types'
 
 // ─── Constants ─────────────────────────────────────────────────────────────────
 
@@ -184,12 +185,21 @@ function ClientPanel({ client, onClose, onUpdate, onDelete, isUpdating, isDeleti
   const { data: demandesClient = [] } = useClientLeads(client.id)
   const { data: allLoicConvs  = [] } = useLoicConversations()
   const loicConvs = useMemo(() => allLoicConvs.filter(c => c.client_id === client.id), [allLoicConvs, client.id])
-  const createSubscription           = useCreateSubscriptionCheckout()
+  const { data: stripePlans = [], isLoading: plansLoading } = useStripePlans()
+  const createSubscriptionFromPlan   = useCreateSubscriptionFromPlan()
   const cancelSubscription           = useCancelSubscription()
 
+  const activePlans = useMemo(() => stripePlans.filter(p => p.active), [stripePlans])
+
   const [showSubModal, setShowSubModal]     = useState(false)
-  const [subPlan, setSubPlan]               = useState<SubscriptionPlan>('vitrine')
+  const [subPriceId, setSubPriceId]         = useState<string>('')
   const [subDevisId, setSubDevisId]         = useState('')
+
+  useEffect(() => {
+    if (subPriceId === '' && activePlans.length > 0) {
+      setSubPriceId(activePlans[0].stripe_price_id)
+    }
+  }, [activePlans]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Activity timeline
   const activite = useMemo(() => {
@@ -662,31 +672,45 @@ function ClientPanel({ client, onClose, onUpdate, onDelete, isUpdating, isDeleti
 
               {/* Modal création abonnement */}
               {showSubModal && (
-                <Modal open={showSubModal} title="Nouvel abonnement" onClose={() => setShowSubModal(false)}>
+                <Modal open={showSubModal} title="Nouvel abonnement" onClose={() => { setShowSubModal(false); setSubDevisId('') }}>
                   <div className="space-y-4">
                     <div>
                       <label className="block text-xs font-medium text-gray-600 mb-1.5">Plan de maintenance</label>
-                      <div className="space-y-2">
-                        {([
-                          { value: 'vitrine',   label: 'Maintenance Site Vitrine',    price: '49 €/mois' },
-                          { value: 'ecommerce', label: 'Maintenance E-commerce',      price: '99 €/mois' },
-                          { value: 'ia',        label: 'Maintenance IA / Sur-mesure', price: '149 €/mois' },
-                        ] as const).map(p => (
-                          <label key={p.value} className={cn(
-                            'flex items-center justify-between p-3 rounded-xl border cursor-pointer transition',
-                            subPlan === p.value ? 'border-brand-400 bg-brand-50' : 'border-gray-200 hover:border-gray-300'
-                          )}>
-                            <div className="flex items-center gap-2">
-                              <input type="radio" className="sr-only" value={p.value} checked={subPlan === p.value} onChange={() => setSubPlan(p.value)} />
-                              <div className={cn('h-4 w-4 rounded-full border-2 flex items-center justify-center shrink-0', subPlan === p.value ? 'border-brand-500' : 'border-gray-300')}>
-                                {subPlan === p.value && <div className="h-2 w-2 rounded-full bg-brand-500" />}
+                      {plansLoading ? (
+                        <div className="flex items-center justify-center py-6">
+                          <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+                        </div>
+                      ) : activePlans.length === 0 ? (
+                        <div className="flex items-start gap-2 p-3 bg-amber-50 rounded-xl border border-amber-200">
+                          <AlertCircle className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
+                          <div className="text-xs text-amber-700">
+                            <p className="font-semibold mb-1">Aucun plan configuré</p>
+                            <p>Configurez vos plans dans le{' '}
+                              <Link to="/parametres/abonnements-catalogue" className="underline font-medium" onClick={() => setShowSubModal(false)}>
+                                catalogue abonnements
+                              </Link>.
+                            </p>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          {activePlans.map(plan => (
+                            <label key={plan.stripe_price_id} className={cn(
+                              'flex items-center justify-between p-3 rounded-xl border cursor-pointer transition',
+                              subPriceId === plan.stripe_price_id ? 'border-brand-400 bg-brand-50' : 'border-gray-200 hover:border-gray-300'
+                            )}>
+                              <div className="flex items-center gap-2">
+                                <input type="radio" className="sr-only" value={plan.stripe_price_id} checked={subPriceId === plan.stripe_price_id} onChange={() => setSubPriceId(plan.stripe_price_id)} />
+                                <div className={cn('h-4 w-4 rounded-full border-2 flex items-center justify-center shrink-0', subPriceId === plan.stripe_price_id ? 'border-brand-500' : 'border-gray-300')}>
+                                  {subPriceId === plan.stripe_price_id && <div className="h-2 w-2 rounded-full bg-brand-500" />}
+                                </div>
+                                <span className="text-sm font-medium text-gray-800">{plan.name}</span>
                               </div>
-                              <span className="text-sm font-medium text-gray-800">{p.label}</span>
-                            </div>
-                            <span className="text-sm font-bold text-gray-900">{p.price}</span>
-                          </label>
-                        ))}
-                      </div>
+                              <span className="text-sm font-bold text-gray-900">{(plan.amount / 100).toFixed(0)} €<span className="text-xs font-normal text-gray-400">/mois HT</span></span>
+                            </label>
+                          ))}
+                        </div>
+                      )}
                     </div>
                     {devis.length > 0 && (
                       <div>
@@ -708,18 +732,19 @@ function ClientPanel({ client, onClose, onUpdate, onDelete, isUpdating, isDeleti
                     </p>
                   </div>
                   <div className="flex justify-end gap-2 mt-5 pt-4 border-t border-gray-100">
-                    <button type="button" onClick={() => setShowSubModal(false)} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 transition">Annuler</button>
+                    <button type="button" onClick={() => { setShowSubModal(false); setSubDevisId('') }} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 transition">Annuler</button>
                     <button
                       type="button"
-                      disabled={createSubscription.isPending}
+                      disabled={createSubscriptionFromPlan.isPending || !subPriceId || activePlans.length === 0}
                       onClick={async () => {
                         try {
-                          const url = await createSubscription.mutateAsync({
+                          const url = await createSubscriptionFromPlan.mutateAsync({
                             client_id: client.id,
-                            plan: subPlan,
+                            stripe_price_id: subPriceId,
                             devis_id: subDevisId || undefined,
                           })
                           setShowSubModal(false)
+                          setSubDevisId('')
                           window.open(url, '_blank', 'noopener,noreferrer')
                         } catch (e: any) {
                           alert(e?.message ?? 'Erreur lors de la création')
@@ -727,12 +752,12 @@ function ClientPanel({ client, onClose, onUpdate, onDelete, isUpdating, isDeleti
                       }}
                       className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold bg-brand-500 text-white rounded-xl hover:bg-brand-600 disabled:opacity-50 transition"
                     >
-                      {createSubscription.isPending ? (
+                      {createSubscriptionFromPlan.isPending ? (
                         <span className="h-3.5 w-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />
                       ) : (
                         <ExternalLink className="h-3.5 w-3.5" />
                       )}
-                      {createSubscription.isPending ? 'Génération…' : 'Générer le lien Stripe'}
+                      {createSubscriptionFromPlan.isPending ? 'Génération…' : 'Générer le lien Stripe'}
                     </button>
                   </div>
                 </Modal>

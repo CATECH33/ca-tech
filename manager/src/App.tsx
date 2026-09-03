@@ -56,6 +56,7 @@ const CatalogueServiceForm           = lazy(() => import('./pages/catalogue/Cata
 const CatalogueCollaborateurs        = lazy(() => import('./pages/catalogue/CatalogueCollaborateurs').then(m => ({ default: m.CatalogueCollaborateurs })))
 const CatalogueCollaborateurForm     = lazy(() => import('./pages/catalogue/CatalogueCollaborateurForm').then(m => ({ default: m.CatalogueCollaborateurForm })))
 const EmailDigest                    = lazy(() => import('./pages/EmailDigest').then(m => ({ default: m.EmailDigest })))
+const AbonnementsCatalogue           = lazy(() => import('./pages/parametres/AbonnementsCatalogue').then(m => ({ default: m.AbonnementsCatalogue })))
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { staleTime: 5 * 60 * 1000, retry: 1 } },
@@ -118,6 +119,7 @@ function ProtectedApp() {
         <Route path="/catalogue/collaborateurs/new"        element={<ProtectedRoute><CatalogueCollaborateurForm /></ProtectedRoute>} />
         <Route path="/catalogue/collaborateurs/:id/edit"   element={<ProtectedRoute><CatalogueCollaborateurForm /></ProtectedRoute>} />
         <Route path="/emails-digest"        element={<ProtectedRoute><EmailDigest /></ProtectedRoute>} />
+        <Route path="/parametres/abonnements-catalogue" element={<ProtectedRoute><AbonnementsCatalogue /></ProtectedRoute>} />
         <Route path="/auth/google/callback" element={<GoogleOAuthCallback />} />
       </Routes>
     </Suspense>

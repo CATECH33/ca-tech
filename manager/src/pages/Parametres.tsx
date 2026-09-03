@@ -1,9 +1,10 @@
 import { useState, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import {
   User, Building2, Receipt, Bell, Palette, Shield,
   Check, Eye, EyeOff, AlertTriangle, CreditCard,
   Clock, Monitor, Smartphone, LogOut, Mail, Send, MessageCircle,
-  Globe, Upload, X, Loader2,
+  Globe, Upload, X, Loader2, LayoutGrid,
 } from 'lucide-react'
 import { Layout } from '@/components/layout/Layout'
 import { Card } from '@/components/ui/Card'
@@ -475,6 +476,15 @@ export function Parametres() {
                 </button>
               )
             })}
+            <div className="pt-2 mt-2 border-t border-gray-100">
+              <Link
+                to="/parametres/abonnements-catalogue"
+                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+              >
+                <LayoutGrid className="h-4 w-4 shrink-0 text-gray-400" />
+                Abonnements
+              </Link>
+            </div>
           </nav>
         </aside>
 

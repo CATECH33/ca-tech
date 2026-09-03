@@ -49,12 +49,32 @@ export function useCreateSubscriptionCheckout() {
       const token = session?.access_token ?? SUPABASE_ANON_KEY
       const res = await fetch(`${SUPABASE_URL}/functions/v1/stripe-create-subscription`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-          'apikey': SUPABASE_ANON_KEY,
-        },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, 'apikey': SUPABASE_ANON_KEY },
         body: JSON.stringify({ client_id, plan, devis_id }),
+      })
+      const data = await res.json() as { url?: string; session_id?: string; error?: string }
+      if (!res.ok) throw new Error(data.error ?? `HTTP ${res.status}`)
+      if (!data.url) throw new Error('Aucune URL retournée')
+      return data.url as string
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: Q }),
+  })
+}
+
+export function useCreateSubscriptionFromPlan() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ client_id, stripe_price_id, devis_id }: {
+      client_id:       string
+      stripe_price_id: string
+      devis_id?:       string
+    }) => {
+      const { data: { session } } = await supabase.auth.getSession()
+      const token = session?.access_token ?? SUPABASE_ANON_KEY
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/stripe-create-subscription`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, 'apikey': SUPABASE_ANON_KEY },
+        body: JSON.stringify({ client_id, stripe_price_id, devis_id }),
       })
       const data = await res.json() as { url?: string; session_id?: string; error?: string }
       if (!res.ok) throw new Error(data.error ?? `HTTP ${res.status}`)
