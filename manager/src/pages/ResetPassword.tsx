@@ -1,22 +1,54 @@
-import { useState, type FormEvent } from 'react'
+import { useState, useEffect, type FormEvent } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { Zap, Eye, EyeOff, Loader2, CheckCircle, RefreshCw } from 'lucide-react'
+import { Zap, Eye, EyeOff, Loader2, CheckCircle, RefreshCw, AlertTriangle } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+
+type PageState = 'checking' | 'ready' | 'invalid' | 'done'
 
 export function ResetPassword() {
   const navigate = useNavigate()
-  const [password, setPassword] = useState('')
-  const [confirm, setConfirm] = useState('')
+  const [pageState, setPageState] = useState<PageState>('checking')
+  const [password, setPassword]   = useState('')
+  const [confirm, setConfirm]     = useState('')
   const [showPassword, setShowPassword] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [done, setDone] = useState(false)
-  const [error, setError] = useState('')
-  const [linkExpired, setLinkExpired] = useState(false)
+  const [loading, setLoading]     = useState(false)
+  const [error, setError]         = useState('')
+
+  useEffect(() => {
+    let resolved = false
+
+    function markReady() {
+      if (!resolved) {
+        resolved = true
+        setPageState('ready')
+      }
+    }
+
+    // Écoute PASSWORD_RECOVERY (PKCE : fired après échange du code)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY') markReady()
+    })
+
+    // Vérification immédiate : session déjà établie (ex. refresh de page)
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) markReady()
+    })
+
+    // Timeout de sécurité : si aucun événement après 5s → lien invalide
+    const timeout = setTimeout(() => {
+      if (!resolved) setPageState('invalid')
+    }, 5000)
+
+    return () => {
+      subscription.unsubscribe()
+      clearTimeout(timeout)
+    }
+  }, [])
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setError('')
-    setLinkExpired(false)
+
     if (password !== confirm) {
       setError('Les mots de passe ne correspondent pas.')
       return
@@ -25,34 +57,83 @@ export function ResetPassword() {
       setError('Le mot de passe doit contenir au moins 8 caractères.')
       return
     }
+
     setLoading(true)
-    const { error } = await supabase.auth.updateUser({ password })
+    const { error: updateError } = await supabase.auth.updateUser({ password })
     setLoading(false)
-    if (error) {
-      setLinkExpired(true)
-      setError('Ce lien est invalide ou a expiré.')
-    } else {
-      setDone(true)
-      setTimeout(() => navigate('/login'), 3000)
+
+    if (updateError) {
+      setError('Une erreur est survenue. Le lien est peut-être expiré.')
+      setPageState('invalid')
+      return
     }
+
+    // Succès : on invalide la session de récupération puis on redirige
+    setPageState('done')
+    await supabase.auth.signOut()
+    setTimeout(() => navigate('/login'), 3000)
   }
 
-  if (done) {
+  // ── États de la page ──────────────────────────────────────────────────────
+
+  if (pageState === 'checking') {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="w-full max-w-sm">
+          <BrandHeader />
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 flex flex-col items-center gap-3">
+            <Loader2 className="h-8 w-8 text-brand-500 animate-spin" />
+            <p className="text-sm text-gray-500">Vérification du lien…</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (pageState === 'done') {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="w-full max-w-sm">
           <BrandHeader />
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 text-center">
-            <CheckCircle className="h-10 w-10 text-green-500 mx-auto mb-3" />
+            <CheckCircle className="h-10 w-10 text-emerald-500 mx-auto mb-3" />
             <h2 className="text-base font-semibold text-gray-900 mb-1">Mot de passe mis à jour</h2>
             <p className="text-sm text-gray-500">
-              Votre mot de passe a été réinitialisé. Vous pouvez maintenant vous connecter.
+              Votre mot de passe a été réinitialisé. Redirection vers la connexion…
             </p>
           </div>
         </div>
       </div>
     )
   }
+
+  if (pageState === 'invalid') {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="w-full max-w-sm">
+          <BrandHeader />
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 text-center">
+            <div className="h-10 w-10 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-3">
+              <AlertTriangle className="h-5 w-5 text-red-500" />
+            </div>
+            <h2 className="text-base font-semibold text-gray-900 mb-1">Lien invalide ou expiré</h2>
+            <p className="text-sm text-gray-500 mb-5">
+              Ce lien de réinitialisation n'est plus valide. Demandez-en un nouveau.
+            </p>
+            <Link
+              to="/forgot-password"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-brand-500 hover:text-brand-600 transition"
+            >
+              <RefreshCw className="h-3.5 w-3.5" />
+              Demander un nouveau lien
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Formulaire de réinitialisation ────────────────────────────────────────
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -65,7 +146,9 @@ export function ResetPassword() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1.5">Nouveau mot de passe</label>
+              <label className="block text-xs font-medium text-gray-700 mb-1.5">
+                Nouveau mot de passe
+              </label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -88,7 +171,9 @@ export function ResetPassword() {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1.5">Confirmer le mot de passe</label>
+              <label className="block text-xs font-medium text-gray-700 mb-1.5">
+                Confirmer le mot de passe
+              </label>
               <input
                 type={showPassword ? 'text' : 'password'}
                 required
@@ -101,16 +186,7 @@ export function ResetPassword() {
 
             {error && (
               <div className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">
-                <p>{error}</p>
-                {linkExpired && (
-                  <Link
-                    to="/forgot-password"
-                    className="inline-flex items-center gap-1 mt-2 text-brand-500 hover:underline font-medium"
-                  >
-                    <RefreshCw className="h-3 w-3" />
-                    Demander un nouveau lien
-                  </Link>
-                )}
+                {error}
               </div>
             )}
 
