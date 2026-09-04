@@ -491,7 +491,7 @@ export function Parametres() {
                   'h-4 w-4 shrink-0',
                   pathname === '/parametres/abonnements-catalogue' ? 'text-brand-500' : 'text-gray-400'
                 )} />
-                Abonnements
+                Catalogue abonnements
               </Link>
             </div>
           </nav>
