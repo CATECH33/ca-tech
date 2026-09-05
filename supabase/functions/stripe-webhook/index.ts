@@ -111,6 +111,16 @@ body_html = HTML partiel (sans html/head/body).` }],
   }
 }
 
+// ─── Helper : lire le feature flag auto_suspend ───────────────────────────────
+async function getAutoSuspend(sb: ReturnType<typeof createClient>): Promise<boolean> {
+  const { data } = await sb
+    .from('global_settings')
+    .select('value')
+    .eq('key', 'auto_suspend')
+    .maybeSingle()
+  return data?.value === true
+}
+
 Deno.serve(async (req) => {
   try {
     const body      = await req.text()
@@ -132,7 +142,6 @@ Deno.serve(async (req) => {
       const session = event.data.object as Stripe.Checkout.Session
 
       if (session.mode === 'subscription') {
-        // ── Abonnement ──────────────────────────────────────────────────────────
         const stripeSubId = typeof session.subscription === 'string' ? session.subscription : null
         if (stripeSubId) {
           const stripeSub = await stripe.subscriptions.retrieve(stripeSubId)
@@ -148,7 +157,6 @@ Deno.serve(async (req) => {
         return new Response('OK', { status: 200 })
       }
 
-      // ── Paiement unique (acompte / solde / ad hoc) ──────────────────────────
       const invoiceId = session.metadata?.invoice_id
       if (!invoiceId) {
         console.warn('[stripe-webhook] Pas de invoice_id dans les métadonnées')
@@ -159,7 +167,6 @@ Deno.serve(async (req) => {
       const paidAt        = new Date().toISOString()
       const paymentIntent = typeof session.payment_intent === 'string' ? session.payment_intent : null
 
-      // Idempotence : ignorer si déjà enregistré
       if (paymentIntent) {
         const { data: existing } = await sb
           .from('payments')
@@ -172,7 +179,6 @@ Deno.serve(async (req) => {
         }
       }
 
-      // Lire la facture
       const { data: inv, error: invErr } = await sb
         .from('invoices')
         .select('id, total, amount_paid, client_id, payment_type, devis_id')
@@ -184,7 +190,6 @@ Deno.serve(async (req) => {
         return new Response('Facture introuvable', { status: 404 })
       }
 
-      // Insérer le paiement
       const { error: pErr } = await sb.from('payments').insert([{
         invoice_id:        invoiceId,
         client_id:         inv.client_id,
@@ -201,7 +206,6 @@ Deno.serve(async (req) => {
         return new Response('Erreur BDD', { status: 500 })
       }
 
-      // P2 : sync atomique via RPC — FOR UPDATE élimine la race condition
       const { error: syncErr } = await sb.rpc('sync_invoice_after_payment', {
         p_invoice_id: invoiceId,
         p_paid_at:    paidAt,
@@ -219,8 +223,8 @@ Deno.serve(async (req) => {
         canceled: 'cancelled', unpaid:   'past_due',
         paused:   'paused',   trialing:  'trialing',
       }
-      // A1 : ne jamais réactiver un abonnement déjà annulé — Stripe envoie parfois
-      // customer.subscription.updated après customer.subscription.deleted (ordre non garanti).
+      // Ne jamais réactiver un abonnement annulé ou suspendu manuellement —
+      // la suspension auto est levée uniquement par invoice.payment_succeeded.
       await sb.from('subscriptions')
         .update({
           status:               statusMap[sub.status] ?? sub.status,
@@ -229,6 +233,7 @@ Deno.serve(async (req) => {
         })
         .eq('stripe_subscription_id', sub.id)
         .neq('status', 'cancelled')
+        .neq('status', 'suspended')
       return new Response('OK', { status: 200 })
     }
 
@@ -239,7 +244,6 @@ Deno.serve(async (req) => {
         .update({ status: 'cancelled', cancelled_at: new Date().toISOString() })
         .eq('stripe_subscription_id', sub.id)
 
-      // Notification churn in-app
       const { data: dbSub } = await sb
         .from('subscriptions')
         .select('name, amount, clients(first_name, last_name)')
@@ -269,9 +273,6 @@ Deno.serve(async (req) => {
         const stripeSubId     = typeof stripeInv.subscription   === 'string' ? stripeInv.subscription   : null
         const stripePaymentId = typeof stripeInv.payment_intent === 'string' ? stripeInv.payment_intent : null
 
-        // F2 : idempotence — ne pas insérer un paiement déjà enregistré.
-        // Le UNIQUE index payments_stripe_payment_id_key garantit l'unicité en DB,
-        // mais on vérifie en amont pour éviter une erreur 23505 et des retry Stripe infinis.
         if (stripePaymentId) {
           const { data: existingPayment } = await sb
             .from('payments')
@@ -287,9 +288,10 @@ Deno.serve(async (req) => {
         if (stripeSubId) {
           const { data: sub } = await sb
             .from('subscriptions')
-            .select('id, client_id')
+            .select('id, client_id, consecutive_failures, status')
             .eq('stripe_subscription_id', stripeSubId)
             .maybeSingle()
+
           if (sub) {
             await sb.from('payments').insert([{
               client_id:         sub.client_id,
@@ -300,6 +302,29 @@ Deno.serve(async (req) => {
               notes:             `Renouvellement abonnement · Stripe Invoice ${stripeInv.id}`,
               paid_at:           new Date().toISOString(),
             }])
+
+            // Réinitialisation du compteur d'échecs + lever la suspension
+            if ((sub.consecutive_failures ?? 0) > 0) {
+              const wasSuspended = sub.status === 'suspended'
+              await sb.from('subscriptions')
+                .update({
+                  consecutive_failures: 0,
+                  ...(wasSuspended ? { status: 'active' } : {}),
+                })
+                .eq('id', sub.id)
+
+              await sb.from('churn_events').insert({
+                subscription_id:               sub.id,
+                event_type:                    'payment_recovered',
+                consecutive_failures_at_event: 0,
+                metadata: {
+                  stripe_subscription_id: stripeSubId,
+                  previous_failures:      sub.consecutive_failures,
+                  was_suspended:          wasSuspended,
+                },
+              })
+              console.log(`[stripe-webhook] Compteur échecs remis à 0 pour ${stripeSubId} (était ${sub.consecutive_failures})`)
+            }
           }
         }
       }
@@ -312,31 +337,61 @@ Deno.serve(async (req) => {
       if (stripeInv.subscription) {
         const subId = typeof stripeInv.subscription === 'string' ? stripeInv.subscription : null
         if (subId) {
-          // W2 : ne pas écraser un abonnement déjà annulé
-          await sb.from('subscriptions')
-            .update({ status: 'past_due' })
-            .eq('stripe_subscription_id', subId)
-            .neq('status', 'cancelled')
-
-          // Récupérer les infos abonnement + client
+          // Lire abonnement avec compteur et infos client
           const { data: dbSub } = await sb
             .from('subscriptions')
-            .select('name, amount, clients(first_name, last_name, email)')
+            .select('id, name, amount, consecutive_failures, clients(first_name, last_name, email)')
             .eq('stripe_subscription_id', subId)
             .maybeSingle()
 
           if (dbSub?.clients) {
             const cl = dbSub.clients as any
-            const clientName = `${cl.first_name} ${cl.last_name}`
+            const clientName  = `${cl.first_name} ${cl.last_name}`
+            const newFailures = (dbSub.consecutive_failures ?? 0) + 1
+
+            // Vérifier le feature flag auto_suspend
+            const autoSuspend   = await getAutoSuspend(sb)
+            const shouldSuspend = autoSuspend && newFailures >= 3
+
+            // Mettre à jour statut + compteur
+            await sb.from('subscriptions')
+              .update({
+                status:               shouldSuspend ? 'suspended' : 'past_due',
+                consecutive_failures: newFailures,
+              })
+              .eq('stripe_subscription_id', subId)
+              .neq('status', 'cancelled')
+
+            // Log churn_event : payment_failed
+            await sb.from('churn_events').insert({
+              subscription_id:               dbSub.id,
+              event_type:                    'payment_failed',
+              consecutive_failures_at_event: newFailures,
+              metadata: { stripe_subscription_id: subId, amount: dbSub.amount },
+            })
+
+            // Log churn_event : auto_suspended (si applicable)
+            if (shouldSuspend) {
+              await sb.from('churn_events').insert({
+                subscription_id:               dbSub.id,
+                event_type:                    'auto_suspended',
+                consecutive_failures_at_event: newFailures,
+                metadata: { stripe_subscription_id: subId },
+              })
+            }
 
             // Notification in-app
             await sb.from('notifications').insert({
               type:    'error',
-              title:   `Paiement échoué — ${clientName}`,
-              message: `L'abonnement "${dbSub.name}" n'a pas pu être prélevé. Montant : ${new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(dbSub.amount)}/mois.`,
-              link:    '/paiements',
+              title:   shouldSuspend
+                ? `Abonnement suspendu — ${clientName}`
+                : `Paiement échoué — ${clientName}`,
+              message: shouldSuspend
+                ? `L'abonnement "${dbSub.name}" a été suspendu après ${newFailures} échecs consécutifs.`
+                : `L'abonnement "${dbSub.name}" n'a pas pu être prélevé (échec n°${newFailures}). Montant : ${new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(dbSub.amount)}/mois.`,
+              link:    '/parametres/abonnements-catalogue',
               is_read: false,
-              metadata: { stripe_subscription_id: subId, event: 'payment_failed' },
+              metadata: { stripe_subscription_id: subId, event: shouldSuspend ? 'auto_suspended' : 'payment_failed', consecutive_failures: newFailures },
             })
 
             // Email IA au client via Gmail
@@ -350,6 +405,8 @@ Deno.serve(async (req) => {
             } catch (emailErr) {
               console.error('[stripe-webhook] Erreur envoi email paiement échoué', emailErr)
             }
+
+            console.log(`[stripe-webhook] invoice.payment_failed — ${subId} — échec n°${newFailures}${shouldSuspend ? ' — SUSPENDU' : ''}`)
           }
         }
       }
@@ -357,9 +414,6 @@ Deno.serve(async (req) => {
     }
 
     // ─── customer.subscription.trial_will_end ─────────────────────────────────
-    // W3 (amélioration future) : notifier le client J-3 avant fin d'essai.
-    // Non implémenté — aucun essai gratuit (trialing) n'est actuellement utilisé
-    // par CA-TECH. À implémenter si des trials sont activés dans Stripe.
     if (event.type === 'customer.subscription.trial_will_end') {
       return new Response('OK', { status: 200 })
     }
