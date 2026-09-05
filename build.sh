@@ -4,9 +4,10 @@ set -e
 # Build site principal
 npm run build
 
-# Build manager
+# Build manager (purge Vite cache to force full recompile)
 cd manager
 npm install
+rm -rf node_modules/.vite
 npm run build
 cd ..
 
