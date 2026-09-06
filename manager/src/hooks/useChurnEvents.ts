@@ -39,7 +39,7 @@ export function useChurnEvents(days = 30) {
         .order('created_at', { ascending: false })
         .limit(100)
       if (error) throw error
-      return (data ?? []) as ChurnEvent[]
+      return (data ?? []) as unknown as ChurnEvent[]
     },
   })
 }
