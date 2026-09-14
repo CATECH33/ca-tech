@@ -53,7 +53,7 @@
     axeptio:    { clientId: '686e8f86b80b5e7c51a0e5b9', cookiesVersion: 'ca-tech-fr' },
 
     // ── Analytique ───────────────────────────────────────────────────
-    ga4:        { id:  'G-R526KDMC17' },   // Measurement ID GA4
+    ga4:        { id:  'G-JJ5V7FR5JM' },   // Measurement ID GA4
     gtm:        { id:  '' },               // GTM-XXXXXXX (charge sans consentement)
     clarity:    { id:  '' },               // Microsoft Clarity project ID
     hotjar:     { id:  '' },               // Hotjar Site ID (ex: 1234567)

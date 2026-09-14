@@ -5,7 +5,7 @@
 (function () {
   'use strict';
 
-  const GA_ID       = 'G-R526KDMC17';
+  const GA_ID       = 'G-JJ5V7FR5JM';
   const STORAGE_KEY = 'ca-tech-cookies-consent';
   const SCHEMA_V    = 2;
   const DAYS        = 180;
