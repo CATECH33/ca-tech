@@ -56,15 +56,16 @@ export const organizationSchema = {
   telephone: '+33775664975',
   address: {
     '@type': 'PostalAddress',
-    addressLocality: 'Paris',
-    addressRegion: 'Île-de-France',
-    postalCode: '75000',
+    streetAddress: '1 Avenue du Mail',
+    addressLocality: 'Talant',
+    addressRegion: 'Bourgogne-Franche-Comté',
+    postalCode: '21240',
     addressCountry: 'FR',
   },
   geo: {
     '@type': 'GeoCoordinates',
-    latitude: 48.8566,
-    longitude: 2.3522,
+    latitude: 47.3319,
+    longitude: 5.0158,
   },
   priceRange: '€€',
   currenciesAccepted: 'EUR',
@@ -111,7 +112,7 @@ export const organizationSchema = {
       {
         '@type': 'Offer',
         name: 'Site e-commerce',
-        price: '1090',
+        price: '990',
         priceCurrency: 'EUR',
         availability: 'https://schema.org/InStock',
         url: `${SITE_URL}/tarifs`,
@@ -155,7 +156,7 @@ export const organizationSchema = {
     reviewCount: '47',
   },
   foundingDate: '2023',
-  sameAs: [],
+  sameAs: ['https://www.linkedin.com/company/ca-tech-france/'],
 }
 
 /* ══════════════════════════════════════════════════════════════════════
