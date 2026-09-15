@@ -50,7 +50,7 @@
 
   /** @type {Object} Configuration globale — modifier ici uniquement */
   var CONFIG = {
-    axeptio:    { clientId: '686e8f86b80b5e7c51a0e5b9', cookiesVersion: 'ca-tech-fr' },
+    axeptio:    { clientId: '6aa933d3aa12434a5b6b7008', cookiesVersion: '2c122181-c417-460c-ae3a-749d469fc315' },
 
     // ── Analytique ───────────────────────────────────────────────────
     ga4:        { id:  'G-JJ5V7FR5JM' },   // Measurement ID GA4
