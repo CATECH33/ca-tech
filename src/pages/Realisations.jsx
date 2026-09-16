@@ -133,7 +133,7 @@ const PROJECTS = [
     cat: 'collaborateurs',
     title: 'Commercial IA — Loïc',
     company: 'Agence de services · Bordeaux',
-    img: '/collaborateurs/commercial-ia.webp',
+    img: '/portfolio/ca-tech-manager/home.webp',
     probleme: 'Commerciaux débordés, relances oubliées, pipeline CRM mal suivi.',
     solution: 'Commercial IA qui qualifie, relance et planifie les RDV automatiquement 24 h/24.',
     resultats: [
@@ -148,7 +148,7 @@ const PROJECTS = [
     cat: 'collaborateurs',
     title: 'Support IA 24/7',
     company: 'E-commerce · Paris',
-    img: '/collaborateurs/support-ia.webp',
+    img: '/portfolio/ca-tech-manager/clients.webp',
     probleme: '300+ tickets/semaine, équipe saturée, délai de réponse supérieur à 24 h.',
     solution: 'Collaborateur IA qui répond en < 2 min, traite 80 % des tickets, escalade le reste.',
     resultats: [
@@ -165,7 +165,7 @@ const PROJECTS = [
     cat: 'seo',
     title: 'SEO local — Boutique spécialisée',
     company: 'Greenlab · Lyon',
-    img: '/collaborateurs/seo-ia.webp',
+    img: 'https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=800&q=80',
     probleme: 'Invisible sur Google, 100 % du trafic payant, concurrence féroce.',
     solution: 'SEO local + 40 pages optimisées + Google Business + schema markup complet.',
     resultats: [

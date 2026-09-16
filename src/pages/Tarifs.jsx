@@ -174,8 +174,29 @@ export default function Tarifs() {
         </div>
       </section>
 
+      {/* ═══════════════════════════════════ ANCHOR NAV */}
+      <nav className="tar-anchor-nav" aria-label="Navigation rapide">
+        <div className="tar-anchor-nav-inner">
+          {[
+            { id: 'tarifs',    label: 'Offres & Tarifs' },
+            { id: 'processus', label: 'Comment ça marche' },
+            { id: 'faq',       label: 'FAQ' },
+            { id: 'comparatif',label: 'Comparatif' },
+          ].map(({ id, label }) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              className="tar-anchor-link"
+              onClick={e => { e.preventDefault(); document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }) }}
+            >
+              {label}
+            </a>
+          ))}
+        </div>
+      </nav>
+
       {/* ═══════════════════════════════════ PRICING */}
-      <section className="tar-section">
+      <section className="tar-section" id="tarifs">
         <div className="tar-section-inner">
           <div className="tar-section-header">
             <h2 className="tar-section-title">Nos Offres & Tarifs</h2>
@@ -369,7 +390,7 @@ export default function Tarifs() {
       </section>
 
       {/* ═══════════════════════════════════ PROCESSUS */}
-      <section className="tar-process">
+      <section className="tar-process" id="processus">
         <div className="tar-section-inner">
           <div className="tar-section-header">
             <p className="tar-label">Méthode</p>
@@ -412,7 +433,7 @@ export default function Tarifs() {
       </section>
 
       {/* ═══════════════════════════════════ FAQ */}
-      <section className="tar-faq">
+      <section className="tar-faq" id="faq">
         <div className="tar-faq-inner">
           <div className="tar-section-header">
             <p className="tar-label">Questions fréquentes</p>
@@ -433,6 +454,7 @@ export default function Tarifs() {
       </SeoSection>
 
       {/* ── SEO · COMPARATIF ───────────────────────────────────── */}
+      <div id="comparatif" />
       <SeoSection
         variant="light"
         eyebrow="Comparatif"

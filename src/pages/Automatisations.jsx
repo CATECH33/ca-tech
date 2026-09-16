@@ -425,7 +425,7 @@ export default function Automatisations() {
       <section className="aut-section" id="services">
         <div className="aut-inner">
 
-          <div className="aut-header at-reveal">
+          <div className="aut-header">
             <span className="aut-label">14 services d'automatisation</span>
             <h2 className="aut-title">Choisissez votre <em>problème métier.</em></h2>
             <p className="aut-desc">
