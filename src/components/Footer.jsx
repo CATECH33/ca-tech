@@ -119,7 +119,7 @@ export default function Footer() {
           <a href="/politique-des-cookies" style={{ color: 'rgba(255,255,255,.65)', textDecoration: 'none', fontSize: '.72rem' }}>Politique cookies</a>
           <a href="/tarifs" style={{ color: 'rgba(255,255,255,.65)', textDecoration: 'none', fontSize: '.72rem' }}>CGV</a>
           <button
-            onClick={() => window.CATechConsent?.openPreferences()}
+            onClick={() => window.openAxeptioCookies?.() ?? window.CATechConsent?.openPreferences()}
             style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,.65)', fontSize: '.72rem', cursor: 'pointer', padding: 0, fontFamily: 'inherit' }}
           >
             Gérer mes cookies

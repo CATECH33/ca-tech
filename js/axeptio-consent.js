@@ -1,7 +1,7 @@
 /* ══════════════════════════════════════════════════════════════════════
    CA-TECH — Enterprise Tracking System v3.0
    ▸ Chargé en PREMIER, sans defer/async, avant tout tag Google
-   ▸ 12 services | 3 catégories | priorité de chargement (high/normal/low)
+   ▸ 11 services | 3 catégories | priorité de chargement (high/normal/low)
    ▸ Google Consent Mode v2 — 7 signaux RGPD strict (défaut : denied)
    ▸ Axeptio CMP — consentement granulaire par service
    ▸ Isolation d'erreur par service — un crash n'en bloque pas d'autres
@@ -11,7 +11,7 @@
 
    ┌─────────────────────────────────────────────────────────────────┐
    │  §1  CONFIG       — IDs & clés de tous les services            │
-   │  §2  REGISTRY     — déclaration des 12 services tiers          │
+   │  §2  REGISTRY     — déclaration des 11 services tiers          │
    │  §3  GCM v2       — signaux consentement (défaut : denied)     │
    │  §4  ENGINE       — chargeur, isolateur d'erreurs, event bus   │
    │  §5  AXEPTIO      — initialisation CMP                         │
@@ -28,6 +28,9 @@
      google-analytics | microsoft-clarity | hotjar
      google-ads       | meta-pixel        | linkedin-insight | tiktok-pixel
      stripe           | youtube           | google-maps      | calendly
+   NOTE GA4 : le script est chargé en GCM v2 Advanced via §5 (pas de double
+     chargement). Le vendor google-analytics dans Axeptio sert uniquement à
+     émettre analytics_storage='granted' via _applyChoices après consentement.
    ══════════════════════════════════════════════════════════════════════ */
 
 (function () {
@@ -44,8 +47,8 @@
   //    Si CONFIG.gtm.id est renseigné, GTM est chargé SANS consentement
   //    (c'est le conteneur qui lit les signaux GCM, pas un tracker).
   //    Dans ce cas, GA4 et Google Ads doivent être gérés VIA GTM —
-  //    les entrées google-analytics / google-ads sont automatiquement
-  //    désactivées pour éviter le double chargement.
+  //    l'entrée google-ads est automatiquement désactivée pour éviter
+  //    le double chargement (GA4 est géré en GCM v2 Advanced via §5).
   // ══════════════════════════════════════════════════════════════════════
 
   /** @type {Object} Configuration globale — modifier ici uniquement */
@@ -96,8 +99,11 @@
     // ══ ANALYTIQUE ═══════════════════════════════════════════════════════
 
     /**
-     * Google Analytics 4 — mesure d'audience.
-     * Ignoré si GTM est configuré (GTM gère GA4 via son conteneur).
+     * Google Analytics 4 — signal GCM v2 uniquement.
+     * Le script GA4 est chargé en GCM v2 Advanced via §5 (IIFE immédiate).
+     * Cette entrée sert exclusivement à émettre analytics_storage:'granted'
+     * via _applyChoices lorsque l'utilisateur accepte google-analytics.
+     * load() est un no-op : _script() dans §5 a déjà injecté le tag.
      */
     'google-analytics': {
       label:      'Google Analytics 4',
@@ -107,17 +113,8 @@
       partner:    'https://policies.google.com/privacy',
       gcm:        { analytics_storage: 'granted' },
       priority:   'high',
-      preconnect: ['https://www.googletagmanager.com', 'https://www.google-analytics.com'],
       active:     function () { return !!CONFIG.ga4.id && !CONFIG.gtm.id; },
-      load: function () {
-        _script(
-          'https://www.googletagmanager.com/gtag/js?id=' + CONFIG.ga4.id,
-          function () {
-            gtag('js', new Date());
-            gtag('config', CONFIG.ga4.id, { anonymize_ip: true });
-          }
-        );
-      },
+      load:       function () { /* GA4 déjà chargé en GCM v2 Advanced via §5 */ },
     },
 
     /**
@@ -685,6 +682,14 @@
       '    border-radius: 16px 16px 0 0 !important; left: 0 !important; right: 0 !important;',
       '    bottom: 0 !important; width: 100% !important; max-width: 100% !important; margin: 0 !important;',
       '  }',
+      '}',
+      '/* ─ Bouton lanceur persistant Axeptio (re-open après consentement) ─ */',
+      '#axeptio_btn_optout,',
+      '#axeptio_overlay .ax-badge,',
+      '#axeptio_overlay .ax-button-launcher,',
+      '#axeptio_overlay [class*="launcher"],',
+      '#axeptio_overlay [class*="badge"]:not(.ax-widget) {',
+      '  display: none !important;',
       '}',
     ].join('\n');
 
