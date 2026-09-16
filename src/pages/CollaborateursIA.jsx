@@ -54,7 +54,7 @@ const COLLABORATEURS = [
     id: 'commercial',
     name: 'Commercial IA',
     color: '#0066FF',
-    img: '/collaborateurs/commercial-ia.webp',
+    img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
     desc: 'Votre meilleur commercial — sans pause café, sans jours fériés. Il qualifie chaque lead entrant, relance automatiquement et personnalise chaque proposition pour maximiser vos conversions.',
     missions: [
       'Répond aux demandes entrantes',
@@ -107,7 +107,7 @@ const COLLABORATEURS = [
     id: 'support',
     name: 'Support IA',
     color: '#7c3aed',
-    img: '/collaborateurs/support-ia.webp',
+    img: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80',
     desc: 'Disponible 24h/24, 7j/7, sans jamais perdre patience. Il répond, classe et résout les demandes clients instantanément pendant que vos équipes se concentrent sur les cas complexes.',
     missions: [
       'Répond aux clients 24h/24',
@@ -160,7 +160,7 @@ const COLLABORATEURS = [
     id: 'rh',
     name: 'RH IA',
     color: '#0891b2',
-    img: '/collaborateurs/rh-ia.webp',
+    img: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800&q=80',
     desc: 'Recrutement, onboarding, congés, réponses aux équipes — votre RH IA prend en charge tout l\'administratif pour que vous vous consacriez au développement des talents.',
     missions: [
       'Trie et note les CVs reçus',
@@ -213,7 +213,7 @@ const COLLABORATEURS = [
     id: 'juridique',
     name: 'Juridique IA',
     color: '#6d28d9',
-    img: '/collaborateurs/juridique-ia.webp',
+    img: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=80',
     desc: 'Contrats, CGV, clauses spécifiques — rédigés et analysés en quelques secondes. Signez en confiance sans attendre un avocat ni payer 500 €/heure.',
     missions: [
       'Rédige les contrats sur mesure',
@@ -266,7 +266,7 @@ const COLLABORATEURS = [
     id: 'seo',
     name: 'SEO IA',
     color: '#059669',
-    img: '/collaborateurs/seo-ia.webp',
+    img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
     desc: 'Articles de blog, pages et fiches optimisés pour Google chaque semaine. Vos clients vous trouvent avant vos concurrents — sans que vous écriviez une seule ligne.',
     missions: [
       'Rédige les articles de blog chaque semaine',
@@ -319,7 +319,7 @@ const COLLABORATEURS = [
     id: 'comptable',
     name: 'Comptable IA',
     color: '#d97706',
-    img: '/collaborateurs/collaborateur-ia-hero.webp',
+    img: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&q=80',
     desc: 'Factures, rapprochements bancaires, relances impayés, déclarations — gérés en temps réel. Vos fins de mois cessent d\'être chaotiques.',
     missions: [
       'Émet les factures automatiquement',
