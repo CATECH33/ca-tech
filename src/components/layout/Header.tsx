@@ -18,7 +18,6 @@ const NAV = [
   { label: 'Collaborateurs IA', to: '/collaborateurs-ia' },
   { label: 'Automatisations',   to: '/automatisations' },
   { label: 'Réalisations',      to: '/realisations' },
-  { label: 'Blog',              href: '/blog' },
   { label: 'Tarifs',            to: '/tarifs' },
   { label: 'Contact',           to: '/contact' },
 ] as const

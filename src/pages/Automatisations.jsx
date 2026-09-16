@@ -21,7 +21,7 @@ const AUTO_RELATED = [
   { href: '/creation-site-ecommerce', label: 'Boutique e-commerce',        icon: '🛒', desc: 'Vente en ligne clé en main' },
   { href: '/maintenance-site-web',    label: 'Maintenance de site web',    icon: '🔧', desc: 'À partir de 49 €/mois' },
   { href: '/automatisation-pme',      label: 'Automatisation PME',         icon: '🏭', desc: 'Guide complet pour PME' },
-  { href: '/contact',                 label: 'Diagnostic gratuit',         icon: '→',  desc: 'Identifiez vos 3 processus clés' },
+  { href: '/loic',                     label: 'Diagnostic IA gratuit',       icon: '→',  desc: 'Score de maturité IA en 5 min' },
 ]
 
 const SERVICES = [
@@ -42,7 +42,7 @@ const SERVICES = [
   {
     id: 'qualification-prospects',
     cat: 'commercial',
-    image: '/collaborateurs/commercial-ia.webp',
+    image: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&q=80',
     name: 'Qualification automatique des prospects',
     benefit: 'Chaque lead est scoré, trié et assigné au bon commercial en temps réel.',
     gains: [
@@ -98,7 +98,7 @@ const SERVICES = [
   {
     id: 'support-client',
     cat: 'communication',
-    image: '/collaborateurs/support-ia.webp',
+    image: 'https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=800&q=80',
     name: 'Support client 24h/24',
     benefit: 'Un agent IA répond à vos clients sur tous les canaux — email, chat, WhatsApp — sans interruption.',
     gains: [
@@ -126,7 +126,7 @@ const SERVICES = [
   {
     id: 'signature-elec',
     cat: 'finance',
-    image: '/collaborateurs/juridique-ia.webp',
+    image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&q=80',
     name: 'Signature électronique',
     benefit: 'Vos contrats et devis sont signés en quelques clics — sans impression, sans déplacement.',
     gains: [
@@ -154,7 +154,7 @@ const SERVICES = [
   {
     id: 'automatisation-rh',
     cat: 'rh',
-    image: '/collaborateurs/rh-ia.webp',
+    image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80',
     name: 'Automatisation RH',
     benefit: 'Onboarding, congés, notes de frais, contrats — tous vos processus RH en pilote automatique.',
     gains: [
@@ -206,6 +206,34 @@ const SERVICES = [
     ],
     result: 'Décisions toujours basées sur des données à jour',
     color: '#7c3aed',
+  },
+  {
+    id: 'reseaux-sociaux',
+    cat: 'communication',
+    image: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=800&q=80',
+    name: 'Publication réseaux sociaux automatisée',
+    benefit: 'Votre présence LinkedIn, Instagram et Facebook est alimentée en continu — sans rédiger ni planifier manuellement.',
+    gains: [
+      '3 à 5 publications par semaine sans effort',
+      'Contenu adapté au format de chaque réseau',
+      'Engagement analysé et calendrier optimisé',
+    ],
+    result: '×3 de portée organique en 60 jours',
+    color: '#0A66C2',
+  },
+  {
+    id: 'compte-rendu',
+    cat: 'communication',
+    image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80',
+    name: 'Compte rendu de réunion automatique',
+    benefit: 'Chaque réunion génère un compte rendu structuré, envoyé aux participants dans la minute — sans saisie manuelle.',
+    gains: [
+      'Transcription et résumé en moins de 2 min',
+      'Actions assignées automatiquement aux bonnes personnes',
+      'Archivé, consultable et exportable à tout moment',
+    ],
+    result: '−45 min de travail administratif par réunion',
+    color: '#0891b2',
   },
   {
     id: 'crm-intelligent',
@@ -421,6 +449,75 @@ export default function Automatisations() {
         </div>
       </section>
 
+      {/* ════════ WORKFLOWS VISUELS ════════ */}
+      <section className="at-wf-section">
+        <div className="at-wf-inner">
+          <div className="at-wf-head at-reveal">
+            <p className="at-wf-eyebrow">Comment ça fonctionne</p>
+            <h2 className="at-wf-title">3 workflows <em>concrets.</em></h2>
+            <p className="at-wf-sub">Voici des exemples réels d'automatisations que nous déployons. Chaque étape s'enchaîne sans intervention humaine.</p>
+          </div>
+          <div className="at-wf-list">
+            {[
+              {
+                label: 'Email entrant → réponse → CRM',
+                color: '#0066FF',
+                steps: [
+                  { icon: '📧', text: 'Email reçu' },
+                  { icon: '🤖', text: 'IA classifie le sujet' },
+                  { icon: '✉️', text: 'Réponse envoyée < 5 min' },
+                  { icon: '📊', text: 'CRM mis à jour' },
+                  { icon: '🔔', text: 'Équipe alertée si urgent' },
+                ],
+              },
+              {
+                label: 'Nouveau lead → devis → commercial',
+                color: '#7c3aed',
+                steps: [
+                  { icon: '📋', text: 'Lead entrant' },
+                  { icon: '🤖', text: 'Scoring IA 0→100' },
+                  { icon: '📄', text: 'Devis généré < 2 min' },
+                  { icon: '📧', text: 'Envoyé au prospect' },
+                  { icon: '👤', text: 'Commercial assigné' },
+                ],
+              },
+              {
+                label: 'Mission terminée → facture → relance',
+                color: '#059669',
+                steps: [
+                  { icon: '✅', text: 'Mission terminée' },
+                  { icon: '🧾', text: 'Facture émise < 30 s' },
+                  { icon: '📧', text: 'Envoyée au client' },
+                  { icon: '⏰', text: 'Relance auto J+15' },
+                  { icon: '📊', text: 'Compta mise à jour' },
+                ],
+              },
+            ].map(({ label, color, steps }) => (
+              <div key={label} className="at-wf-item at-reveal">
+                <p className="at-wf-label" style={{ color }}>{label}</p>
+                <div className="at-wf-steps">
+                  {steps.map((step, i) => (
+                    <div key={i} className="at-wf-step-wrap">
+                      <div className="at-wf-step" style={{ borderColor: color + '35', background: color + '0c' }}>
+                        <span className="at-wf-step-icon">{step.icon}</span>
+                        <span className="at-wf-step-text">{step.text}</span>
+                      </div>
+                      {i < steps.length - 1 && (
+                        <span className="at-wf-arrow" style={{ color }} aria-hidden="true">→</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="at-wf-note">
+            Ces workflows sont traçables, modifiables et monitorés en temps réel.{' '}
+            <Link to="/contact">Testez votre scénario →</Link>
+          </p>
+        </div>
+      </section>
+
       {/* ════════ SERVICES CATALOGUE ════════ */}
       <section className="aut-section" id="services">
         <div className="aut-inner">
@@ -492,7 +589,7 @@ export default function Automatisations() {
                     <span style={{ color: s.color }}>{s.result}</span>
                   </div>
 
-                  <Link to="/contact" className="aut-card-btn" style={{ background: s.color }}>
+                  <Link to={`/contact?service=${s.id}`} className="aut-card-btn" style={{ background: s.color }}>
                     Découvrir ce service →
                   </Link>
                 </div>
