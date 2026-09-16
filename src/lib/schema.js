@@ -343,23 +343,3 @@ export function itemListSchema(items) {
   }
 }
 
-/* ══════════════════════════════════════════════════════════════════════
-   SOFTWARE APPLICATION (Loïc IA demo)
-══════════════════════════════════════════════════════════════════════ */
-export function softwareAppSchema({ name, description, path, applicationCategory, offers }) {
-  const s = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    '@id': `${SITE_URL}${path}#app`,
-    name,
-    description,
-    url: `${SITE_URL}${path}`,
-    applicationCategory: applicationCategory || 'BusinessApplication',
-    operatingSystem: 'All',
-    inLanguage: 'fr-FR',
-    author: { '@id': ORG_ID },
-    provider: { '@id': ORG_ID },
-  }
-  if (offers) s.offers = offers
-  return s
-}
