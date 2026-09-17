@@ -718,6 +718,18 @@
   font-size: .72rem; color: #6b7280; line-height: 1.3;
 }
 
+/* Prix */
+.cai-col-price {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin: 0 0 16px;
+  letter-spacing: 0.01em;
+}
+.cai-col-price strong {
+  color: var(--col-color, #0066FF);
+  font-weight: 600;
+}
+
 /* CTAs — stack */
 .cai-col-actions {
   display: flex;

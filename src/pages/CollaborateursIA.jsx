@@ -811,6 +811,9 @@ export default function CollaborateursIA() {
                   ))}
                 </div>
 
+                {/* Prix */}
+                <p className="cai-col-price">À partir de <strong>290 €/mois</strong> — sans engagement</p>
+
                 {/* CTAs */}
                 <div className="cai-col-actions" style={{ '--col-color': c.color }}>
                   <Link

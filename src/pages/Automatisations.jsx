@@ -425,7 +425,7 @@ export default function Automatisations() {
                 <div className="at-stat-lbl">Déploiement possible</div>
               </div>
               <div>
-                <div className="at-stat-val">10<em>h</em></div>
+                <div className="at-stat-val">14<em>h</em></div>
                 <div className="at-stat-lbl">Gagnées chaque semaine*</div>
               </div>
               <div>
