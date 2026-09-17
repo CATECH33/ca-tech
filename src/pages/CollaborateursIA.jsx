@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import DetailDrawer from '../components/DetailDrawer'
 import './CollaborateursIA.css'
@@ -213,8 +213,8 @@ const COLLABORATEURS = [
     id: 'juridique',
     name: 'Juridique IA',
     color: '#6d28d9',
-    img: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=80',
-    desc: 'Contrats, CGV, clauses spécifiques — rédigés et analysés en quelques secondes. Signez en confiance sans attendre un avocat ni payer 500 €/heure.',
+    img: '/collaborateurs/juridique-ia.webp',
+    desc: 'Contrats, CGV, clauses spécifiques — rédigés et analysés en quelques secondes. Réduisez votre dépendance aux conseils extérieurs et accélérez vos cycles de signature.',
     missions: [
       'Rédige les contrats sur mesure',
       'Analyse les documents reçus des partenaires',
@@ -224,8 +224,8 @@ const COLLABORATEURS = [
       'Alerte en cas de risque contractuel',
     ],
     resultats: [
-      { val: '−80 %', lbl: 'de coûts juridiques évités' },
-      { val: '100 %', lbl: 'de contrats conformes RGPD' },
+      { val: 'Jusqu\'à −80 %', lbl: 'de coûts juridiques (estimation)' },
+      { val: 'Conformité', lbl: 'RGPD assistée à chaque rédaction' },
     ],
     fonctionnalites: [
       'Rédaction de contrats sur mesure en < 5 min',
@@ -319,7 +319,7 @@ const COLLABORATEURS = [
     id: 'comptable',
     name: 'Comptable IA',
     color: '#d97706',
-    img: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&q=80',
+    img: '/collaborateurs/comptable-ia.webp',
     desc: 'Factures, rapprochements bancaires, relances impayés, déclarations — gérés en temps réel. Vos fins de mois cessent d\'être chaotiques.',
     missions: [
       'Émet les factures automatiquement',
@@ -369,6 +369,237 @@ const COLLABORATEURS = [
     ],
   },
 ]
+
+/* ══════════════════════════════════════════════════
+   HERO AGENT UI — panneau live activity
+══════════════════════════════════════════════════ */
+function HeroAgentUI() {
+  return (
+    <div className="cai-hero-ui" role="img" aria-label="Agents IA en activité en temps réel">
+      <div className="cai-hui-header">
+        <span className="cai-hui-live-dot" aria-hidden="true" />
+        <span className="cai-hui-title">Agents actifs</span>
+        <span className="cai-hui-count">3 / 6</span>
+        <span className="cai-hui-live-tag">En direct</span>
+      </div>
+
+      <div className="cai-hui-feed" aria-hidden="true">
+        <div className="cai-hui-entry">
+          <div className="cai-hui-entry-meta">
+            <span className="cai-hui-role-dot" style={{ background: '#0066FF' }} />
+            <span className="cai-hui-role-name">Commercial IA</span>
+            <span className="cai-hui-ts">12s</span>
+          </div>
+          <div className="cai-hui-entry-content">
+            <span className="cai-hui-action-label">Lead qualifié — Marie Dubois, CEO</span>
+            <span className="cai-hui-action-sub">Score 91 / 100 · Proposition envoyée</span>
+          </div>
+          <div className="cai-hui-progress">
+            <div className="cai-hui-progress-fill" style={{ width: '91%', background: '#0066FF' }} />
+          </div>
+        </div>
+
+        <div className="cai-hui-entry">
+          <div className="cai-hui-entry-meta">
+            <span className="cai-hui-role-dot" style={{ background: '#7c3aed' }} />
+            <span className="cai-hui-role-name">Support IA</span>
+            <span className="cai-hui-ts">28s</span>
+          </div>
+          <div className="cai-hui-entry-content">
+            <span className="cai-hui-action-label">Ticket #2847 résolu automatiquement</span>
+            <span className="cai-hui-action-sub">Réponse en 8 sec · Satisfaction ★★★★★</span>
+          </div>
+          <div className="cai-hui-tag cai-hui-tag--ok">Résolu · sans intervention humaine</div>
+        </div>
+
+        <div className="cai-hui-entry cai-hui-entry--active">
+          <div className="cai-hui-entry-meta">
+            <span className="cai-hui-role-dot" style={{ background: '#059669' }} />
+            <span className="cai-hui-role-name">SEO IA</span>
+            <span className="cai-hui-ts cai-hui-ts--live">En cours</span>
+          </div>
+          <div className="cai-hui-entry-content">
+            <span className="cai-hui-action-label">Rédaction — « Automatisation PME 2024 »</span>
+            <span className="cai-hui-action-sub">1 847 mots · Publication dans 3 min</span>
+          </div>
+          <div className="cai-hui-typing" aria-hidden="true">
+            <span /><span /><span />
+          </div>
+        </div>
+      </div>
+
+      <div className="cai-hui-footer" aria-hidden="true">
+        <div className="cai-hui-stat">
+          <span className="cai-hui-stat-val">847</span>
+          <span className="cai-hui-stat-lbl">actions ce mois</span>
+        </div>
+        <div className="cai-hui-sep" />
+        <div className="cai-hui-stat">
+          <span className="cai-hui-stat-val">98%</span>
+          <span className="cai-hui-stat-lbl">résolution auto</span>
+        </div>
+        <div className="cai-hui-sep" />
+        <div className="cai-hui-stat">
+          <span className="cai-hui-stat-val">&lt;10s</span>
+          <span className="cai-hui-stat-lbl">temps de réponse</span>
+        </div>
+      </div>
+      <p className="cai-hui-demo-bar" aria-hidden="true">Données de démonstration</p>
+    </div>
+  )
+}
+
+/* ══════════════════════════════════════════════════
+   COLLABORATEUR VISUAL — UI mockup par rôle
+══════════════════════════════════════════════════ */
+function CollaborateurVisual({ id, color }) {
+  if (id === 'commercial') return (
+    <div className="cai-cv cai-cv--commercial">
+      <span className="cai-cv-demo" aria-hidden="true">EXEMPLE</span>
+      <div className="cai-cv-pipeline">
+        {[['Prospects', 12], ['Qualifiés', 8], ['Propositions', 4], ['Signés', 2]].map(([s, n]) => (
+          <div key={s} className="cai-cv-stage">
+            <div className="cai-cv-stage-n" style={{ color }}>{n}</div>
+            <div className="cai-cv-stage-s">{s}</div>
+          </div>
+        ))}
+      </div>
+      <div className="cai-cv-lead-card">
+        <div className="cai-cv-lead-left">
+          <div className="cai-cv-lead-name">Marie Dubois · CEO</div>
+          <div className="cai-cv-lead-co">Startup SaaS · 12 personnes</div>
+        </div>
+        <div className="cai-cv-lead-score" style={{ color, borderColor: color + '40' }}>91</div>
+      </div>
+      <div className="cai-cv-steps">
+        <div className="cai-cv-step done">Scoré</div>
+        <div className="cai-cv-step done">Proposition</div>
+        <div className="cai-cv-step active" style={{ borderColor: color, color }}>Envoi…</div>
+      </div>
+    </div>
+  )
+
+  if (id === 'support') return (
+    <div className="cai-cv cai-cv--support">
+      <span className="cai-cv-demo" aria-hidden="true">EXEMPLE</span>
+      <div className="cai-cv-chat">
+        <div className="cai-cv-bubble cai-cv-bubble--user">
+          Ma commande #4521 n&apos;est pas arrivée
+        </div>
+        <div className="cai-cv-bubble cai-cv-bubble--ai" style={{ borderColor: color + '30', background: color + '0d' }}>
+          Bonjour ! Commande localisée — livraison <strong>demain avant 18h</strong>.
+        </div>
+        <div className="cai-cv-bubble cai-cv-bubble--user">
+          Parfait, merci !
+        </div>
+      </div>
+      <div className="cai-cv-resolved" style={{ color }}>
+        <span className="cai-cv-res-dot" style={{ background: color }} />
+        Résolu · 8 sec · Satisfaction ★★★★★
+      </div>
+    </div>
+  )
+
+  if (id === 'rh') return (
+    <div className="cai-cv cai-cv--rh">
+      <span className="cai-cv-demo" aria-hidden="true">EXEMPLE</span>
+      <div className="cai-cv-rh-header">
+        <span className="cai-cv-rh-title">47 CVs analysés</span>
+        <span className="cai-cv-rh-time" style={{ color }}>en 10 min</span>
+      </div>
+      {[['M', 'Martin L.', 92], ['S', 'Sophie M.', 88], ['T', 'Thomas D.', 74]].map(([init, name, score]) => (
+        <div key={name} className="cai-cv-candidate">
+          <div className="cai-cv-cand-av" style={{ background: color + '1a', color }}>{init}</div>
+          <div className="cai-cv-cand-info">
+            <div className="cai-cv-cand-name">{name}</div>
+            <div className="cai-cv-cand-bar">
+              <div className="cai-cv-cand-fill" style={{ width: score + '%', background: color }} />
+            </div>
+          </div>
+          <div className="cai-cv-cand-score" style={{ color }}>{score}</div>
+        </div>
+      ))}
+    </div>
+  )
+
+  if (id === 'juridique') return (
+    <div className="cai-cv cai-cv--juridique">
+      <span className="cai-cv-demo" aria-hidden="true">EXEMPLE</span>
+      <div className="cai-cv-doc-row">
+        <div className="cai-cv-doc-icon" style={{ background: color + '1a', color }}>PDF</div>
+        <div>
+          <div className="cai-cv-doc-name">Contrat_Prestation.pdf</div>
+          <div className="cai-cv-doc-time">Analysé en 4 min 12 sec</div>
+        </div>
+      </div>
+      {[
+        { label: 'Clause paiement', ok: true },
+        { label: 'Propriété intellectuelle', ok: false, warn: 'Risque' },
+        { label: 'Conformité RGPD', ok: true },
+        { label: 'Clause résiliation', ok: true },
+      ].map(cl => (
+        <div key={cl.label} className={`cai-cv-clause ${cl.ok ? 'ok' : 'warn'}`}>
+          <span className="cai-cv-clause-ic">{cl.ok ? '✓' : '⚠'}</span>
+          <span className="cai-cv-clause-txt">{cl.label}</span>
+          {!cl.ok && <span className="cai-cv-clause-warn">{cl.warn}</span>}
+        </div>
+      ))}
+    </div>
+  )
+
+  if (id === 'seo') return (
+    <div className="cai-cv cai-cv--seo">
+      <span className="cai-cv-demo" aria-hidden="true">EXEMPLE</span>
+      <div className="cai-cv-seo-top">
+        <span>4 articles publiés cette semaine</span>
+      </div>
+      {[
+        { kw: 'agence ia paris', pos: 3, delta: '+5', up: true },
+        { kw: 'automatisation PME', pos: 1, tag: 'NEW' },
+        { kw: 'cabinet conseil ia', pos: 7, delta: '—' },
+        { kw: 'collaborateur ia', pos: 5, delta: '+2', up: true },
+      ].map(k => (
+        <div key={k.kw} className="cai-cv-kw-row">
+          <span className="cai-cv-kw-pos" style={{ color: k.up || k.tag ? color : '#9ca3af' }}>#{k.pos}</span>
+          <span className="cai-cv-kw-word">{k.kw}</span>
+          <span className={`cai-cv-kw-delta ${k.up ? 'up' : ''}${k.tag ? 'new' : ''}`}
+            style={k.up || k.tag ? { color } : {}}>
+            {k.tag || k.delta}
+          </span>
+        </div>
+      ))}
+    </div>
+  )
+
+  if (id === 'comptable') return (
+    <div className="cai-cv cai-cv--comptable">
+      <span className="cai-cv-demo" aria-hidden="true">EXEMPLE</span>
+      <div className="cai-cv-revenue">
+        <span className="cai-cv-rev-val" style={{ color }}>€ 24 800</span>
+        <span className="cai-cv-rev-lbl">encaissé ce mois</span>
+      </div>
+      {[
+        { label: 'Payées', n: 18, amount: '€24 800', type: 'ok' },
+        { label: 'En attente', n: 3, amount: '€4 200', type: 'warn' },
+        { label: 'Relances J+15', n: 2, amount: '€1 800', type: 'action' },
+      ].map(r => (
+        <div key={r.label} className={`cai-cv-inv-row cai-cv-inv-row--${r.type}`}>
+          <span className="cai-cv-inv-dot" />
+          <span className="cai-cv-inv-lbl">{r.label}</span>
+          <span className="cai-cv-inv-n">{r.n}</span>
+          <span className="cai-cv-inv-amt" style={r.type === 'ok' ? { color } : {}}>{r.amount}</span>
+        </div>
+      ))}
+      <div className="cai-cv-bars" aria-hidden="true">
+        {[40, 65, 50, 80, 95, 70, 100].map((h, i) => (
+          <div key={i} className="cai-cv-bar-col" style={{ height: h + '%', background: i === 6 ? color : color + '40' }} />
+        ))}
+      </div>
+    </div>
+  )
+
+  return null
+}
 
 /* ══════════════════════════════════════════════════
    FAQ ITEM — accordion
@@ -533,7 +764,6 @@ function CollaborateurPanel({ collab, onClose }) {
 ══════════════════════════════════════════════════ */
 export default function CollaborateursIA() {
   const [selected, setSelected] = useState(null)
-  const heroVideoRef = useRef(null)
 
   usePageMeta({
     title: 'Collaborateurs IA — 6 agents autonomes 24/7 pour PME · CA-TECH',
@@ -681,16 +911,6 @@ export default function CollaborateursIA() {
     }
   }, [])
 
-  useEffect(() => {
-    const video = heroVideoRef.current
-    if (!video) return
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const apply = () => { if (mq.matches) video.pause(); else video.play().catch(() => {}) }
-    apply()
-    mq.addEventListener('change', apply)
-    return () => mq.removeEventListener('change', apply)
-  }, [])
-
   const openDrawer = useCallback(c => setSelected(c), [])
   const closeDrawer = useCallback(() => setSelected(null), [])
 
@@ -705,32 +925,9 @@ export default function CollaborateursIA() {
         <div className="cai-halo cai-halo-3" id="halo3" aria-hidden="true" />
 
         <div className="cai-hero-inner">
-          {/* Colonne vidéo — GAUCHE */}
+          {/* Colonne UI — GAUCHE */}
           <div className="cai-hero-right">
-            <div className="cai-hero-photo-wrap">
-              <video
-                ref={heroVideoRef}
-                autoPlay muted loop playsInline preload="metadata"
-                className="cai-hero-video"
-                poster="/collaborateurs/collaborateur-ia-hero.webp"
-                aria-label="Démonstration des collaborateurs IA CA-TECH en action"
-              >
-                <source src="/collaborateurs/Collaborateurs%20IA.mp4" type="video/mp4" />
-              </video>
-              <div className="cai-hero-photo-overlay" />
-            </div>
-            <div className="cai-metric m-1" aria-hidden="true">
-              <span className="cai-metric-num">847</span>
-              <span className="cai-metric-lbl">tickets résolus ce mois</span>
-            </div>
-            <div className="cai-metric m-2" aria-hidden="true">
-              <span className="cai-metric-num"><em>×3</em></span>
-              <span className="cai-metric-lbl">leads générés</span>
-            </div>
-            <div className="cai-metric m-3" aria-hidden="true">
-              <span className="cai-metric-num">98<em>%</em></span>
-              <span className="cai-metric-lbl">satisfaction</span>
-            </div>
+            <HeroAgentUI />
           </div>
 
           {/* Colonne texte — DROITE */}
@@ -773,13 +970,12 @@ export default function CollaborateursIA() {
           {COLLABORATEURS.map(c => (
             <article key={c.id} className="cai-col-card cai-reveal" style={{ '--col-color': c.color }}>
 
-              {/* Image */}
-              <div className="cai-col-img">
-                <img src={c.img} alt={c.name} loading="lazy" decoding="async" width="640" height="380" />
-                <div className="cai-col-img-overlay" />
+              {/* Visual UI */}
+              <div className="cai-col-visual-wrap">
+                <CollaborateurVisual id={c.id} color={c.color} />
                 <span className="cai-col-status">
                   <span className="cai-col-dot" />
-                  Actif
+                  En ligne
                 </span>
               </div>
 
@@ -802,6 +998,7 @@ export default function CollaborateursIA() {
                 </ul>
 
                 {/* Résultats */}
+                <p className="cai-col-metrics-label">Exemples de résultats</p>
                 <div className="cai-col-resultats">
                   {c.resultats.map(r => (
                     <div key={r.lbl} className="cai-col-resultat">
