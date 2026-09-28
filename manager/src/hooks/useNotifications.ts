@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 
 export interface NotificationChannel {
   id: string
-  channel: 'email' | 'telegram' | 'whatsapp'
+  channel: 'email' | 'whatsapp'
   enabled: boolean
   updated_at: string
 }
@@ -13,7 +13,7 @@ export interface NotificationLog {
   id: string
   prospect_id: string | null
   type: string
-  channel: 'email' | 'telegram' | 'whatsapp'
+  channel: 'email' | 'whatsapp'
   provider: string | null
   status: 'sent' | 'failed' | 'skipped'
   recipient: string | null

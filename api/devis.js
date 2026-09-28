@@ -212,7 +212,7 @@ async function handleCreate(body, supabase) {
     console.error('[STEP 5/7] Audit log non critique:', auditErr.message);
   }
 
-  console.log('[STEP 6/7] Notification admin (Telegram + email)...');
+  console.log('[STEP 6/7] Notification admin (email + WhatsApp)...');
   await notify('nouveau_devis', {
     devisNumber,
     clientName: body.contact_name || body.contact_email,

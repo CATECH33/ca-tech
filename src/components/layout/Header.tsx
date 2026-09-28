@@ -2,42 +2,34 @@ import { NavLink, useLocation } from 'react-router-dom'
 import { useState, useEffect, useCallback } from 'react'
 import './Header.css'
 
-const SOLUTIONS = [
-  { label: 'Création de site Web', href: '/creation-site-vitrine' },
-  { label: 'E-commerce',           href: '/creation-site-ecommerce' },
-  { label: 'Applications Métier',  href: '/services' },
-  { label: 'CRM sur mesure',       href: '/services' },
-  { label: 'SEO & Visibilité',     href: '/services' },
-  { label: 'Maintenance',          href: '/maintenance-site-web' },
+const EXPERTISES = [
+  { label: 'Intelligence Artificielle', to: '/expertises/ia' },
+  { label: 'Automatisation',            to: '/expertises/automatisation' },
+  { label: 'Web & SaaS',               to: '/expertises/web-saas' },
+  { label: 'Infrastructure IT',         to: '/expertises/infrastructure' },
 ]
 
-// React SPA routes that belong to "Solutions"
-const SOL_PATHS = ['/services', '/catalogue']
+const EXPERTISE_PATHS = EXPERTISES.map(e => e.to)
 
 const NAV = [
-  { label: 'Collaborateurs IA', to: '/collaborateurs-ia' },
-  { label: 'Automatisations',   to: '/automatisations' },
-  { label: 'Réalisations',      to: '/realisations' },
-  { label: 'Tarifs',            to: '/tarifs' },
-  { label: 'Contact',           to: '/contact' },
+  { label: 'Réalisations', to: '/realisations' },
+  { label: 'À propos',     to: '/a-propos' },
+  { label: 'Contact',      to: '/contact' },
 ] as const
 
 export default function Header() {
-  const [scrolled, setScrolled] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [solOpen, setSolOpen] = useState(false)
+  const [scrolled, setScrolled]   = useState(false)
+  const [menuOpen, setMenuOpen]   = useState(false)
+  const [expOpen, setExpOpen]     = useState(false)
   const location = useLocation()
 
-  const solActive = SOL_PATHS.some(p => location.pathname.startsWith(p))
+  const expActive = EXPERTISE_PATHS.some(p => location.pathname.startsWith(p))
 
   useEffect(() => {
     let ticking = false
     const onScroll = () => {
       if (!ticking) {
-        requestAnimationFrame(() => {
-          setScrolled(window.scrollY > 80)
-          ticking = false
-        })
+        requestAnimationFrame(() => { setScrolled(window.scrollY > 80); ticking = false })
         ticking = true
       }
     }
@@ -45,112 +37,104 @@ export default function Header() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const closeMenu = useCallback(() => {
-    setMenuOpen(false)
-    setSolOpen(false)
-  }, [])
+  const closeMenu = useCallback(() => { setMenuOpen(false); setExpOpen(false) }, [])
 
   const active = ({ isActive }: { isActive: boolean }) =>
-    isActive ? 'nav-active' : undefined
+    isActive ? 'nav-link nav-active' : 'nav-link'
 
   return (
     <>
-      <div id="prog" />
-      <nav className={scrolled ? 'scrolled' : ''} id="nav">
+      <nav className={`nav${scrolled ? ' nav--scrolled' : ''}`} id="nav" aria-label="Navigation principale">
 
         {/* Logo */}
-        <NavLink to="/" className="logo" onClick={closeMenu} aria-label="CA-TECH — Retour à l'accueil">
+        <NavLink to="/" className="nav-logo" onClick={closeMenu} aria-label="CA-TECH — Retour à l'accueil">
           <picture>
-            <source media="(max-width: 1024px)" srcSet="/logos/logo-ca-tech-icon.svg" type="image/svg+xml" />
-            <source media="(min-width: 1025px)" srcSet="/assets/logos/logo-ca-tech.webp" type="image/webp" />
+            <source media="(max-width:1024px)" srcSet="/logos/logo-ca-tech-icon.svg" type="image/svg+xml" />
+            <source media="(min-width:1025px)" srcSet="/assets/logos/logo-ca-tech.webp" type="image/webp" />
             <img
               src="/assets/logos/logo-ca-tech.png"
-              alt="Logo CA-TECH — Agence Web & IA"
-              width="36" height="36"
+              alt="Logo CA-TECH"
+              width="34" height="34"
               decoding="async"
               fetchPriority="high"
             />
           </picture>
-          <div>
-            <span className="logo-name">CA-TECH</span>
-            <span className="logo-sub">Agence Web &amp; Design</span>
+          <div className="nav-logo-text">
+            <span className="nav-logo-name">CA-TECH</span>
+            <span className="nav-logo-sub">Cabinet Technologique</span>
           </div>
         </NavLink>
 
         {/* Desktop nav */}
-        <ul className="nav-links">
+        <ul className="nav-links" role="list">
           <li>
-            <NavLink to="/" className={active} end>Accueil</NavLink>
+            <NavLink to="/" className={active} end onClick={closeMenu}>Accueil</NavLink>
           </li>
 
-          {/* Solutions dropdown */}
+          {/* Expertises dropdown */}
           <li className="nav-dropdown">
             <button
-              className={`nav-dd-trigger${solActive ? ' nav-active' : ''}`}
-              aria-haspopup="true"
+              className={`nav-link nav-dd-trigger${expActive ? ' nav-active' : ''}`}
+              aria-haspopup="listbox"
+              aria-expanded="false"
             >
-              Solutions <span className="nav-caret" aria-hidden="true">▾</span>
+              Expertises <span className="nav-caret" aria-hidden="true">▾</span>
             </button>
-            <div className="nav-sol-panel" role="menu">
-              {SOLUTIONS.map(({ label, href }) => (
-                <a key={label} href={href} className="nav-sol-link" role="menuitem" onClick={closeMenu}>
+            <div className="nav-dd-panel" role="listbox">
+              {EXPERTISES.map(({ label, to }) => (
+                <NavLink key={to} to={to} className="nav-dd-item" role="option" onClick={closeMenu}>
                   {label}
-                </a>
+                </NavLink>
               ))}
             </div>
           </li>
 
-          {/* Main nav items */}
           {NAV.map(item => (
             <li key={item.label}>
-              {'to' in item
-                ? <NavLink to={item.to} className={active} onClick={closeMenu}>{item.label}</NavLink>
-                : <a href={item.href} onClick={closeMenu}>{item.label}</a>
-              }
+              <NavLink to={item.to} className={active} onClick={closeMenu}>{item.label}</NavLink>
             </li>
           ))}
 
           <li>
-            <NavLink to="/contact" className="btn-nav" onClick={closeMenu}>
-              Demander un devis
+            <NavLink to="/contact" className="nav-cta" onClick={closeMenu}>
+              Démarrer
             </NavLink>
           </li>
         </ul>
 
         {/* Hamburger */}
         <button
-          className={`ham${menuOpen ? ' open' : ''}`}
+          className={`nav-ham${menuOpen ? ' nav-ham--open' : ''}`}
           onClick={() => setMenuOpen(o => !o)}
           aria-label={menuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
           aria-expanded={menuOpen}
+          aria-controls="mobile-menu"
         >
           <span /><span /><span />
         </button>
       </nav>
 
       {/* Mobile menu */}
-      <div className={`mob-menu${menuOpen ? ' open' : ''}`} id="mob">
+      <div className={`mob-menu${menuOpen ? ' mob-menu--open' : ''}`} id="mobile-menu" role="dialog" aria-label="Menu mobile">
         <NavLink to="/" className={active} end onClick={closeMenu}>Accueil</NavLink>
 
-        {/* Solutions mobile toggle */}
         <button
-          className={`mob-sol-hd${solOpen ? ' open' : ''}`}
-          onClick={() => setSolOpen(o => !o)}
-          aria-expanded={solOpen}
+          className={`mob-exp-hd${expOpen ? ' mob-exp-hd--open' : ''}`}
+          onClick={() => setExpOpen(o => !o)}
+          aria-expanded={expOpen}
         >
-          Solutions <span className="nav-caret" aria-hidden="true">▾</span>
+          Expertises <span className="nav-caret" aria-hidden="true">▾</span>
         </button>
-        {solOpen && SOLUTIONS.map(({ label, href }) => (
-          <a key={label} href={href} className="mob-dd-item" onClick={closeMenu}>{label}</a>
+
+        {expOpen && EXPERTISES.map(({ label, to }) => (
+          <NavLink key={to} to={to} className="mob-dd-item" onClick={closeMenu}>{label}</NavLink>
         ))}
 
         {NAV.map(item => (
-          'to' in item
-            ? <NavLink key={item.label} to={item.to} className={active} onClick={closeMenu}>{item.label}</NavLink>
-            : <a key={item.label} href={item.href} onClick={closeMenu}>{item.label}</a>
+          <NavLink key={item.label} to={item.to} className={active} onClick={closeMenu}>{item.label}</NavLink>
         ))}
 
-        <NavLink to="/contact" className="btn-mob" onClick={closeMenu}>Demander un devis</NavLink>
+        <NavLink to="/contact" className="mob-cta" onClick={closeMenu}>Démarrer</NavLink>
       </div>
     </>
   )

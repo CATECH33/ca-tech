@@ -161,7 +161,7 @@ async function handleCheckoutCompleted(session, supabase) {
     },
   });
 
-  // 7. Notifications (email + telegram + whatsapp selon paramètres)
+  // 7. Notifications (email + whatsapp selon paramètres)
   const notifType = isSubscription ? 'abonnement_souscrit' : 'paiement_confirme';
   await notify(notifType, {
     productName: product.name,

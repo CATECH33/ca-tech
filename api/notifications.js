@@ -1,6 +1,6 @@
 /**
  * NotificationService — CA-TECH
- * Canaux : Email (Resend), Telegram Bot, WhatsApp (CallMeBot)
+ * Canaux : Email (Resend), WhatsApp (CallMeBot)
  * Chaque canal est indépendant : l'échec de l'un n'interrompt pas les autres.
  */
 
@@ -299,26 +299,6 @@ async function sendEmail({ subject, htmlBody, to }) {
   }
 }
 
-async function sendTelegram({ text }) {
-  if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.TELEGRAM_CHAT_ID) {
-    return { status: 'skipped', error: 'TELEGRAM_BOT_TOKEN ou TELEGRAM_CHAT_ID absent', recipient: null, provider: 'telegram' };
-  }
-  try {
-    const resp = await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: process.env.TELEGRAM_CHAT_ID, text, parse_mode: 'Markdown' }),
-    });
-    if (!resp.ok) {
-      const body = await resp.text();
-      return { status: 'failed', error: body, recipient: process.env.TELEGRAM_CHAT_ID, provider: 'telegram' };
-    }
-    return { status: 'sent', recipient: process.env.TELEGRAM_CHAT_ID, provider: 'telegram' };
-  } catch (err) {
-    return { status: 'failed', error: err.message, recipient: process.env.TELEGRAM_CHAT_ID || null, provider: 'telegram' };
-  }
-}
-
 async function sendWhatsApp({ text }) {
   if (!process.env.CALLMEBOT_PHONE || !process.env.CALLMEBOT_APIKEY) {
     return { status: 'skipped', error: 'CALLMEBOT_PHONE ou CALLMEBOT_APIKEY absent', recipient: null, provider: 'callmebot' };
@@ -365,7 +345,7 @@ async function notify(type, data, supabase) {
   }
 
   // Charger les paramètres des canaux
-  let channelSettings = { email: true, telegram: true, whatsapp: false };
+  let channelSettings = { email: true, whatsapp: false };
   try {
     const { data: rows } = await supabase.from('notification_settings').select('channel, enabled');
     if (rows?.length) {
@@ -379,7 +359,6 @@ async function notify(type, data, supabase) {
   const tpl = template(data);
   const results = [];
   const prospectId = data.prospectId || null;
-  const messageSnippet = tpl.telegram?.slice(0, 200);
 
   // Email
   if (channelSettings.email && tpl.emailHtml) {
@@ -393,17 +372,6 @@ async function notify(type, data, supabase) {
       error: result.error, metadata: { provider: result.provider }, prospectId,
     });
     results.push({ channel: 'email', ...result });
-  }
-
-  // Telegram
-  if (channelSettings.telegram && tpl.telegram) {
-    const result = await sendTelegram({ text: tpl.telegram });
-    await logNotification(supabase, {
-      type, channel: 'telegram', status: result.status,
-      recipient: result.recipient, message: messageSnippet,
-      error: result.error, metadata: { provider: result.provider }, prospectId,
-    });
-    results.push({ channel: 'telegram', ...result });
   }
 
   // WhatsApp

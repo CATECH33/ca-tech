@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react'
+cimport { useState, useCallback, useRef } from 'react'
 import { X, ExternalLink, CheckCircle2, XCircle, Loader2, Play, RefreshCw, Pencil, Clock, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useConnectors, useConnectorRunning, useConnectorLogs, useTestConnector, useRunImport, useRunSync, useConfigureConnector } from '@/hooks/useConnectors'

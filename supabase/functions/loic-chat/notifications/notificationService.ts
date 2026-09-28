@@ -3,7 +3,6 @@
 // Chaque canal est indépendant : l'échec d'un canal n'arrête pas les autres.
 
 import { sendEmail, type EmailPayload }         from './email.ts'
-import { sendTelegram, type TelegramPayload }   from './telegram.ts'
 import { sendWhatsApp, type WhatsAppPayload }   from './whatsapp.ts'
 
 export type NotificationTrigger =
@@ -59,16 +58,12 @@ export async function notify(ctx: NotificationContext, supabase: any): Promise<v
     prospect: ctx.prospect, summary: ctx.summary,
     conversationId: ctx.conversationId, priority, trigger: triggerLabel,
   }
-  const telegramPayload: TelegramPayload = {
-    prospect: ctx.prospect, summary: ctx.summary, priority, trigger: triggerLabel,
-  }
   const whatsappPayload: WhatsAppPayload = {
     prospect: ctx.prospect, summary: ctx.summary, priority, trigger: triggerLabel,
   }
 
-  const [emailRes, telegramRes, whatsappRes] = await Promise.allSettled([
+  const [emailRes, whatsappRes] = await Promise.allSettled([
     sendEmail(emailPayload),
-    sendTelegram(telegramPayload),
     sendWhatsApp(whatsappPayload),
   ])
 
@@ -77,7 +72,6 @@ export async function notify(ctx: NotificationContext, supabase: any): Promise<v
   ): T => r.status === 'fulfilled' ? r.value : { ok: false, error: String((r as any).reason), provider: fallbackProvider } as T
 
   const eR  = resolve(emailRes,    'unknown')
-  const tR  = resolve(telegramRes, 'telegram')
   const wR  = resolve(whatsappRes, 'unknown')
 
   const logs = [
@@ -88,15 +82,6 @@ export async function notify(ctx: NotificationContext, supabase: any): Promise<v
       recipient: ctx.prospect.email ?? null,
       message: `Trigger: ${ctx.trigger} | Priority: ${priority}`,
       error: eR.ok ? null : (eR.error ?? null),
-      metadata: { trigger: ctx.trigger, priority },
-    },
-    {
-      prospect_id: ctx.conversationId,
-      type: 'telegram', provider: 'telegram',
-      status: tR.ok ? 'sent' : 'failed',
-      recipient: 'CA-TECH Bot',
-      message: `Trigger: ${ctx.trigger} | Priority: ${priority}`,
-      error: tR.ok ? null : (tR.error ?? null),
       metadata: { trigger: ctx.trigger, priority },
     },
     {

@@ -10,7 +10,7 @@ Site web & back-office de CA-TECH — agence web & design (Paris · Lyon · Dijo
 - **API** : Vercel serverless functions (Node.js)
 - **Base de données** : Supabase (PostgreSQL)
 - **Paiements** : Stripe Checkout
-- **Notifications** : Resend (email) + Telegram
+- **Notifications** : Resend (email) + WhatsApp (CallMeBot)
 - **IA** : Loïc — assistant conversationnel pour devis, leads, CRM
 
 ## Structure
@@ -58,5 +58,3 @@ Push sur `master` → déploiement automatique Vercel.
 | `STRIPE_SECRET_KEY` | Clé secrète Stripe |
 | `STRIPE_WEBHOOK_SECRET` | Secret webhook Stripe |
 | `RESEND_API_KEY` | API Resend (emails) |
-| `TELEGRAM_BOT_TOKEN` | Bot Telegram |
-| `TELEGRAM_CHAT_ID` | Chat ID Telegram |

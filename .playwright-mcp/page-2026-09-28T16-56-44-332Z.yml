@@ -1,0 +1,117 @@
+- generic [active] [ref=f9e1]:
+  - generic [ref=f9e2]:
+    - navigation "Navigation principale" [ref=f9e3]:
+      - link "CA-TECH — Retour à l'accueil" [ref=f9e4] [cursor=pointer]:
+        - /url: /
+        - img "Logo CA-TECH" [ref=f9e6]
+        - generic [ref=f9e7]:
+          - generic [ref=f9e8]: CA-TECH
+          - generic [ref=f9e9]: Cabinet Technologique
+      - list [ref=f9e10]:
+        - listitem [ref=f9e11]:
+          - link "Accueil" [ref=f9e12] [cursor=pointer]:
+            - /url: /
+        - listitem [ref=f9e13]:
+          - button "Expertises" [ref=f9e14] [cursor=pointer]:
+            - text: Expertises
+            - generic [aria-hidden]: ▾
+        - listitem [ref=f9e15]:
+          - link "Réalisations" [ref=f9e16] [cursor=pointer]:
+            - /url: /realisations
+        - listitem [ref=f9e17]:
+          - link "À propos" [ref=f9e18] [cursor=pointer]:
+            - /url: /a-propos
+        - listitem [ref=f9e19]:
+          - link "Contact" [ref=f9e20] [cursor=pointer]:
+            - /url: /contact
+        - listitem [ref=f9e21]:
+          - link "Démarrer" [ref=f9e22] [cursor=pointer]:
+            - /url: /contact
+    - main
+    - contentinfo [ref=f9e23]:
+      - generic [ref=f9e24]:
+        - generic [ref=f9e25]:
+          - link "Logo CA-TECH CA-TECH Cabinet Technologique" [ref=f9e26] [cursor=pointer]:
+            - /url: /
+            - img "Logo CA-TECH" [ref=f9e28]
+            - generic [ref=f9e29]:
+              - generic [ref=f9e30]: CA-TECH
+              - generic [ref=f9e31]: Cabinet Technologique
+          - paragraph [ref=f9e32]: Nous concevons les systèmes qui font fonctionner votre entreprise — intelligence artificielle, automatisation, développement web et infrastructure.
+          - generic [ref=f9e33]:
+            - link "contact@ca-tech.fr" [ref=f9e34] [cursor=pointer]:
+              - /url: mailto:contact@ca-tech.fr
+            - link "+33 7 75 66 49 75" [ref=f9e35] [cursor=pointer]:
+              - /url: tel:+33775664975
+            - link "LinkedIn" [ref=f9e36] [cursor=pointer]:
+              - /url: https://www.linkedin.com/company/ca-tech-france/
+        - generic [ref=f9e37]:
+          - heading "Expertises" [level=5] [ref=f9e38]
+          - list [ref=f9e39]:
+            - listitem [ref=f9e40]:
+              - link "Intelligence Artificielle" [ref=f9e41] [cursor=pointer]:
+                - /url: /expertises/ia
+            - listitem [ref=f9e42]:
+              - link "Automatisation" [ref=f9e43] [cursor=pointer]:
+                - /url: /expertises/automatisation
+            - listitem [ref=f9e44]:
+              - link "Web & SaaS" [ref=f9e45] [cursor=pointer]:
+                - /url: /expertises/web-saas
+            - listitem [ref=f9e46]:
+              - link "Infrastructure IT" [ref=f9e47] [cursor=pointer]:
+                - /url: /expertises/infrastructure
+        - generic [ref=f9e48]:
+          - heading "Navigation" [level=5] [ref=f9e49]
+          - list [ref=f9e50]:
+            - listitem [ref=f9e51]:
+              - link "Réalisations" [ref=f9e52] [cursor=pointer]:
+                - /url: /realisations
+            - listitem [ref=f9e53]:
+              - link "À propos" [ref=f9e54] [cursor=pointer]:
+                - /url: /a-propos
+            - listitem [ref=f9e55]:
+              - link "Tarifs" [ref=f9e56] [cursor=pointer]:
+                - /url: /tarifs
+            - listitem [ref=f9e57]:
+              - link "Loïc — Agent IA" [ref=f9e58] [cursor=pointer]:
+                - /url: /loic
+            - listitem [ref=f9e59]:
+              - link "Contact" [ref=f9e60] [cursor=pointer]:
+                - /url: /contact
+        - generic [ref=f9e61]:
+          - heading "Zones d'intervention" [level=5] [ref=f9e62]
+          - generic [ref=f9e63]:
+            - link "Paris" [ref=f9e64] [cursor=pointer]:
+              - /url: /contact
+            - link "Lyon" [ref=f9e65] [cursor=pointer]:
+              - /url: /contact
+            - link "Dijon" [ref=f9e66] [cursor=pointer]:
+              - /url: /contact
+            - link "Troyes" [ref=f9e67] [cursor=pointer]:
+              - /url: /contact
+            - link "Marseille" [ref=f9e68] [cursor=pointer]:
+              - /url: /contact
+            - link "Bordeaux" [ref=f9e69] [cursor=pointer]:
+              - /url: /contact
+      - generic [ref=f9e71]:
+        - generic [ref=f9e72]: © 2026 CA-TECH — Tous droits réservés
+        - generic [ref=f9e73]:
+          - link "Mentions légales" [ref=f9e74] [cursor=pointer]:
+            - /url: /mentions-legales
+          - link "Confidentialité" [ref=f9e75] [cursor=pointer]:
+            - /url: /politique-de-confidentialite
+          - link "Cookies" [ref=f9e76] [cursor=pointer]:
+            - /url: /politique-des-cookies
+          - button "Gérer mes cookies" [ref=f9e77] [cursor=pointer]
+  - button "Ouvrir le chat" [ref=f9e78] [cursor=pointer]
+  - dialog [aria-hidden]:
+    - generic:
+      - generic:
+        - generic: Loïc — CA-TECH
+        - generic: ● En ligne · Répond en quelques secondes
+      - button
+    - generic:
+      - textbox:
+        - /placeholder: Écrire un message… (Entrée pour envoyer)
+      - button [disabled]
+    - generic: Propulsé par CA-TECH · IA Loïc

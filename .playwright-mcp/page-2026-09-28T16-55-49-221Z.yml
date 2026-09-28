@@ -1,0 +1,219 @@
+- generic [active] [ref=f8e1]:
+  - button "Manage your preferences about cookies" [ref=f8e2] [cursor=pointer]
+  - generic [ref=f8e9]:
+    - navigation "Navigation principale" [ref=f8e10]:
+      - link "CA-TECH — Retour à l'accueil" [ref=f8e11] [cursor=pointer]:
+        - /url: /
+        - img "Logo CA-TECH" [ref=f8e13]
+        - generic [ref=f8e14]:
+          - generic [ref=f8e15]: CA-TECH
+          - generic [ref=f8e16]: Cabinet Technologique
+      - button "Ouvrir le menu" [ref=f8e17] [cursor=pointer]
+    - main [ref=f8e21]:
+      - generic [ref=f8e22]:
+        - generic [ref=f8e24]:
+          - paragraph [ref=f8e25]: Cabinet technologique français
+          - heading [level=1] [ref=f8e26]:
+            - text: Nous concevons les systèmes qui font fonctionner
+            - emphasis [ref=f8e27]: votre entreprise.
+          - paragraph [ref=f8e28]: CA-TECH accompagne les PME françaises qui prennent l'IA et l'automatisation au sérieux — de la conception à la mise en production.
+          - generic [ref=f8e29]:
+            - link "Démarrer un diagnostic" [ref=f8e30] [cursor=pointer]:
+              - /url: /contact
+            - link "Voir nos réalisations" [ref=f8e31] [cursor=pointer]:
+              - /url: /realisations
+        - generic [ref=f8e33]:
+          - paragraph [ref=f8e34]: Positionnement
+          - heading "Un cabinet, pas une agence." [level=2] [ref=f8e35]
+          - generic [ref=f8e36]:
+            - paragraph [ref=f8e37]: Une agence livre un site. Nous livrons un système — conçu pour durer, documenté pour être repris, pensé pour s'intégrer dans vos processus réels.
+            - paragraph [ref=f8e38]: Nous cadrons avant de coder. Nous mesurons après avoir livré. Et nous restons disponibles quand le vrai travail commence — quand les utilisateurs arrivent.
+        - generic [ref=f8e40]:
+          - generic [ref=f8e41]:
+            - paragraph [ref=f8e42]: Nos domaines
+            - heading "Quatre expertises, une équipe." [level=2] [ref=f8e43]
+          - generic [ref=f8e44]:
+            - link "IA Intelligence Artificielle Agents conversationnels, RAG, automatisation décisionnelle. Des systèmes qui pensent avec votre équipe, pas à sa place." [ref=f8e45] [cursor=pointer]:
+              - /url: /expertises/ia
+              - generic [ref=f8e46]: IA
+              - heading "Intelligence Artificielle" [level=3] [ref=f8e47]
+              - paragraph [ref=f8e48]: Agents conversationnels, RAG, automatisation décisionnelle. Des systèmes qui pensent avec votre équipe, pas à sa place.
+              - generic [aria-hidden] [ref=f8e49]: →
+            - link "Auto Automatisation N8N, Make, scripts sur mesure. Vos processus répétitifs disparaissent. Vos équipes se concentrent sur ce qui compte." [ref=f8e50] [cursor=pointer]:
+              - /url: /expertises/automatisation
+              - generic [ref=f8e51]: Auto
+              - heading "Automatisation" [level=3] [ref=f8e52]
+              - paragraph [ref=f8e53]: N8N, Make, scripts sur mesure. Vos processus répétitifs disparaissent. Vos équipes se concentrent sur ce qui compte.
+              - generic [aria-hidden] [ref=f8e54]: →
+            - link "Web Web & SaaS Sites vitrines, e-commerce, applications métier. Du code propre, livrable en semaines, pas en mois." [ref=f8e55] [cursor=pointer]:
+              - /url: /expertises/web-saas
+              - generic [ref=f8e56]: Web
+              - heading "Web & SaaS" [level=3] [ref=f8e57]
+              - paragraph [ref=f8e58]: Sites vitrines, e-commerce, applications métier. Du code propre, livrable en semaines, pas en mois.
+              - generic [aria-hidden] [ref=f8e59]: →
+            - link "Infra Infrastructure IT Cloud, sécurité, sauvegardes, supervision. La technique qui s'oublie parce qu'elle ne tombe jamais." [ref=f8e60] [cursor=pointer]:
+              - /url: /expertises/infrastructure
+              - generic [ref=f8e61]: Infra
+              - heading "Infrastructure IT" [level=3] [ref=f8e62]
+              - paragraph [ref=f8e63]: Cloud, sécurité, sauvegardes, supervision. La technique qui s'oublie parce qu'elle ne tombe jamais.
+              - generic [aria-hidden] [ref=f8e64]: →
+        - generic [ref=f8e66]:
+          - generic [ref=f8e67]:
+            - paragraph [ref=f8e68]: Projets livrés
+            - heading "Ce que nous avons construit." [level=2] [ref=f8e69]
+          - generic [ref=f8e70]:
+            - link "Aperçu du projet CA-TECH Manager CA-TECH CA-TECH Manager CRM et outil de gestion interne développé entièrement sur mesure — devis, contrats, clients, trésorerie et suivi de projet en temps réel. React Supabase Stripe" [ref=f8e71] [cursor=pointer]:
+              - /url: /realisations
+              - img "Aperçu du projet CA-TECH Manager" [ref=f8e73]
+              - generic [ref=f8e74]:
+                - generic [ref=f8e75]: CA-TECH
+                - heading "CA-TECH Manager" [level=3] [ref=f8e76]
+                - paragraph [ref=f8e77]: CRM et outil de gestion interne développé entièrement sur mesure — devis, contrats, clients, trésorerie et suivi de projet en temps réel.
+                - generic [ref=f8e78]:
+                  - generic [ref=f8e79]: React
+                  - generic [ref=f8e80]: Supabase
+                  - generic [ref=f8e81]: Stripe
+            - link "Aperçu du projet CV Magic CV Magic CV Magic Next.js OpenAI" [ref=f8e82] [cursor=pointer]:
+              - /url: /realisations
+              - img "Aperçu du projet CV Magic" [ref=f8e84]
+              - generic [ref=f8e85]:
+                - generic [ref=f8e86]: CV Magic
+                - heading "CV Magic" [level=3] [ref=f8e87]
+                - generic [ref=f8e88]:
+                  - generic [ref=f8e89]: Next.js
+                  - generic [ref=f8e90]: OpenAI
+            - link "Aperçu du projet Pemous Money Pemous Pemous Money React Supabase" [ref=f8e91] [cursor=pointer]:
+              - /url: /realisations
+              - img "Aperçu du projet Pemous Money" [ref=f8e93]
+              - generic [ref=f8e94]:
+                - generic [ref=f8e95]: Pemous
+                - heading "Pemous Money" [level=3] [ref=f8e96]
+                - generic [ref=f8e97]:
+                  - generic [ref=f8e98]: React
+                  - generic [ref=f8e99]: Supabase
+          - link "Voir toutes les réalisations →" [ref=f8e101] [cursor=pointer]:
+            - /url: /realisations
+        - generic [ref=f8e103]:
+          - generic [ref=f8e104]:
+            - paragraph [ref=f8e105]: Notre méthode
+            - heading "Comment nous travaillons." [level=2] [ref=f8e106]
+          - list [ref=f8e107]:
+            - listitem [ref=f8e108]:
+              - generic [ref=f8e109]: "01"
+              - heading "Comprendre" [level=3] [ref=f8e110]
+              - paragraph [ref=f8e111]: Audit de votre activité, vos processus, vos contraintes. On pose les bonnes questions avant de proposer des solutions.
+            - listitem [ref=f8e112]:
+              - generic [ref=f8e113]: "02"
+              - heading "Concevoir" [level=3] [ref=f8e114]
+              - paragraph [ref=f8e115]: Architecture technique, maquettes, roadmap chiffrée. Vous validez avant qu'une ligne de code est écrite.
+            - listitem [ref=f8e116]:
+              - generic [ref=f8e117]: "03"
+              - heading "Construire" [level=3] [ref=f8e118]
+              - paragraph [ref=f8e119]: Développement itératif, premières livraisons rapides. Vous voyez le projet avancer chaque semaine.
+            - listitem [ref=f8e120]:
+              - generic [ref=f8e121]: "04"
+              - heading "Déployer" [level=3] [ref=f8e122]
+              - paragraph [ref=f8e123]: Mise en production supervisée, tests en conditions réelles, documentation remise à vos équipes.
+            - listitem [ref=f8e124]:
+              - generic [ref=f8e125]: "05"
+              - heading "Améliorer" [level=3] [ref=f8e126]
+              - paragraph [ref=f8e127]: Monitoring, optimisations continues, évolutions priorisées. Le projet ne s'arrête pas à la mise en ligne.
+        - generic [ref=f8e130]:
+          - paragraph [ref=f8e131]: À propos
+          - heading "Nous sommes des technologues, pas des vendeurs de solutions." [level=2] [ref=f8e132]
+          - paragraph [ref=f8e133]: CA-TECH est un cabinet technologique fondé en 2023, basé à Dijon, qui intervient en France entière. Notre équipe conçoit et livre des systèmes pour les PME — de la création de site au déploiement d'agents IA en production.
+          - paragraph [ref=f8e134]: Nous n'avons pas de catalogue générique. Chaque projet commence par un diagnostic — gratuit, 30 minutes, avec un compte-rendu écrit remis dans les 24h.
+          - link "En savoir plus sur CA-TECH →" [ref=f8e135] [cursor=pointer]:
+            - /url: /a-propos
+        - generic [ref=f8e137]:
+          - heading "Prêt à faire fonctionner votre entreprise autrement ?" [level=2] [ref=f8e138]
+          - paragraph [ref=f8e139]: 30 minutes · Gratuit · Compte-rendu écrit
+          - link "Démarrer un diagnostic gratuit" [ref=f8e140] [cursor=pointer]:
+            - /url: /contact
+    - contentinfo [ref=f8e141]:
+      - generic [ref=f8e142]:
+        - generic [ref=f8e143]:
+          - link "Logo CA-TECH CA-TECH Cabinet Technologique" [ref=f8e144] [cursor=pointer]:
+            - /url: /
+            - img "Logo CA-TECH" [ref=f8e146]
+            - generic [ref=f8e147]:
+              - generic [ref=f8e148]: CA-TECH
+              - generic [ref=f8e149]: Cabinet Technologique
+          - paragraph [ref=f8e150]: Nous concevons les systèmes qui font fonctionner votre entreprise — intelligence artificielle, automatisation, développement web et infrastructure.
+          - generic [ref=f8e151]:
+            - link "contact@ca-tech.fr" [ref=f8e152] [cursor=pointer]:
+              - /url: mailto:contact@ca-tech.fr
+            - link "+33 7 75 66 49 75" [ref=f8e153] [cursor=pointer]:
+              - /url: tel:+33775664975
+            - link "LinkedIn" [ref=f8e154] [cursor=pointer]:
+              - /url: https://www.linkedin.com/company/ca-tech-france/
+        - generic [ref=f8e155]:
+          - heading "Expertises" [level=5] [ref=f8e156]
+          - list [ref=f8e157]:
+            - listitem [ref=f8e158]:
+              - link "Intelligence Artificielle" [ref=f8e159] [cursor=pointer]:
+                - /url: /expertises/ia
+            - listitem [ref=f8e160]:
+              - link "Automatisation" [ref=f8e161] [cursor=pointer]:
+                - /url: /expertises/automatisation
+            - listitem [ref=f8e162]:
+              - link "Web & SaaS" [ref=f8e163] [cursor=pointer]:
+                - /url: /expertises/web-saas
+            - listitem [ref=f8e164]:
+              - link "Infrastructure IT" [ref=f8e165] [cursor=pointer]:
+                - /url: /expertises/infrastructure
+        - generic [ref=f8e166]:
+          - heading "Navigation" [level=5] [ref=f8e167]
+          - list [ref=f8e168]:
+            - listitem [ref=f8e169]:
+              - link "Réalisations" [ref=f8e170] [cursor=pointer]:
+                - /url: /realisations
+            - listitem [ref=f8e171]:
+              - link "À propos" [ref=f8e172] [cursor=pointer]:
+                - /url: /a-propos
+            - listitem [ref=f8e173]:
+              - link "Tarifs" [ref=f8e174] [cursor=pointer]:
+                - /url: /tarifs
+            - listitem [ref=f8e175]:
+              - link "Loïc — Agent IA" [ref=f8e176] [cursor=pointer]:
+                - /url: /loic
+            - listitem [ref=f8e177]:
+              - link "Contact" [ref=f8e178] [cursor=pointer]:
+                - /url: /contact
+        - generic [ref=f8e179]:
+          - heading "Zones d'intervention" [level=5] [ref=f8e180]
+          - generic [ref=f8e181]:
+            - link "Paris" [ref=f8e182] [cursor=pointer]:
+              - /url: /contact
+            - link "Lyon" [ref=f8e183] [cursor=pointer]:
+              - /url: /contact
+            - link "Dijon" [ref=f8e184] [cursor=pointer]:
+              - /url: /contact
+            - link "Troyes" [ref=f8e185] [cursor=pointer]:
+              - /url: /contact
+            - link "Marseille" [ref=f8e186] [cursor=pointer]:
+              - /url: /contact
+            - link "Bordeaux" [ref=f8e187] [cursor=pointer]:
+              - /url: /contact
+      - generic [ref=f8e189]:
+        - generic [ref=f8e190]: © 2026 CA-TECH — Tous droits réservés
+        - generic [ref=f8e191]:
+          - link "Mentions légales" [ref=f8e192] [cursor=pointer]:
+            - /url: /mentions-legales
+          - link "Confidentialité" [ref=f8e193] [cursor=pointer]:
+            - /url: /politique-de-confidentialite
+          - link "Cookies" [ref=f8e194] [cursor=pointer]:
+            - /url: /politique-des-cookies
+          - button "Gérer mes cookies" [ref=f8e195] [cursor=pointer]
+  - button "Ouvrir le chat" [ref=f8e196] [cursor=pointer]
+  - dialog [aria-hidden]:
+    - generic:
+      - generic:
+        - generic: Loïc — CA-TECH
+        - generic: ● En ligne · Répond en quelques secondes
+      - button
+    - generic:
+      - textbox:
+        - /placeholder: Écrire un message… (Entrée pour envoyer)
+      - button [disabled]
+    - generic: Propulsé par CA-TECH · IA Loïc

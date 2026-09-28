@@ -5,14 +5,13 @@ import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { cn } from '@/lib/utils'
 import {
-  Bell, Mail, MessageCircle, Phone, CheckCircle, XCircle,
+  Bell, Mail, Phone, CheckCircle, XCircle,
   Loader2, RefreshCw, Filter, Wifi,
 } from 'lucide-react'
 
 const TYPE_CONFIG = {
-  email:    { label: 'Email',    Icon: Mail,          color: 'text-blue-500',   bg: 'bg-blue-50'   },
-  telegram: { label: 'Telegram', Icon: MessageCircle, color: 'text-sky-500',    bg: 'bg-sky-50'    },
-  whatsapp: { label: 'WhatsApp', Icon: Phone,         color: 'text-green-500',  bg: 'bg-green-50'  },
+  email:    { label: 'Email',    Icon: Mail,  color: 'text-blue-500',   bg: 'bg-blue-50'  },
+  whatsapp: { label: 'WhatsApp', Icon: Phone, color: 'text-green-500',  bg: 'bg-green-50' },
 } as const
 
 const STATUS_CONFIG = {
@@ -21,7 +20,7 @@ const STATUS_CONFIG = {
   skipped: { label: 'Ignoré',  Icon: XCircle,     color: 'text-gray-400',  bg: 'bg-gray-50'  },
 } as const
 
-type FilterType = 'all' | 'email' | 'telegram' | 'whatsapp'
+type FilterType = 'all' | 'email' | 'whatsapp'
 type FilterStatus = 'all' | 'sent' | 'failed'
 
 export function Notifications() {
@@ -90,7 +89,7 @@ export function Notifications() {
             <Filter className="h-3.5 w-3.5" /> Filtres
           </div>
           <div className="flex gap-1.5 flex-wrap">
-            {(['all', 'email', 'telegram', 'whatsapp'] as FilterType[]).map(t => (
+            {(['all', 'email', 'whatsapp'] as FilterType[]).map(t => (
               <button
                 key={t}
                 onClick={() => setTypeFilter(t)}
@@ -209,11 +208,6 @@ export function Notifications() {
               <p className="font-semibold mb-1">📧 Email (Resend) ✅</p>
               <code className="block">RESEND_API_KEY</code>
               <code className="block">ADMIN_EMAIL (optionnel)</code>
-            </div>
-            <div>
-              <p className="font-semibold mb-1">📱 Telegram</p>
-              <code className="block">TELEGRAM_BOT_TOKEN</code>
-              <code className="block">TELEGRAM_CHAT_ID</code>
             </div>
             <div>
               <p className="font-semibold mb-1">💬 WhatsApp (CallMeBot)</p>

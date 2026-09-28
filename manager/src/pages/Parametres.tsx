@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import {
   User, Building2, Receipt, Bell, Palette, Shield,
   Check, Eye, EyeOff, AlertTriangle, CreditCard,
-  Clock, Monitor, Smartphone, LogOut, Mail, Send, MessageCircle,
+  Clock, Monitor, Smartphone, LogOut, Mail, MessageCircle,
   Globe, Upload, X, Loader2, LayoutGrid,
 } from 'lucide-react'
 import { Layout } from '@/components/layout/Layout'
@@ -341,9 +341,8 @@ function GoogleWorkspaceCard({
 // ─── Main component ───────────────────────────────────────────────────────────
 
 const CHANNEL_META: Record<string, { label: string; desc: string; icon: React.ElementType; color: string }> = {
-  email:    { label: 'Email',    desc: 'Notifications par email via Resend',         icon: Mail,          color: 'text-blue-500' },
-  telegram: { label: 'Telegram', desc: 'Messages via votre bot Telegram',             icon: Send,          color: 'text-sky-500' },
-  whatsapp: { label: 'WhatsApp', desc: 'Messages via CallMeBot (compte personnel)',   icon: MessageCircle, color: 'text-emerald-500' },
+  email:    { label: 'Email',    desc: 'Notifications par email via Resend',        icon: Mail,          color: 'text-blue-500'    },
+  whatsapp: { label: 'WhatsApp', desc: 'Messages via CallMeBot (compte personnel)', icon: MessageCircle, color: 'text-emerald-500' },
 }
 
 export function Parametres() {

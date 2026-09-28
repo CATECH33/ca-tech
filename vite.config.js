@@ -6,7 +6,9 @@ import react from '@vitejs/plugin-react'
 const SPA_ROUTES = [
   '/services', '/loic', '/collaborateurs-ia',
   '/automatisations', '/realisations', '/blog', '/contact',
-  '/catalogue', '/tarifs',
+  '/catalogue', '/tarifs', '/a-propos',
+  '/expertises/ia', '/expertises/automatisation',
+  '/expertises/web-saas', '/expertises/infrastructure',
 ]
 
 function spaRouter() {

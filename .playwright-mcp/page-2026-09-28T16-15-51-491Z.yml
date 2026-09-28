@@ -1,0 +1,24 @@
+- generic [active]:
+  - generic:
+    - generic:
+      - generic:
+        - 'dialog "Plateforme de Gestion du Consentement : Personnalisez vos Options"':
+          - generic [aria-hidden] [ref=e1]:
+            - text: Axeptio consent
+            - checkbox [ref=e2]
+          - generic [ref=e3]:
+            - paragraph [ref=e4]: "Plateforme de Gestion du Consentement : Personnalisez vos Options"
+            - paragraph [ref=e5]: Notre plateforme vous permet d'adapter et de gérer vos paramètres de confidentialité, en garantissant la conformité avec les réglementations. Personnalisez vos préférences pour contrôler la manière dont vos informations sont manipulées.
+        - button "Gérez vos préférences en matière de cookies et données personnelles" [ref=e6] [cursor=pointer]
+  - button "Ouvrir le chat" [ref=e13] [cursor=pointer]
+  - dialog [aria-hidden]:
+    - generic:
+      - generic:
+        - generic: Loïc — CA-TECH
+        - generic: ● En ligne · Répond en quelques secondes
+      - button
+    - generic:
+      - textbox:
+        - /placeholder: Écrire un message… (Entrée pour envoyer)
+      - button [disabled]
+    - generic: Propulsé par CA-TECH · IA Loïc
