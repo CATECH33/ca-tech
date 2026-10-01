@@ -26,6 +26,9 @@ Thumbs.db
 # Claude Code local settings
 .claude/
 
+# MCP config (peut contenir des clés API)
+.mcp.json
+
 
 # Supabase local dev
 supabase/.temp/
@@ -107,3 +110,6 @@ agence-ia-lyon.html
 automatisation-pme.html
 maintenance-informatique-pme.html
 .env
+
+# Playwright MCP artifacts (screenshots & logs QA)
+.playwright-mcp/

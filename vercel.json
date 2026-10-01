@@ -54,12 +54,23 @@
     }
   ],
   "redirects": [
-    { "source": "/index",            "destination": "/",             "permanent": true },
-    { "source": "/diagnostic-ia",    "destination": "/contact",      "permanent": true },
-    { "source": "/nos-realisations", "destination": "/realisations", "permanent": true },
-    { "source": "/loic-ia",         "destination": "/loic",          "permanent": true }
+    { "source": "/index",              "destination": "/",                          "permanent": true },
+    { "source": "/diagnostic-ia",      "destination": "/contact",                   "permanent": true },
+    { "source": "/nos-realisations",   "destination": "/projets",                   "permanent": true },
+    { "source": "/realisations",       "destination": "/projets",                   "permanent": true },
+    { "source": "/loic-ia",            "destination": "/loic",                      "permanent": true },
+    { "source": "/collaborateurs-ia",  "destination": "/services/ia",               "permanent": true },
+    { "source": "/automatisations",    "destination": "/services/automatisation",   "permanent": true },
+    { "source": "/catalogue",          "destination": "/",                          "permanent": true },
+    { "source": "/tarifs",             "destination": "/contact",                   "permanent": true },
+    { "source": "/expertises/ia",             "destination": "/services/ia",            "permanent": true },
+    { "source": "/expertises/automatisation", "destination": "/services/automatisation", "permanent": true },
+    { "source": "/expertises/web-saas",       "destination": "/services/developpement",  "permanent": true },
+    { "source": "/expertises/infrastructure", "destination": "/services/systemes",       "permanent": true },
+    { "source": "/expertises/:path*",         "destination": "/services",               "permanent": true }
   ],
   "rewrites": [
-    { "source": "/manager/assets/(.*)", "destination": "/manager/dist/assets/$1" }
+    { "source": "/manager/assets/(.*)", "destination": "/manager/dist/assets/$1" },
+    { "source": "/((?!manager).*)",     "destination": "/index-src.html" }
   ]
 }

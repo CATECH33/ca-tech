@@ -1,0 +1,273 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@theme {
+  /* ─── Colors ─── */
+  --color-deep-navy:    #05101E;
+  --color-navy:         #102740;
+  --color-tech-blue:    #1A4066;
+  --color-accent:       #359BD9;
+  --color-accent-hover: #4AAEE0;
+  --color-accent-dim:   #1E6A96;
+  --color-silver:       #A5ACB5;
+  --color-light-silver: #E0E0E3;
+  --color-cool-white:   #F2F4F6;
+  --color-white:        #FFFFFF;
+  --color-success:      #22C55E;
+  --color-warning:      #F59E0B;
+  --color-error:        #EF4444;
+
+  /* ─── Fonts ─── */
+  --font-display: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  --font-body:    'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+
+  /* ─── Spacing ─── */
+  --spacing-1:  4px;
+  --spacing-2:  8px;
+  --spacing-3:  12px;
+  --spacing-4:  16px;
+  --spacing-5:  20px;
+  --spacing-6:  24px;
+  --spacing-8:  32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-20: 80px;
+  --spacing-24: 96px;
+  --spacing-32: 128px;
+  --spacing-40: 160px;
+
+  /* ─── Border Radius ─── */
+  --radius-none: 0px;
+  --radius-xs:   4px;
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
+  --radius-2xl:  32px;
+  --radius-pill: 999px;
+}
+
+/* ─── shadcn/ui CSS variables — palette CA-TECH dark ─── */
+:root {
+  --background:         oklch(0.072 0.018 232);
+  --foreground:         oklch(0.945 0.005 210);
+  --card:               oklch(0.115 0.022 228);
+  --card-foreground:    oklch(0.945 0.005 210);
+  --popover:            oklch(0.115 0.022 228);
+  --popover-foreground: oklch(0.945 0.005 210);
+  --primary:            oklch(0.615 0.145 215);
+  --primary-foreground: oklch(1 0 0);
+  --secondary:          oklch(0.155 0.028 228);
+  --secondary-foreground: oklch(0.945 0.005 210);
+  --muted:              oklch(0.155 0.028 228);
+  --muted-foreground:   oklch(0.67 0.015 215);
+  --accent:             oklch(0.155 0.028 228);
+  --accent-foreground:  oklch(0.945 0.005 210);
+  --destructive:        oklch(0.577 0.245 27.325);
+  --border:             oklch(0.67 0.015 215 / 0.13);
+  --input:              oklch(0.67 0.015 215 / 0.18);
+  --ring:               oklch(0.615 0.145 215);
+  --radius:             0.5rem;
+}
+
+@theme inline {
+  --color-background:        var(--background);
+  --color-foreground:        var(--foreground);
+  --color-card:              var(--card);
+  --color-card-foreground:   var(--card-foreground);
+  --color-popover:           var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary:           var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary:         var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted:             var(--muted);
+  --color-muted-foreground:  var(--muted-foreground);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive:       var(--destructive);
+  --color-border:            var(--border);
+  --color-input:             var(--input);
+  --color-ring:              var(--ring);
+}
+
+/* ─── CSS Custom Properties (complex tokens) ─── */
+:root {
+  /* Surfaces */
+  --surface-canvas:   #05101E;
+  --surface-panel:    #102740;
+  --surface-elevated: #1A4066;
+  --surface-overlay:  rgba(16, 39, 64, 0.90);
+  --surface-frosted:  rgba(5, 16, 30, 0.82);
+  --surface-glow:     rgba(53, 155, 217, 0.08);
+
+  /* Borders */
+  --border-subtle:        1px solid rgba(165, 172, 181, 0.12);
+  --border-default:       1px solid rgba(165, 172, 181, 0.20);
+  --border-strong:        1px solid rgba(165, 172, 181, 0.35);
+  --border-accent:        1px solid rgba(53, 155, 217, 0.40);
+  --border-accent-strong: 1px solid #359BD9;
+
+  /* Navigation */
+  --nav-height:        64px;
+  --nav-height-mobile: 56px;
+
+  /* Grid */
+  --grid-max-width:          1200px;
+  --grid-max-width-wide:     1440px;
+  --grid-max-width-editorial:960px;
+  --grid-max-width-narrow:   720px;
+  --grid-padding-mobile:     24px;
+  --grid-padding-tablet:     48px;
+  --grid-padding-desktop:    80px;
+
+  /* Type scale */
+  --text-hero:       80px;
+  --text-display:    64px;
+  --text-display-md: 48px;
+  --text-heading-xl: 40px;
+  --text-heading:    32px;
+  --text-heading-sm: 24px;
+  --text-subheading: 20px;
+  --text-body-lg:    18px;
+  --text-body:       16px;
+  --text-body-sm:    14px;
+  --text-label:      13px;
+  --text-caption:    12px;
+  --text-overline:   11px;
+  --text-mono-lg:    18px;
+  --text-mono:       14px;
+  --text-mono-sm:    13px;
+
+  /* Transitions */
+  --transition-fast:   0.18s ease;
+  --transition-normal: 0.30s ease;
+  --transition-medium: 0.50s ease;
+  --transition-slow:   0.70s ease;
+}
+
+/* ─── Reset & Base ─── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: 1.6;
+  color: var(--color-cool-white);
+  background-color: var(--surface-canvas);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Focus ─── */
+:focus-visible {
+  outline: 2px solid #359BD9;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ─── Skip Link ─── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 9999;
+  padding: 8px 16px;
+  background: #359BD9;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 0 0 6px 6px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: top 0.2s;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* ─── Selection ─── */
+::selection {
+  background: rgba(53, 155, 217, 0.25);
+  color: #F2F4F6;
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #05101E;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(165, 172, 181, 0.20);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(165, 172, 181, 0.35);
+}
+
+/* ─── Images ─── */
+img, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ─── Reduced Motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── Grain texture overlay ─── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9997;
+  opacity: 0.038;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* ─── Float animation (hero visual) ─── */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-12px); }
+}
+
+/* ─── Glow pulse ─── */
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.08; }
+  50%       { opacity: 0.15; }
+}
+
+/* ─── Typing cursor ─── */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}

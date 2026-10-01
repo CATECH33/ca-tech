@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Pages principales -->
   <url>
     <loc>https://www.ca-tech.fr/</loc>
     <changefreq>weekly</changefreq>
@@ -10,74 +12,57 @@
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
+
+  <!-- Services -->
   <url>
-    <loc>https://www.ca-tech.fr/collaborateurs-ia</loc>
+    <loc>https://www.ca-tech.fr/services/ia</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
+    <priority>0.92</priority>
   </url>
   <url>
-    <loc>https://www.ca-tech.fr/automatisations</loc>
+    <loc>https://www.ca-tech.fr/services/automatisation</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.92</priority>
+  </url>
+  <url>
+    <loc>https://www.ca-tech.fr/services/llm-mcp</loc>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://www.ca-tech.fr/catalogue</loc>
+    <loc>https://www.ca-tech.fr/services/systemes</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.88</priority>
   </url>
   <url>
-    <loc>https://www.ca-tech.fr/tarifs</loc>
+    <loc>https://www.ca-tech.fr/services/developpement</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <!-- Réalisations -->
+  <url>
+    <loc>https://www.ca-tech.fr/projets</loc>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
+
+  <!-- Pages -->
   <url>
-    <loc>https://www.ca-tech.fr/realisations</loc>
+    <loc>https://www.ca-tech.fr/a-propos</loc>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://www.ca-tech.fr/loic</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.70</priority>
-  </url>
-  <url>
     <loc>https://www.ca-tech.fr/contact</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.70</priority>
+    <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://www.ca-tech.fr/creation-site-internet-dijon</loc>
+    <loc>https://www.ca-tech.fr/devis</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.90</priority>
+    <priority>0.75</priority>
   </url>
-  <url>
-    <loc>https://www.ca-tech.fr/creation-site-internet-lyon</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.90</priority>
-  </url>
-  <url>
-    <loc>https://www.ca-tech.fr/creation-site-internet-paris</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.90</priority>
-  </url>
-  <url>
-    <loc>https://www.ca-tech.fr/agence-ia-dijon</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.88</priority>
-  </url>
-  <url>
-    <loc>https://www.ca-tech.fr/agence-ia-lyon</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.88</priority>
-  </url>
-  <url>
-    <loc>https://www.ca-tech.fr/automatisation-pme</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://www.ca-tech.fr/maintenance-informatique-pme</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
+
+
 </urlset>

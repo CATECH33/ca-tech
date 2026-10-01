@@ -7,6 +7,21 @@
         "@playwright/mcp@latest"
       ],
       "env": {}
+    },
+    "shadcn": {
+      "command": "npx",
+      "args": [
+        "@jpisnice/shadcn-ui-mcp-server",
+        "--framework",
+        "react"
+      ]
+    },
+    "21st": {
+      "type": "http",
+      "url": "https://21st.dev/api/mcp",
+      "headers": {
+        "x-api-key": "${API_KEY_21ST}"
+      }
     }
   }
 }

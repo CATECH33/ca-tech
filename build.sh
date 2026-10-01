@@ -17,6 +17,8 @@ for f in \
   automatisations.html realisations.html contact.html catalogue.html tarifs.html \
   politique-des-cookies.html \
   politique-cookies.html \
+  a-propos.html devis.html blog.html mentions-legales.html \
+  politique-de-confidentialite.html gestion-des-cookies.html \
   creation-site-internet-dijon.html creation-site-internet-lyon.html \
   creation-site-internet-paris.html agence-ia-dijon.html agence-ia-lyon.html \
   automatisation-pme.html maintenance-informatique-pme.html; do
@@ -24,6 +26,27 @@ for f in \
   # Vite transforme href="/site.webmanifest" en href="/dist/site.webmanifest" à cause du base:/dist/
   # Chrome Android utilise ce chemin pour vérifier l'installabilité — il doit pointer à la racine
   sed -i 's|href="/dist/site.webmanifest"|href="/site.webmanifest"|g' $f
+done
+
+# SPA routing — routes /services/* (V2 canoniques)
+mkdir -p services
+for route in ia automatisation llm-mcp systemes developpement seo design; do
+  cp dist/index-src.html "services/${route}.html"
+  sed -i 's|href="/dist/site.webmanifest"|href="/site.webmanifest"|g' "services/${route}.html"
+done
+
+# SPA routing — /projets + sous-routes
+mkdir -p projets
+for route in ca-tech-manager cv-magic pasmal pemous-money; do
+  cp dist/index-src.html "projets/${route}.html"
+  sed -i 's|href="/dist/site.webmanifest"|href="/site.webmanifest"|g' "projets/${route}.html"
+done
+
+# SPA routing — anciennes routes /expertises/* (gardées pour compatibilité, redirigées côté Vercel)
+mkdir -p expertises
+for route in ia automatisation web-saas infrastructure; do
+  cp dist/index-src.html "expertises/${route}.html"
+  sed -i 's|href="/dist/site.webmanifest"|href="/site.webmanifest"|g' "expertises/${route}.html"
 done
 
 # Copie des assets à la racine pour les chemins sans /dist/ prefix

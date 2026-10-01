@@ -1,12 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@custom-variant dark (&:is(.dark *));
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   *, *::before, *::after { box-sizing: border-box; }
-  html { -webkit-font-smoothing: antialiased; }
-  body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: #f8fafc; }
+  html { -webkit-font-smoothing: antialiased;
+    @apply font-sans; }
+  body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: #f8fafc;
+    @apply bg-background text-foreground; }
   #root { min-height: 100vh; }
 
   ::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -14,7 +18,8 @@
   ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 99px; }
   ::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
 
-  * { scrollbar-width: thin; scrollbar-color: #e2e8f0 transparent; }
+  * { scrollbar-width: thin; scrollbar-color: #e2e8f0 transparent;
+    @apply border-border outline-ring/50; }
 }
 
 @layer utilities {
@@ -25,3 +30,4 @@
     overflow: hidden;
   }
 }
+
